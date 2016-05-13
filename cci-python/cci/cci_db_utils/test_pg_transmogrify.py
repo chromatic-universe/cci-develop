@@ -1,4 +1,4 @@
-__author__ = 'William K. Johnson Rockwell-Collins 2015'
+# william k. johnson 2015
 
 import unittest
 import peci_db_utils.pg_transmogrify as pt
