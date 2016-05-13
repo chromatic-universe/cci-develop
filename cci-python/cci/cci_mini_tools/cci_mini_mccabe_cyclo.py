@@ -10,19 +10,7 @@ import clang.cindex as clang
 from clang.cindex import CursorKind
 import unittest
 
-"""
-interesting tidbit from:
 
-Comprehensive Analysis of C++ Applications
-using the libClang API
-Stephen Schaub and Brian A. Malloy
-School of Computing
-Clemson University
-Clemson, SC 29634, USA
-{sschaub,malloy}@clemson.edu
-
-cyclometric complexity
-"""
 
 from cci_mini_interface import cci_mini_clang_tool
 import cci_utils.cci_io_tools as io
