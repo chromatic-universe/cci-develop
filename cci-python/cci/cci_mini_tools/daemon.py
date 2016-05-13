@@ -1,25 +1,5 @@
-'''
-***
-Modified generic daemon class
-***
+# generic daemon class
 
-Author:         http://www.jejik.com/articles/2007/02/
-                        a_simple_unix_linux_daemon_in_python/www.boxedice.com
-
-License:        http://creativecommons.org/licenses/by-sa/3.0/
-
-Changes:        23rd Jan 2009 (David Mytton <david@boxedice.com>)
-                - Replaced hard coded '/dev/null in __init__ with os.devnull
-                - Added OS check to conditionally remove code that doesn't
-                  work on OS X
-                - Added output to console on completion
-                - Tidied up formatting
-                11th Mar 2009 (David Mytton <david@boxedice.com>)
-                - Fixed problem with daemon exiting on Python 2.4
-                  (before SystemExit was part of the Exception base)
-                13th Aug 2010 (David Mytton <david@boxedice.com>
-                - Fixed unhandled exception if PID file is empty
-'''
 
 # Core modules
 import atexit
@@ -50,9 +30,7 @@ class Daemon(object):
 
     def daemonize(self):
         """
-        Do the UNIX double-fork magic, see Stevens' "Advanced
-        Programming in the UNIX Environment" for details (ISBN 0201563177)
-        http://www.erlenstar.demon.co.uk/unix/faq_2.html#SEC16
+        double fork magic here
         """
         try:
             pid = os.fork()
@@ -221,7 +199,7 @@ class Daemon(object):
 
     def run(self):
         """
-        You should override this method when you subclass Daemon.
+        you should override this method when you subclass daemon.
         It will be called after the process has been
         daemonized by start() or restart().
         """
