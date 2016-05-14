@@ -23,7 +23,7 @@ from flask import Flask ,\
                   blueprints ,\
                   jsonify
 from datetime import date
-from cci_presents import application
+
 
 
 def page_not_found( e , **kargs) :
