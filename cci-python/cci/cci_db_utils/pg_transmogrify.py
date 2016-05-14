@@ -11,11 +11,8 @@ import os
 import sys
 
 
-# peci
-from peci_db_utils.transmogrify import db_transmogrify ,\
-                                       db_transmogrify_cli_facade , \
-                                       binary_util
-import peci_db_utils.constants as const
+# cci
+import cci_utils.cci_constants as const
 # postgres
 import psycopg2
 import psycopg2.extras
@@ -52,7 +49,7 @@ const.pg_cli_user = ''
 const.pg_option_group = ['general' , 'output' , 'connection']
 
 #-----------------------------------------------------------------------------------------------------------------------
-class pg_transmogrify( db_transmogrify ) :
+class pg_transmogrify( object ) :
 
         """
         postgres database transmogrifier
@@ -65,9 +62,9 @@ class pg_transmogrify( db_transmogrify ) :
         '''
         object model
         '''
-        def __init__( self , name = 'peci_db' ,
-                             user = 'peci_user' ,
-                             password = 'peci_user' ,
+        def __init__( self , name = 'cci_db' ,
+                             user = 'postgres' ,
+                             password = 'postgres' ,
                              host = 'localhost' ,
                              port = '5432' ,
                              connect_immediate = True ,
@@ -921,7 +918,7 @@ def output_handler( output ) :
 def transmogrify_main()  :
 
     # command line
-    parser = argparse.ArgumentParser( description='pg_transmogrify , rockwell collins 2015 , all rights reserved' ,
+    parser = argparse.ArgumentParser( description='pg_transmogrify , william k. johnson 2015' ,
                                       epilog='...postgres processing utlities...')
 
     parser.add_argument('--verbose', '-v',
@@ -984,8 +981,15 @@ def transmogrify_main()  :
 
 if __name__ == "__main__":
 
-
+    # do a test connect and retrieve
+    try :
+        postgres = pg_transmogrify( connect_immediate = True , logging_on = True )
+    except psycopg2.DatabaseError , exception:
+        print exception
+        sys.exit( 1 )
+    finally:
+        pass
     #doctest.testmod()
-    transmogrify_main()
+    #transmogrify_main()
 
 
