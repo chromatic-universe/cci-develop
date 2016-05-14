@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="cci-codeblocks-interface" />
+		<Option pch_mode="2" />
+		<Option compiler="clang" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/cci_cinterface" imp_lib="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).a" def_file="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).def" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="3" />
+				<Option compiler="clang" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add directory="/trunk/dev_src/include" />
+					<Add directory="/usr/lib/i386-linux-gnu/glib-2.0/include" />
+					<Add directory="/usr/include/glib-2.0" />
+				</Compiler>
+				<Linker>
+					<Add option="-fPIC" />
+					<Add library="glib-2.0" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="cp bin/Debug/libcci_cinterface.so $DEV_LIB" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/cci-codeblocks" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="clang" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-g" />
+			<Add directory="/cci/cci_src/master/git_repo_1/include/" />
+			<Add directory="/usr/lib/i386-linux-gnu/glib-2.0/include" />
+		</Compiler>
+		<Unit filename="../cci/cci_memory_utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../cci/cci_mini_assert.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../cci/cci_mini_except.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../cci/cci_mini_list.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../cci/cci_mini_stack.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../cci/cci_mini_trace.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

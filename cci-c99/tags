@@ -1,0 +1,134 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BIN_OBJS	Makefile	/^BIN_OBJS = chromatic_c_test.o$/;"	m
+BIN_SRCS	Makefile	/^BIN_SRCS = $(SRC_DIR)test\/chromatic_c_test.c$/;"	m
+CC	Makefile	/^CC     = clang$/;"	m
+CCI_DIR	Makefile	/^CCI_DIR = $(SRC_DIR)cci$/;"	m
+CFLAGS	Makefile	/^CFLAGS = -fPIC -Wall -Qunused-arguments  -I..\/include \\$/;"	m
+CYBER_OBJS	Makefile	/^CYBER_OBJS = cci_access_ctl.o$/;"	m
+CYBER_SRCS	Makefile	/^CYBER_SRCS =  $(CCI_DIR)\/cyber\/cci_access_ctl.c$/;"	m
+DBGBIN	Makefile	/^DBGBIN = $(DBGDIR)\/$(TARGET_BIN)$/;"	m
+DBGBINOBJS	Makefile	/^DBGBINOBJS = $(addprefix $(DBGDIR)\/, $(BIN_OBJS))$/;"	m
+DBGCFLAGS	Makefile	/^DBGCFLAGS = -g -O0 -DDEBUG -pg $/;"	m
+DBGCYBERLIB	Makefile	/^DBGCYBERLIB = $(DBGDIR)\/$(TARGET_CYBER_LIB)$/;"	m
+DBGCYBEROBJS	Makefile	/^DBGCYBEROBJS = $(addprefix $(DBGDIR)\/, $(CYBER_OBJS))$/;"	m
+DBGDIR	Makefile	/^DBGDIR = debug$/;"	m
+DBGINTERFACELIB	Makefile	/^DBGINTERFACELIB = $(DBGDIR)\/$(TARGET_INTERFACE_LIB)$/;"	m
+DBGINTERFACEOBJS	Makefile	/^DBGINTERFACEOBJS = $(addprefix $(DBGDIR)\/, $(INTERFACE_OBJS))$/;"	m
+DBGLIB	Makefile	/^DBGLIB = $(DBGDIR)\/$(TARGET_LIB)$/;"	m
+DBGOBJS	Makefile	/^DBGOBJS = $(addprefix $(DBGDIR)\/, $(OBJS))$/;"	m
+DBGSERVICELIB	Makefile	/^DBGSERVICELIB = $(DBGDIR)\/$(TARGET_SERVICE_LIB)$/;"	m
+DBGSERVICEOBJS	Makefile	/^DBGSERVICEOBJS = $(addprefix $(DBGDIR)\/, $(SERVICE_OBJS))$/;"	m
+INTERFACE_OBJS	Makefile	/^INTERFACE_OBJS = cci_mini_stack.o cci_mini_except.o \\$/;"	m
+INTERFACE_SRCS	Makefile	/^INTERFACE_SRCS = $(CCI_DIR)\/cci_mini_stack.c $(CCI_DIR)\/cci_mini_except.c \\$/;"	m
+LDBINFLAGS	Makefile	/^LDBINFLAGS = -lcci_cutils  -lcci_cinterface -lglib-2.0 -lrdkafka -lfuse \\$/;"	m
+LDFLAGS	Makefile	/^LDFLAGS = -shared  -fPIC -lcci_cutils  -lcci_cinterface -lglib-2.0 \\$/;"	m
+LDSERVICEFLAGS	Makefile	/^LDSERVICEFLAGS = -lrdkafka -lfuse -lcassandra -lrabbitmq$/;"	m
+LIB_DIR	Makefile	/^LIB_DIR = \/dev_tools\/lib$/;"	m
+OBJS	Makefile	/^OBJS = cci_utils.o$/;"	m
+RELBIN	Makefile	/^RELBIN = $(RELDIR)\/$(TARGET_BIN)$/;"	m
+RELBINOBJS	Makefile	/^RELBINOBJS = $(addprefix $(RELDIR)\/, $(BIN_OBJS))$/;"	m
+RELCFLAGS	Makefile	/^RELCFLAGS = -O3 -DNDEBUG$/;"	m
+RELCYBERLIB	Makefile	/^RELCYBERLIB = $(RELDIR)\/$(TARGET_CYBER_LIB)$/;"	m
+RELCYBEROBJS	Makefile	/^RELCYBEROBJS =  $(addprefix $(RELDIR)\/, $(CYBER_OBJS))$/;"	m
+RELDIR	Makefile	/^RELDIR = release$/;"	m
+RELINTERFACELIB	Makefile	/^RELINTERFACELIB = $(RELDIR)\/$(TARGET_INTERFACE_LIB)$/;"	m
+RELINTERFACEOBJS	Makefile	/^RELINTERFACEOBJS = $(addprefix $(RELDIR)\/, $(INTERFACE_OBJS))$/;"	m
+RELLIB	Makefile	/^RELLIB = $(RELDIR)\/$(TARGET_LIB)$/;"	m
+RELOBJS	Makefile	/^RELOBJS = $(addprefix $(RELDIR)\/, $(OBJS))$/;"	m
+RELSERVICELIB	Makefile	/^RELSERVICELIB = $(RELDIR)\/$(TARGET_SERVICE_LIB)$/;"	m
+RELSERVICEOBJS	Makefile	/^RELSERVICEOBJS = $(addprefix $(RELDIR)\/, $(SERVICE_OBJS))$/;"	m
+SERVICE_OBJS	Makefile	/^SERVICE_OBJS = cci_mini_kafka.o cci_mini_cassandra.o \\$/;"	m
+SERVICE_SRCS	Makefile	/^SERVICE_SRCS = $(CCI_DIR)\/service\/cci_mini_kafka.c $(CCI_DIR)\/service\/cci_mini_cassandra.c \\$/;"	m
+SRCS	Makefile	/^SRCS = $(CCI_DIR)\/cci_utils.c$/;"	m
+SRC_DIR	Makefile	/^SRC_DIR = .\/$/;"	m
+T	cci/cci_mini_except.c	6;"	d	file:
+TARGET_BIN	Makefile	/^TARGET_BIN = chromatic-c-test$/;"	m
+TARGET_CYBER_LIB	Makefile	/^TARGET_CYBER_LIB = libcci_cyber_utils.so$/;"	m
+TARGET_INTERFACE_LIB	Makefile	/^TARGET_INTERFACE_LIB = libcci_cinterface.so$/;"	m
+TARGET_LIB	Makefile	/^TARGET_LIB = libcci_cutils.so $/;"	m
+TARGET_SERVICE_LIB	Makefile	/^TARGET_SERVICE_LIB = libcci_service.so$/;"	m
+__cyg_profile_func_enter	cci/cci_mini_trace.c	/^void __cyg_profile_func_enter( void *func ,  void *caller )$/;"	f
+__cyg_profile_func_exit	cci/cci_mini_trace.c	/^void __cyg_profile_func_exit( void *func , void *caller )$/;"	f
+allocate	test/chromatic_c_test.c	/^void* allocate ( unsigned n )$/;"	f
+allocate_failed	test/chromatic_c_test.c	/^except_T allocate_failed = { "The Original Corny Snaps" };$/;"	v
+amqp_dump	cci/service/cci_mini_rabbit.c	/^void amqp_dump( void const *buffer , size_t len )$/;"	f
+assert	cci/cci_mini_assert.c	/^void (assert)( int e )$/;"	f
+assert_failed	cci/cci_mini_assert.c	/^const except_T assert_failed = { "assertion failed" };$/;"	v
+cci_getattr	cci/fuser/cci_mini_fuser.c	/^int cci_getattr( const char* path , struct stat* stbuf )$/;"	f
+cci_guttman_file_wipe	cci/cyber/cci_access_ctl.c	/^int cci_guttman_file_wipe( FILE *f )$/;"	f
+cci_is_safe_dir	cci/cyber/cci_access_ctl.c	/^int cci_is_safe_dir( const char* dir )$/;"	f
+cci_kf_hex_dump	cci/service/cci_mini_kafka.c	/^void cci_kf_hex_dump( file_ptr fp, const char *name, const void_ptr ptr , size_t len )$/;"	f
+cci_kf_logger	cci/service/cci_mini_kafka.c	/^void cci_kf_logger ( const rd_kafka_t *rk ,$/;"	f
+cci_kf_metadata_print	cci/service/cci_mini_kafka.c	/^void cci_kf_metadata_print ( const char *topic , const metadata_ptr_k metadata )$/;"	f
+cci_kf_mini_run	cci/service/cci_mini_kafka.c	/^void cci_kf_mini_run( int argc , char**argv )$/;"	f
+cci_kf_msg_consume	cci/service/cci_mini_kafka.c	/^void cci_kf_msg_consume( message_ptr_k rkmessage ,$/;"	f
+cci_kf_msg_delivered	cci/service/cci_mini_kafka.c	/^void cci_kf_msg_delivered( rd_kafka_t *rk ,$/;"	f
+cci_mem_chk_alloc	cci/cci_memory_utils.c	/^void_ptr cci_mem_chk_alloc( long nbytes , const char *file , int line )$/;"	f
+cci_mem_chk_calloc	cci/cci_memory_utils.c	/^void_ptr cci_mem_chk_calloc( long count , long nbytes ,	const char* file , int line )$/;"	f
+cci_mem_chk_dalloc	cci/cci_memory_utils.c	/^struct descriptor* cci_mem_chk_dalloc( void_ptr ptr ,$/;"	f
+cci_mem_chk_free	cci/cci_memory_utils.c	/^void cci_mem_chk_free( void_ptr ptr , const char* file , int line )$/;"	f
+cci_mem_chk_resize	cci/cci_memory_utils.c	/^void_ptr cci_mem_chk_resize( void_ptr ptr ,$/;"	f
+cci_open	cci/fuser/cci_mini_fuser.c	/^int cci_open( const char *path ,$/;"	f
+cci_open_dev_null	cci/cyber/cci_access_ctl.c	/^int cci_open_dev_null( int fd )$/;"	f
+cci_oper	cci/fuser/cci_mini_fuser.c	/^static struct fuse_operations cci_oper =$/;"	v	typeref:struct:fuse_operations	file:
+cci_path	cci/fuser/cci_mini_fuser.c	/^static const char *cci_path = "\/cci_mini";$/;"	v	file:
+cci_read	cci/fuser/cci_mini_fuser.c	/^int cci_read( const char *path ,$/;"	f
+cci_readdir	cci/fuser/cci_mini_fuser.c	/^int cci_readdir( const char* path ,$/;"	f
+cci_sanitize_files	cci/cyber/cci_access_ctl.c	/^void cci_sanitize_files( void )$/;"	f
+cci_str	cci/fuser/cci_mini_fuser.c	/^static const char *cci_str = "cci_mini_fuser\\n";$/;"	v	file:
+cci_zero_core	cci/cci_memory_utils.c	/^void cci_zero_core()$/;"	f
+cdra_stream_err	cci/service/cci_mini_cassandra.c	/^void cdra_stream_err( cdra_future_ptr future )$/;"	f
+compare_str	cci/cci_utils.c	/^boolean compare_str( const string first_str , const string second_str )$/;"	f
+compare_str_mem	cci/cci_utils.c	/^boolean compare_str_mem( const string first , const string second )$/;"	f
+count_non_blank_lines	cci/cci_utils.c	/^int count_non_blank_lines( string in_string )$/;"	f
+create_cluster	cci/service/cci_mini_cassandra.c	/^cdra_cluster_ptr create_cluster( const char* ip_string )$/;"	f
+dict_setup	test/chromatic_c_test.c	/^void dict_setup( dfixture* fx , gconstpointer test_data )$/;"	f
+dict_teardown	test/chromatic_c_test.c	/^void dict_teardown( dfixture* fx , gconstpointer test_datea )$/;"	f
+die	cci/service/cci_mini_rabbit.c	/^void die( const char *fmt , ... )$/;"	f
+die_on_amqp_error	cci/service/cci_mini_rabbit.c	/^void die_on_amqp_error( amqp_rpc_reply_t x , char const *context )$/;"	f
+die_on_error	cci/service/cci_mini_rabbit.c	/^void die_on_error( int x , char const *context )$/;"	f
+error_log	cci/cci_utils.c	/^file_handle* error_log = NULL;$/;"	v
+error_mode	cci/cci_utils.c	/^const char error_mode = 's';$/;"	v
+except_raise	cci/cci_mini_except.c	/^void except_raise( const T *e ,$/;"	f
+except_stack	cci/cci_mini_except.c	/^except_frame *except_stack = NULL;$/;"	v
+exit_eof	cci/service/cci_mini_kafka.c	/^int exit_eof = 0;$/;"	v
+find	cci/cci_memory_utils.c	/^static struct descriptor *find( const void_ptr ptr )$/;"	f	file:
+freelist	cci/cci_memory_utils.c	/^static struct descriptor freelist = { &freelist };$/;"	v	typeref:struct:descriptor	file:
+hash	cci/cci_memory_utils.c	11;"	d	file:
+int_to_str	cci/cci_utils.c	/^void int_to_str( char int_str[] , int input )$/;"	f
+is_unique_chars_in_str	cci/cci_utils.c	/^boolean is_unique_chars_in_str( char str[] )$/;"	f
+len_str	cci/cci_utils.c	/^size_t len_str( string str )$/;"	f
+long_str_len	test/chromatic_c_test.c	/^const int long_str_len = 24;$/;"	v
+main	test/chromatic_c_test.c	/^int main( int argv , char* argc[] )$/;"	f
+mem_alloc	cci/cci_memory_utils.c	/^void_ptr mem_alloc (  long nbytes , const char *file , int line )$/;"	f
+mem_calloc	cci/cci_memory_utils.c	/^void_ptr mem_calloc( long count , long nbytes , const char *file , int line )$/;"	f
+mem_failed	cci/cci_memory_utils.c	/^const except_T mem_failed  = { "allocation failed" };$/;"	v
+mem_free	cci/cci_memory_utils.c	/^void mem_free( void_ptr ptr , const char *file , int line )$/;"	f
+mem_resize	cci/cci_memory_utils.c	/^void_ptr mem_resize( void_ptr ptr , long nbytes ,	const char *file , int line )$/;"	f
+microsleep	cci/service/cci_mini_rabbit.c	/^void microsleep( int usec )$/;"	f
+n_alloc	cci/cci_memory_utils.c	14;"	d	file:
+n_descriptors	cci/cci_memory_utils.c	13;"	d	file:
+no_function_call_copy	cci/cci_utils.c	/^void no_function_call_copy( string to_str , string from_str )$/;"	f
+now_microseconds	cci/service/cci_mini_rabbit.c	/^uint64_t now_microseconds( void )$/;"	f
+quick_palindrome	cci/cci_utils.c	/^boolean quick_palindrome( const int dw_palindrome )$/;"	f
+quiet	cci/service/cci_mini_kafka.c	/^int quiet = 0;$/;"	v
+rk	cci/service/cci_mini_kafka.c	/^rd_kafka_t *rk = NULL;$/;"	v
+run	cci/service/cci_mini_kafka.c	/^int run = 1;$/;"	v
+safe_palindrome	cci/cci_utils.c	/^boolean safe_palindrome( const int dw_palindrome )$/;"	f
+short_str_len	test/chromatic_c_test.c	/^const int short_str_len = 6;$/;"	v
+sig_usr1	cci/service/cci_mini_kafka.c	/^void sig_usr1 ( int sig )$/;"	f
+stop	cci/service/cci_mini_kafka.c	/^void stop (int sig) {$/;"	f
+str_reverse	cci/cci_utils.c	/^void str_reverse( char begin_str[] )$/;"	f
+str_to_int	cci/cci_utils.c	/^int str_to_int( string dw_str )$/;"	f
+string_list_free	cci/cci_utils.c	/^void string_list_free( string_list* list )$/;"	f
+string_list_new	cci/cci_utils.c	/^string_list* string_list_new( string in_string , char const *delimiters )$/;"	f
+test_compare_equal	test/chromatic_c_test.c	/^void test_compare_equal( dfixture* fx , gconstpointer ignored )$/;"	f
+test_not_compare_equal	test/chromatic_c_test.c	/^void test_not_compare_equal( dfixture* fx , gconstpointer ignored )$/;"	f
+text_string_from_file	cci/cci_utils.c	/^string text_string_from_file( char const *filename )$/;"	f
+trace_begin	cci/cci_mini_trace.c	/^void __attribute__ ( ( constructor ) ) trace_begin( void )$/;"	f
+trace_end	cci/cci_mini_trace.c	/^void __attribute__ ( (destructor ) ) trace_end ( void )$/;"	f

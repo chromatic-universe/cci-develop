@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Workspace">
+		<Project filename="cci-codeblocks/cci-codeblocks.cbp" />
+		<Project filename="cci-codeblocks-cyber/cci-codeblocks-cyber.cbp" />
+		<Project filename="cci-codeblocks-service/cci-codeblocks-service.cbp" />
+		<Project filename="cci-codeblocks-test/cci-codeblocks-test.cbp" />
+		<Project filename="cci-codeblocks-utils/cci-codeblocks-utils.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>
