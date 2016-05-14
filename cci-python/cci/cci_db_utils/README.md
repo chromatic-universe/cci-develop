@@ -1,6 +1,6 @@
 'out of framework' postgres utils for django.
 
-a module which addresses one of my reservations about frameeworks 
+a module which addresses one of my reservations about frameworks 
 like django: the maintenance of everything in a database , including
 ooerational code and metadata. this module deals with the 'sawing off the 
 branch you're sitting' on problem: the django application cannot recover
