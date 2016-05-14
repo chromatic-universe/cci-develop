@@ -120,7 +120,7 @@ class pg_transmogrify( object ) :
                  """ add the handlers to the self._logger """
                  self._logger.addHandler( fh )
                  self._logger.addHandler( ch )
-                 self._logger.info( 'pg_transmogrify , Rockwell-Collins , 2015; all rights reserved' )
+                 self._logger.info( 'pg_transmogrify ,william k. johnson 2015' )
 
              if connect_immediate is True :
                 self.connect()
@@ -161,7 +161,7 @@ class pg_transmogrify( object ) :
               :rtype: basestring
               :return: str
               """
-              return 'pg_transmogrify , 2015 , Rockwell-Collins; all rights reserved'
+              return 'pg_transmogrify , 2015 ,william k. johnson'
 
         def __bool__( self ) :
               """
@@ -846,7 +846,7 @@ class pg_transmogrify_facade( object ) :
             """
             # TODO: implement this method
 
-            b_ret - False
+            b_ret = False
             try:
                 self._logger.warn( 'initiating commit generation....' )
                 self._logger.warn( 'rotating fielded configuration to fallback configuration....' )
