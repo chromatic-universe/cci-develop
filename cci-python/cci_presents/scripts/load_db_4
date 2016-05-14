@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import sys
+import re
+import sqlite3
+
+# Load motor neuron data into db
+
+# About: script to load motor data into an sqlite3 db from a text file
+
+mydb = sys.argv[1]
+myfile = sys.argv[2]
+mytable = sys.argv[3]
+
+conn = sqlite3.connect(mydb)
+conn.text_factory = str
+c = conn.cursor()
+
+# clear database
+c.execute('DELETE FROM ' + mytable + ' WHERE id>=1')
+
+counter = 1 
+
+with open(myfile, "r") as f:
+	for line in f:
+		# if line not empty
+		if (line.strip()):
+
+			line = line.rstrip('\n')
+
+			l = tuple([counter] + line.split())
+
+			c.execute('INSERT INTO ' + mytable + ' (id, Gene, Cells, Mean, Min, Max, Connectivity, p_value, BH_p_value, Centroid, Dispersion, RNA_binding, Splicing, Surface, Transcription) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', l)
+
+			# Save (commit) the changes
+			conn.commit()
+
+			# increment
+			counter += 1
+
+conn.close()

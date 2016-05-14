@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+
+{% block title %}cci-dev domain( {{server}} ){% endblock %}
+
+<!-- CSS for this specific page -->
+{% block extracss %}
+<link rel="stylesheet" href="/static/vendor/css/jquery.qtip.css">
+<link rel="stylesheet" href="/static/vendor/css/hover.css">
+{% endblock %}
+
+<!-- Content -->
+{% block content %}
+
+ <!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">cci-dev
+                   <small>development domain {{server}}</small>
+                </h2>
+                <ol class="breadcrumb">
+                    <li><a href="/">home</a>
+                    </li>
+                    <li class="active">cci-dev <{{server}}/li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Image Header -->
+        <div class="row">
+            <div class="col-lg-12">
+                <img class="img-responsive" src="/static/image/networking.jpg" alt="">
+            </div>
+        </div>
+
+
+         <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+
+    </div>
+    <!-- /.container -->
+
+
+
+{% endblock %}
+
+<!-- JS for this specific page -->
+{% block extrajs %}
+
+<!-- Script to Activate the Carousel -->
+    <script>
+    $('.carousel').carousel({
+        interval: 3500 //changes the speed
+    })
+    </script>
+<!-- Use Qtip Tool tip bubbles -->
+<script>
+  $(document).ready(function() {
+    useQtips();
+  });
+</script>
+
+{% endblock %}

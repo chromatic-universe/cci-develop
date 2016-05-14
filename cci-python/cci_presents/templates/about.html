@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+
+{% block title %}about william k. johnson{% endblock %}
+
+<!-- CSS for this specific page -->
+{% block extracss %}
+<link rel="stylesheet" href="/static/vendor/css/jquery.qtip.css">
+<link rel="stylesheet" href="/static/vendor/css/hover.css">
+{% endblock %}
+
+<!-- Content -->
+{% block content %}
+
+ <!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">about
+                   <small> william k. johnson</small>
+                </h2>
+                <ol class="breadcrumb">
+                    <li><a href="/">home</a>
+                    </li>
+                    <li class="active">about</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Image Header -->
+        <div class="row">
+            <div class="col-lg-12">
+                <img class="img-responsive" src="/static/image/helio.jpg" alt="">
+            </div>
+        </div>
+        <!-- /.row -->
+        <br>
+         <div class="row">
+            <div class="col-lg-12">
+                <p>principal level software engineer with advanced knowledge and experience of several
+                   object oriented programming languages including <strong>c/c++/stl, python , and delphi/objectpascal.
+                   </strong>api and system level development experience on both unix/linux and windows platforms.
+                   experienced with wide array of open source implementations
+                   <strong>(llvm/clang ,kafka, zookeeper, nginx, django/django rest Api,thrift,mongodb,
+                   flask,vagrant ,elasticsearch, apache).</strong> Wide experience in porting Open Source implementations to
+                   production modules.  concentration in email/messaging protocols and APIs and distributed and
+                   concurrent programming <strong>( ssl ,fix ,dds ,amqp , publish/subscribe,thrift.protobuffers).
+                   </strong>knowledgeable of numerous problem domains including accounting , network storage
+                   digital forensics and dynamic and static binary analysis.Linux,Windows and Arm platforms.</p>
+
+
+            </div>
+         </div>
+        <br>
+
+        <center><a href="/static/pdf/wjohnson_short.pdf" download="wjohnson_short.pdf" class="btn btn-default">short resume pdf</a></center>
+        <br>
+
+
+         <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    </div>
+    <!-- /.container -->
+
+
+
+{% endblock %}
+
+<!-- JS for this specific page -->
+{% block extrajs %}
+
+<!-- Script to Activate the Carousel -->
+    <script>
+    $('.carousel').carousel({
+        interval: 3500 //changes the speed
+    })
+    </script>
+<!-- Use Qtip Tool tip bubbles -->
+<script>
+  $(document).ready(function() {
+    useQtips();
+  });
+</script>
+
+{% endblock %}

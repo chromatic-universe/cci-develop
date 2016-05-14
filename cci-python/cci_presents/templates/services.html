@@ -1,0 +1,368 @@
+{% extends "base.html" %}
+
+
+{% block title %}chromatic universe services{% endblock %}
+
+<!-- CSS for this specific page -->
+{% block extracss %}
+<link rel="stylesheet" href="/static/vendor/css/jquery.qtip.css">
+<link rel="stylesheet" href="/static/vendor/css/hover.css">
+<link rel="stylesheet" href="/static/custom/css/custom.css">
+{% endblock %}
+
+<!-- Content -->
+{% block content %}
+
+ <!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">services
+                   <small> platform deliverables and api development</small>
+                </h2>
+                <ol class="breadcrumb">
+                    <li><a href="/">home</a>
+                    </li>
+                    <li class="active">services</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Image Header -->
+        <div class="row">
+            <div class="col-lg-12">
+                <img class="img-responsive" src="/static/image/krak.jpg" alt="">
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Service Panels -->
+        <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header"></h2>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="panel panel-default text-center">
+                    <div class="panel-heading">
+                        <span class="fa-stack fa-5x">
+                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                              <i class="fa fa-tree fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <h4>rpc/rest</h4>
+
+                        <a href="/more/rpc" class="btn btn-default">learn more</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="panel panel-default text-center">
+                    <div class="panel-heading">
+                        <span class="fa-stack fa-5x">
+                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                              <i class="fa fa-support fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <h4>messaging and serialization</h4>
+
+                        <a href="/more/messaging" class="btn btn-default">learn more</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="panel panel-default text-center">
+                    <div class="panel-heading">
+                        <span class="fa-stack fa-5x">
+                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                              <i class="fa fa-support fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <h4>custom api develpment</h4>
+
+                        <a href="/more/api" class="btn btn-default">learn more</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="panel panel-default text-center">
+                    <div class="panel-heading">
+                        <span class="fa-stack fa-5x">
+                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                              <i class="fa fa-database fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+
+                        <h4>tooling and interoperability</h4>
+
+                        <a href="/more/interop" class="btn btn-default">learn more</a>
+                    </div>
+                </div>
+            </div>  <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+        </div>
+
+        <!-- Service Tabs -->
+        <div class="row">
+            <div class="col-lg-12">
+
+            </div>
+            <div class="col-lg-12">
+
+                <ul id="myTab" class="nav nav-tabs nav-justified">
+                    <li class="active"><a href="#service-one" data-toggle="tab"><i class="fa fa-tree"></i>c++</a>
+                    </li>
+                    <li class=""><a href="#service-two" data-toggle="tab"><i class="fa fa-car"></i>c99</a>
+                    </li>
+                    <li class=""><a href="#service-three" data-toggle="tab"><i class="fa fa-support"></i>python</a>
+                    </li>
+                    <li class=""><a href="#service-four" data-toggle="tab"><i class="fa fa-database"></i>distributed computing</a>
+                    </li>
+                </ul>
+
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade active in" id="service-one">
+                        <h4>c++</h4>
+                        <p>i first began my c++ journey with the venerable visual c++ 1.5 way back in the day(as they say). as in most things , Microsoft was ambivalent: most of its products and the winapi itself were written in C89 and it wanted to maintain a generic code baseline. even the microsoft foundation classes(mfc) , which are remarkably still alive , were written in straight c and wrapped with a c++ facade-which accounts for the bizarre event dispatching mechanisms. Even more remarkably , microsoft has never adopted the c99 specification , which makes c applications for Windows as decrepit as quattro pro.stangely , this retarded microsoft;s adherence to the c++ standard in ways we won't go into here.</p>
+                        <p>the gnu c and g++ compilers at the time were light years ahead , although compiler file formats were not as universal as they are now. but microsoft actually showed constant improvement in the compiler game , somewhat mollified by the companies insistence on non-standard compliant binary hijinks. i actually started out first in c and c++ on the microsoft and intel compilers and several years later picked up the gnu gcc toolchain. this historical perspective has actually served me well in delivering engineering services in a number of ways....</p>
+
+                        <center><a href=# class="btn btn-default">....</a></center>
+                    </div>
+                    <div class="tab-pane fade" id="service-two">
+                        <h4>c99</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae repudiandae fugiat illo cupiditate excepturi esse officiis consectetur, laudantium qui voluptatem. Ad necessitatibus velit, accusantium expedita debitis impedit rerum totam id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus quibusdam recusandae illum, nesciunt, architecto, saepe facere, voluptas eum incidunt dolores magni itaque autem neque velit in. At quia quaerat asperiores.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae repudiandae fugiat illo cupiditate excepturi esse officiis consectetur, laudantium qui voluptatem. Ad necessitatibus velit, accusantium expedita debitis impedit rerum totam id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus quibusdam recusandae illum, nesciunt, architecto, saepe facere, voluptas eum incidunt dolores magni itaque autem neque velit in. At quia quaerat asperiores.</p>
+                    </div>
+                    <div class="tab-pane fade" id="service-three">
+                        <h4>python</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae repudiandae fugiat illo cupiditate excepturi esse officiis consectetur, laudantium qui voluptatem. Ad necessitatibus velit, accusantium expedita debitis impedit rerum totam id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus quibusdam recusandae illum, nesciunt, architecto, saepe facere, voluptas eum incidunt dolores magni itaque autem neque velit in. At quia quaerat asperiores.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae repudiandae fugiat illo cupiditate excepturi esse officiis consectetur, laudantium qui voluptatem. Ad necessitatibus velit, accusantium expedita debitis impedit rerum totam id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus quibusdam recusandae illum, nesciunt, architecto, saepe facere, voluptas eum incidunt dolores magni itaque autem neque velit in. At quia quaerat asperiores.</p>
+                    </div>
+                    <div class="tab-pane fade" id="service-four">
+                        <h4>distributed computing</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae repudiandae fugiat illo cupiditate excepturi esse officiis consectetur, laudantium qui voluptatem. Ad necessitatibus velit, accusantium expedita debitis impedit rerum totam id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus quibusdam recusandae illum, nesciunt, architecto, saepe facere, voluptas eum incidunt dolores magni itaque autem neque velit in. At quia quaerat asperiores.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae repudiandae fugiat illo cupiditate excepturi esse officiis consectetur, laudantium qui voluptatem. Ad necessitatibus velit, accusantium expedita debitis impedit rerum totam id. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus quibusdam recusandae illum, nesciunt, architecto, saepe facere, voluptas eum incidunt dolores magni itaque autem neque velit in. At quia quaerat asperiores.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Service List -->
+        <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="page-header">service resources</h3>
+            </div>
+            <div class="col-md-4">
+                <div class="media">
+                    <div class="pull-left">
+                        <span class="fa-stack fa-2x">
+                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                              <i class="fa fa-tree fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><u>c++</u></h4>
+                        <ul >
+                            <li>visual studio 2016 ultimate</li>
+                            <li>intel parallel studio(linux and windows)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="media">
+                    <div class="pull-left">
+                        <span class="fa-stack fa-2x">
+                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                              <i class="fa fa-car fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><u>c99</u></h4>
+                         <ul >
+                            <li>chilkat network libraries</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="media">
+                    <div class="pull-left">
+                        <span class="fa-stack fa-2x">
+                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                              <i class="fa fa-support fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><u>python</u></h4>
+                        <ul >
+                            <li>pycharm professional(windows and linux)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="media">
+                    <div class="pull-left">
+                        <span class="fa-stack fa-2x">
+                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                              <i class="fa fa-database fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><u>distributed computing</u></h4>
+                        <ul >
+                            <li>amazon web services resources</li>
+                            <li>digital ocean resources</li>
+                            <li>confluent(kafka) support</li>
+                            <li>red hat enterprise support</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="media">
+                    <div class="pull-left">
+                        <span class="fa-stack fa-2x">
+                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                              <i class="fa fa-bomb fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><u>delphi/objectpascal</u></h4>
+                        <ul >
+                            <li>embarcadero delphi 10</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="media">
+                    <div class="pull-left">
+                        <span class="fa-stack fa-2x">
+                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                              <i class="fa fa-bank fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><u>compiler infrastructure</u></h4>  <!-- jQuery -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="media">
+                    <div class="pull-left">
+                        <span class="fa-stack fa-2x">
+                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                              <i class="fa fa-paper-plane fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><u>dissassembly and discovery</u></h4>
+                         <ul >
+                            <li>ida pro 6.6</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="media">
+                    <div class="pull-left">
+                        <span class="fa-stack fa-2x">
+                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                              <i class="fa fa-space-shuttle fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><u>design and documentation</u></h4>
+                        <ul >
+                            <li>understand for linux</li>
+                            <li>enterprise architect 12</li>
+                        </ul>
+                    </div>
+                </div>
+                 <div class="media">
+                    <div class="pull-left">
+                        <span class="fa-stack fa-2x">
+                              <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                              <i class="fa fa-space-shuttle fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><u>configration management</u></h4>
+                        <ul >
+                            <li>jira</li>
+                            <li>fisheye</li>
+                            <li>confluence</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- /.row -->
+        <!-- Features Section -->
+        <div class="row">
+             <style scoped>
+            ul {
+
+                list-style-image: url('/static/image/software-components.jpg' );
+            }
+
+            </style>
+            <div class="col-lg-12">
+                <h5 class="page-header">component delivery model</h5>
+            </div>
+
+            <div class="col-md-6">
+                <h5 class="page header">a modern business template for service rendition includes:</h5>
+                <br>
+                <ul >
+                    <li>vagrant</li>
+                    <li>docker</li>
+                    <li>cmake/cpack(rpm,deb)</li>
+                    <li>automake,pypi,virtualenv</li>
+                    <li>custom build chains(yocto)
+                    <li>source and binary images(elf,pe and intermediate representations-clang/llvm,gcc,intel)
+                </ul>
+            </div>
+
+
+        </div>
+
+        <hr>
+        <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+
+    </div>
+    <!-- /.container -->
+
+
+
+{% endblock %}
+
+<!-- JS for this specific page -->
+{% block extrajs %}
+
+<!-- Script to Activate the Carousel -->
+    <script>
+    $('.carousel').carousel({
+        interval: 3500 //changes the speed
+    })
+    </script>
+<!-- Use Qtip Tool tip bubbles -->
+<script>
+  $(document).ready(function() {
+    useQtips();
+  });
+</script>
+
+{% endblock %}
+
