@@ -510,7 +510,7 @@ class pg_transmogrify( object ) :
 
 
 #-----------------------------------------------------------------------------------------------------------------------
-class pg_binary_util_dump( binary_util ) :
+class pg_binary_util_dump( object ) :
 
     """
     wrapper facade for runtime binary pg_dump
@@ -675,7 +675,7 @@ class pg_binary_util_dump( binary_util ) :
 
 
 #-----------------------------------------------------------------------------------------------------------------------
-class pg_binary_util_restore( binary_util ) :
+class pg_binary_util_restore( object ) :
 
     """
     wrapper facade for runtime binary pg_restore
@@ -733,7 +733,7 @@ class pg_binary_util_restore( binary_util ) :
 
 
 #-----------------------------------------------------------------------------------------------------------------------
-class pg_transmogrify_facade( db_transmogrify_cli_facade ) :
+class pg_transmogrify_facade( object ) :
        """
        wrapper facade for postgres db command line utils
        exposing fincionality of the fallback and commit
