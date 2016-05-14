@@ -1,0 +1,44 @@
+#cmake cci-curator  william k. johnson 2016
+
+#version
+cmake_minimum_required(VERSION 2.8)
+
+
+message(STATUS ${CMAKE_CXX_COMPILER})
+message(STATUS ${CMAKE_C_COMPILER})
+#cpp flags
+set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -Wall -g -O0  -Qunused-arguments  -DDEBUG -std=c++11")
+set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -Wall -O3  -Qunused-arguments  -DNDEBUG -std=c++11")
+
+#includes
+include_directories($DEV/include
+                    ./)
+link_directories(${ccicurator_SOURCE_DIR}
+                  ${CMAKE_INSTALL_PREFIX}/lib
+                ) 
+
+#shared library
+add_library(cci-curator SHARED CuratorService.cpp
+                               curator_types.cpp
+                               DiscoveryServiceLowLevel_server.skeleton.cpp
+                               SharedService_server.skeleton.cpp
+                               curator_constants.cpp 
+                               DiscoveryServiceLowLevel.cpp
+                               DiscoveryService_server.skeleton.cpp
+                               EventService_server.skeleton.cpp
+                               SharedService.cpp
+                               shared_types.cpp
+                               CuratorService_server.skeleton.cpp
+                               DiscoveryService.cpp
+                               EventService.cpp 
+                               shared_constants.cpp)
+                               
+#link libs
+target_link_libraries(cci-curator -levent -lthrift -lthriftnb)
+
+#install
+install_targets( /lib cci-curator)
+
+
+
+
