@@ -2,7 +2,7 @@
 
 a module which addresses one of my reservations about frameworks 
 like django: the maintenance of everything in a database , including
-ooerational code and metadata. this module deals with the 'sawing off the 
+operational code and metadata. this module deals with the 'sawing off the 
 branch you're sitting' on problem: the django application cannot recover
 or handle exceptions while operating on its own database since that's 
 where all the application logic is stored . This means that all data
