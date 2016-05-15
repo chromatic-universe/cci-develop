@@ -88,8 +88,9 @@ def about_pdf( pd )  :
 @application.route( '/domain/<server>' )
 def cci_dev( server )  :
         """
-        more data about william k. page
+        domain dev servers
 
+        :param: server
         :return:
         """
 
@@ -100,15 +101,24 @@ def portfolio( moniker )  :
         """
         portfolio
 
+        :param: moniker
         :return:
         """
 
         return  cci.portfolio_t(  folio = moniker ,
                                   image = portfolio_images[moniker] )
 
+# -----------------------------------------------------
+@application.route( '/contact' )
+def contact()  :
+        """
+        contact william k. page
 
+        :return:
+        """
 
-
+        return  cci.contact_t()
+#
 
 # -------------------------------------------------
 if __name__ == '__main__':

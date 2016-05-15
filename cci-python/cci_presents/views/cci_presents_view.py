@@ -62,5 +62,8 @@ def portfolio_t( **kargs )  :
                             moniker = kargs['folio'] ,
                             port_image = '/static/image/' + kargs['image'] )
 
+def contact_t( *kargs ):
+    return render_template( 'contact.html' )
+
 
 
