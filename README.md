@@ -1,5 +1,5 @@
 # cci-develop
-cci cevelopment code
+cci development code
 
 william k. johnson 
 consulting principal software engineer
