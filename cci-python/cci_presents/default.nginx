@@ -28,8 +28,8 @@ server {
 	server_name localhost;
 	
 	location / {
-		include /dev_t/environs/cci_presents/uwsgi_params;
-		uwsgi_pass unix:/dev_t/environs/cci_presents/cci_presents.sock;
+		include /runtime/cci-develop/cci-python/cci_presents/uwsgi_params;
+		uwsgi_pass unix:/runtime/cci-develop/cci-python/cci_presents/cci_presents.sock;
 		}
 
 	# redirect server error pages to the static page /50x.html
