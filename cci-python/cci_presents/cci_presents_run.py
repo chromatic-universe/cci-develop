@@ -13,6 +13,11 @@ import views.cci_presents_view as cci
 application = Flask( __name__ )
 application.config['SECRET_KEY'] = 'the original corny snaps!'
 
+portfolio_images = { 'c++' : 'game.jpg' ,
+                     'python' : 'shutter.jpg' ,
+                     'objectpascal' : 'uvm.png' ,
+                     'c99' : 'materials.jpg' }
+
 
 # -----------------------------------------------------
 @application.route('/')
@@ -98,7 +103,8 @@ def portfolio( moniker )  :
         :return:
         """
 
-        return  cci.portfolio_t(  folio = moniker  )
+        return  cci.portfolio_t(  folio = moniker ,
+                                  image = portfolio_images[moniker] )
 
 
 

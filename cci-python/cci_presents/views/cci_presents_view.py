@@ -59,7 +59,8 @@ def cci_dev_t( **kargs )  :
 def portfolio_t( **kargs )  :
     """function to render the portfolio"""
     return render_template( 'portfolio-4-col.html' ,
-                            moniker = kargs['folio'] )
+                            moniker = kargs['folio'] ,
+                            port_image = '/static/image/' + kargs['image'] )
 
 
 
