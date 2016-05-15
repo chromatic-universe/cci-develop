@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-    cci_presents
+    cci_presents facade isolation
     ~~~~~~
 
 
@@ -64,6 +64,14 @@ def portfolio_t( **kargs )  :
 
 def contact_t( *kargs ):
     return render_template( 'contact.html' )
+
+def faq_t( *kargs ):
+    return render_template( 'faq.html' )
+
+def customer_stream_t( *kargs ):
+    return render_template( 'customer_stream.html' )
+
+
 
 
 

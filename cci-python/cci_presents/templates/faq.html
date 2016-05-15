@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 
-{% block title %} contact william k. johnson {% endblock %}
+{% block title %} william k. johnson faq{% endblock %}
 
 <!-- CSS for this specific page -->
 {% block extracss %}
-<link rel="stylesheet" href="/static/vendor/css/jquery.qtip.css" xmlns="http://www.w3.org/1999/html">
+<link rel="stylesheet" href="/static/vendor/css/jquery.qtip.css">
 <link rel="stylesheet" href="/static/vendor/css/hover.css">
 <link rel="stylesheet" href="/static/custom/css/custom.css">
 {% endblock %}
@@ -19,13 +19,13 @@
         <!-- Page Heading/Breadcrumbs -->
         <div class="row">
             <div class="col-lg-12">
-                <h2 class="page-header">contact
+                <h2 class="page-header">faq
                    <small> william k. johnson </small>
                 </h2>
                 <ol class="breadcrumb">
                     <li><a href="/">home</a>
                     </li>
-                    <li class="active">contact </li>
+                    <li class="active">faq</li>
                 </ol>
             </div>
         </div>
@@ -34,44 +34,22 @@
         <!-- Image Header -->
         <div class="row">
             <div class="col-lg-12">
-                <img class="img-responsive" src= "/static/image/contact.jpg"  alt="">
+                <img class="img-responsive" src= "/static/image/faq.jpg"  alt="">
             </div>
         </div>
         <!-- /.row -->
-        <br><hr>
 
-        <div>
-        <center>
-         <small><i><strong>
-            william k. johnson<br>
-            5532 Channing Rd.<br>
-            Baltimore , MD 21229<br>
-             (443)802-6337<br>
-             skype: wiljoh_at_large
-        </strong></i></small>
-            <br><br>
-        {% with %}
 
-            {% set location=(39.29283 ,-76.71855 ) %}
-            {% set style="width:1100px;height:500px;"%}
 
-            {{
-            googlemap(
-                "simple-map",
-                location.0, location.1,
-                markers=[location,],
-                style=style
-                )
-            }}
-
-        {% endwith %}
-
-         </center>
 
         </div>
 
         <hr>
-<!-- /.container -->
+
+
+
+
+    <!-- /.container -->
 
 
 

@@ -7,10 +7,12 @@ import sys , \
        doctest , \
        unittest
 from flask import Flask
+from flask.ext.googlemaps import GoogleMaps
 
 import views.cci_presents_view as cci
 
 application = Flask( __name__ )
+GoogleMaps( application )
 application.config['SECRET_KEY'] = 'the original corny snaps!'
 
 portfolio_images = { 'c++' : 'game.jpg' ,
@@ -118,7 +120,28 @@ def contact()  :
         """
 
         return  cci.contact_t()
-#
+# -----------------------------------------------------
+@application.route( '/faq' )
+def faq()  :
+        """
+        faq william k. page
+
+        :return:
+        """
+
+        return  cci.faq_t()
+
+# -----------------------------------------------------
+@application.route( '/customer_stream' )
+def customer_stream()  :
+        """
+        stream customers william k. page
+
+        :return:
+        """
+
+        return  cci.customer_stream_t()
+
 
 # -------------------------------------------------
 if __name__ == '__main__':
