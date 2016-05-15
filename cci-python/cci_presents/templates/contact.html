@@ -5,7 +5,8 @@
 
 <!-- CSS for this specific page -->
 {% block extracss %}
-<link rel="stylesheet" href="/static/vendor/css/jquery.qtip.css" xmlns="http://www.w3.org/1999/html">
+<link rel="stylesheet" href="/static/vendor/css/jquery.qtip.css" xmlns="http://www.w3.org/1999/html"
+      xmlns="http://www.w3.org/1999/html">
 <link rel="stylesheet" href="/static/vendor/css/hover.css">
 <link rel="stylesheet" href="/static/custom/css/custom.css">
 {% endblock %}
@@ -66,11 +67,58 @@
 
         {% endwith %}
 
-         </center>
-
+        </center>
         </div>
 
         <hr>
+
+        <div id="email">
+           <h4>email contact</h4>
+
+           {% if success %}
+                <p>thank you for your message {{ name }}. i'll get back to you shortly - william k..</p>
+
+            {% else %}
+               <form action="{{ url_for('contact') }}" method=post>
+
+                {% for message in form.name.errors %}
+                  <div class="flash">{{ message }}</div>
+                {% endfor %}
+
+                {% for message in form.email.errors %}
+                  <div class="flash">{{ message }}</div>
+                {% endfor %}
+
+                {% for message in form.subject.errors %}
+                  <div class="flash">{{ message }}</div>
+                {% endfor %}
+
+                {% for message in form.message.errors %}
+                  <div class="flash">{{ message }}</div>
+                {% endfor %}
+
+                {{ form.hidden_tag() }}
+
+                {{ form.name.label }}<br>
+                {{ form.name }}<br>
+
+                {{ form.email.label }}<br>
+                {{ form.email }}<br>
+
+                {{ form.subject.label }}<br>
+                {{ form.subject }}<br>
+
+                {{ form.message.label }}<br>
+                {{ form.message }}<br>
+
+                {{ form.submit }}
+              </form>
+            {% endif %}
+          <script>
+          document.getElementById('email').scrollIntoView();
+          </script>
+        </div>
+
 <!-- /.container -->
 
 
