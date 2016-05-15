@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/cci_presents/cci_py/forms.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/cci_presents_run.py" afterPath="$PROJECT_DIR$/cci-python/cci_presents/cci_presents_run.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_view.py" afterPath="$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_view.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/templates/contact.html" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/contact.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/static/custom/css/custom.css" afterPath="$PROJECT_DIR$/cci-python/cci_presents/static/custom/css/custom.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="" />
     <ignored path="cci_git_1.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -88,8 +81,8 @@
       <file leaf-file-name="cci_presents_view.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_view.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.73007244" vertical-offset="780" max-vertical-offset="1391">
-              <caret line="91" column="40" selection-start-line="91" selection-start-column="40" selection-end-line="91" selection-end-column="40" />
+            <state vertical-scroll-proportion="0.8242754" vertical-offset="780" max-vertical-offset="1391">
+              <caret line="95" column="19" selection-start-line="95" selection-start-column="19" selection-end-line="96" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -846,8 +839,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_view.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.73007244" vertical-offset="780" max-vertical-offset="1391">
-          <caret line="91" column="40" selection-start-line="91" selection-start-column="40" selection-end-line="91" selection-end-column="40" />
+        <state vertical-scroll-proportion="0.8242754" vertical-offset="780" max-vertical-offset="1391">
+          <caret line="95" column="19" selection-start-line="95" selection-start-column="19" selection-end-line="96" selection-end-column="0" />
           <folding />
         </state>
       </provider>
