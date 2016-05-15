@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/customer_stream.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/faq.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/static/image/wind.jpg" afterPath="$PROJECT_DIR$/cci-python/cci_presents/static/image/wind.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/cci_presents_run.py" afterPath="$PROJECT_DIR$/cci-python/cci_presents/cci_presents_run.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_view.py" afterPath="$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_view.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/templates/contact.html" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/contact.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/templates/layout.html" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/layout.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/templates/navbar.html" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/navbar.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/templates/portfolio-4-col.html" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/portfolio-4-col.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="" />
     <ignored path="cci_git_1.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
