@@ -77,6 +77,9 @@
 
            {% if success %}
                 <p>thank you for your message {{ name }}. i'll get back to you shortly - william k..</p>
+                <script>
+                  document.getElementById('email').scrollIntoView();
+                </script>
 
             {% else %}
                <form action="{{ url_for('contact') }}" method=post>
@@ -114,9 +117,6 @@
                 {{ form.submit }}
               </form>
             {% endif %}
-          <script>
-          document.getElementById('email').scrollIntoView();
-          </script>
         </div>
 
 <!-- /.container -->
