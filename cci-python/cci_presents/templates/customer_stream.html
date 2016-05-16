@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="/static/vendor/css/jquery.qtip.css">
 <link rel="stylesheet" href="/static/vendor/css/hover.css">
 <link rel="stylesheet" href="/static/custom/css/custom.css">
+<link rel="stylesheet" href="/static/custom//css/application.css">
 {% endblock %}
 
 <!-- Content -->
@@ -39,17 +40,31 @@
         </div>
         <!-- /.row -->
 
-
-
-
-        </div>
-
         <hr>
 
+        <div id="stream">
+           <h4>publish to customer subscribers</h4>
 
+           <div class="container">
+              <div class="jumbotron">
+               <form id="input-form" class="form-inline">
+                <div class="form-group">
+                  <input id="input-handle" type="text" class="form-control" placeholder="Enter handle" autofocus />
+                </div>
+                <div class="form-group">
+                  <input id="input-text" type="text" class="form-control" placeholder="Enter chat text here!" autofocus />
+                </div>
+                <button class="btn btn-primary" type="submit">send</button>
+              </form>
+              <div class="page-header">
+              </div>
+              <div id="chat-text">
+              </div>
+            </div>
+        </div>
+        </div>
 
-
-    <!-- /.container -->
+        <hr>  <!-- /.container -->
 
 
 
@@ -57,7 +72,8 @@
 
 <!-- JS for this specific page -->
 {% block extrajs %}
-
+    <script type="text/javascript" src="/static/buid/reconnecting-websocket.min.js"></script>
+    <script type="text/javascript" src="/static/build/application.js"></script>
 <!-- Script to Activate the Carousel -->
     <script>
     $('.carousel').carousel({

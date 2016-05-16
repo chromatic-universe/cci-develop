@@ -103,7 +103,7 @@ class cci_base_chat_server( cci_pub_sub_intf ) :
             pass
 
         # --------------------------------------------------------
-        def __iter_data( self ):
+        def _iter_data( self ):
             """
             iter data generator expr
 
@@ -154,7 +154,7 @@ class cci_base_chat_server( cci_pub_sub_intf ) :
             :return:
            """
 
-            for data in self.__iter_data():
+            for data in self._iter_data():
              for client in self._clients:
                  gevent.spawn(self.send   , client, data)
 
@@ -198,7 +198,7 @@ class cci_base_chat_server( cci_pub_sub_intf ) :
 # ----------------------------------------------------------
 try :
      # web sockets
-     cci_chat  = cci_base_chat_server( red = redis  ,
+     """cci_chat  = cci_base_chat_server( red = redis  ,
                                   web_sockets = sockets ,
                                   flask_app = application )
      cci_chat.logger.info( "instantiated redis endpoint.....")
@@ -206,7 +206,7 @@ try :
      # start
      cci_chat.start()
      cci_chat.logger.info( "started chat server....." )
-
+    """
 
 
 except ValueError as err :

@@ -56,7 +56,8 @@ def more_t( **kargs )  :
     """function to render more"""
     return render_template( 'learn_more_1.html' ,
                              topic = 'more_%s_inc.html' % kargs['tp'] ,
-                             topic_name =  kargs['tp']  )
+                             topic_name =  kargs['tp'] ,
+                             image = '/static/image/' + kargs['image'] )
 
 def cci_dev_t( **kargs )  :
     """function to render the homepage"""
@@ -93,7 +94,9 @@ def faq_t( **kargs ):
 
 
 def customer_stream_t( **kargs ):
-    return render_template( 'customer_stream.html' )
+    return render_template( 'customer_stream.html' ,
+                             success = kargs['success'] ,
+                             form = kargs['form']  )
 
 
 
