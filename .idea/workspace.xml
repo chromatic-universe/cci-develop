@@ -2,21 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/cci_presents/static/custom/css/application.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/cci_presents/static/build/application.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/more_c++_inc.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/more_c99_inc.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/more_objectpascal_inc.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/more_python_inc.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/cci_presents/static/build/reconnecting-websocket.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/cci_presents/cci_py/sock.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/cci-python/cci_presents/cci_py/forms.py" afterPath="$PROJECT_DIR$/cci-python/cci_presents/cci_py/cci_forms.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_view.py" afterPath="$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/cci_py/cci_mini_im.py" afterPath="$PROJECT_DIR$/cci-python/cci_presents/cci_py/cci_mini_im.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/cci_presents_run.py" afterPath="$PROJECT_DIR$/cci-python/cci_presents/cci_presents_run.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/templates/customer_stream.html" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/customer_stream.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/templates/learn_more_1.html" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/learn_more_1.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/templates/services.html" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/services.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci/cci_aws_bot/cci_aws_meta_bot.py" afterPath="$PROJECT_DIR$/cci-python/cci/cci_aws_bot/cci_aws_meta_bot.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cci_git_1.iws" />
@@ -56,7 +42,7 @@
       <file leaf-file-name="cci_aws_meta_bot.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cci-python/cci/cci_aws_bot/cci_aws_meta_bot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8168761" vertical-offset="0" max-vertical-offset="923">
+            <state vertical-scroll-proportion="0.40173912" vertical-offset="224" max-vertical-offset="1768">
               <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
               <folding />
             </state>
@@ -88,16 +74,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="1430">
               <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="home.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/templates/home.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-42.0" vertical-offset="922" max-vertical-offset="2964">
-              <caret line="142" column="22" selection-start-line="142" selection-start-column="22" selection-end-line="142" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -183,9 +159,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="16" />
-    <option name="width" value="1594" />
-    <option name="height" value="859" />
+    <option name="x" value="-3" />
+    <option name="width" value="1606" />
+    <option name="height" value="877" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -283,12 +259,34 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cci_git_1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cci_git_1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cci-python" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cci" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cci_aws_bot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="options.lastSelected" value="Errors" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="last_opened_file_path" value="/cci/cci_src/master/git_repo_1/python/cci_base/cci_3/portfolio-4-col.html" />
@@ -311,7 +309,7 @@
       <recent name="$PROJECT_DIR$/cci-python/cci_presents/static/custom/css" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.sock">
+  <component name="RunManager" selected="Python.cci_aws_meta_bot">
     <configuration default="false" name="pg_transmogrify" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -368,6 +366,27 @@
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="cci_aws_meta_bot" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/cci-python/cci/cci_aws_bot" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="cci_git_1" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/cci-python/cci/cci_aws_bot/cci_aws_meta_bot.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PyDebugRunner" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PyDebugRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
@@ -493,16 +512,18 @@
       <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
-    <list size="3">
+    <list size="4">
       <item index="0" class="java.lang.String" itemvalue="Python.pg_transmogrify" />
       <item index="1" class="java.lang.String" itemvalue="Python.cci_presents_run" />
       <item index="2" class="java.lang.String" itemvalue="Python.sock" />
+      <item index="3" class="java.lang.String" itemvalue="Python.cci_aws_meta_bot" />
     </list>
     <recent_temporary>
-      <list size="3">
-        <item index="0" class="java.lang.String" itemvalue="Python.sock" />
-        <item index="1" class="java.lang.String" itemvalue="Python.cci_presents_run" />
-        <item index="2" class="java.lang.String" itemvalue="Python.pg_transmogrify" />
+      <list size="4">
+        <item index="0" class="java.lang.String" itemvalue="Python.cci_aws_meta_bot" />
+        <item index="1" class="java.lang.String" itemvalue="Python.sock" />
+        <item index="2" class="java.lang.String" itemvalue="Python.cci_presents_run" />
+        <item index="3" class="java.lang.String" itemvalue="Python.pg_transmogrify" />
       </list>
     </recent_temporary>
   </component>
@@ -520,21 +541,21 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="16" width="1594" height="859" extended-state="0" />
+    <frame x="-3" y="0" width="1606" height="877" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20116429" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1996149" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19470198" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21786198" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20974289" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14747736" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20475562" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14634146" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29905277" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22251655" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36265224" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -578,7 +599,10 @@
           <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="7" />
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
+      <option name="time" value="15" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -838,9 +862,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///cci/dev_t/pyenv/versions/2.7.9/envs/cci_env_flask/lib/python2.7/site-packages/boto3/session.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="3869" max-vertical-offset="5577">
+          <caret line="320" column="0" selection-start-line="320" selection-start-column="0" selection-end-line="320" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cci-python/cci/cci_aws_bot/cci_aws_meta_bot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8168761" vertical-offset="0" max-vertical-offset="923">
+        <state vertical-scroll-proportion="0.40173912" vertical-offset="224" max-vertical-offset="1768">
           <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
           <folding />
         </state>
