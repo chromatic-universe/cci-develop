@@ -7,6 +7,11 @@ import sys
 import doctest
 import unittest
 from sets import Set
+import copy
+try:
+    from cStringIO import StringIO
+except:
+    from StringIO import StringIO
 ##############
 import requests
 import logging
@@ -30,6 +35,8 @@ const.volumes = 'volumes'
 const.aws_cli_dump = ['aws' , 'ec2' , 'describe-instances' , '--profile']
 aws_output_t = Set( ['text', 'table' ,'json'] )
 
+
+
 # ------------------------------------------------------------------------------
 class cci_mini_aws_bot( object ) :
         """
@@ -51,8 +58,10 @@ class cci_mini_aws_bot( object ) :
                 else :
                         self._boto_session = domain_accounts[0]
                 self._current_profile = self._boto_session.profile_name
+                self._ec2 = self._boto_session.resource( const.ec2 )
             self._domain_accounts = domain_accounts
-            self._ec2 = self._boto_session.resource( const.ec2 )
+            self._lines = []
+            self._buffer = str()
 
         @property
         def ec2( self ) :
@@ -66,8 +75,21 @@ class cci_mini_aws_bot( object ) :
         @logger.setter
         def logger( self , log ) :
             self._logger= log
+        @property
+        def lines( self ) :
+            return self._lines
+        @lines.setter
+        def lines( self , li ) :
+            self._lines = li
+        @property
+        def buffer( self ) :
+            return self._buffer
+        @buffer.setter
+        def buffer( self ,buf ) :
+            self._buffer = buf
 
-        # ------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------
         def enum_profile_metadata( self , ec2 = None) :
                 """
                 enumerate profile metadata
@@ -94,6 +116,28 @@ class cci_mini_aws_bot( object ) :
                 :return:
                 """
                 print( output )
+
+
+        # -------------------------------------------------------------------------
+        def output_to_list_handler( self , output ) :
+                """
+                html out
+
+                :param output:
+                :return:
+                """
+                self._lines = output.split( '\n' )
+
+
+         # -------------------------------------------------------------------------
+        def output_to_buffer_handler( self , output ) :
+                """
+                html out
+
+                :param output:
+                :return:
+                """
+                self._buffer = output
 
 
         # -------------------------------------------------------------------------
@@ -144,7 +188,7 @@ class cci_mini_aws_bot( object ) :
                 if not out_format in aws_output_t :
                     raise ValueError( 'unrecognized output format' )
 
-                command_line = const.aws_cli_dump
+                command_line = copy.deepcopy( const.aws_cli_dump )
                 command_line.append( profile )
                 command_line.append( '--output' )
                 command_line.append( out_format )
@@ -153,13 +197,14 @@ class cci_mini_aws_bot( object ) :
 
                     # subprocess call , checks return value of process and returns output
                     # output is returned as byte array and needs to be decoded to utf-8
-                    output = proc.check_output( command_line ).decode()
+                    output = StringIO()
+                    output.write( proc.check_output( command_line ).decode() )
                     if out_func is None :
-                        self._default_output_handler( output )
+                        self._default_output_handler( output.getvalue() )
                     else :
-                        out_func( output )
+                        out_func( output.getvalue() )
 
-                except subprocess.CalledProcessError as e :
+                except proc.CalledProcessError as e :
                     self._logger.error( e.message )
 
 
@@ -172,10 +217,11 @@ if __name__ == '__main__' :
 
         try :
 
-           aws = cci_mini_aws_bot( domain_accounts=accounts , use_default=True )
+           aws = cci_mini_aws_bot()
            # profile_metadata = aws.enum_all_profiles()
-           aws.aws_cli_display_dump()
+           aws.aws_cli_display_dump( out_func=aws.output_to_buffer_handler )
 
+           print aws.buffer
            # print profile_metadata
 
         except IOError as e :

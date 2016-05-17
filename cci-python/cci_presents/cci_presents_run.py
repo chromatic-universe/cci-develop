@@ -62,6 +62,7 @@ portfolio_images = { 'c++' : 'game.jpg' ,
                      'api' : 'materials.jpg' ,
                      'messaging' : 'materials.jpg' ,
                      'interop' : 'materials.jpg'}
+server_to_profile = { ''}
 
 
 # -----------------------------------------------------
