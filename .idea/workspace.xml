@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/cci/cci_utils/cci_aws_meta_bot.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci/cci_aws_bot/cci_aws_meta_bot.py" afterPath="$PROJECT_DIR$/cci-python/cci/cci_aws_bot/cci_aws_meta_bot.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/cci_presents_run.py" afterPath="$PROJECT_DIR$/cci-python/cci_presents/cci_presents_run.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_views.py" afterPath="$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/templates/domain.html" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/domain.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/templates/layout.html" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/layout.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/templates/navbar.html" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/navbar.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci/setup.py" afterPath="$PROJECT_DIR$/cci-python/cci/setup.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci_presents/templates/home.html" afterPath="$PROJECT_DIR$/cci-python/cci_presents/templates/home.html" />
     </list>
     <ignored path="cci_git_1.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,7 +30,7 @@
       <file leaf-file-name="cci_presents_run.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/cci_presents_run.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3435" max-vertical-offset="4004">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2733" max-vertical-offset="4004">
               <caret line="169" column="0" selection-start-line="169" selection-start-column="0" selection-end-line="169" selection-end-column="0" />
               <folding>
                 <element signature="e#70#133#0" expanded="true" />
@@ -49,7 +42,7 @@
       <file leaf-file-name="cci_aws_meta_bot.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-python/cci/cci_utils/cci_aws_meta_bot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2245" max-vertical-offset="3068">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1777" max-vertical-offset="3068">
               <caret line="193" column="49" selection-start-line="193" selection-start-column="49" selection-end-line="193" selection-end-column="49" />
               <folding>
                 <element signature="e#49#58#0" expanded="true" />
@@ -91,17 +84,27 @@
       <file leaf-file-name="cci_presents_views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="780" max-vertical-offset="1911">
-              <caret line="87" column="0" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1301" max-vertical-offset="1924">
+              <caret line="84" column="30" selection-start-line="84" selection-start-column="30" selection-end-line="84" selection-end-column="30" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="setup.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="home.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/templates/home.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.78346455" vertical-offset="1734" max-vertical-offset="2964">
+              <caret line="164" column="56" selection-start-line="164" selection-start-column="56" selection-end-line="164" selection-end-column="56" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="setup.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-python/cci/setup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.09811321" vertical-offset="0" max-vertical-offset="530">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="234">
               <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
               <folding />
             </state>
@@ -117,7 +120,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/cci-python/cci/cci_db_utils/pg_transmogrify.py" />
-        <option value="$PROJECT_DIR$/cci-python/cci_presents/templates/home.html" />
         <option value="$PROJECT_DIR$/cci-python/cci_presents/templates/portfolio-4-col.html" />
         <option value="$PROJECT_DIR$/cci-python/cci_presents/templates/faq.html" />
         <option value="$PROJECT_DIR$/cci-python/cci_presents/static/custom/css/custom.css" />
@@ -140,8 +142,9 @@
         <option value="$PROJECT_DIR$/cci-python/cci_presents/templates/navbar.html" />
         <option value="$PROJECT_DIR$/cci-python/cci_presents/templates/layout.html" />
         <option value="$PROJECT_DIR$/cci-python/cci/cci_utils/cci_aws_meta_bot.py" />
-        <option value="$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_views.py" />
         <option value="$PROJECT_DIR$/cci-python/cci/setup.py" />
+        <option value="$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_views.py" />
+        <option value="$PROJECT_DIR$/cci-python/cci_presents/templates/home.html" />
       </list>
     </option>
   </component>
@@ -852,13 +855,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/templates/home.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-42.0" vertical-offset="922" max-vertical-offset="2964">
-          <caret line="142" column="22" selection-start-line="142" selection-start-column="22" selection-end-line="142" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/templates/more_c++_inc.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.909091" vertical-offset="0" max-vertical-offset="208">
@@ -1000,6 +996,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cci-python/cci/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="234">
+          <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cci-python/cci/cci_utils/cci_aws_meta_bot.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2245" max-vertical-offset="3068">
@@ -1022,16 +1026,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="780" max-vertical-offset="1911">
-          <caret line="87" column="0" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1301" max-vertical-offset="1924">
+          <caret line="84" column="30" selection-start-line="84" selection-start-column="30" selection-end-line="84" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-python/cci/setup.py">
+    <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/templates/home.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.09811321" vertical-offset="0" max-vertical-offset="530">
-          <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.78346455" vertical-offset="1734" max-vertical-offset="2964">
+          <caret line="164" column="56" selection-start-line="164" selection-start-column="56" selection-end-line="164" selection-end-column="56" />
           <folding />
         </state>
       </provider>

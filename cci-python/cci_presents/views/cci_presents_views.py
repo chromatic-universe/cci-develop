@@ -82,6 +82,7 @@ def cci_dev_t( **kargs )  :
 
        # we're only using the aws cli dump so default constructor is ok
        aws = aws_bot()
+       # aws cli instance info
        aws.aws_cli_display_dump( profile = kargs['serv'] ,
                                  out_func=aws.output_to_buffer_handler )
        server_info = aws.buffer
