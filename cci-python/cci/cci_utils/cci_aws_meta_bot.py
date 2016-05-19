@@ -7,6 +7,7 @@ import sys
 import doctest
 import unittest
 from sets import Set
+from abc import abstractmethod , ABCMeta
 import copy
 try:
     from cStringIO import StringIO
@@ -18,10 +19,12 @@ import logging
 import argparse
 import subprocess as proc
 ##############
-from abc import ABCMeta , abstractmethod
+
 ##############
 import cci_utils.cci_io_tools as io
+from cci_stream_inf import cci_stream_intf
 import cci_utils.cci_constants as const
+
 ##############
 import boto3
 
@@ -38,15 +41,18 @@ aws_output_t = Set( ['text', 'table' ,'json'] )
 
 
 # ------------------------------------------------------------------------------
-class cci_mini_aws_bot( object ) :
+class cci_mini_aws_bot( cci_stream_intf ) :
         """
         minimal wrapper for boto3 and aws cli
         """
+
 
         def __init__( self ,
                       domain_accounts=None ,
                       use_default = True ) :
 
+
+            super( cci_mini_aws_bot , self ).__init__()
 
             self._logger = io.init_logging( self.__class__.__name__  )
             self._logger.info( self.__class__.__name__ + '...'  )
@@ -89,7 +95,7 @@ class cci_mini_aws_bot( object ) :
             self._buffer = buf
 
 
-# ------------------------------------------------------------------------
+        # ------------------------------------------------------------------------
         def enum_profile_metadata( self , ec2 = None) :
                 """
                 enumerate profile metadata
@@ -129,7 +135,7 @@ class cci_mini_aws_bot( object ) :
                 self._lines = output.split( '\n' )
 
 
-         # -------------------------------------------------------------------------
+        # -------------------------------------------------------------------------
         def output_to_buffer_handler( self , output ) :
                 """
                 html out

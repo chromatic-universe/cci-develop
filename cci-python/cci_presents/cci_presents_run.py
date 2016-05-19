@@ -10,7 +10,8 @@ import redis
 import gevent
 from flask import Flask ,\
                   request , \
-                  flash
+                  flash , \
+                  render_template
 from flask.ext.googlemaps import GoogleMaps
 from flask.ext.mail import Message, Mail
 from flask_sockets import Sockets
@@ -144,6 +145,11 @@ def about_pdf( pd )  :
 
         return  cci.about_pdf_t( ps = pd )
 
+# -----------------------------------------------------
+@application.route( '/sidebar' )
+def sidebar()  :
+
+    return render_template( 'sidebar.html' )
 
 # -----------------------------------------------------
 @application.route( '/domain/<server>' )
