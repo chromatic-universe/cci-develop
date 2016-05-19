@@ -1,11 +1,5 @@
-//--------------------------------------------------------------------------------
-//						Header for Imap C-Client c++ wrapper
-//								  Inter-Tel , Inc.
-//								?GNU Public License?
-//						William K. Johnson - initial version 21 Nov 2002
-//							(C) copyright Intertel-Tel , Inc,
-//--------------------------------------------------------------------------------
-//update 5/1/2013 William K.Johnson
+//cci_generic.h william k. johnson 2016
+
 //
 //header for non-application specific tenplates
 //using C++11
