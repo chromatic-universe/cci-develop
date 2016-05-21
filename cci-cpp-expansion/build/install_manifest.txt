@@ -1,2 +1,0 @@
-/cci/dev_t/bin/cci_exp_run
-/cci/dev_t/lib/libcci_expansion.so
