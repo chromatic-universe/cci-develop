@@ -64,8 +64,8 @@ namespace cci_expansion
 
                         //ctor
                         explicit thread_raii( T&  t_  ,
-                                              dtor_action act ) : m_t ( std::move( t_ ) ) ,
-                                                                  m_action { act }
+                                              dtor_action act ) :  m_action { act } ,
+                                                                   m_t ( std::move( t_ ) )
                         {}
                         //dtor
                         ~thread_raii()
