@@ -2,7 +2,7 @@
 
 //
 //header for non-application specific tenplates
-//using C++11
+//using C++14
 #pragma once
 
 #ifndef _GENERIC_H

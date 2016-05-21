@@ -22,7 +22,7 @@ add_library(cci_expansion SHARED cci_complexity.cpp)
 add_executable(cci_exp_run  cci_exp_run.cpp)
 
 #link libs
-target_link_libraries(cci_exp_run -lcci_expansion)
+target_link_libraries(cci_exp_run -lcci_expansion -lpthread )
 
 #install
 install_targets( /lib cci_expansion)

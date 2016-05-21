@@ -3,8 +3,25 @@
 
 #include <cci_numeric_utils.h>
 #include <cci_complexity.h>
+#include <cci_concurrent_utils.h>
 
 using namespace cci_expansion;
+
+struct func
+{
+    int& i;
+    func( int& i_ ) : i{ i_ } {}
+
+    void operator() ()
+    {
+        for( unsigned j = 0; j < 1000; ++j )
+        {
+            ++i;
+            std::cout << i;
+        }
+        std::cout << "\n";
+    }
+};
 
 int main( int argc , char* argv[] )
 {
@@ -34,6 +51,14 @@ int main( int argc , char* argv[] )
                        std::default_random_engine> manip( v_dw , di , dre ) ;
     */
     //manip->shuffle_t();
+    //
+    int dw { 100 };
+    func the_function( dw );
+    std::thread thr( the_function );
+    thread_raii<std::thread> g( thr ,
+                                dtor_action::join );
+    scoped_thread<std::thread> st( std::thread( func ) );
+
     std::string str( "abcdefghiabcdx" );
     baby_bits bb;
     char_count cc;

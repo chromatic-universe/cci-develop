@@ -2,11 +2,20 @@
 
 #pragma once
 
-
-//chromatic
+//cci
 #include <cci_generic.h>
 
 namespace cci_expansion
 {
+
+                //forward declarations
+
+                //enumerations
+
+
+                //aliases
+
+
+
 
 }
