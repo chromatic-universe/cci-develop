@@ -56,6 +56,7 @@ namespace cci_expansion
                 using   v_bool =  std::vector<bool>;
                 using   v_bool_ptr = v_bool*;
                 using   ascii_bits = std::bitset<ascii_chars>;
+                using   ascii_bits_ptr = ascii_bits*;
                 using   edge = std::tuple<std::string,std::string>;
                 using   edges = std::vector<edge>;
                 using   ptr_edge = edge*;
@@ -71,7 +72,6 @@ namespace cci_expansion
                 using   char_count_ptr = char_count*;
                 using   v_bool = std::vector<bool>;
                 using   v_bool_ptr = v_bool*;
-                using   ascii_bits = std::bitset<ascii_chars>;
                 using   randon_default_manip =  cci_random_manip_t<std::vector<int> ,
                                                 std::uniform_int_distribution<int> ,
                                                 std::default_random_engine>;

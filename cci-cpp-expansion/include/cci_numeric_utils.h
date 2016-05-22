@@ -148,15 +148,19 @@ namespace cci_expansion
 
             }
             //------------------------------------------------------------
-            static bool is_unique_chars_in_str( const std::string& str )
+            static bool is_unique_chars_in_str( const std::string& str ,
+                                                ascii_bits_ptr exclude_bits )
             {
                 //are there any unique chars
-               	bool b_ret { false };
-		        ascii_bits a_bits;
+               	bool b_ret { true };
+                ascii_bits a_bits;
+                //exclude these bits
+                assert( exclude_bits );
 
 		        for( auto elem : str )
 		        {
-		            if( a_bits.test( elem ) == true )
+		            if( ( a_bits.test( elem ) == true ) &&
+                        ( exclude_bits->test( elem ) == false ) )
 		            {
 		            	b_ret = false;
 		            	break;

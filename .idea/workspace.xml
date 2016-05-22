@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-cpp-expansion/CMakeLists.txt" afterPath="$PROJECT_DIR$/cci-cpp-expansion/CMakeLists.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-cpp-expansion/include/cci_complexity.h" afterPath="$PROJECT_DIR$/cci-cpp-expansion/include/cci_complexity.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-cpp-expansion/include/cci_concurrent_utils.h" afterPath="$PROJECT_DIR$/cci-cpp-expansion/include/cci_concurrent_utils.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-cpp-expansion/cci_exp_run.cpp" afterPath="$PROJECT_DIR$/cci-cpp-expansion/cci_exp_run.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-cpp-expansion/include/cci_generic.h" afterPath="$PROJECT_DIR$/cci-cpp-expansion/include/cci_generic.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-cpp-expansion/include/cci_opt_utils.h" afterPath="$PROJECT_DIR$/cci-cpp-expansion/include/cci_opt_utils.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cci_git_1.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -47,8 +41,8 @@
       <file leaf-file-name="layout.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/templates/layout.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.76936024" vertical-offset="726" max-vertical-offset="2314">
-              <caret line="91" column="20" selection-start-line="91" selection-start-column="20" selection-end-line="91" selection-end-column="20" />
+            <state vertical-scroll-proportion="1.1195287" vertical-offset="570" max-vertical-offset="2314">
+              <caret line="95" column="14" selection-start-line="95" selection-start-column="14" selection-end-line="95" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -1178,8 +1172,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/templates/layout.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.76936024" vertical-offset="726" max-vertical-offset="2314">
-          <caret line="91" column="20" selection-start-line="91" selection-start-column="20" selection-end-line="91" selection-end-column="20" />
+        <state vertical-scroll-proportion="1.1195287" vertical-offset="570" max-vertical-offset="2314">
+          <caret line="95" column="14" selection-start-line="95" selection-start-column="14" selection-end-line="95" selection-end-column="14" />
           <folding />
         </state>
       </provider>

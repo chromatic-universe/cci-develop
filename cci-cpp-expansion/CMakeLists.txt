@@ -1,9 +1,12 @@
-#cmake c++complexity  william k. johnson 2015
+#cmake cpp_expansion william k. johnson 2016
 
 #version
 cmake_minimum_required(VERSION 2.82)
 #project
-project(CPPCOMPLEX)
+project(CPPEXPANSION)
+
+#tests
+add_subdirectory(test)
 
 #compiler
 message(STATUS ${CMAKE_CXX_COMPILER})
@@ -14,7 +17,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -Wall -O3  -Qunused-arguments  -DNDEBUG -std=
 
 #includes
 include_directories(./include)
-link_directories(${CPPCOMPLEX_SOURCE_DIR})
+link_directories(${CPPEXPANSION_SOURCE_DIR})
 
 #shared library
 add_library(cci_expansion SHARED cci_complexity.cpp)
@@ -22,7 +25,7 @@ add_library(cci_expansion SHARED cci_complexity.cpp)
 add_executable(cci_exp_run  cci_exp_run.cpp)
 
 #link libs
-target_link_libraries(cci_exp_run -lcci_expansion -lpthread )
+target_link_libraries(cci_exp_run -lcci_expansion -lpthread)
 
 #install
 install_targets( /lib cci_expansion)

@@ -23,7 +23,7 @@ struct func
     }
 };
 
-int main( int argc , char* argv[] )
+int main( int argc , char* argv[])
 {
 
     std::vector<int> v_dw { 1, 2 , 3 , 4 , 5 }    ;
@@ -88,9 +88,6 @@ int main( int argc , char* argv[] )
     manip.shuffle_t();
     for( auto elem : *manip.collection() ) { std::cout << elem << " "; }
     std::cout << "\n";*/
-
-
-
 
 
     return ( 0 );
