@@ -27,7 +27,6 @@ namespace cci_expansion
             protected :
 
                 //attributes
-                //cmake add subdirecotry
                 //integer
                 ceu_baby_bits<int,int> b_bits_i;
                 //unsigned
