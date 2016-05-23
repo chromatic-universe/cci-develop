@@ -65,6 +65,24 @@ namespace cci_expansion
 
                 //services
                 //------------------------------------------------------------
+                static void v_to_ascii_bits( const std::vector<A>& v ,
+                                             ascii_bits& bits )
+                {
+
+                     std::for_each( v.begin() ,
+                                    v.end()  ,
+                                    [&bits] ( int elem )
+                                    {
+                                         if( elem > ascii_chars )
+                                         {
+                                            throw std::out_of_range( "value exceeds ascii extended enum..." );
+                                         }
+                                         bits.set( elem );
+                                    }
+                                  );
+
+                }
+                //------------------------------------------------------------
                 static A bin_str_to_num( const std::string& bin_str )
                 {
 
@@ -84,7 +102,6 @@ namespace cci_expansion
                 }
                 //------------------------------------------------------------
                 static std::string num_to_bin_str( A dw )
-
                 {
                     //template param to binary string repr
                     std::string str;

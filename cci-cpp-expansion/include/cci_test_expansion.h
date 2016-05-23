@@ -57,12 +57,30 @@ namespace cci_expansion
             ////
             //ignore crlf , space , comma , semicolon
             std::vector<int> v_ignore_i{ 0x12,0x13,0x20,0x2C,0x3b };
-            for( auto elem : v_ignore_i ) { a_bits.set( elem ); }
+            try
+            {
+                integer_bits().v_to_ascii_bits( v_ignore_i , a_bits );
+            }
+            catch ( const std::out_of_range& e )
+            {
+                ASSERT_TRUE( false ) << "ascii test range out of bounds....integer";
+            }
 
             ASSERT_TRUE( integer_bits().is_unique_chars_in_str( test_t , &a_bits ) )
                  << "string of unique characters failed...integer";
             ASSERT_FALSE( integer_bits().is_unique_chars_in_str( test_t_2 , &a_bits ) )
                  << "string of non-unique characters failed...integer";
+
+            a_bits.reset();
+            std::vector<unsigned> v_ignore_u{ 0x12,0x13,0x20,0x2C,0x3b };
+            try
+            {
+                unsigned_bits().v_to_ascii_bits( v_ignore_u , a_bits );
+            }
+            catch ( const std::out_of_range& e )
+            {
+                ASSERT_TRUE( false ) << "ascii test range out of bounds....unsigned";
+            }
 
             //unsigned
             ////

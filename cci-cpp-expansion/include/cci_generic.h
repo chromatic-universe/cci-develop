@@ -18,6 +18,7 @@
 #include <typeinfo>
 #include <iostream>
 #include <exception>
+#include <stdexcept>
 #include <system_error>
 #include <string>
 #include <vector>
