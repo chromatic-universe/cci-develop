@@ -1,5 +1,5 @@
 //cci_numeric_utils.h william k. johnson 2015
-#pragma once
+    pragma once
 
 //c++ standard
 #include <random>
@@ -318,9 +318,6 @@ namespace cci_expansion
               }
 
         };
-
-
-        //immutable
 
 
 }
