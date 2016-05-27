@@ -11,7 +11,8 @@ import gevent
 from flask import Flask ,\
                   request , \
                   flash , \
-                  render_template
+                  render_template ,\
+                  redirect
 from flask.ext.googlemaps import GoogleMaps
 from flask.ext.mail import Message, Mail
 from flask_sockets import Sockets
@@ -174,8 +175,11 @@ def portfolio( moniker )  :
         :return:
         """
 
-        return  cci.portfolio_t(  folio = moniker ,
-                                  image = portfolio_images[moniker] )
+        if moniker == 'github' :
+            return redirect( 'https://github.com/chromatic-universe' )
+        else :
+            return  cci.portfolio_t(  folio = moniker ,
+                                      image = portfolio_images[moniker] )
 
 
 # -----------------------------------------------------

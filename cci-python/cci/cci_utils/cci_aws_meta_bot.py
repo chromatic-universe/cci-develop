@@ -58,7 +58,7 @@ class cci_mini_aws_bot( cci_stream_intf ) :
         def __init__( self ,
                       domain_accounts=None ,
                       use_default = True ,
-                      out_format = 'text' ) :
+                      out_format = 'table' ) :
 
 
             super( cci_mini_aws_bot , self ).__init__()
