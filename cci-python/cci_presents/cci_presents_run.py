@@ -176,7 +176,7 @@ def portfolio( moniker )  :
         """
 
         if moniker == 'github' :
-            return redirect( 'https://github.com/chromatic-universe' )
+            return redirect( 'http://tinyurl.com/jmnpxvb' )
         else :
             return  cci.portfolio_t(  folio = moniker ,
                                       image = portfolio_images[moniker] )
