@@ -16,8 +16,12 @@ set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -Wall -g -O0  -Qunused-arguments  -DDEBUG -std=
 set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -Wall -O3  -Qunused-arguments  -DNDEBUG -std=c++14")
 
 #includes
-include_directories(./include)
-link_directories(${CPPEXPANSION_SOURCE_DIR})
+include_directories(./include 
+                    $ENV{DEV}/include
+                    $ENV{DEV}/lib/cci)
+link_directories(${CPPEXPANSION_SOURCE_DIR}
+                  $ENV{DEV}/lib
+                  $ENV{DEV}/lib/cci)
 
 #shared library
 add_library(cci_expansion SHARED cci_complexity.cpp)
@@ -28,8 +32,10 @@ add_executable(cci_exp_run  cci_exp_run.cpp)
 target_link_libraries(cci_exp_run -lcci_expansion -lpthread)
 
 #install
-install_targets( /lib cci_expansion)
+install_targets( /lib/cci cci_expansion)
+install_targets( /bin/cci cci_exp_run)
 
-install_targets( /bin cci_exp_run)
+install (DIRECTORY include/ 
+         DESTINATION include/cci )
 
 
