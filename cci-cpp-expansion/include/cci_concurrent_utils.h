@@ -5,6 +5,11 @@
 
 //stl
 #include <thread>
+#include <queue>
+#include <memory>
+#include <mutex>
+#include <condition_variable>
+
 //cci
 #include <cci_generic.h>
 
@@ -104,4 +109,98 @@ namespace cci_expansion
                                      std::forward<F> ( f ) ,
                                      std::forward<Ts> ( params )...);
           }
+          //--------------------------------------------------------------------------------------
+          template <typename T>
+          class cci_safe_q
+          {
+                    public :
+
+                        //ctor
+                        cci_safe_q() = default;
+                        //copy
+                        cci_safe_q( const cci_safe_q& csq )
+                        {
+                            std::lock_guard<std::mutex> lk( csq.m_mutx );
+                            m_data_q = csq.m_data_q;
+                        }
+                        //no assign
+                        cci_safe_q& operator= ( const cci_safe_q& csq ) = delete;
+
+                    private :
+
+                        //attributes
+                        //mutabe mutex for copy constructor and inspector
+                        mutable std::mutex          m_mutx;
+                        std::queue<T>               m_data_q;
+                        std::condition_variable     m_data_cond;
+
+
+                    public :
+
+                        //accessors-inspectors
+                        bool empty() const noexcept
+                        {
+                            std::lock_guard<std::mutex> lk( m_mutx );
+                            return m_data_q.empty();
+                        }
+
+                        //services
+                        void push_q( T value_new )
+                        {
+                            std::lock_guard<std::mutex> lk( m_mutx );
+                            m_data_q.push( value_new );
+                            m_data_cond.notify_one();
+                        }
+
+                        void wait_and_pop( T& value )
+                        {
+                            std::lock_guard<std::mutex> lk( m_mutx );
+                            m_data_cond.wait( lk ,
+                                              [this] { return !m_data_q.empty();} );
+                            value = m_data_q.front();
+                            m_data_q.pop();
+                        }
+
+                        std::shared_ptr<T> wait_and_pop()
+                        {
+                            std::lock_guard<std::mutex> lk( m_mutx );
+                             m_data_cond.wait( lk ,
+                                              [this] { return !m_data_q.empty();} );
+                            std::shared_ptr<T> res ( std::make_shared<T> ( m_data_q.front() ) );
+                            m_data_q.pop();
+
+                            return res;
+
+                        }
+
+                        bool try_pop( T& value )
+                        {
+                             std::lock_guard<std::mutex> lk( m_mutx );
+                             m_data_cond.wait( lk ,
+                                              [this] { return !m_data_q.empty();} );
+
+                             if( m_data_q.empty() ) { return false; }
+
+                             value = m_data_q.front();
+                             m_data_q.pop();
+
+                             return true;
+                        }
+
+                        std::shared_ptr<T> try_pop()
+                        {
+                             std::lock_guard<std::mutex> lk( m_mutx );
+                             m_data_cond.wait( lk ,
+                                              [this] { return !m_data_q.empty();} );
+                            if( m_data_q.empty() ) { return  std::shared_ptr<T>(); }
+
+                            std::shared_ptr<T> res ( std::make_shared<T> ( m_data_q.front() ) );
+                            m_data_q.pop();
+
+                            return res;
+                        }
+
+
+
+          };
 }
