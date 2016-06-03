@@ -57,8 +57,8 @@ int main( int argc , char* argv[])
     std::thread thr( the_function );
     thread_raii<std::thread> g( thr ,
                                 dtor_action::join );
-    std::thread thr_2( the_function );
-    scoped_thread<std::thread> st( thr_2 );
+    //std::thread thr_2( the_function );
+    //scoped_thread<std::thread> st( thr_2 );
 
     std::string str( "abcdefghiabcdx" );
     baby_bits bb;

@@ -8,6 +8,9 @@
 #include <queue>
 #include <memory>
 #include <mutex>
+#include <thread>
+#include <future>
+#include <utility>
 #include <condition_variable>
 
 //cci
@@ -29,14 +32,13 @@ namespace cci_expansion
            //services
            //
            //-------------------------------------------------------------------------------------
-           template<typename T>
            class scoped_thread
            {
 
                     public :
 
                         //ctor
-                        explicit scoped_thread( T& t_ ) :  m_t ( std::move(  t_ ) )
+                        explicit scoped_thread(  std::thread  t_ ) :  m_t ( std::move(  t_ ) )
                         {
                             if( m_t.joinable() )
                             {
@@ -56,7 +58,7 @@ namespace cci_expansion
 
                        //attributes
                        //declare last for tls safety
-                       T m_t;
+                       std::thread m_t;
 
 
            };
