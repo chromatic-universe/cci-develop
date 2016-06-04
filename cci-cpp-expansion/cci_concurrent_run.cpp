@@ -11,25 +11,28 @@ using namespace cci_expansion;
 
 struct func
 {
-    int& i;
-    func( int& i_ ) : i{ i_ } {}
+        int& i;
+        func( int& i_ ) : i{ i_ } {}
 
-    void operator() ()
-    {
-        for( unsigned j = 0; j < 1000; ++j )
+        void operator() ()
         {
-            ++i;
-            std::cout << i;
+            for( unsigned j = 0; j < 1000; ++j )
+            {
+                ++i;
+                std::cout << i;
+            }
+            std::cout << "\n";
         }
-        std::cout << "\n";
-    }
 };
 
+
+///concurrency artifacts
 std::mutex mtx;
-std::deque<std::packaged_task<void()> > tasks;
+std::deque<std::packaged_task<std::string()> > tasks;
 std::atomic<bool> gb_shutdown_stream{ false };
 std::atomic<bool> gb_stream_ready{ false };
 std::condition_variable var_ready;
+
 
 void ofstr_stream_thread()
 {
@@ -45,24 +48,25 @@ void ofstr_stream_thread()
                 //signal
                 var_ready.notify_one();
 
-                while( !gb_shutdown_stream )
+                do
                 {
-                    /*std::packaged_task<void()> task;
+                    std::packaged_task<std::string()> task;
                     {
-                        std::cout << "name\n";
 
                         std::lock_guard<std::mutex> lk( mtx );
-                        if (tasks.empty(  )) { continue; }
+                        if ( tasks.empty() ) { continue; }
                         task = std::move( tasks.front() );
-                        tasks.pop_front();
+                        /*tasks.pop_front();
                         ::sleep( 1 );
-                        std::cout << "name\n";
+                        std::cout << "name\n";*/
                     }
-                    task();*/
+                    task();
+
                     std::cout << "name\n";
                     std::this_thread::sleep_for( std::chrono::milliseconds( 2000 ) );
 
-                }
+                } while ( !gb_shutdown_stream );
+
                 std::cerr << "received shutdown notice...exiting\n";
 
           }
@@ -78,6 +82,23 @@ void shutdown_stream_thread()
          gb_shutdown_stream.store( true );
 }
 
+void stream_packet( const std::string& payload )
+{
+
+}
+
+
+
+
+/*template<typename funct_t>
+std::future<void> post_stream_packet( func_t func )
+{
+    std::packaged_task<void()> task( func );
+    std::future<void> res=task.get_future();
+    std::lock_guard<std::mutex> lk(m);
+    tasks.push_back(std::move(task));
+    return res;
+}*/
 
 int main( int argc , char* argv[])
 {
@@ -97,8 +118,9 @@ int main( int argc , char* argv[])
         std::cerr << "received stream initialization signal....starting threads\n";
         //start exercise thread
         std::thread sthr( shutdown_stream_thread );
-        //join both
+        //join stream
         othr.join();
+        //after stream exits
         sthr.join();
 
         return 0;

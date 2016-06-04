@@ -104,7 +104,9 @@ namespace cci_expansion
           };
           //-------------------------------------------------------------------------------------
           template<typename F , typename... Ts>
-          inline auto true_async( F&& f , Ts&&... params  )
+          inline
+          std::future<typename std::result_of<F(Ts...)>::type>
+          true_async( F&& f , Ts&&... params  )
           {
                   //wrapper that makes async policy default
                   return std::async( std::launch::async ,
@@ -201,8 +203,6 @@ namespace cci_expansion
 
                             return res;
                         }
-
-
 
           };
 }
