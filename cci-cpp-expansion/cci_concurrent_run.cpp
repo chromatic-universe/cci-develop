@@ -32,6 +32,7 @@ std::deque<std::packaged_task<std::string()> > tasks;
 std::atomic<bool> gb_shutdown_stream{ false };
 std::atomic<bool> gb_stream_ready{ false };
 std::condition_variable var_ready;
+cci_safe_q<std::string> g_stream_q{};
 
 
 void ofstr_stream_thread()
@@ -120,6 +121,7 @@ int main( int argc , char* argv[])
         std::thread sthr( shutdown_stream_thread );
         //join stream
         othr.join();
+        std::string s( "foo" );
         //after stream exits
         sthr.join();
 
