@@ -1,4 +1,4 @@
-# cci_ssh.py willliam k. johnson 2016
+# cci_mini_ssh.py willliam k. johnson 2016
 
 
 import os
@@ -27,6 +27,9 @@ import cci_utils.cci_constants as const
 ##############
 import paramiko
 
+
+
+# -------------------------------------------------------------------------------------
 class cci_ssh_util( object ) :
 
             __metaclass__ =  ABCMeta
@@ -35,9 +38,12 @@ class cci_ssh_util( object ) :
             minimal wrapper for paramiko and cryot
             """
 
+            # object model
             def __init__( self ,
-                          key_file=None ,
-                          target_server = None ) :
+                          user_name = None ,
+                          key_file = None ,
+                          target_server = None ,
+                          connect_immediate = True ) :
                 """
 
                 :param key_file:
@@ -49,13 +55,19 @@ class cci_ssh_util( object ) :
                 self._logger.info( self.__class__.__name__ + '...'  )
                 self._key_file = key_file ,
                 self._target_server = target_server
+                self._user_name = user_name
                 self._lines = []
                 self._buffer = str()
                 self._connection_live = False
+                # is nuop in compound expression , i.e. always true
+                self._connect_immediate = connect_immediate
                 #paramiko client
+                self._raw_client = paramiko.SSHClient()
+                self._raw_client.set_missing_host_key_policy( paramiko.AutoAddPolicy() )
+                if connect_immediate :
+                    self._start()
 
 
-            # object model
             def __repr__( self ) :
                  """
                  returns string representation and construction info
@@ -68,6 +80,7 @@ class cci_ssh_util( object ) :
             def __str__( self ) :
                   """
                   returns pretty string
+
                   :rtype: basestring
                   :return: str
                   """
@@ -81,13 +94,44 @@ class cci_ssh_util( object ) :
                   """
                   return self._connection_live
 
+
+            def __enter__( self ) :
+                  """
+                  compound statement
+
+                  :return:
+                  """
+
+                  if not self._connection_live :
+                      self._start()
+
+
+            def  __exit__( self, type , value , traceback ) :
+                  """
+                  compound statement
+
+                  :param type:
+                  :param value:
+                  :param traceback:
+                  :return:
+                  """
+
+                  self._stop()
+
+
             # attributes
             @property
             def private_key( self ) :
                 return self._key_file
             @private_key.setter
             def private_key( self , key ) :
-                self.private_key = key
+                self._key_file = key
+            @property
+            def user_name( self ) :
+                return self.user_name
+            @user_name.setter
+            def user_name( self , name ) :
+                self.user_name = name
             @property
             def logger( self ) :
                 return self._logger
@@ -113,9 +157,39 @@ class cci_ssh_util( object ) :
             def live( self ,lv ) :
                 self._connection_live = lv
 
+
+            # helpers
+            def _start( self ) :
+                """
+                initialize session with class params
+
+                :return:
+                """
+                try :
+                    self._raw_client.connect( self._target_server ,
+                                              username = self._user_name ,
+                                              key_filename = self._key_file )
+                    self._connection_live = True
+                    self._logger.info( 'ssh session %s@%s connected...'    % ( self._user_name ,
+                                                                                self._target_server ) )
+                except paramiko.AuthenticationException as err :
+                    self._logger.error( err.message )
+                    self._connection_live = False
+                    raise
+
+            def _stop( self ) :
+                """
+                halt ssh session
+
+                :return:
+                """
+                if self._connection_live :
+                    self._raw_client.close()
+                    self._logger.info( 'ssh session at %s@%s closed...'    % ( self._user_name ,
+                                                                                self._target_server ) )
+
             # services
             def raw_key( self ) :
-
                  """
                  key from file
 
@@ -128,21 +202,44 @@ class cci_ssh_util( object ) :
 
                  return data
 
+
+            def start( self ) :
+                """
+                start
+                """
+
+                if not self._connection_live :
+                    self._start()
+                else :
+                    self._logger.info( '...already connected...' )
+
+
+
+
+# -------------------------------------------------------------------------------------
 class cci_ssh_kafka( cci_ssh_util ) :
 
             """
             kafka ssh
             """
+
+            # object model
             def __init__( self ,
-                          key_file=None ,
-                          target_server = None ) :
+                          user_name = None ,
+                          key_file = None ,
+                          target_server = None ,
+                          connect_immediate = True
+                          ) :
 
-                super( cci_ssh_kafka , self ).__init__( key_file ,
-                                                        target_server )
+                super( cci_ssh_kafka , self ).__init__( user_name ,
+                                                        key_file ,
+                                                        target_server ,
+                                                        connect_immediate )
 
 
 
-# ------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------------
 if __name__ == '__main__' :
 
 
@@ -150,7 +247,15 @@ if __name__ == '__main__' :
 
             try :
 
-                cci_ssh = cci_ssh_kafka()
+
+                with cci_ssh_kafka( user_name = 'ubuntu' ,
+                                    key_file = '/home/wiljoh/cci-develop.pem' ,
+                                    target_server = 'cci-aws-1' ) :
+                    pass
+
+
+
+
 
             except IOError as e :
                 ostr << 'IO error ' << e.message << const.endl
