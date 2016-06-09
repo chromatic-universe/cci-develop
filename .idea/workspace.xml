@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci/cci_utils/cci_aws_meta_bot.py" afterPath="$PROJECT_DIR$/cci-python/cci/cci_utils/cci_aws_meta_bot.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci/cci_utils/cci_mini_ssh.py" afterPath="$PROJECT_DIR$/cci-python/cci/cci_utils/cci_mini_ssh.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cci_git_1.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,8 +30,8 @@
       <file leaf-file-name="cci_aws_meta_bot.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-python/cci/cci_utils/cci_aws_meta_bot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="506" max-vertical-offset="3510">
-              <caret line="63" column="55" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="55" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2266" max-vertical-offset="3562">
+              <caret line="203" column="55" selection-start-line="203" selection-start-column="55" selection-end-line="203" selection-end-column="55" />
               <folding>
                 <element signature="e#49#58#0" expanded="true" />
               </folding>
@@ -52,8 +52,8 @@
       <file leaf-file-name="cci_mini_ssh.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cci-python/cci/cci_utils/cci_mini_ssh.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.522689" vertical-offset="2889" max-vertical-offset="3484">
-              <caret line="61" column="67" selection-start-line="61" selection-start-column="67" selection-end-line="61" selection-end-column="67" />
+            <state vertical-scroll-proportion="0.5462185" vertical-offset="1170" max-vertical-offset="4212">
+              <caret line="115" column="13" selection-start-line="115" selection-start-column="13" selection-end-line="115" selection-end-column="13" />
               <folding>
                 <element signature="e#45#54#0" expanded="true" />
               </folding>
@@ -103,13 +103,13 @@
         <option value="$PROJECT_DIR$/cci-python/cci/cci_utils/cci_stream_inf.py" />
         <option value="$PROJECT_DIR$/cci-python/cci_presents/templates/sidebar.html" />
         <option value="$PROJECT_DIR$/cci-python/cci/cci_utils/inout.py" />
-        <option value="$PROJECT_DIR$/cci-python/cci/cci_utils/cci_aws_meta_bot.py" />
         <option value="$PROJECT_DIR$/cci-python/cci/setup.py" />
         <option value="$PROJECT_DIR$/cci-python/cci_presents/templates/layout.html" />
         <option value="$PROJECT_DIR$/cci-python/cci_presents/cci_presents_run.py" />
         <option value="$PROJECT_DIR$/cci-python/cci_presents/templates/home.html" />
         <option value="$PROJECT_DIR$/cci-python/cci/cci_utils/cci_ssh.py" />
         <option value="$PROJECT_DIR$/cci-python/cci/cci_mini_tools/cci_mini_lex.py" />
+        <option value="$PROJECT_DIR$/cci-python/cci/cci_utils/cci_aws_meta_bot.py" />
         <option value="$PROJECT_DIR$/cci-python/cci/cci_utils/cci_mini_ssh.py" />
       </list>
     </option>
@@ -304,7 +304,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="options.lastSelected" value="Errors" />
+    <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="last_opened_file_path" value="/cci/cci_src/master/git_repo_1/python/cci_base/cci_3/sidebar.html" />
@@ -604,7 +604,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-3" y="0" width="1606" height="877" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22015405" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -613,8 +613,8 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21870883" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16337286" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1508344" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16337286" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15340179" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29905277" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24901186" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1044,8 +1044,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-python/cci/cci_utils/cci_aws_meta_bot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="506" max-vertical-offset="3510">
-          <caret line="63" column="55" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="55" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2266" max-vertical-offset="3562">
+          <caret line="203" column="55" selection-start-line="203" selection-start-column="55" selection-end-line="203" selection-end-column="55" />
           <folding>
             <element signature="e#49#58#0" expanded="true" />
           </folding>
@@ -1054,8 +1054,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-python/cci/cci_utils/cci_mini_ssh.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.522689" vertical-offset="2889" max-vertical-offset="3484">
-          <caret line="61" column="67" selection-start-line="61" selection-start-column="67" selection-end-line="61" selection-end-column="67" />
+        <state vertical-scroll-proportion="0.5462185" vertical-offset="1170" max-vertical-offset="4212">
+          <caret line="115" column="13" selection-start-line="115" selection-start-column="13" selection-end-line="115" selection-end-column="13" />
           <folding>
             <element signature="e#45#54#0" expanded="true" />
           </folding>

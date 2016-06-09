@@ -193,6 +193,8 @@ class cci_mini_aws_bot( cci_stream_intf ) :
                 :return:
                 """
 
+                output = None
+
                 if not self._out_format in aws_output_t :
                     raise ValueError( 'unrecognized output format' )
 
@@ -214,6 +216,8 @@ class cci_mini_aws_bot( cci_stream_intf ) :
 
                 except proc.CalledProcessError as e :
                     self._logger.error( e.message )
+                finally :
+                    output.close()
 
         @property
         def ec2( self ) :
