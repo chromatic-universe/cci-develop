@@ -49,7 +49,7 @@ json = '''
         "title": "default chromatic user",
         "desc": "set default user",
         "section": "My Label",
-        "key": "text"
+        "key": "default_user"
     }
 ]
 '''
@@ -70,13 +70,15 @@ class MyApp(App):
         label = root.ids.label
         label.text = self.config.get('My Label', 'text')
         label.font_size = float(self.config.get('My Label', 'font_size'))
+        label.default_user = self.config.get('My Label', 'default_user')
+
         return root
 
     def build_config(self, config):
         """
         Set the default values for the configs sections.
         """
-        config.setdefaults('My Label', {'text': 'Hello', 'font_size': 20})
+        config.setdefaults('My Label', {'text': 'chromatic universe', 'font_size': 20 , 'default_user' : 'wiljoh' } )
 
     def build_settings(self, settings):
         """
@@ -99,6 +101,9 @@ class MyApp(App):
                 self.root.ids.label.text = value
             elif key == 'font_size':
                 self.root.ids.label.font_size = float(value)
+            elif key == 'default_user':
+                self.root.ids.label.default_user = value
+
 
     def close_settings(self, settings):
         """
