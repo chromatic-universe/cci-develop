@@ -4,6 +4,7 @@
 #include <cci_numeric_utils.h>
 #include <cci_complexity.h>
 #include <cci_concurrent_utils.h>
+#include <cci_opt_utils.h>
 
 using namespace cci_expansion;
 
