@@ -24,7 +24,9 @@ link_directories(${CPPEXPANSION_SOURCE_DIR}
                   $ENV{DEV}/lib/cci)
 
 #shared library
-add_library(cci_expansion SHARED cci_complexity.cpp)
+add_library(cci_expansion SHARED cci_complexity.cpp
+                                 cci_concurrent_impl.cpp)
+    
 #executable
 add_executable(cci_exp_run  cci_exp_run.cpp)
 #executable

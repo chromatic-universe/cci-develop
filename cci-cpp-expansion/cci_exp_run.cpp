@@ -31,6 +31,10 @@ int main( int argc , char* argv[])
     std::default_random_engine dre( 7 );
     std::uniform_int_distribution<int> di( 10 , 20 );
 
+    {
+         // cci_base_stopwatch<cci_timer_base>* ctb();
+    }
+
     //shuffle - unseeded
     /*std::vector<int> v_dw_shuffled { shuffle_t( v_dw , dre ) };
     for( auto elem : v_dw_shuffled ) { std::cout << elem << " "; }

@@ -1,114 +1,88 @@
-//cci_opt_utils.h   william k. johnson 2016
+//concurrenti_utils.h  pimpl  william k. johnson 2016
 
-#pragma once
-
-
+#include <memory>
 #include <chrono>
-
-//cci
-#include <cci_generic.h>
 
 namespace cci_expansion
 {
+        //forward declarations
+        class timer_base_impl;
 
-                //forward declarations
+        //aliases
+        using  time_point_t = std::chrono::system_clock::time_point;
+        using  tbi_ptr = timer_base_impl*;
 
-                //enumerations
+        //-------------------------------------------------------------------------------
+        class cci_base_stopwatch
+        {
+             public:
 
+                  //ctors
+                  cci_base_stopwatch() ;
 
-                //aliases
+                  // ddtor
+                  virtual ~cci_base_stopwatch() = 0;
 
+                  //srvices
+                  //last lap time (time of last stop)
+                  virtual time_point_t lap() const = 0;
+                  //predicate: return true if the stopwatch is running
+                  virtual bool is_started() const noexcept = 0;
+                  //show accumulated time, keep running, set/return lap
+                  virtual time_point_t show() = 0;
+                  // (re)start a stopwatch, set/return lap time
+                  virtual void start() = 0;
+                  // stop a running stopwatch, set/return lap time
+                  virtual time_point_t stop() = 0;
+                  //get the number of milliseconds since the timer was started
+                  virtual unsigned long duration_ms() = 0;
+
+        };
+
+        //services
+        class cci_timer_base : public cci_base_stopwatch
+        {
+
+            public :
+
+                //ctor
+                explicit  cci_timer_base( bool start = true );
+                //dtor
+                virtual ~cci_timer_base() = default;
+                //no  copy
+                cci_timer_base( const cci_timer_base& ctb ) = delete;
+                //no assign
+                cci_timer_base&  operator=( const cci_timer_base& ctb ) = delete;
+
+            private :
+
+                //atttributes
+                //implementation
+                //class timer_base_impl;
+                std::unique_ptr<timer_base_impl>  m_tbi;
+
+            public :
+
+                //accessors-inspectors
+                //last lap time (time of last stop)
+                virtual time_point_t lap() const noexcept;
+                tbi_ptr watch_ptr() { return m_tbi.get(); }
 
                 //services
-                //-------------------------------------------------------------------------------
-                template <typename T> class cci_base_stopwatch : T
-                {
-                    typedef  T  base_timer;
+                //predicate: return true if the stopwatch is running
+                virtual bool is_started() const noexcept;
+                //show accumulated time, keep running, set/return lap
+                virtual time_point_t show();
+                // (re)start a stopwatch, set/return lap time
+                virtual void start();
+                // stop a running stopwatch, set/return lap time
+                virtual time_point_t stop();
+                //get the number of milliseconds since the timer was started
+                unsigned long duration_ms();
+                //clears the timer
+                virtual void clear();
 
-                    public:
-
-                        //ctors
-                        explicit cci_base_stopwatch( bool start );
-                        explicit cci_base_stopwatch( char const* activity = "stopwatch" ,
-                                                      bool start = true );
-                        cci_base_stopwatch( std::ostream& log,
-                                             char const* activity = "stopwatch",
-                                             bool start = true );
-                        // ddtor
-                        ~cci_base_stopwatch();
-
-
-                    private :
-
-                       //attributes
-                       char const*          m_activity;
-                       unsigned             m_lap;
-                       std::ostream&        m_log;
-
-
-                    public :
-
-                      //srvices
-                      //last lap time (time of last stop)
-                      unsigned lap() const;
-                      //predicate: return true if the stopwatch is running
-                      bool is_started() const;
-                      //show accumulated time, keep running, set/return lap
-                      unsigned show( char const* event = "show" );
-                      // (re)start a stopwatch, set/return lap time
-                      unsigned start( char const* event_namee = "start");
-                      // stop a running stopwatch, set/return lap time
-                      unsigned stop( char const* event_name = "stop" );
-             };
-             //-------------------------------------------------------------------------------------
-             class cci_timer_base
-             {
-
-                    public:
-
-                        //clears the timer
-                        cci_timer_base() : m_start( std::chrono::system_clock::time_point::min() )
-                        {}
-
-                        ~cci_timer_base() = default;
-
-
-                    private :
-
-                         //attributes
-                         std::chrono::system_clock::time_point m_start;
-
-
-                    public :
-
-                         //servies
-
-                         //clears the timer
-                         void clear() { m_start = std::chrono::system_clock::time_point::min(); }
-
-                         //returns true if the timer is running
-                         bool is_started() const noexcept
-                         { return (  m_start.time_since_epoch() != std::chrono::system_clock::duration( 0 ) ); }
-
-                         // start the timer
-                         void start() { m_start = std::chrono::system_clock::now(); }
-
-                         //get the number of milliseconds since the timer was started
-                         unsigned long get_ms()
-                         {
-                            if ( is_started() )
-                            {
-                                std::chrono::system_clock::duration diff;
-                                diff = std::chrono::system_clock::now() - m_start;
-
-                                return (unsigned)( std::chrono::duration_cast<std::chrono::milliseconds>
-                                                     (diff).count() );
-                            }
-
-                            return 0;
-                         }
-
-             };
-
+        };
 
 }
+
