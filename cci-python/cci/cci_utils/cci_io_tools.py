@@ -207,3 +207,43 @@ if __name__ == '__main__':
 
     example_main()
 
+
+
+# ---------------------------------------------------------------------------------------------
+def chomp( source_str , delimiter = '' , keep_trailing_delim = True ) :
+    """
+    truncate and return string at last delimiter
+    easy to do wiht splicing , but this function is
+    more of a predicate for loop processsing
+
+    :param delimiter :
+    :param keep_trailing_delim :
+    :return
+    """
+
+    idx = source_str.rfind( delimiter )
+    temp_str = str()
+    if idx is not -1 :
+        temp_str = source_str[:idx]
+        if keep_trailing_delim is True :
+            temp_str += delimiter
+
+    return temp_str
+
+
+# ---------------------------------------------------------------------------------------------
+def gnaw( source_str , delimiter = ' ' ) :
+    """
+    truncate and return substring rend
+
+    :param source_str:
+    :param delimiter:
+    :return:
+    """
+
+    temp_str = str()
+    idx = source_str.rfind( delimiter )
+    if idx is not -1 :
+        temp_str = source_str[idx:]
+
+    return temp_str

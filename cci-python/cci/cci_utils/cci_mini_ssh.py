@@ -25,6 +25,9 @@ from cci_stream_inf import cci_stream_intf
 import cci_utils.cci_constants as const
 
 ##############
+'''disable ipv6 console annoyance'''
+logging.getLogger( "scapy.runtime" ).setLevel(logging.ERROR)
+from scapy.all import *
 import paramiko
 
 
@@ -35,7 +38,7 @@ class cci_ssh_util( object ) :
             __metaclass__ =  ABCMeta
 
             """
-            minimal wrapper for paramiko and cryot
+            minimal wrapper for paramiko and crypt
             """
 
             # object model

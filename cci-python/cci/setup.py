@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='cci',
-    version='0.87',
+    version='0.90',
     packages=['cci_utils'],
     url='',
     license='',

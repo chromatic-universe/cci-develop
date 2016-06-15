@@ -109,7 +109,7 @@ class cci_mini_scrapy( cci_scrapy_skel_impl ) :
 if __name__ == '__main__' :
 
         ostr = io.ostream_py()
-cd         try :
+        try :
             cci = cci_mini_scrapy()
 
             cci.logger.info( 'completed ...' )
