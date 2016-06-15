@@ -9,6 +9,10 @@ project(CPPEXPANSION)
 set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -Wall -g -O0  -Qunused-arguments  -DDEBUG -std=c++14")
 set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -Wall -O3  -Qunused-arguments  -DNDEBUG -std=c++14")
 
+link_directories(${CPPEXPANSION_SOURCE_DIR}
+                    $ENV{DEV}/lib
+                    $ENV{DEV}/lib/cci)
+
 #includes
 include_directories(../include
     $ENV{DEV}/include)
