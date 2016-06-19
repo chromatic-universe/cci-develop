@@ -9,6 +9,8 @@ __pycache__/
 # Distribution / packaging
 scapy/
 kafka/
+.buildozer/
+.idea/
 .Python
 env/
 build/
