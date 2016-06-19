@@ -73,5 +73,9 @@ def ping_subnet( destination = None ) :
 # ------------------------------------------------------------------------------------
 if __name__ == '__main__' :
 
-        print ( ping_atom( '10.233.166.247' ) )
+        stream = sys.stdout
+        reply = ping_atom( '0.0.0.180' )
+        if reply is None :
+            print "ping failed....."
+
 
