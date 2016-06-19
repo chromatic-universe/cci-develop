@@ -1,0 +1,77 @@
+Accordion:
+   orientation: 'horizontal'
+   id: cci_accordion
+        
+   AccordionItem:
+      title: 'session'
+      Label: 
+         id: acc_item_session
+         text: 'session'            
+   AccordionItem:
+      title: 'tcp'
+      Label: 
+         id: acc_item_traceroute
+         text: 'tcp'
+   AccordionItem:
+      title: 'network'
+      Accordion:
+         orientation: 'vertical'
+         AccordionItem:
+            title: 'ping'
+            Button:
+               id: ping_btn
+               text: 'ping'
+         AccordionItem:
+            title: 'ping subnet'
+            Button:
+               id: ping_subnet_btn
+               text: 'ping subnet'
+   AccordionItem:
+      title: 'datalink'
+      Label: 
+         id: acc_item_datalink
+         text: 'data link'
+   AccordionItem:
+      title: 'physical layer'
+      Label: 
+         id: acc_item_physical
+         text: 'physical layer'
+   AccordionItem:
+      title: 'wireless'
+      Label: 
+         id: acc_item_wireless
+         text: 'wireless'
+   AccordionItem:
+      title: 'cci-maelstrom'
+      BoxLayout:
+         orientation: 'vertical'
+         Carousel:
+            direction: 'right'
+            id: carousel
+            BoxLayout:
+               Image:
+                  source: 'rabw2.jpg'
+                  allow_stretch: True
+            BoxLayout:
+               Image:
+                  source: 'ramask.png'
+                  allow_stretch: 'True'
+            BoxLayout:
+               Image:
+                  source: 'ragilmore.jpg'
+                  allow_stretch: 'True'
+
+ 
+      
+
+
+
+
+
+
+
+
+
+
+         
+  

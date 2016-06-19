@@ -1,0 +1,77 @@
+Accordion:
+   orientation: 'horizontal'
+   id: cci_accordion
+        
+   AccordionItem:
+      title: 'kafka'
+      Label: 
+         id: acc_item_kafka
+         text: 'kafka'            
+   AccordionItem:
+      title: 'zookeeper/curator'
+      Label: 
+         id: acc_item_curator
+         text: 'curator'
+   AccordionItem:
+      title: 'redis'
+      Accordion:
+         orientation: 'vertical'
+         AccordionItem:
+            title: 'server def'
+            Button:
+               id: redis_server_btn
+               text: 'server'
+         AccordionItem:
+            title: 'client manip'
+            Button:
+               id: redis_client_btn
+               text: 'client manip'
+   AccordionItem:
+      title: 'elasticsearch'
+      Label: 
+         id: acc_item_elastic
+         text: 'elasticsearch'
+   AccordionItem:
+      title: 'rabbitmq'
+      Label: 
+         id: acc_item_rabbit
+         text: 'rabbitmq'
+   AccordionItem:
+      title: 'mongo'
+      Label: 
+         id: acc_item_mongo
+         text: 'mongo'
+   AccordionItem:
+      title: 'cci-urnack'
+      BoxLayout:
+         orientation: 'vertical'
+         Carousel:
+            direction: 'right'
+            id: carousel
+            BoxLayout:
+               Image:
+                  source: 'This_Is_Our_Music.jpg'
+                  allow_stretch: True
+            BoxLayout:
+               Image:
+                  source: 'rejoice.jpg'
+                  allow_stretch: 'True'
+            BoxLayout:
+               Image:
+                  source: 'ornette_change.jpg'
+                  allow_stretch: 'True'
+
+ 
+      
+
+
+
+
+
+
+
+
+
+
+         
+  
