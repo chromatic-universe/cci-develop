@@ -1,7 +1,7 @@
 Accordion:
    orientation: 'horizontal'
    id: cci_accordion
-        
+   on_touch_up: app.accordion_touch_up()
    AccordionItem:
       title: 'session'
       Label: 
@@ -18,14 +18,49 @@ Accordion:
          orientation: 'vertical'
          AccordionItem:
             title: 'ping'
-            Button:
-               id: ping_btn
-               text: 'ping'
+            BoxLayout:
+               orientation: 'vertical'
+               BoxLayout
+                  orientation: 'vertical'
+                  Button:
+                     id: ping_ip_btn
+                     text: 'ip or address'
+                     on_press: app.on_ping_ip_input()
+               BoxLayout
+                  orientation: 'horizontal'
+                  Label:
+                     text: 'show trace:'
+                  Switch:
+                     active: True
+               BoxLayout
+                  orientation: 'horizontal'
+                  Label:
+                     text: 'timeout:'
+                  Slider:
+                     orientation: 'horizontal'
+                     min: 1
+                     max: 15
+                     value: 1
+               Button:
+                  id: ping_btn
+                  text: 'execute'
          AccordionItem:
             title: 'ping subnet'
             Button:
                id: ping_subnet_btn
                text: 'ping subnet'
+         AccordionItem:
+            title: 'output viewer'
+            ScrollView:
+               TextInput:
+                  text: '6/19/2016'
+                  background_color: [0,0,0,0]
+                  foreground_color: [1,1,1,1]
+                  multiline: True
+                  font_size: 12
+                  size_hint_x: 1
+                  size_hint_y: None
+                  readonly: True
    AccordionItem:
       title: 'datalink'
       Label: 

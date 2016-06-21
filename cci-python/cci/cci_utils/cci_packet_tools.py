@@ -28,6 +28,7 @@ import cci_utils.cci_constants as const
 '''disable ipv6 console annoyance'''
 logging.getLogger( "scapy.runtime" ).setLevel(logging.ERROR)
 from scapy.all import *
+
 import paramiko
 
 
@@ -74,8 +75,10 @@ def ping_subnet( destination = None ) :
 if __name__ == '__main__' :
 
         stream = sys.stdout
-        reply = ping_atom( '0.0.0.180' )
+        reply = ping_atom( 'www.google.com' )
         if reply is None :
             print "ping failed....."
+        else :
+            print 'ping succeeded'
 
 
