@@ -12,6 +12,8 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
+from kivy.config import ConfigParser
+
 import logging
 import importlib
 
@@ -69,6 +71,56 @@ class maelstromApp( App ) :
             self._logger.addHandler( fh )
             self._logger.info( self.__class__.__name__ + '...'  )
 
+           
+        # settings
+        def build_settings( self , settings ) :
+            """
+
+            :param settings:
+            :return:
+            """
+            with open( "settings.json", "r" ) as settings_json :
+                settings.add_json_panel( 'cci-maelstrom settings', 
+                                         self.config ,
+                                         data=settings_json.read() )
+
+        def build_config( self , config ) :
+            """
+
+            :param config:
+            :return:
+            """
+            config.setdefaults( 'physical', {
+                                            'packet_timeout': 3 ,
+                                            'show_stream': 1 ,
+                                            } )
+            config.setdefaults( 'network-icmp', {
+                                            'packet_timeout': 1 ,
+                                            'show_stream': 1 ,
+                                            'default_address' : 'www.chromaticuniverse.xyz'
+                                            } )
+
+        def on_config_change(self, config, section, key, value):
+            """
+
+            :param config:
+            :param section:
+            :param key:
+            :param value:
+            :return:
+            """
+            self._logger.info("main.py: app.on_config_change: {0}, {1}, {2}, {3}".format(
+                config, section, key, value))
+
+            """
+            if section == "section1":
+                if key == "key1":
+                    self.root.ids.label. = value
+                elif key == 'font_size':
+                    self.root.ids.label.font_size = float(value)
+                elif key == 'default_user':
+                    self.root.ids.label.default_user = value
+            """
 
         # android mishegas
         def on_pause(self):
