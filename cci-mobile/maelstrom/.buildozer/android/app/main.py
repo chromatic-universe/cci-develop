@@ -77,9 +77,11 @@ class maelstromApp( App ) :
 
             return
 
-        def on_resume(self):
+        def on_resume( self ):
             # something
             self._logger.info( self.__class__.__name__ + '...'  + 'on_resume' )
+
+            pass
 
         # icmp handlers
         def on_ping_ip_input( self ) :
@@ -90,16 +92,21 @@ class maelstromApp( App ) :
 
             box = BoxLayout( orientation='vertical' )
             box.add_widget(Label(text='enter ip or addres:'))
-            box.add_widget(TextInput(text='www.chromaticuniverse.zyz' ) )
+            box.add_widget(TextInput( text='www.chromaticuniverse.xyz' ,
+                                      id = 'input'  ,
+                                      cursor_blink = True ,
+                                      background_color = [0,0,0,0] ,
+                                      foreground_color = [1,1,1,1] ) )
             box.add_widget( Button( text='ok' , id='dismiss') )
             popup = Popup( title='icmp request reply',
                            size_hint=(None, None) ,
-                           size=(300,300) ,
+                           size=(500,200) ,
                            content= box ,
                            auto_dismiss=False )
             for item in box.children :
                 if item.id == 'dismiss' :
                     item.on_press=popup.dismiss
+
             popup.open()
 
 
