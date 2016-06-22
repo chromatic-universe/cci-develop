@@ -33,7 +33,7 @@ cci_kafka_consumer::cci_kafka_consumer( kafka_preamble_ptr ptr_preamble  ,
         config_library_consumer();
 }
 
-//----------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 cci_kafka_consumer::~cci_kafka_consumer()
 {
         m_tmu->time_stamp();

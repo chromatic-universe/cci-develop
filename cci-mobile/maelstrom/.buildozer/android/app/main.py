@@ -75,7 +75,7 @@ class maelstromApp( App ) :
             # save data 
             self._logger.info( self.__class__.__name__ + '...'  + 'on_pause' )
 
-            return
+            return True
 
         def on_resume( self ):
             # something
