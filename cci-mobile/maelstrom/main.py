@@ -16,6 +16,7 @@ from kivy.config import ConfigParser
 
 import logging
 import importlib
+import subprocess as proc
 
 kivy.require( '1.9.1' )
 
@@ -83,6 +84,7 @@ class maelstromApp( App ) :
                 settings.add_json_panel( 'cci-maelstrom settings', 
                                          self.config ,
                                          data=settings_json.read() )
+                self.use_kivy_settings = False
 
         def build_config( self , config ) :
             """
@@ -158,6 +160,26 @@ class maelstromApp( App ) :
             for item in box.children :
                 if item.id == 'dismiss' :
                     item.on_press=popup.dismiss
+
+            try :
+
+
+                cmd = ["sh" , "/system/xbin/qpyenv.sh"]
+                out = proc.check_output( cmd )
+                self._logger.info( 'ok python runtime environment....' )
+
+                cmd = ['su']
+                out = proc.check_output( cmd )
+                self._logger.info( 'ok superuser...' )
+
+
+                cmd = ["python" , "/system/bin/ping.py"]
+                out = proc.check_output( cmd )
+                self._logger.info( out )
+
+
+            except Exception as e :
+                self._logger.error( e )
 
             popup.open()
 

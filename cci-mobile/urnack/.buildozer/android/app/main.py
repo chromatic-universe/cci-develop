@@ -6,7 +6,7 @@ from kivy.app import App
 from kivy.uix import image
 from kivy.core.window import Window
 
-from kafka import KafkaClient
+
 
 #from scapy.all import *
 
@@ -26,10 +26,6 @@ class urnackApp( App ) :
 
             super( urnackApp , self ).__init__()
 
-            
-
-            with open( 'carousel_id' ,  'w' ) as the_file :
-                the_file.write( '0' )
 
         def on_pause(self):
             # save data 
