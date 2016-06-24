@@ -1,3 +1,4 @@
+# kivy
 import kivy
 from kivy.uix.accordion import Accordion, AccordionItem
 from kivy.uix.carousel import Carousel
@@ -14,9 +15,13 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.config import ConfigParser
 
+# python standard
 import logging
 import importlib
 import subprocess as proc
+
+#cci
+from cci_maelstrom import *
 
 kivy.require( '1.9.1' )
 
@@ -148,6 +153,7 @@ class maelstromApp( App ) :
             box.add_widget(Label(text='enter ip or addres:'))
             box.add_widget(TextInput( text='www.chromaticuniverse.xyz' ,
                                       id = 'input'  ,
+
                                       cursor_blink = True ,
                                       background_color = [0,0,0,0] ,
                                       foreground_color = [1,1,1,1] ) )
@@ -163,20 +169,19 @@ class maelstromApp( App ) :
 
             try :
 
+                cmd = ["su" ,
+                       "-c" ,
+                       "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
+                       "/system/bin/ping.py"]
 
-                cmd = ["sh" , "/system/xbin/qpyenv.sh"]
-                out = proc.check_output( cmd )
-                self._logger.info( 'ok python runtime environment....' )
-
-                cmd = ['su']
-                out = proc.check_output( cmd )
-                self._logger.info( 'ok superuser...' )
-
-
-                cmd = ["python" , "/system/bin/ping.py"]
-                out = proc.check_output( cmd )
+                out = proc.check_output( cmd  )
                 self._logger.info( out )
 
+                """
+                cmd = ["python /system/bin/ping.py"]
+                out = proc.check_output( cmd , shell=True )
+                self._logger.info( out )
+                """
 
             except Exception as e :
                 self._logger.error( e )
