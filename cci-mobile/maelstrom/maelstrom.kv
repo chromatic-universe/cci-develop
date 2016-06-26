@@ -1,3 +1,4 @@
+
 Accordion:
    orientation: 'horizontal'
    id: cci_accordion
@@ -9,7 +10,7 @@ Accordion:
          text: 'session'            
    AccordionItem:
       title: 'tcp'
-      Label: 
+      Label:
          id: acc_item_traceroute
          text: 'tcp'
    AccordionItem:
@@ -20,12 +21,11 @@ Accordion:
             title: 'ping'
             BoxLayout:
                orientation: 'vertical'
-               BoxLayout
-                  orientation: 'vertical'
-                  Button:
-                     id: ping_ip_btn
-                     text: 'ip or address'
-                     on_press: app.on_ping_ip_input()
+               Button:
+                  id: ping_btn
+                  text: 'execute ping'
+                  size_hint_y: 0.55
+                  on_press: app.on_ping_ip_input()
                BoxLayout
                   orientation: 'horizontal'
                   Label:
@@ -35,49 +35,60 @@ Accordion:
                BoxLayout
                   orientation: 'horizontal'
                   Label:
+                     text: 'greedy trace:'
+                  Switch:
+                     active: False
+               BoxLayout
+                  orientation: 'horizontal'
+                  Label:
+                     text: 'multiple ip:'
+                  Switch:
+                     active: False
+               BoxLayout
+                  orientation: 'horizontal'
+                  Label:
                      text: 'timeout:'
                   Slider:
                      orientation: 'horizontal'
                      min: 1
                      max: 15
                      value: 1
-               Button:
-                  id: ping_btn
-                  text: 'execute'
+               GridLayout
+                  orientation: 'horizontal'
+                  cols: 1
+                  size_hint_y: 1.25
+                  Label:
+                     text: 'ip or address:'
+                  TextInput:
+                     text: 'www.chromaticuniverse.xyz'
+					 id: ip_input
+                     cursor_blink: True
+                     readonly: False
+                     multiline: True
          AccordionItem:
             title: 'ping subnet'
             Button:
                id: ping_subnet_btn
                text: 'ping subnet'
-         AccordionItem:
-            title: 'output viewer'
-            ScrollView:
-               TextInput:
-                  text: '6/19/2016'
-                  background_color: [0,0,0,0]
-                  foreground_color: [1,1,1,1]
-                  multiline: True
-                  font_size: 12
-                  size_hint_x: 1
-                  size_hint_y: None
-                  readonly: True
+
+
    AccordionItem:
       title: 'datalink'
-      Label: 
-         id: acc_item_datalink
+      id: acc_item_datalink
+      Label:
          text: 'data link'
    AccordionItem:
       title: 'physical layer'
-      Label: 
-         id: acc_item_physical
+      id: acc_item_physical
+      Label:
          text: 'physical layer'
    AccordionItem:
       title: 'cci-maelstrom'
       BoxLayout:
          orientation: 'vertical'
          Carousel:
-            direction: 'right'
-            id: carousel
+            direction: 'left'
+            id: maelstrom_carousel_id
             BoxLayout:
                Image:
                   source: 'rabw2.jpg'
@@ -90,21 +101,3 @@ Accordion:
                Image:
                   source: 'ragilmore.jpg'
                   allow_stretch: 'True'
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-         
-  

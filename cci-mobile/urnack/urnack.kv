@@ -1,15 +1,49 @@
 Accordion:
    orientation: 'horizontal'
    id: cci_accordion
-        
    AccordionItem:
       title: 'kafka'
-      Label: 
-         id: acc_item_kafka
-         text: 'kafka'            
+      Accordion:
+         orientation: 'vertical'
+         AccordionItem:
+            title: 'icmp ping'
+
+
+
+
+
+         AccordionItem:
+            title: 'icmp ping subnet'
+            ScrollView:
+               GridLayout:
+                  cols: 1
+                  size_hint_y: None
+                  height: self.minimum_height
+                  padding : [0, 1, 0, 1]
+                  BoxLayout
+                     orientation: 'horizontal'
+                     size_hint_y: None
+                     Label:
+                        text: 'show trace:'
+                     Switch:
+                        active: True
+         AccordionItem:
+            title: 'console'
+            ScrollView:
+               TextInput:
+                  id: ping_accordion_console
+                  text: 'maelstrom->'
+                  background_color: [0,0,0,0]
+                  foreground_color: [1,1,1,1]
+                  multiline: True
+                  font_size: 12
+                  size_hint_x: 1
+                  size_hint_y: None
+                  readonly: True
+
    AccordionItem:
       title: 'zookeeper/curator'
-      Label: 
+      Label:
          id: acc_item_curator
          text: 'curator'
    AccordionItem:
@@ -26,21 +60,23 @@ Accordion:
             Button:
                id: redis_client_btn
                text: 'client manip'
+
    AccordionItem:
       title: 'elasticsearch'
-      Label: 
+      Label:
          id: acc_item_elastic
          text: 'elasticsearch'
    AccordionItem:
       title: 'rabbitmq'
-      Label: 
+      Label:
          id: acc_item_rabbit
          text: 'rabbitmq'
    AccordionItem:
       title: 'mongo'
-      Label: 
+      Label:
          id: acc_item_mongo
          text: 'mongo'
+
    AccordionItem:
       title: 'cci-urnack'
       BoxLayout:
@@ -61,8 +97,6 @@ Accordion:
                   source: 'ornette_change.jpg'
                   allow_stretch: 'True'
 
- 
-      
 
 
 
@@ -73,5 +107,5 @@ Accordion:
 
 
 
-         
+
   
