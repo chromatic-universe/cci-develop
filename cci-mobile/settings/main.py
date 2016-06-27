@@ -36,7 +36,7 @@ json = '''
         "desc": "choose the text that appears in the label",
         "section": "My Label",
         "key": "text"
-    },
+    },presentation = Builder.load_file("configures.kv")
     {
         "type": "numeric",
         "title": "label font size",

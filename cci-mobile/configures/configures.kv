@@ -1,0 +1,50 @@
+
+
+ScreenManagement:
+
+    CciScreen:
+    KafkaScreen:
+    CuratorScreen:
+
+	
+<CciScreen>:
+    name: 'cci'
+    id: cci_screen
+    Accordion:
+        orientation: 'horizontal'
+        id: cci_accordion
+        AccordionItem:
+            title: 'kafka'
+            on_touch_down: app.root.current = 'kafka'
+        AccordionItem:
+            title: 'curator'
+            on_touch_down: app.root.current = 'curator'
+        AccordionItem:
+            title: 'cci maelstrom'
+            Label:
+                text: 'this is screen'
+
+
+
+            
+<KafkaScreen>:
+    name: 'kafka'
+    id: kafka_screen
+    Accordion:
+        orientation: 'horizontal'
+        AccordionItem:
+            title: 'kafka'
+            Label:
+                text: 'this is kafka screen'
+
+<CuratorScreen>:
+    name: 'curator'
+    id: curator_screen
+    Accordion:
+        orientation: 'horizontal'
+        id: curator_accordion
+        AccordionItem:
+            title: 'curator'
+            Label:
+                text: 'this is curator screen'
+

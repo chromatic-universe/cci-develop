@@ -17,6 +17,9 @@ from kivy.uix.button import Button
 from kivy.config import ConfigParser
 from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock
+from kivy.core.window import Window
+from kivy.uix.settings import SettingsWithSidebar
+Window.softinput_mode = 'pan'
 
 # python standard
 import logging
@@ -72,6 +75,8 @@ class maelstromApp( App ) :
 
 			super( maelstromApp , self ).__init__()
 
+			self.settings_cls = SettingsWithSidebar
+
 			# logger
 			self._logger = logging.getLogger( "cci_maelstrom" )
 			self._logger.setLevel( logging.DEBUG )
@@ -83,6 +88,9 @@ class maelstromApp( App ) :
 			self._logger.info( self.__class__.__name__ + '...'  )
 			self._ret_text = str()
 
+			self._console_count = 1
+
+
 		# settings
 		def build_settings( self , settings ) :
 			"""
@@ -91,10 +99,18 @@ class maelstromApp( App ) :
 			:return:
 			"""
 			with open( "settings.json", "r" ) as settings_json :
-				settings.add_json_panel( 'cci-maelstrom settings',
+				settings.add_json_panel( 'cci-maelstrom contexts',
 										 self.config ,
 										 data=settings_json.read() )
-				self.use_kivy_settings = False
+			with open( "settings_env.json", "r" ) as settings_json :
+				settings.add_json_panel( 'cci-maelstrom environment',
+										 self.config ,
+										 data=settings_json.read() )
+			with open( "settings_stream.json", "r" ) as settings_json :
+				settings.add_json_panel( 'cci-maelstrom stream data',
+										 self.config ,
+										 data=settings_json.read() )
+			self.use_kivy_settings = False
 
 		def build_config( self , config ) :
 			"""
@@ -170,11 +186,8 @@ class maelstromApp( App ) :
 					self._logger.info( out )
 				except proc.CalledProcessError as e :
 					b_ret = False
-
 			except Exception as e :
 				self._logger.error( e )
-
-
 
 			carousel = self.root.ids.maelstrom_carousel_id
 			if b_ret :
@@ -184,15 +197,30 @@ class maelstromApp( App ) :
 			boiler = 'maelstrom[icmp]->ping: ' + \
 					  res + \
 					  ' ' + self.root.ids.ip_input.text
+			boiler += '\n'
+			boiler += out
+			pos = boiler.find( '#[QPython]' )
+			if pos :
+				boiler = boiler[:pos]
 
+			"""
+			data = str()
+			try :
+				with open( "/data/data/com.chromaticuniverse.cci_maelstrom/files/cci_maelstrom_command.log" ) as f :
+					data = f.read()
+			except :
+				pass
+			"""
 
 			grid = GridLayout( cols = 1 ,
-							   size_hint_y = None ,
-							   height = 0 ,
+
+
 							   padding = [0 , 20 ,20 ,0] )
-			grid.add_widget( Label( text = 'icmp ping console #1',
+
+			grid.add_widget( Label( text = 'icmp ping console #'+ str( self._console_count ),
 									color = [ 1, 0 , 0 , 1] ,
 									size_hint_y = 0.2 ) )
+
 			grid.add_widget( TextInput(   text= boiler ,
 										  id = 'console'  ,
 										  cursor_blink = True ,
@@ -200,21 +228,20 @@ class maelstromApp( App ) :
 										  foreground_color = [1,1,1,1] ,
 										  multiline = True ,
 										  font_size = 16 ,
-										  size_hint_x = 1 ,
-										  size_hint_y = None ,
+
 										  readonly = True ) )
+
 			grid.add_widget( Label( text = strftime("%Y-%m-%d %H:%M:%S", gmtime()) ,
-									font_size = 12  ,
+									font_size = 16  ,
 									color = [ 1, 0 , 0 , 1] ,
 									size_hint_y = 0.2 ) )
+			"""
 			scroller = ScrollView()
 			scroller.add_widget( grid )
-			carousel.add_widget( scroller )
+			"""
+			carousel.add_widget( grid )
 			carousel.index = len( carousel.slides ) - 1
-
-
-
-
+			self._console_count += 1
 
 
 		def accordion_touch_up( self ) :
@@ -239,6 +266,8 @@ class maelstromApp( App ) :
 				if child.title == 'cci-maelstrom' :
 					child.collapse = False
 					child.canvas.ask_update()
+
+			self.root.ids.ping_btn.text = "execute"
 
 
 		# attributes

@@ -2,7 +2,6 @@
 Accordion:
    orientation: 'horizontal'
    id: cci_accordion
-   on_touch_up: app.accordion_touch_up()
    AccordionItem:
       title: 'session'
       Label: 
@@ -24,28 +23,34 @@ Accordion:
                Button:
                   id: ping_btn
                   text: 'execute ping'
-                  size_hint_y: 0.55
+                  color: 1,0,0,1
+                  size_hint_y: 0.15
+                  background_color: [0,0,0,0]
                   on_press: app.on_ping_ip_input()
                BoxLayout
                   orientation: 'horizontal'
+                  size_hint_y: 0.15
                   Label:
                      text: 'show trace:'
                   Switch:
                      active: True
                BoxLayout
                   orientation: 'horizontal'
+                  size_hint_y: 0.15
                   Label:
                      text: 'greedy trace:'
                   Switch:
                      active: False
                BoxLayout
                   orientation: 'horizontal'
+                  size_hint_y: 0.15
                   Label:
                      text: 'multiple ip:'
                   Switch:
                      active: False
                BoxLayout
                   orientation: 'horizontal'
+                  size_hint_y: 0.15
                   Label:
                      text: 'timeout:'
                   Slider:
@@ -56,7 +61,7 @@ Accordion:
                GridLayout
                   orientation: 'horizontal'
                   cols: 1
-                  size_hint_y: 1.25
+                  size_hint_y: .30
                   Label:
                      text: 'ip or address:'
                   TextInput:
@@ -65,12 +70,55 @@ Accordion:
                      cursor_blink: True
                      readonly: False
                      multiline: True
-         AccordionItem:
-            title: 'ping subnet'
-            Button:
-               id: ping_subnet_btn
-               text: 'ping subnet'
 
+         AccordionItem:
+            title: 'ping subnetwork'
+            collapse: True
+            BoxLayout:
+               orientation: 'vertical'
+               Button:
+                  id: ping_subnet_btn
+                  size_hint_y: 0.15
+                  text: 'execute ping subnet'
+                  color: 1,0,0,1
+                  background_color: [0,0,0,0]
+                  on_press: app.on_ping_ip_input()
+               BoxLayout
+                  orientation: 'horizontal'
+                  size_hint_y: 0.15
+                  Label:
+                     text: 'show trace:'
+                  Switch:
+                     active: True
+               BoxLayout
+                  orientation: 'horizontal'
+                  size_hint_y: 0.15
+                  Label:
+                     text: 'greedy trace:'
+                  Switch:
+                     active: False
+               BoxLayout
+                  orientation: 'horizontal'
+                  size_hint_y: 0.15
+                  Label:
+                     text: 'timeout:'
+                  Slider:
+                     orientation: 'horizontal'
+                     min: 1
+                     max: 15
+                     value: 1
+               GridLayout
+                  orientation: 'horizontal'
+                  cols: 1
+                  size_hint_y: .30
+                  Label:
+                     text: 'subnet:'
+                  TextInput:
+                     text: '192.168.0.0'
+                     id: ip_subnet_input
+                     cursor_blink: True
+                     readonly: False
+                     multiline: False
 
    AccordionItem:
       title: 'datalink'
