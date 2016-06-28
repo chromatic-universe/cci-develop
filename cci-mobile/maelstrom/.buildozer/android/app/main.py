@@ -18,7 +18,14 @@ from kivy.config import ConfigParser
 from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.lang import Builder
 from kivy.uix.settings import SettingsWithSidebar
+from kivy.uix.screenmanager import ScreenManager, \
+	                               Screen ,\
+	                               RiseInTransition ,\
+								   SwapTransition , \
+								   FallOutTransition , \
+								   SlideTransition
 Window.softinput_mode = 'pan'
 
 # python standard
@@ -34,6 +41,36 @@ from cci_maelstrom import *
 kivy.require( '1.9.1' )
 
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
+bx="""
+ScrollView:
+    id: scrlv
+    TextInput:
+        text: 'foo'
+        size_hint: 1, None
+        cursor_blink: True
+		background_color: [0,0,0,0]
+		foreground_color: [1,1,1,1]
+		multiline: True
+		font_size: 16
+		readonly: True
+        height: max( (len(self._lines)+1) * self.line_height, scrlv.height)
+"""
+
+class CciScreen( Screen ):
+    pass
+
+
+class NetworkScreen( Screen ):
+    pass
+
+class TcpScreen( Screen ):
+    pass
+
+
+
+class ScreenManagement( ScreenManager ) :
+	transition = SlideTransition()
+
 
 class dynamic_import :
 		"""
@@ -173,8 +210,8 @@ class maelstromApp( App ) :
 			out = str()
 			b_ret = True
 
-
-			self._move_to_accordion_item( self.root , self.root.ids.ip_input )
+			self._move_to_accordion_item( self.root.current_screen.ids.cci_accordion ,
+										  self.root.current_screen.ids.ip_input )
 			try :
 
 				cmd = ["su" ,
@@ -189,66 +226,60 @@ class maelstromApp( App ) :
 			except Exception as e :
 				self._logger.error( e )
 
-			carousel = self.root.ids.maelstrom_carousel_id
+			carousel = self.root.current_screen.ids.maelstrom_carousel_id
 			if b_ret :
 				res = 'ping succeeded....'
 			else :
 				res = 'ping failed......'
 			boiler = 'maelstrom[icmp]->ping: ' + \
 					  res + \
-					  ' ' + self.root.ids.ip_input.text
+					  ' ' + self.root.current_screen.ids.ip_input.text
 			boiler += '\n'
 			boiler += out
 			pos = boiler.find( '#[QPython]' )
 			if pos :
 				boiler = boiler[:pos]
 
-			"""
-			data = str()
-			try :
-				with open( "/data/data/com.chromaticuniverse.cci_maelstrom/files/cci_maelstrom_command.log" ) as f :
-					data = f.read()
-			except :
-				pass
-			"""
 
-			grid = GridLayout( cols = 1 ,
-
-
-							   padding = [0 , 20 ,20 ,0] )
-
-			grid.add_widget( Label( text = 'icmp ping console #'+ str( self._console_count ),
+			layout = GridLayout( cols = 1 ,
+								 padding = [0 , 5 , 0 ,5]
+								  )
+			layout.add_widget( Label( text = 'icmp ping console #'+ str( self._console_count ),
 									color = [ 1, 0 , 0 , 1] ,
-									size_hint_y = 0.2 ) )
+									size_hint_y = 0.1 ) )
 
-			grid.add_widget( TextInput(   text= boiler ,
-										  id = 'console'  ,
-										  cursor_blink = True ,
-										  background_color = [0,0,0,0] ,
-										  foreground_color = [1,1,1,1] ,
-										  multiline = True ,
-										  font_size = 16 ,
-
-										  readonly = True ) )
-
-			grid.add_widget( Label( text = strftime("%Y-%m-%d %H:%M:%S", gmtime()) ,
+			scrolly = Builder.load_string( bx )
+			tx = scrolly.children[0]
+			tx.text = boiler
+			layout.add_widget( scrolly )
+			layout.add_widget( Label( text = strftime("%Y-%m-%d %H:%M:%S", gmtime()) ,
 									font_size = 16  ,
-									color = [ 1, 0 , 0 , 1] ,
-									size_hint_y = 0.2 ) )
-			"""
-			scroller = ScrollView()
-			scroller.add_widget( grid )
-			"""
-			carousel.add_widget( grid )
+									size_hint_y = 0.2 ,
+									color = [ 1, 0 , 0 , 1] ) )
+			carousel.add_widget( layout )
+
 			carousel.index = len( carousel.slides ) - 1
 			self._console_count += 1
+
+
+		def _selected_accordion_item( self ) :
+			"""
+
+			:return accordion item selected:
+			"""
+			for item in self.root.current_screen.ids.cci_accordion.children :
+				try:
+					if not item.collapse :
+						return item
+				except :
+					pass
 
 
 		def accordion_touch_up( self ) :
 			"""
 			:return:
 			"""
-			for item in self.root.children :
+			for item in self.root.current_screen.children :
 				try:
 					if not item.collapse :
 						self._logger.info( self.__class__.__name__ + '...' +
@@ -256,18 +287,40 @@ class maelstromApp( App ) :
 				except :
 					pass
 
+
 		def _move_to_accordion_item( self , acc , tag = None ) :
 			"""
 			workaround for android nesting bug
 			:param acc:
 			:return:
 			"""
+
 			for child in acc.children :
 				if child.title == 'cci-maelstrom' :
 					child.collapse = False
 					child.canvas.ask_update()
 
-			self.root.ids.ping_btn.text = "execute"
+			self.root.current_screen.ids.ping_btn.text = "execute"
+
+
+		def _open_extended_window( self ) :
+			"""
+
+			:return:
+			"""
+
+			item = self._selected_accordion_item()
+			self.root.current = 'screen_' + item.title
+
+
+		def _manip_extended_window( self ) :
+			"""
+
+			:return:
+			"""
+
+			self.root.current = 'screen_cci'
+
 
 
 		# attributes

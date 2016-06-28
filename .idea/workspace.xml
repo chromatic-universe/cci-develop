@@ -1,50 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/cci-mobile/maelstrom/main.py" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/urnack/main.py" />
-    <bookmark url="file://$PROJECT_DIR$/cci-mobile/maelstrom/main.py" line="226" />
-    <bookmark url="file://$PROJECT_DIR$/cci-mobile/maelstrom/main.py" line="93" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/maelstrom/main.py" line="130" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/urnack/main.py" line="58" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/maelstrom/maelstrom.kv" line="167" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/maelstrom/main.py" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-mobile/configures/ornette_change.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-mobile/configures/ramask.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-mobile/configures/configures.kv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-mobile/maelstrom/settings_env.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-mobile/maelstrom/settings_stream.json" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/_applibs/six-1.10.0.dist-info/DESCRIPTION.rst" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/_applibs/six-1.10.0.dist-info/INSTALLER" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/_applibs/six-1.10.0.dist-info/METADATA" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/_applibs/six-1.10.0.dist-info/RECORD" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/_applibs/six-1.10.0.dist-info/WHEEL" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/_applibs/six-1.10.0.dist-info/metadata.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/_applibs/six-1.10.0.dist-info/top_level.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/_applibs/six.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/applibs/six-1.10.0.dist-info/DESCRIPTION.rst" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/applibs/six-1.10.0.dist-info/INSTALLER" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/applibs/six-1.10.0.dist-info/METADATA" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/applibs/six-1.10.0.dist-info/RECORD" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/applibs/six-1.10.0.dist-info/WHEEL" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/applibs/six-1.10.0.dist-info/metadata.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/applibs/six-1.10.0.dist-info/top_level.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/applibs/six.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/maelstrom/settings_env.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/maelstrom/settings_stream.json" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/maelstrom/bin/ccimaelstrom-0.1-debug.apk" afterPath="$PROJECT_DIR$/cci-mobile/maelstrom/bin/ccimaelstrom-0.1-debug.apk" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/bin/cciurnack-0.1-debug.apk" afterPath="$PROJECT_DIR$/cci-mobile/urnack/bin/cciurnack-0.1-debug.apk" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/.gitignore" afterPath="$PROJECT_DIR$/cci-mobile/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/maelstrom/maelstrom.kv" afterPath="$PROJECT_DIR$/cci-mobile/maelstrom/maelstrom.kv" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/maelstrom/.buildozer/android/app/maelstrom.kv" afterPath="$PROJECT_DIR$/cci-mobile/maelstrom/.buildozer/android/app/maelstrom.kv" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/maelstrom/main.py" afterPath="$PROJECT_DIR$/cci-mobile/maelstrom/main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/maelstrom/.buildozer/android/app/main.py" afterPath="$PROJECT_DIR$/cci-mobile/maelstrom/.buildozer/android/app/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/settings/main.py" afterPath="$PROJECT_DIR$/cci-mobile/settings/main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/main.py" afterPath="$PROJECT_DIR$/cci-mobile/urnack/main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/main.py" afterPath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/maelstrom/ping.py" afterPath="$PROJECT_DIR$/cci-mobile/maelstrom/ping.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/maelstrom/.buildozer/state.db" afterPath="$PROJECT_DIR$/cci-mobile/maelstrom/.buildozer/state.db" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/state.db" afterPath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/state.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/urnack.kv" afterPath="$PROJECT_DIR$/cci-mobile/urnack/urnack.kv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/urnack.kv" afterPath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/urnack.kv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/maelstrom/sub.py" afterPath="$PROJECT_DIR$/cci-mobile/maelstrom/sub.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cci_git_1.iws" />
@@ -69,11 +47,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.646098" vertical-offset="931" max-vertical-offset="3861">
-              <caret line="99" column="15" selection-start-line="99" selection-start-column="15" selection-end-line="99" selection-end-column="15" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2778" max-vertical-offset="4550">
+              <caret line="285" column="88" selection-start-line="285" selection-start-column="88" selection-end-line="285" selection-end-column="88" />
               <folding>
                 <element signature="e#7#18#0" expanded="true" />
               </folding>
@@ -81,63 +59,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/settings.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.681818" vertical-offset="39" max-vertical-offset="676">
-              <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cci-mobile/settings/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1768">
-              <caret line="63" column="44" selection-start-line="63" selection-start-column="36" selection-end-line="63" selection-end-column="55" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="maelstrom.kv" pinned="false" current-in-tab="false">
+      <file leaf-file-name="maelstrom.kv" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/maelstrom.kv">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="582" max-vertical-offset="2028">
-              <caret line="88" column="24" selection-start-line="88" selection-start-column="24" selection-end-line="88" selection-end-column="24" />
+            <state vertical-scroll-proportion="0.61343014" vertical-offset="1599" max-vertical-offset="2535">
+              <caret line="149" column="30" selection-start-line="149" selection-start-column="30" selection-end-line="149" selection-end-column="30" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ping.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/ping.py">
+      <file leaf-file-name="builder.py" pinned="false" current-in-tab="false">
+        <entry file="file:///usr/lib/python2.7/dist-packages/kivy/lang/builder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="143" max-vertical-offset="455">
-              <caret line="11" column="32" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="buildozer.spec" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/buildozer.spec">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="468" max-vertical-offset="3042">
-              <caret line="36" column="13" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="cci_maelstrom_command.log" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/cci_maelstrom_command.log">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="26" max-vertical-offset="104">
-              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="399" max-vertical-offset="11414">
+              <caret line="77" column="0" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -189,19 +125,19 @@
         <option value="$PROJECT_DIR$/cci-python/cci/cci_utils/cci_packet_tools.py" />
         <option value="$PROJECT_DIR$/cci-mobile/maelstrom/settings.json" />
         <option value="$PROJECT_DIR$/cci-mobile/maelstrom/maelstrom.ini" />
-        <option value="$PROJECT_DIR$/cci-mobile/maelstrom/sub.py" />
         <option value="$PROJECT_DIR$/cci-mobile/maelstrom/cci_maelstrom/maelstrom_icmp.py" />
         <option value="$PROJECT_DIR$/cci-mobile/urnack/buildozer.spec" />
         <option value="$PROJECT_DIR$/cci-mobile/urnack/urnack.kv" />
-        <option value="$PROJECT_DIR$/cci-mobile/urnack/main.py" />
         <option value="$PROJECT_DIR$/cci-mobile/configures/buildozer.spec" />
         <option value="$PROJECT_DIR$/cci-mobile/settings/main.py" />
         <option value="$PROJECT_DIR$/cci-mobile/configures/main.py" />
         <option value="$PROJECT_DIR$/cci-mobile/configures/configures.kv" />
         <option value="$PROJECT_DIR$/cci-mobile/maelstrom/buildozer.spec" />
+        <option value="$PROJECT_DIR$/cci-mobile/urnack/main.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/maelstrom/sub.py" />
         <option value="$PROJECT_DIR$/cci-mobile/maelstrom/ping.py" />
-        <option value="$PROJECT_DIR$/cci-mobile/maelstrom/maelstrom.kv" />
         <option value="$PROJECT_DIR$/cci-mobile/maelstrom/main.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/maelstrom/maelstrom.kv" />
       </list>
     </option>
   </component>
@@ -310,7 +246,7 @@
     <property name="options.lastSelected" value="reference.settingsdialog.IDE.editor.postfix.templates" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/cci-mobile/settings/main.py" />
+    <property name="last_opened_file_path" value="/cci/dev_t/kivy-1.9.1/examples/widgets/scrollview.kv" />
     <property name="recentsLimit" value="5" />
     <property name="FullScreen" value="false" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
@@ -323,11 +259,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/cci-mobile/urnack" />
       <recent name="$PROJECT_DIR$/cci-mobile/maelstrom" />
       <recent name="$PROJECT_DIR$/cci-mobile/configures" />
       <recent name="$PROJECT_DIR$/cci-python/cci/cci_utils" />
       <recent name="$PROJECT_DIR$/cci-python/cci_presents/static/custom/css" />
-      <recent name="$PROJECT_DIR$/cci-python/cci_presents/static/build" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/cci-python/cci_presents/static/custom/css" />
@@ -387,6 +323,25 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="cci_git_1" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/cci-mobile/urnack/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="sub" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/cci-mobile/maelstrom" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="cci_git_1" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/cci-mobile/maelstrom/sub.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <RunnerSettings RunnerId="PythonRunner" />
@@ -578,19 +533,21 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <list size="6">
+    <list size="7">
       <item index="0" class="java.lang.String" itemvalue="Python.main (2)" />
       <item index="1" class="java.lang.String" itemvalue="Python.cci_aws_meta_bot (1)" />
       <item index="2" class="java.lang.String" itemvalue="Python.main" />
       <item index="3" class="java.lang.String" itemvalue="Python.main (3)" />
       <item index="4" class="java.lang.String" itemvalue="Python.ping" />
       <item index="5" class="java.lang.String" itemvalue="Python.main (1)" />
+      <item index="6" class="java.lang.String" itemvalue="Python.sub" />
     </list>
     <recent_temporary>
-      <list size="3">
+      <list size="4">
         <item index="0" class="java.lang.String" itemvalue="Python.main (3)" />
-        <item index="1" class="java.lang.String" itemvalue="Python.ping" />
-        <item index="2" class="java.lang.String" itemvalue="Python.main (1)" />
+        <item index="1" class="java.lang.String" itemvalue="Python.sub" />
+        <item index="2" class="java.lang.String" itemvalue="Python.ping" />
+        <item index="3" class="java.lang.String" itemvalue="Python.main (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -619,7 +576,7 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16469038" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23847167" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16367137" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17265725" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14361002" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27799737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -685,53 +642,11 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="62" />
+      <option name="time" value="71" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/templates/sidebar.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.0" vertical-offset="676" max-vertical-offset="2548">
-          <caret line="52" column="25" selection-start-line="52" selection-start-column="25" selection-end-line="52" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///cci/dev_t/pyenv/versions/2.7.9/envs/cci_env_flask/lib/python2.7/site-packages/click/core.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="8906" max-vertical-offset="22464">
-          <caret line="715" column="0" selection-start-line="715" selection-start-column="0" selection-end-line="715" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33207548" vertical-offset="21183" max-vertical-offset="28977">
-          <caret line="1647" column="0" selection-start-line="1647" selection-start-column="0" selection-end-line="1647" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///cci/dev_t/pyenv/versions/cci_env_flask/lib/python2.7/site-packages/boto3/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1300">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/templates/layout.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="570" max-vertical-offset="2314">
-          <caret line="65" column="32" selection-start-line="65" selection-start-column="32" selection-end-line="65" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/views/cci_presents_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="911" max-vertical-offset="1924">
-          <caret line="84" column="30" selection-start-line="84" selection-start-column="30" selection-end-line="84" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-python/cci_presents/cci_presents_run.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2720" max-vertical-offset="4134">
@@ -865,13 +780,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/sub.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2123412" vertical-offset="0" max-vertical-offset="551">
-          <caret line="9" column="13" selection-start-line="5" selection-start-column="3" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/urnack/kfk.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="551">
@@ -905,39 +813,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/uix/widget.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5578" max-vertical-offset="16055">
-          <caret line="473" column="55" selection-start-line="473" selection-start-column="55" selection-end-line="473" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/uix/accordion.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3667" max-vertical-offset="6240">
-          <caret line="304" column="0" selection-start-line="304" selection-start-column="0" selection-end-line="304" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/uix/behaviors/button.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334" vertical-offset="1717" max-vertical-offset="2730">
-          <caret line="150" column="0" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/cci_maelstrom.log-debug.log">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-10.7918215" vertical-offset="6820" max-vertical-offset="7358">
           <caret line="78" column="90" selection-start-line="78" selection-start-column="90" selection-end-line="78" selection-end-column="90" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/urnack/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.52813065" vertical-offset="47" max-vertical-offset="650">
-          <caret line="26" column="48" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="48" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -945,13 +825,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.63702357" vertical-offset="117" max-vertical-offset="3029">
           <caret line="36" column="33" selection-start-line="36" selection-start-column="33" selection-end-line="36" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/lang/builder.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="7471" max-vertical-offset="11414">
-          <caret line="594" column="7" selection-start-line="594" selection-start-column="7" selection-end-line="594" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -982,20 +855,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/configures/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.10163339" vertical-offset="516" max-vertical-offset="1196">
-          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/configures/configures.kv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.37749547" vertical-offset="0" max-vertical-offset="728">
-          <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/cci_maelstrom_command.log">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="13" max-vertical-offset="104">
@@ -1004,12 +863,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/ping.py">
+    <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/settings.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="455">
-          <caret line="11" column="32" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
+        <state vertical-scroll-proportion="0.3194707" vertical-offset="39" max-vertical-offset="676">
+          <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///cci/dev_t/kivy-1.9.1/kivy/uix/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33575317" vertical-offset="3793" max-vertical-offset="15834">
+          <caret line="328" column="79" selection-start-line="328" selection-start-column="79" selection-end-line="328" selection-end-column="79" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///cci/dev_t/kivy-1.9.1/examples/widgets/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.61343014" vertical-offset="312" max-vertical-offset="1287">
+          <caret line="50" column="50" selection-start-line="50" selection-start-column="50" selection-end-line="50" selection-end-column="50" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#0#24#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/urnack/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7735125" vertical-offset="0" max-vertical-offset="1196">
+          <caret line="31" column="22" selection-start-line="31" selection-start-column="22" selection-end-line="31" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#11#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1022,37 +907,122 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/maelstrom.kv">
+    <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/Male-Face-O4-icon.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/uix/accordion.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="582" max-vertical-offset="2028">
-          <caret line="88" column="24" selection-start-line="88" selection-start-column="24" selection-end-line="88" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.33205375" vertical-offset="3675" max-vertical-offset="6240">
+          <caret line="304" column="0" selection-start-line="304" selection-start-column="0" selection-end-line="304" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/uix/widget.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33205375" vertical-offset="5586" max-vertical-offset="16055">
+          <caret line="456" column="0" selection-start-line="456" selection-start-column="0" selection-end-line="456" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/uix/behaviors/button.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33205375" vertical-offset="1725" max-vertical-offset="2730">
+          <caret line="150" column="0" selection-start-line="150" selection-start-column="0" selection-end-line="150" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/sub.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2123412" vertical-offset="0" max-vertical-offset="551">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/ping.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.51905626" vertical-offset="0" max-vertical-offset="551">
+          <caret line="23" column="22" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/configures/configures.kv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.80217785" vertical-offset="0" max-vertical-offset="728">
+          <caret line="34" column="22" selection-start-line="34" selection-start-column="22" selection-end-line="34" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/configures/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.4863884" vertical-offset="372" max-vertical-offset="1196">
+          <caret line="8" column="42" selection-start-line="8" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///cci/dev_t/kivy-1.9.1/examples/widgets/scrollview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.23593466" vertical-offset="0" max-vertical-offset="585">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///cci/dev_t/kivy-1.9.1/examples/widgets/textinput.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3629764" vertical-offset="294" max-vertical-offset="845">
+          <caret line="38" column="45" selection-start-line="38" selection-start-column="45" selection-end-line="38" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///cci/dev_t/kivy-1.9.1/examples/widgets/scrollview.kv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="286">
+          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/settings/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1768">
-          <caret line="63" column="44" selection-start-line="63" selection-start-column="36" selection-end-line="63" selection-end-column="55" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="429" max-vertical-offset="1768">
+          <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/settings.json">
+    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/lang/builder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.681818" vertical-offset="39" max-vertical-offset="676">
-          <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="399" max-vertical-offset="11414">
+          <caret line="77" column="0" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.646098" vertical-offset="931" max-vertical-offset="3861">
-          <caret line="99" column="15" selection-start-line="99" selection-start-column="15" selection-end-line="99" selection-end-column="15" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2778" max-vertical-offset="4550">
+          <caret line="285" column="88" selection-start-line="285" selection-start-column="88" selection-end-line="285" selection-end-column="88" />
           <folding>
             <element signature="e#7#18#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/maelstrom/maelstrom.kv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.61343014" vertical-offset="1599" max-vertical-offset="2535">
+          <caret line="149" column="30" selection-start-line="149" selection-start-column="30" selection-end-line="149" selection-end-column="30" />
+          <folding />
         </state>
       </provider>
     </entry>

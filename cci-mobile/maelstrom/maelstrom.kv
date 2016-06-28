@@ -1,151 +1,190 @@
+ScreenManagement:
+    CciScreen:
+    NetworkScreen:
+    TcpScreen:
 
-Accordion:
-   orientation: 'horizontal'
-   id: cci_accordion
-   AccordionItem:
-      title: 'session'
-      Label: 
-         id: acc_item_session
-         text: 'session'            
-   AccordionItem:
-      title: 'tcp'
-      Label:
-         id: acc_item_traceroute
-         text: 'tcp'
-   AccordionItem:
-      title: 'network'
-      Accordion:
-         orientation: 'vertical'
-         AccordionItem:
-            title: 'ping'
-            BoxLayout:
-               orientation: 'vertical'
-               Button:
-                  id: ping_btn
-                  text: 'execute ping'
-                  color: 1,0,0,1
-                  size_hint_y: 0.15
-                  background_color: [0,0,0,0]
-                  on_press: app.on_ping_ip_input()
-               BoxLayout
-                  orientation: 'horizontal'
-                  size_hint_y: 0.15
-                  Label:
-                     text: 'show trace:'
-                  Switch:
-                     active: True
-               BoxLayout
-                  orientation: 'horizontal'
-                  size_hint_y: 0.15
-                  Label:
-                     text: 'greedy trace:'
-                  Switch:
-                     active: False
-               BoxLayout
-                  orientation: 'horizontal'
-                  size_hint_y: 0.15
-                  Label:
-                     text: 'multiple ip:'
-                  Switch:
-                     active: False
-               BoxLayout
-                  orientation: 'horizontal'
-                  size_hint_y: 0.15
-                  Label:
-                     text: 'timeout:'
-                  Slider:
-                     orientation: 'horizontal'
-                     min: 1
-                     max: 15
-                     value: 1
-               GridLayout
-                  orientation: 'horizontal'
-                  cols: 1
-                  size_hint_y: .30
-                  Label:
-                     text: 'ip or address:'
-                  TextInput:
-                     text: 'www.chromaticuniverse.xyz'
-					 id: ip_input
-                     cursor_blink: True
-                     readonly: False
-                     multiline: True
+<CciScreen>:
+    id: cci_screen
+    name: 'screen_cci'
+    Accordion:
+        orientation: 'horizontal'
+        id: cci_accordion
+        AccordionItem:
+            title: 'session'
+            Label:
+                id: acc_item_session
+                text: 'session'
+        AccordionItem:
+            title: 'tcp'
+            Button:
+                text: 'the original tcp screen'
+                font_size: 16
+                background_color: [0,0,0,0]
+                on_touch_down: app._open_extended_window()
+        AccordionItem:
+            title: 'network'
+            Accordion:
+                orientation: 'vertical'
+                AccordionItem:
+                    title: 'ping'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 2
+                            size_hint_y: 0.20
+                            Button:
+                                id: more_ping_btn
+                                text: '...'
+                                font_size: 24
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app._open_extended_window()
+                            Button:
+                                id: ping_btn
+                                text: 'execute ping'
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app.on_ping_ip_input()
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'show trace:'
+                            Switch:
+                                active: True
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'greedy trace:'
+                            Switch:
+                                active: False
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'multiple ip:'
+                            Switch:
+                                active: False
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'timeout:'
+                            Slider:
+                                orientation: 'horizontal'
+                                min: 1
+                                max: 15
+                                value: 1
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 1
+                            size_hint_y: .30
+                            Label:
+                                text: 'ip or address:'
+                            TextInput:
+                                text: 'www.chromaticuniverse.xyz'
+                                id: ip_input
+                                cursor_blink: True
+                                readonly: False
+                                multiline: True
+                AccordionItem:
+                    title: 'ping subnetwork'
+                    collapse: True
+                    BoxLayout:
+                        orientation: 'vertical'
+                        Button:
+                            id: ping_subnet_btn
+                            size_hint_y: 0.15
+                            text: 'execute ping subnet'
+                            color: 1,0,0,1
+                            background_color: [0,0,0,0]
+                            on_press: app.on_ping_ip_input()
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'show trace:'
+                            Switch:
+                                active: True
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'greedy trace:'
+                            Switch:
+                                active: False
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'timeout:'
+                            Slider:
+                                orientation: 'horizontal'
+                                min: 1
+                                max: 15
+                                value: 1
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 1
+                            size_hint_y: .30
+                            Label:
+                                text: 'subnet:'
+                            TextInput:
+                                text: '192.168.0.35'
+                                id: ip_subnet_input
+                                cursor_blink: True
+                                readonly: False
+                                multiline: False
 
-         AccordionItem:
-            title: 'ping subnetwork'
-            collapse: True
+        AccordionItem:
+            title: 'datalink'
+            id: acc_item_datalink
+            Label:
+                text: 'data link'
+        AccordionItem:
+            title: 'physical layer'
+            id: acc_item_physical
+            Label:
+                text: 'streams'
+        AccordionItem:
+            title: 'cci-maelstrom'
             BoxLayout:
-               orientation: 'vertical'
-               Button:
-                  id: ping_subnet_btn
-                  size_hint_y: 0.15
-                  text: 'execute ping subnet'
-                  color: 1,0,0,1
-                  background_color: [0,0,0,0]
-                  on_press: app.on_ping_ip_input()
-               BoxLayout
-                  orientation: 'horizontal'
-                  size_hint_y: 0.15
-                  Label:
-                     text: 'show trace:'
-                  Switch:
-                     active: True
-               BoxLayout
-                  orientation: 'horizontal'
-                  size_hint_y: 0.15
-                  Label:
-                     text: 'greedy trace:'
-                  Switch:
-                     active: False
-               BoxLayout
-                  orientation: 'horizontal'
-                  size_hint_y: 0.15
-                  Label:
-                     text: 'timeout:'
-                  Slider:
-                     orientation: 'horizontal'
-                     min: 1
-                     max: 15
-                     value: 1
-               GridLayout
-                  orientation: 'horizontal'
-                  cols: 1
-                  size_hint_y: .30
-                  Label:
-                     text: 'subnet:'
-                  TextInput:
-                     text: '192.168.0.0'
-                     id: ip_subnet_input
-                     cursor_blink: True
-                     readonly: False
-                     multiline: False
+                orientation: 'vertical'
+                Carousel:
+                    direction: 'left'
+                    id: maelstrom_carousel_id
+                    BoxLayout:
+                        Image:
+                            source: 'rabw2.jpg'
+                            allow_stretch: True
+                    BoxLayout:
+                        Image:
+                            source: 'ramask.png'
+                            allow_stretch: 'True'
+                    BoxLayout:
+                        Image:
+                            source: 'ragilmore.jpg'
+                            allow_stretch: 'True'
+<NetworkScreen>
+    id: network_screen
+    name: 'screen_network'
+    BoxLayout:
+        orientation: 'vertical'
+        Image:
+            source: 'Male-Face-O4-icon.png'
+            on_touch_down: app._manip_extended_window()
+        Label:
+            text: 'extended network screen'
 
-   AccordionItem:
-      title: 'datalink'
-      id: acc_item_datalink
-      Label:
-         text: 'data link'
-   AccordionItem:
-      title: 'physical layer'
-      id: acc_item_physical
-      Label:
-         text: 'physical layer'
-   AccordionItem:
-      title: 'cci-maelstrom'
-      BoxLayout:
-         orientation: 'vertical'
-         Carousel:
-            direction: 'left'
-            id: maelstrom_carousel_id
-            BoxLayout:
-               Image:
-                  source: 'rabw2.jpg'
-                  allow_stretch: True
-            BoxLayout:
-               Image:
-                  source: 'ramask.png'
-                  allow_stretch: 'True'
-            BoxLayout:
-               Image:
-                  source: 'ragilmore.jpg'
-                  allow_stretch: 'True'
+<TcpScreen>
+    id: tcp_screen
+    name: 'screen_tcp'
+    BoxLayout:
+        orientation: 'vertical'
+        Image:
+            source: 'Male-Face-O4-icon.png'
+            on_touch_down: app._manip_extended_window()
+        Label:
+            text: 'extended tcp screen'
