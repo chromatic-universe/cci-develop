@@ -1,3 +1,7 @@
+
+#:import lv kivy.uix.listview
+#:import la kivy.adapters.listadapter
+
 ScreenManagement:
     CciScreen:
     NetworkScreen:
@@ -7,17 +11,20 @@ ScreenManagement:
     id: cci_screen
     name: 'screen_cci'
     Accordion:
-        orientation: 'horizontal'
+        orientation: 'vertical'
         id: cci_accordion
         AccordionItem:
             title: 'application'
-            Label:
-                id: acc_item_session
-                text: 'application'
+            Accordion:
+                orientation: 'horizontal'
+                AccordionItem:
+                    title: 'dns query'
+                AccordionItem:
+                    title: 'ssh verify'
         AccordionItem:
             title: 'tcp'
             Accordion:
-                orientation: 'vertical'
+                orientation: 'horizontal'
                 AccordionItem:
                     title: 'syn ack'
                     BoxLayout:
@@ -121,7 +128,7 @@ ScreenManagement:
         AccordionItem:
             title: 'network'
             Accordion:
-                orientation: 'vertical'
+                orientation: 'horizontal'
                 AccordionItem:
                     title: 'ping'
                     BoxLayout:
@@ -247,13 +254,20 @@ ScreenManagement:
         AccordionItem:
             title: 'datalink'
             id: acc_item_datalink
-            Label:
-                text: 'data link'
+            Accordion:
+                orientation: 'horizontal'
+                AccordionItem:
+                    title: 'arp'
+                AccordionItem:
+                    title: 'arp scan'
         AccordionItem:
             title: 'stream'
-            id: acc_item_physical
-            Label:
-                text: 'physical layer'
+            Accordion:
+                orientation: 'horizontal'
+                AccordionItem:
+                    title: 'local'
+                AccordionItem:
+                    title: 'publish~subscribe'
         AccordionItem:
             title: 'cci-maelstrom'
             BoxLayout:
@@ -287,29 +301,34 @@ ScreenManagement:
 <TcpScreen>
     id: tcp_screen
     name: 'screen_tcp'
-    ActionBar:
-        pos_hint: {'top':1}
-        ActionView:
-            use_separator: True
-            ActionPrevious:
-                title: 'transport packet manip'
-                with_previous: False
-                app_icon: 'Male-Face-O4-icon.png'
-            ActionOverflow:
-            ActionButton:
-                icon: 'left-icon.png'
-                on_press: app._manip_extended_window()
-            ActionButton:
-                text: 'classics'
-            ActionButton:
-                text: 'custom'
-            ActionButton:
-                text: 'chew packets'
-            ActionGroup:
-                text: 'visualize'
-                ActionButton:
-                    text: 'gnuplot'
-                ActionButton:
-                    text: ''
-                ActionButton:
-                    text: 'Btn7'
+    Accordion:
+        id: tcp_accordion
+        orientation: 'vertical'
+        AccordionItem:
+            title: 'transport packet manip'
+            Accordion:
+                orientation: 'horizontal'
+                AccordionItem:
+                    title: 'classics'
+                    orientation: 'vertical'
+                    GridLayout:
+                        orientation: 'horizontal'
+                        cols: 2
+                        ScrollView:
+                            ListView:
+                                id: list_view_id
+                                size_hint_y: .8
+                                adapter:
+                                    la.ListAdapter(
+                                    data=["cci #{0}".format(i) for i in xrange(30)],
+                                    selection_mode='single',
+                                    allow_empty_selection=False,
+                                    cls=lv.ListItemButton)
+                AccordionItem:
+                    title: 'custom'
+                    orientation: 'vertical'
+        AccordionItem:
+            title: 'cci-maelstrom'
+            Image:
+                source: 'Male-Face-O4-icon.png'
+                on_touch_down: app._manip_extended_window()
