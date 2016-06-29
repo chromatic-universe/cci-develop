@@ -4,7 +4,7 @@ from kivy.uix.carousel import Carousel
 from kivy.uix.label import Label
 from kivy.app import App
 from kivy.uix import image
-from kivy.uix.settings import SettingsWithSidebar
+from kivy.uix.settings import SettingsWithSidebar , SettingsWithSpinner
 from kivy.core.window import Window
 
 import elasticsearch
@@ -27,7 +27,7 @@ class urnackApp( App ) :
 
 				super( urnackApp , self ).__init__()
 
-				self.settings_cls = SettingsWithSidebar
+				self.settings_cls = SettingsWithSpinner
 
 			# settings
 			def build_settings( self , settings ) :

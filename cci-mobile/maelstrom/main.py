@@ -19,7 +19,7 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.lang import Builder
-from kivy.uix.settings import SettingsWithSidebar
+from kivy.uix.settings import SettingsWithSidebar , SettingsWithSpinner
 from kivy.uix.screenmanager import ScreenManager, \
 	                               Screen ,\
 	                               RiseInTransition ,\
@@ -112,7 +112,7 @@ class maelstromApp( App ) :
 
 			super( maelstromApp , self ).__init__()
 
-			self.settings_cls = SettingsWithSidebar
+			self.settings_cls =  SettingsWithSpinner
 
 			# logger
 			self._logger = logging.getLogger( "cci_maelstrom" )
@@ -246,6 +246,7 @@ class maelstromApp( App ) :
 								  )
 			layout.add_widget( Label( text = 'icmp ping console #'+ str( self._console_count ),
 									color = [ 1, 0 , 0 , 1] ,
+									font_size = 16 ,
 									size_hint_y = 0.1 ) )
 
 			scrolly = Builder.load_string( bx )

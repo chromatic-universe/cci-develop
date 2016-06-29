@@ -10,17 +10,110 @@ ScreenManagement:
         orientation: 'horizontal'
         id: cci_accordion
         AccordionItem:
-            title: 'session'
+            title: 'application'
             Label:
                 id: acc_item_session
-                text: 'session'
+                text: 'application'
         AccordionItem:
             title: 'tcp'
-            Button:
-                text: 'the original tcp screen'
-                font_size: 16
-                background_color: [0,0,0,0]
-                on_touch_down: app._open_extended_window()
+            Accordion:
+                orientation: 'vertical'
+                AccordionItem:
+                    title: 'syn ack'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 2
+                            size_hint_y: 0.25
+                            ActionButton:
+                                icon: 'right-icon.png'
+                                on_press: app._open_extended_window()
+                            Button:
+                                id: syn_ack_btn
+                                text: 'execute syn ack'
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app.on_ping_ip_input()
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: .25
+                            Label:
+                                text: 'show trace:'
+                            Switch:
+                                active: True
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'ttl:'
+                            Slider:
+                                orientation: 'horizontal'
+                                min: 1
+                                max: 15
+                                value: 5
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 1
+                            size_hint_y: .35
+                            Label:
+                                text: 'ip syn ack'
+                            TextInput:
+                                text: '192.168.0.135'
+                                id: ip_input_syn
+                                cursor_blink: True
+                                readonly: False
+                                multiline: False
+                AccordionItem:
+                    title: 'mini port scan'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 2
+                            size_hint_y: 0.25
+                            Button:
+                                id: more_tcp_btn
+                                text: '...'
+                                font_size: 24
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app._open_extended_window()
+                            Button:
+                                id: syn_ack_btn
+                                text: 'execute mini scan'
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app.on_ping_ip_input()
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.25
+                            Label:
+                                text: 'show trace:'
+                            Switch:
+                                active: True
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 1
+                            size_hint_y: .50
+                            Label:
+                                text: 'ip scan'
+                            TextInput:
+                                text: '192.168.0.135'
+                                id: ip_input_syn
+                                cursor_blink: True
+                                readonly: False
+                                multiline: False
+                            Label:
+                                text: 'ports'
+                            TextInput:
+                                text: '443 993'
+                                id: port_input_syn
+                                cursor_blink: True
+                                readonly: False
+                                multiline: True
+
+
         AccordionItem:
             title: 'network'
             Accordion:
@@ -90,17 +183,26 @@ ScreenManagement:
                                 readonly: False
                                 multiline: True
                 AccordionItem:
-                    title: 'ping subnetwork'
-                    collapse: True
+                    title: 'ping subnet'
                     BoxLayout:
                         orientation: 'vertical'
-                        Button:
-                            id: ping_subnet_btn
-                            size_hint_y: 0.15
-                            text: 'execute ping subnet'
-                            color: 1,0,0,1
-                            background_color: [0,0,0,0]
-                            on_press: app.on_ping_ip_input()
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 2
+                            size_hint_y: 0.20
+                            Button:
+                                id: more_ping_sub_btn
+                                text: '...'
+                                font_size: 24
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app._open_extended_window()
+                            Button:
+                                id: ping_sub_btn
+                                text: 'execute sub ping'
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app.on_ping_ip_input()
                         BoxLayout
                             orientation: 'horizontal'
                             size_hint_y: 0.15
@@ -144,10 +246,10 @@ ScreenManagement:
             Label:
                 text: 'data link'
         AccordionItem:
-            title: 'physical layer'
+            title: 'stream'
             id: acc_item_physical
             Label:
-                text: 'streams'
+                text: 'physical layer'
         AccordionItem:
             title: 'cci-maelstrom'
             BoxLayout:
@@ -181,10 +283,31 @@ ScreenManagement:
 <TcpScreen>
     id: tcp_screen
     name: 'screen_tcp'
-    BoxLayout:
-        orientation: 'vertical'
-        Image:
-            source: 'Male-Face-O4-icon.png'
-            on_touch_down: app._manip_extended_window()
-        Label:
-            text: 'extended tcp screen'
+    ActionBar:
+        pos_hint: {'top':1}
+        ActionView:
+            use_separator: True
+            ActionPrevious:
+                title: 'transport manip'
+                with_previous: False
+                app_icon: 'Male-Face-O4-icon.png'
+            ActionOverflow:
+            ActionButton:
+                icon: 'left-icon.png'
+                on_press: app._manip_extended_window()
+            ActionGroup:
+                text: 'packets'
+                ActionButton:
+                    text: 'classics'
+                ActionButton:
+                    text: 'custom'
+                ActionButton:
+                    text: 'chew packets'
+            ActionGroup:
+                text: 'visual'
+                ActionButton:
+                    text: 'gnuplot'
+                ActionButton:
+                    text: 'vpython'
+                ActionButton:
+                    text: 'graphviz'
