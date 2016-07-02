@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/cci_git_1.iml" filepath="$PROJECT_DIR$/.idea/cci_git_1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cci-python/cci/cci_utils/.idea/cci_utils.iml" filepath="$PROJECT_DIR$/cci-python/cci/cci_utils/.idea/cci_utils.iml" />
     </modules>
   </component>
 </project>

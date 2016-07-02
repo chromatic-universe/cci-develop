@@ -11,6 +11,7 @@ from kivy.uix.slider import Slider
 from kivy.uix.textinput import TextInput
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.popup import Popup
+from kivy.uix.treeview import TreeView , TreeViewLabel , TreeViewNode
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -29,10 +30,10 @@ from kivy.uix.screenmanager import ScreenManager, \
 Window.softinput_mode = 'pan'
 
 # python standard
+import os
 import logging
 import importlib
 from time import gmtime, strftime , sleep
-
 import subprocess as proc
 
 #cci
@@ -42,8 +43,6 @@ from king_console import resource_factory \
 
 
 kivy.require( '1.9.1' )
-
-
 
 # dynamic
 class dynamic_import :
@@ -98,16 +97,19 @@ class kingconsoleApp( App ) :
 			self._logger.addHandler( fh )
 			self._logger.info( self.__class__.__name__ + '...'  )
 			self._ret_text = str()
-
+			#view manager
+			self._view_manager = None
+#
+			self._console_local , \
+			self._console_real  = self._console_host_name = self._Local_net_info()
 			self._console_count = 1
-
 
 		# helpers
 		@staticmethod
 		def _retr_resource( resource_id ) :
 			"""
 
-			:param resourc_id:
+			:param resource_id:
 			:return ui resource:
 			"""
 
@@ -150,6 +152,49 @@ class kingconsoleApp( App ) :
 											} )
 
 
+		def _retr_proc_atom( self , proc_str = None ) :
+			"""
+
+			:return proc atom:
+			"""
+
+			pass
+
+
+		def _Local_net_info( self ) :
+			"""
+
+			:return:
+			"""
+			out = str()
+			out2 = str()
+
+			try :
+
+					cmd = ["su" ,
+						   "-c" ,
+						   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
+						   "./king_console/ping.pyo" ,
+						   "-x"
+						  ]
+					try :
+						out = proc.check_output( cmd  )
+						if out :
+							pos = out.find( '<ip_info>' )
+							if pos :
+								out = out[:pos]
+							out , out2 = out.split( ':' )
+							self.logger.info( ifconfig )
+					except proc.CalledProcessError as e :
+						self._logger.error( e.message )
+						b_ret = False
+			except Exception as e :
+				b_ret = False
+				self._logger.error( e.message )
+
+			return out , out2
+
+
 		def on_config_change(self, config, section, key, value):
 			"""
 
@@ -179,11 +224,23 @@ class kingconsoleApp( App ) :
 
 			return True
 
+
 		def on_resume( self ):
 			# something
 			self._logger.info( self.__class__.__name__ + '...'  + 'on_resume' )
 
 			pass
+
+
+		def on_start(self) :
+			"""
+
+			:return:
+			"""
+			self.root.current_screen.ids.console_local_id.text = self._console_local
+			self.root.current_screen.ids.console_real_id.text = self._console_real
+			self.root.current_screen.ids.console_host_name.text = self._console_ifconfig
+
 
 		# icmp handlers
 		def on_ping_ip_input( self ) :
@@ -194,37 +251,41 @@ class kingconsoleApp( App ) :
 
 			out = str()
 			b_ret = True
+			self._logger.info( self.__class__.__name__ + '...on_ping_ip_input'  )
 
 			self._move_to_accordion_item( self.root.current_screen.ids.cci_accordion ,
 										  self.root.current_screen.ids.ip_input )
+			ip = self.root.current_screen.ids.ip_input.text
 			try :
 
 				cmd = ["su" ,
 					   "-c" ,
 					   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-					   "/system/bin/ping.py"]
+					   "./king_console/ping.pyo" ,
+					   "-s" ,
+					   ip
+					  ]
+
 				try :
 					out = proc.check_output( cmd  )
 					self._logger.info( out )
 				except proc.CalledProcessError as e :
 					b_ret = False
 			except Exception as e :
-				self._logger.error( e )
+				b_ret = False
+				self._logger.error( e.message )
 
 			carousel = self.root.current_screen.ids.maelstrom_carousel_id
-			if b_ret :
-				res = 'ping succeeded....'
-			else :
-				res = 'ping failed......'
+
 			boiler = 'maelstrom[icmp]->ping: ' + \
-					  res + \
 					  ' ' + self.root.current_screen.ids.ip_input.text
 			boiler += '\n'
 			boiler += out
+			self._logger.info( self.__class__.__name__ + '...boiler='  + boiler)
+
 			pos = boiler.find( '#[QPython]' )
 			if pos :
 				boiler = boiler[:pos]
-
 
 			layout = GridLayout( cols = 1 ,
 								 padding = [0 , 5 , 0 ,5]
@@ -246,6 +307,7 @@ class kingconsoleApp( App ) :
 									font_size = 16  ,
 									size_hint_y = 0.2 ,
 									color = [ 1, 0 , 0 , 1] ) )
+
 
 
 			carousel.add_widget( layout )
@@ -313,6 +375,45 @@ class kingconsoleApp( App ) :
 
 			self.root.current = 'screen_cci'
 
+
+		def _on_view_manager( self ) :
+			"""
+
+			:return:
+			"""
+
+			if not self._view_manager :
+				self._view_manager = screen.ViewManagerScreen()
+				self._view_manager.name = 'screen_view_manager'
+				self._view_manager.id = 'view_manager_screen'
+
+				layout = GridLayout( orientation='horizontal' , cols=1 )
+				# action bar
+				ab = Builder.load_string( self._retr_resource( 'action_bar' ) )
+
+				layout.add_widget( ab )
+
+				# scroll
+				sv = ScrollView()
+
+				# tree view
+				tv = TreeView( root_options=dict( text = 'king console') )
+				n1 = tv.add_node(TreeViewLabel(text='king console main'))
+				n2 = tv.add_node(TreeViewLabel(text='level 1'), n1)
+				tv.add_node(TreeViewLabel(text='tcp'), n2)
+				tv.add_node(TreeViewLabel(text='network'), n2)
+				tv.add_node(TreeViewLabel(text='application'), n2)
+				tv.add_node(TreeViewLabel(text='datalink'), n2)
+				tv.add_node(TreeViewLabel(text='streams'), n2)
+				tv.add_node(TreeViewLabel(text='level 2'), n1)
+				tv.add_node(TreeViewLabel(text='level 3'), n1)
+				sv.add_widget( tv )
+
+				layout.add_widget( sv )
+				self._view_manager.add_widget( layout )
+				self.root.add_widget( self._view_manager )
+
+			self.root.current = self._view_manager.name
 
 
 		# attributes

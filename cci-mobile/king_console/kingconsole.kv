@@ -1,0 +1,378 @@
+
+#:import lv kivy.uix.listview
+#:import la kivy.adapters.listadapter
+
+ScreenManagement:
+    CciScreen:
+    NetworkScreen:
+    TcpScreen:
+
+
+<CciScreen>:
+    id: cci_screen
+    name: 'screen_cci'
+    Accordion:
+        orientation: 'vertical'
+        id: cci_accordion
+        AccordionItem:
+            title: 'application'
+            Accordion:
+                orientation: 'horizontal'
+                AccordionItem:
+                    title: 'dns query'
+                AccordionItem:
+                    title: 'ssh verify'
+        AccordionItem:
+            title: 'tcp'
+            Accordion:
+                orientation: 'horizontal'
+                AccordionItem:
+                    title: 'syn ack'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 2
+                            size_hint_y: 0.25
+                            Button:
+                                id: more_tcp_btn
+                                text: '...'
+                                font_size: 24
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app._open_extended_window()
+                            Button:
+                                id: syn_ack_btn
+                                text: 'execute syn ack'
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app.on_ping_ip_input()
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: .25
+                            Label:
+                                text: 'show trace:'
+                            Switch:
+                                active: True
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'ttl:'
+                            Slider:
+                                orientation: 'horizontal'
+                                min: 1
+                                max: 15
+                                value: 5
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 1
+                            size_hint_y: .35
+                            Label:
+                                text: 'ip syn ack'
+                            TextInput:
+                                text: '192.168.0.135'
+                                id: ip_input_syn
+                                cursor_blink: True
+                                readonly: False
+                                multiline: False
+                AccordionItem:
+                    title: 'mini port scan'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 2
+                            size_hint_y: 0.25
+                            Button:
+                                id: more_tcp_btn
+                                text: '...'
+                                font_size: 24
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app._open_extended_window()
+                            Button:
+                                id: syn_ack_btn
+                                text: 'execute mini scan'
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app.on_ping_ip_input()
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.25
+                            Label:
+                                text: 'show trace:'
+                            Switch:
+                                active: True
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 1
+                            size_hint_y: .50
+                            Label:
+                                text: 'ip scan'
+                            TextInput:
+                                text: '192.168.0.135'
+                                id: ip_input_syn
+                                cursor_blink: True
+                                readonly: False
+                                multiline: False
+                            Label:
+                                text: 'ports'
+                            TextInput:
+                                text: '443 993'
+                                id: port_input_syn
+                                cursor_blink: True
+                                readonly: False
+                                multiline: True
+
+
+        AccordionItem:
+            title: 'network'
+            Accordion:
+                orientation: 'horizontal'
+                AccordionItem:
+                    title: 'ping'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 2
+                            size_hint_y: 0.20
+                            Button:
+                                id: more_ping_btn
+                                text: '...'
+                                font_size: 24
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app._open_extended_window()
+                            Button:
+                                id: ping_btn
+                                text: 'execute ping'
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app.on_ping_ip_input()
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'show trace:'
+                            Switch:
+                                active: True
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'greedy trace:'
+                            Switch:
+                                active: False
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'multiple ip:'
+                            Switch:
+                                active: False
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'timeout:'
+                            Slider:
+                                orientation: 'horizontal'
+                                min: 1
+                                max: 15
+                                value: 1
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 1
+                            size_hint_y: .30
+                            Label:
+                                text: 'ip or address:'
+                            TextInput:
+                                text: '192.168.0.133'
+                                id: ip_input
+                                cursor_blink: True
+                                readonly: False
+                                multiline: True
+                AccordionItem:
+                    title: 'ping subnet'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 2
+                            size_hint_y: 0.20
+                            Button:
+                                id: more_ping_sub_btn
+                                text: '...'
+                                font_size: 24
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app._open_extended_window()
+                            Button:
+                                id: ping_sub_btn
+                                text: 'execute sub ping'
+                                color: 1,0,0,1
+                                background_color: [0,0,0,0]
+                                on_press: app.on_ping_ip_input()
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'show trace:'
+                            Switch:
+                                active: True
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'greedy trace:'
+                            Switch:
+                                active: False
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'timeout:'
+                            Slider:
+                                orientation: 'horizontal'
+                                min: 1
+                                max: 15
+                                value: 1
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 1
+                            size_hint_y: .30
+                            Label:
+                                text: 'subnet:'
+                            TextInput:
+                                text: '192.168.0.35'
+                                id: ip_subnet_input
+                                cursor_blink: True
+                                readonly: False
+                                multiline: False
+
+        AccordionItem:
+            title: 'datalink'
+            id: acc_item_datalink
+            Accordion:
+                orientation: 'horizontal'
+                AccordionItem:
+                    title: 'arp'
+                AccordionItem:
+                    title: 'arp scan'
+        AccordionItem:
+            title: 'stream'
+            Accordion:
+                orientation: 'horizontal'
+                AccordionItem:
+                    title: 'local'
+                AccordionItem:
+                    title: 'publish~subscribe'
+        AccordionItem:
+            title: 'king console'
+            GridLayout
+                orientation: 'horizontal'
+                cols: 1
+                ActionBar:
+                    pos_hint: {'top':1}
+                    ActionView:
+                        use_separator: True
+                        ActionPrevious:
+                            title: 'king console'
+                            with_previous: False
+                            app_icon: 'king-console32.png'
+                        ActionButton:
+                            icon: 'menu-icon.png'
+                            on_press: app._on_view_manager()
+                BoxLayout:
+                    orientation: 'vertical'
+                    Carousel:
+                        id: maelstrom_carousel_id
+                        direction: 'right'
+                        GridLayout:
+                            orientation: 'horizontal'
+                            cols: 2
+                            size_hint_y: .5
+                            pos_hint: {'top':1}
+                            Label:
+                                text: 'local ip:'
+                                font_size: 14
+                            Label:
+                                id: console_local_id
+                                text: '0.0.0.0'
+                                font_size: 14
+                            Label:
+                                text: 'external ip:'
+                                font_size: 14
+                            Label:
+                                text: '0.0.0.0'
+                                id: console_real_id
+                                font_size: 14
+                            Label:
+                                text: 'hostname:'
+                                font_size: 14
+                            Label:
+                                text: 'local'
+                                id: console_host_name
+                                font_size: 14
+                            Label:
+                                text: 'mac address:'
+                                font_size: 14
+                            Label:
+                                text: '0.0.0.0'
+                                font_size: 14
+
+
+
+
+
+
+
+<NetworkScreen>
+    id: network_screen
+    name: 'screen_network'
+    BoxLayout:
+        orientation: 'vertical'
+        Image:
+            source: 'Male-Face-O4-icon.png'
+            on_touch_down: app._manip_extended_window()
+        Label:
+            text: 'extended network screen'
+
+# tcp screen
+<TcpScreen>
+    id: tcp_screen
+    name: 'screen_tcp'
+    Accordion:
+        id: tcp_accordion
+        orientation: 'vertical'
+        AccordionItem:
+            title: 'transport packet manip'
+            Accordion:
+                orientation: 'horizontal'
+                AccordionItem:
+                    title: 'classics'
+                    orientation: 'vertical'
+                    GridLayout:
+                        orientation: 'horizontal'
+                        cols: 2
+                        ScrollView:
+                            ListView:
+                                id: list_view_id
+                                size_hint_y: .8
+                                adapter:
+                                    la.ListAdapter(
+                                    data=["cci #{0}".format(i) for i in xrange(30)],
+                                    selection_mode='single',
+                                    allow_empty_selection=False,
+                                    cls=lv.ListItemButton)
+                AccordionItem:
+                    title: 'custom'
+                    orientation: 'vertical'
+        AccordionItem:
+            title: 'king console'
+            Image:
+                source: 'king-console128.png'
+
+

@@ -8,6 +8,7 @@ __pycache__/
 
 # Distribution / packaging
 scapy/
+netifaces/
 bin/
 kafka/
 elasticsearch/
