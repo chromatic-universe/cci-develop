@@ -34,8 +34,8 @@ def retr_local_ip_info() :
 		"""
 
 		# local
-		local_ip = None
-		remote_ip = None
+		local_ip = '0.0.0.0'
+		remote_ip = '0.0.0.0'
 		s = socket.socket( socket.AF_INET , socket.SOCK_DGRAM )
 		try:
 			# doesn't have to be reachable
@@ -44,6 +44,7 @@ def retr_local_ip_info() :
 
 			# if using nat will differ
 			ret = urllib2.urlopen( 'https://enabledns.com/ip' )
+
 			remote_ip = ret.read()
 
 		except :

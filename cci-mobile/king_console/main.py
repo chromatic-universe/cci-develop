@@ -1,4 +1,6 @@
+
 # kivy
+
 import kivy
 from kivy.uix.accordion import Accordion, AccordionItem
 from kivy.uix.carousel import Carousel
@@ -31,6 +33,7 @@ Window.softinput_mode = 'pan'
 
 # python standard
 import os
+import copy
 import logging
 import importlib
 from time import gmtime, strftime , sleep
@@ -99,10 +102,15 @@ class kingconsoleApp( App ) :
 			self._ret_text = str()
 			#view manager
 			self._view_manager = None
+			self._full_screen = None
+			self._full_item = None
 #
 			self._console_local , \
-			self._console_real  = self._console_host_name = self._Local_net_info()
+			self._console_real , \
+			self._console_ifconfig = self._console_host_name = self._Local_net_info()
 			self._console_count = 1
+			self._console_constructed = list()
+
 
 		# helpers
 		@staticmethod
@@ -161,6 +169,16 @@ class kingconsoleApp( App ) :
 			pass
 
 
+		def _update_main_console( self , count ) :
+			"""
+
+			:return:
+			"""
+
+			scr = self.root.get_screen( 'screen_cci' )
+			scr.ids.cci_action_prev.title = 'king console(' + str( count ) + ')'
+			print 'foo'
+
 		def _Local_net_info( self ) :
 			"""
 
@@ -168,6 +186,7 @@ class kingconsoleApp( App ) :
 			"""
 			out = str()
 			out2 = str()
+			ifconfig = str()
 
 			try :
 
@@ -184,6 +203,8 @@ class kingconsoleApp( App ) :
 							if pos :
 								out = out[:pos]
 							out , out2 = out.split( ':' )
+							cmd = ['ip' , 'addr' , 'show']
+							ifconfig = proc.check_output( cmd  )
 							self.logger.info( ifconfig )
 					except proc.CalledProcessError as e :
 						self._logger.error( e.message )
@@ -192,7 +213,7 @@ class kingconsoleApp( App ) :
 				b_ret = False
 				self._logger.error( e.message )
 
-			return out , out2
+			return out , out2 , ifconfig
 
 
 		def on_config_change(self, config, section, key, value):
@@ -239,7 +260,7 @@ class kingconsoleApp( App ) :
 			"""
 			self.root.current_screen.ids.console_local_id.text = self._console_local
 			self.root.current_screen.ids.console_real_id.text = self._console_real
-			self.root.current_screen.ids.console_host_name.text = self._console_ifconfig
+			self.root.current_screen.ids.console_interfaces.text = self._console_ifconfig
 
 
 		# icmp handlers
@@ -290,7 +311,7 @@ class kingconsoleApp( App ) :
 			layout = GridLayout( cols = 1 ,
 								 padding = [0 , 5 , 0 ,5]
 								  )
-
+			self._console_count += 1
 			layout.add_widget( Label( text = 'icmp ping console #'+ str( self._console_count ),
 									color = [ 1, 0 , 0 , 1] ,
 									font_size = 16 ,
@@ -313,7 +334,8 @@ class kingconsoleApp( App ) :
 			carousel.add_widget( layout )
 
 			carousel.index = len( carousel.slides ) - 1
-			self._console_count += 1
+
+			self._update_main_console( self._console_count )
 
 
 		def _selected_accordion_item( self ) :
@@ -321,9 +343,15 @@ class kingconsoleApp( App ) :
 
 			:return accordion item selected:
 			"""
-			for item in self.root.current_screen.ids.cci_accordion.children :
+			acc = self.root.current_screen.ids.cci_accordion
+			for item in acc.children :
 				try:
 					if not item.collapse :
+						if not item.title in self._console_constructed :
+							res = item.title + '_acc_item'
+							ai = Builder.load_string( self._retr_resource( res ) )
+							item.add_widget( ai )
+							self._console_constructed.append( item.title )
 						return item
 				except :
 					pass
@@ -376,6 +404,34 @@ class kingconsoleApp( App ) :
 			self.root.current = 'screen_cci'
 
 
+		def _on_full_screen( self ) :
+			"""
+
+			:return:
+			"""
+
+
+			if not self._full_screen :
+				self._full_screen = screen.FullScreen()
+				self._full_screen.name = 'full_screen'
+				self._full_screen.id = 'screen_full'
+				layout = GridLayout( orientation='horizontal' , cols=1 )
+				# action bar
+				ab = Builder.load_string( self._retr_resource( 'action_bar' ) )
+				layout.add_widget( ab )
+				tb = Builder.load_string( self._retr_resource( 'text_scroller' ) )
+				tb.id = 'full_scroll'
+				tb.children[0].id = 'full_scroll_txt'
+				tb.children[0].text = 'blase'
+				layout.add_widget( tb )
+				self._full_screen.add_widget( layout )
+				self.root.add_widget( self._full_screen )
+				self.root.current = 'full_screen'
+			else :
+				self._full_screen.ids.full_scroll_txt.text = 'the original corny snaps!' #copy.copy( self.root.current_screen.ids.console_interfaces.text )
+				self.root.current = 'full_screen'
+
+
 		def _on_view_manager( self ) :
 			"""
 
@@ -397,16 +453,16 @@ class kingconsoleApp( App ) :
 				sv = ScrollView()
 
 				# tree view
-				tv = TreeView( root_options=dict( text = 'king console') )
-				n1 = tv.add_node(TreeViewLabel(text='king console main'))
-				n2 = tv.add_node(TreeViewLabel(text='level 1'), n1)
-				tv.add_node(TreeViewLabel(text='tcp'), n2)
-				tv.add_node(TreeViewLabel(text='network'), n2)
-				tv.add_node(TreeViewLabel(text='application'), n2)
-				tv.add_node(TreeViewLabel(text='datalink'), n2)
-				tv.add_node(TreeViewLabel(text='streams'), n2)
-				tv.add_node(TreeViewLabel(text='level 2'), n1)
-				tv.add_node(TreeViewLabel(text='level 3'), n1)
+				tv = TreeView( root_options=dict( text = 'king console' , font_size = 18 ) )
+				n1 = tv.add_node(screen.TreeManagerLabel(text='king console main'))
+				n2 = tv.add_node(screen.TreeManagerLabel(text='level 1'), n1)
+				tv.add_node(screen.TreeManagerLabel(text='tcp'), n2)
+				tv.add_node(screen.TreeManagerLabel(text='network'), n2)
+				tv.add_node(screen.TreeManagerLabel(text='application'), n2)
+				tv.add_node(screen.TreeManagerLabel(text='datalink'), n2)
+				tv.add_node(screen.TreeManagerLabel(text='streams'), n2)
+				tv.add_node(screen.TreeManagerLabel(text='level 2'), n1)
+				tv.add_node(screen.TreeManagerLabel(text='level 3'), n1)
 				sv.add_widget( tv )
 
 				layout.add_widget( sv )

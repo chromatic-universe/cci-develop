@@ -1,5 +1,6 @@
 # screen.py     william k. johnson 2016
 
+from kivy.uix.treeview import TreeViewLabel
 from kivy.uix.screenmanager import ScreenManager, \
 	                               Screen ,\
 	                               RiseInTransition ,\
@@ -8,10 +9,16 @@ from kivy.uix.screenmanager import ScreenManager, \
 								   SlideTransition
 
 
+class TreeManagerLabel( TreeViewLabel ) :
+	"""
+
+	"""
+	font_size = 18
+
 # screens
 class CciScreen( Screen ) :
 	"""
-	:return
+
 	"""
 	pass
 
@@ -19,7 +26,7 @@ class CciScreen( Screen ) :
 class NetworkScreen( Screen ) :
 	"""
 
-	:return
+
 	"""
 	pass
 
@@ -27,7 +34,14 @@ class NetworkScreen( Screen ) :
 class TcpScreen( Screen ) :
 	"""
 
-	:return
+
+	"""
+	pass
+
+
+class FullScreen( Screen ) :
+	"""
+
 	"""
 	pass
 
@@ -35,7 +49,7 @@ class TcpScreen( Screen ) :
 class ViewManagerScreen( Screen ) :
 	"""
 
-	:return
+
 	"""
 
 	def __init__( self ) :
@@ -57,7 +71,7 @@ class ViewManagerScreen( Screen ) :
 class ScreenManagement( ScreenManager ) :
 	"""
 
-	:return
+
 	"""
 
 	transition = SlideTransition()

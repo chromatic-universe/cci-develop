@@ -35,8 +35,21 @@ ActionBar:
 			with_previous: False
 			app_icon: 'king-console32.png'
 		ActionButton:
+			icon: 'history.png'
+			on_press: app._manip_extended_window()
+		ActionButton:
 			icon: 'menu-icon.png'
 			on_press: app._manip_extended_window()
+"""
+,
+					   'application_acc_item' :
+"""
+Accordion:
+    orientation: 'horizontal'
+    AccordionItem:
+        title: 'dns query'
+    AccordionItem:
+        title: 'ssh verify'
 """
 }
 
