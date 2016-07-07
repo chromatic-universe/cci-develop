@@ -11,6 +11,7 @@ scapy/
 netifaces/
 bin/
 kafka/
+plyer/
 elasticsearch/
 .buildozer/
 .idea/

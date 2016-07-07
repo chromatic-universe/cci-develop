@@ -1,6 +1,8 @@
 
-# kivy
 
+import sqlite3
+
+# kivy
 import kivy
 from kivy.uix.accordion import Accordion, AccordionItem
 from kivy.uix.carousel import Carousel
@@ -22,6 +24,7 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.lang import Builder
+from kivy.properties import StringProperty, ObjectProperty
 from kivy.uix.settings import SettingsWithSidebar , SettingsWithSpinner
 from kivy.uix.screenmanager import ScreenManager, \
 	                               Screen ,\
@@ -38,6 +41,7 @@ import logging
 import importlib
 from time import gmtime, strftime , sleep
 import subprocess as proc
+import threading
 
 #cci
 from king_console import resource_factory \
@@ -45,7 +49,9 @@ from king_console import resource_factory \
 						 screen
 
 
+
 kivy.require( '1.9.1' )
+
 
 # dynamic
 class dynamic_import :
@@ -71,6 +77,39 @@ class dynamic_import :
 		@cls_instance.setter
 		def cls_instance( self , cls ) :
 			self._instance = cls
+
+
+class ConsoleAccordion( Accordion ) :
+
+		btn_text = StringProperty('')
+		_orientation = StringProperty('vertical')
+		_inner_orientation = StringProperty( 'horizontal' )
+		orientation_handler = ObjectProperty(None)
+
+		def __init__( self, *args, **kwargs):
+			super( ConsoleAccordion , self ).__init__( *args, **kwargs)
+
+			# get the original orientation
+			self._orientation = 'horizontal' if Window.width > Window.height else 'vertical'
+			# inform user
+			self.btn_text = self._orientation
+			self.orientation = self._orientation
+			self._inner_orientation =  'vertical' if self.orientation == 'horizontal' else 'horizontal'
+
+
+		def check_orientation(self, width, height):
+
+			orientation = 'vertical' if height > width else 'horizontal'
+			if orientation != self._orientation:
+				self._orientation = orientation
+				self.orientation_cb(orientation)
+
+
+
+		def orientation_cb(self, orientation):
+			self.btn_text = orientation
+			self.orientation = 'horizontal' if Window.width > Window.height else 'vertical'
+			self._inner_orientation =  'vertical' if self._orientation == 'horizontal' else 'horizontal'
 
 
 
@@ -103,6 +142,7 @@ class kingconsoleApp( App ) :
 			#view manager
 			self._view_manager = None
 			self._full_screen = None
+			self._full_screen_txt = str()
 			self._full_item = None
 #
 			self._console_local , \
@@ -110,6 +150,9 @@ class kingconsoleApp( App ) :
 			self._console_ifconfig = self._console_host_name = self._Local_net_info()
 			self._console_count = 1
 			self._console_constructed = list()
+			self._cur_console_buffer = str()
+
+			Window.on_rotate = self._on_rotate
 
 
 		# helpers
@@ -131,13 +174,13 @@ class kingconsoleApp( App ) :
 			:param settings:
 			:return:
 			"""
-			settings.add_json_panel( 'king-consolecontexts',
+			settings.add_json_panel( 'king-console contexts',
 									  self.config ,
 									  data=resources.settings_json )
-			settings.add_json_panel( 'king-consoleenvironment',
+			settings.add_json_panel( 'king-console environment',
 									  self.config ,
 									  data=resources.settings_env_json )
-			settings.add_json_panel( 'king-consolestream data',
+			settings.add_json_panel( 'king-console streams',
 									 self.config ,
 									 data=resources.settings_stream_json )
 			self.use_kivy_settings = False
@@ -216,6 +259,16 @@ class kingconsoleApp( App ) :
 			return out , out2 , ifconfig
 
 
+
+		def _on_rotate( self , rotation ) :
+			"""
+
+			:param rotation:
+			:return:
+			"""
+
+			pass
+
 		def on_config_change(self, config, section, key, value):
 			"""
 
@@ -261,10 +314,11 @@ class kingconsoleApp( App ) :
 			self.root.current_screen.ids.console_local_id.text = self._console_local
 			self.root.current_screen.ids.console_real_id.text = self._console_real
 			self.root.current_screen.ids.console_interfaces.text = self._console_ifconfig
+			self._cur_console_buffer = self.root.current_screen.ids.console_interfaces.text
 
 
 		# icmp handlers
-		def on_ping_ip_input( self ) :
+		def on_ping_ip_input( self , ip_base = None ) :
 			"""
 			input ping variable
 			:return:
@@ -322,6 +376,7 @@ class kingconsoleApp( App ) :
 			scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
 			tx = scrolly.children[0]
 			tx.text = boiler
+			self._cur_console_buffer = tx.text
 			layout.add_widget( scrolly )
 
 			layout.add_widget( Label( text = strftime("%Y-%m-%d %H:%M:%S", gmtime()) ,
@@ -347,11 +402,13 @@ class kingconsoleApp( App ) :
 			for item in acc.children :
 				try:
 					if not item.collapse :
+						"""
 						if not item.title in self._console_constructed :
 							res = item.title + '_acc_item'
 							ai = Builder.load_string( self._retr_resource( res ) )
 							item.add_widget( ai )
 							self._console_constructed.append( item.title )
+						"""
 						return item
 				except :
 					pass
@@ -412,24 +469,35 @@ class kingconsoleApp( App ) :
 
 
 			if not self._full_screen :
+
+
+
 				self._full_screen = screen.FullScreen()
 				self._full_screen.name = 'full_screen'
 				self._full_screen.id = 'screen_full'
-				layout = GridLayout( orientation='horizontal' , cols=1 )
+				layout = GridLayout( orientation='horizontal' , cols=1 , id = 'full_grid')
 				# action bar
 				ab = Builder.load_string( self._retr_resource( 'action_bar' ) )
 				layout.add_widget( ab )
 				tb = Builder.load_string( self._retr_resource( 'text_scroller' ) )
 				tb.id = 'full_scroll'
 				tb.children[0].id = 'full_scroll_txt'
-				tb.children[0].text = 'blase'
+				tb.children[0].text = self._cur_console_buffer
+				self._full_screen_txt = tb.children[0]
 				layout.add_widget( tb )
 				self._full_screen.add_widget( layout )
 				self.root.add_widget( self._full_screen )
 				self.root.current = 'full_screen'
 			else :
-				self._full_screen.ids.full_scroll_txt.text = 'the original corny snaps!' #copy.copy( self.root.current_screen.ids.console_interfaces.text )
+
+				carousel = self.root.current_screen.ids.maelstrom_carousel_id
+				if carousel.index == 0 :
+					tx = carousel.current_slide.children[0].children[0]
+				else :
+					tx = carousel.current_slide.children[1].children[0]
+				self._full_screen_txt.text = tx.text
 				self.root.current = 'full_screen'
+
 
 
 		def _on_view_manager( self ) :

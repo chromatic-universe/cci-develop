@@ -118,29 +118,30 @@ def ping_atom( destination = None ) :
 
 # ---------------------------------------------------------------------------------------------
 def ping_subnet( destination = None ) :
-        """
-        ping subnet
-        :param  destination , parses local subnet from addr:
-        :return ping reply obj list:
-        """
+			"""
+			ping subnet
+			:param  destination , parses local subnet from addr:
+			:return ping reply obj list:
+			"""
 
-        prefix = chomp( source_str = destination , delimiter = '.' , keep_trailing_delim = True )
-        replies = list()
+			prefix = chomp( source_str = destination , delimiter = '.' , keep_trailing_delim = True )
+			replies = list()
 
-        '''
-        for each address in subnet
-        '''
-        for addr in range( 0 , 254 ):
-            try :
-                #put request on wire
-                print prefix + str( addr )
-                reply = ping_atom( prefix + str( addr ) )
-                if reply is not None :
-                    replies.append( reply )
-            except Exception as err :
-                print err
+			'''
+			for each address in subnet
+			'''
+			for addr in range( 0 , 254 ):
+				try :
+					#put request on wire
+					print prefix + str( addr )
+					reply = ping_atom( prefix + str( addr ) )
+					if reply is not None :
+						replies.append( reply )
+						print reply.display()
+				except Exception as err :
+					print err
 
-        return replies
+			return replies
 
 # ------------------------------------------------------------------------------------
 if __name__ == '__main__' :

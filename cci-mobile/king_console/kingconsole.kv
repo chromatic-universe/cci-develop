@@ -2,17 +2,18 @@
 #:import lv kivy.uix.listview
 #:import la kivy.adapters.listadapter
 
-ScreenManagement:
-    CciScreen:
-    NetworkScreen:
-    TcpScreen:
-
 
 <CciScreen>:
     id: cci_screen
+    accordion_id: cci_accordion
     name: 'screen_cci'
-    Accordion:
-        orientation: 'vertical'
+    ConsoleAccordion:
+
+        _orientation: 'vertical'
+        _inner_orientation: 'horizontal'
+        # My size "Listner" -call every root width or height change-
+        orientation_handler: self.check_orientation(root.width, root.height)
+
         id: cci_accordion
         on_touch_up: app._selected_accordion_item()
         AccordionItem:
@@ -20,7 +21,7 @@ ScreenManagement:
         AccordionItem:
             title: 'tcp'
             Accordion:
-                orientation: 'horizontal'
+                orientation: root.accordion_id._inner_orientation
                 AccordionItem:
                     title: 'syn ack'
                     BoxLayout:
@@ -120,11 +121,10 @@ ScreenManagement:
                                 readonly: False
                                 multiline: True
 
-
         AccordionItem:
             title: 'network'
             Accordion:
-                orientation: 'horizontal'
+                orientation: root.accordion_id._inner_orientation
                 AccordionItem:
                     title: 'ping'
                     BoxLayout:
@@ -251,7 +251,7 @@ ScreenManagement:
             title: 'datalink'
             id: acc_item_datalink
             Accordion:
-                orientation: 'horizontal'
+                orientation: root.accordion_id._inner_orientation
                 AccordionItem:
                     title: 'arp'
                 AccordionItem:
@@ -259,7 +259,7 @@ ScreenManagement:
         AccordionItem:
             title: 'stream'
             Accordion:
-                orientation: 'horizontal'
+                orientation: root.accordion_id._inner_orientation
                 AccordionItem:
                     title: 'local'
                 AccordionItem:
@@ -277,6 +277,7 @@ ScreenManagement:
                             id: cci_action_prev
                             title: 'king console'
                             with_previous: False
+                            on_press: app._on_full_screen()
                             app_icon: 'king-console32.png'
                         ActionButton:
                             icon: 'history.png'
@@ -331,6 +332,26 @@ ScreenManagement:
                                     readonly: True
                                     height: max( (len(self._lines)+1) * self.line_height, console_scrlv.height)
 
+
+
+
+<ListItemButton>:
+    #selected_color: 0, 0, 1, 1
+    deselected_color: 0, 0, 0, 0
+
+ScreenManagement:
+    CciScreen:
+    NetworkScreen:
+    TcpScreen:
+
+
+<CciScreen>:
+    id: cci_screen
+    name: 'screen_cci'
+    ConsoleAccordion:
+
+
+
 <NetworkScreen>
     id: network_screen
     name: 'screen_network'
@@ -346,35 +367,73 @@ ScreenManagement:
 <TcpScreen>
     id: tcp_screen
     name: 'screen_tcp'
-    Accordion:
-        id: tcp_accordion
-        orientation: 'vertical'
-        AccordionItem:
-            title: 'transport packet manip'
-            Accordion:
-                orientation: 'horizontal'
-                AccordionItem:
-                    title: 'classics'
-                    orientation: 'vertical'
-                    GridLayout:
-                        orientation: 'horizontal'
-                        cols: 2
-                        ScrollView:
-                            ListView:
-                                id: list_view_id
-                                size_hint_y: .8
-                                adapter:
-                                    la.ListAdapter(
-                                    data=["cci #{0}".format(i) for i in xrange(30)],
-                                    selection_mode='single',
-                                    allow_empty_selection=False,
-                                    cls=lv.ListItemButton)
-                AccordionItem:
-                    title: 'custom'
-                    orientation: 'vertical'
-        AccordionItem:
-            title: 'king console'
-            Image:
-                source: 'king-console128.png'
+    GridLayout
+        orientation: 'horizontal'
+        cols: 1
+        Accordion:
+            id: tcp_accordion
+            orientation: 'vertical'
+            AccordionItem:
+                title: 'discovery and port manip'
+                Accordion:
+                    orientation: 'horizontal'
+                    AccordionItem:
+                        title: 'classics'
+                        orientation: 'vertical'
+                        GridLayout:
+                            orientation: 'horizontal'
+                            cols: 1
+                            ScrollView:
+                                ListView:
+                                    id: list_view_id
+                                    size_hint_y: .75
+                                    adapter:
+                                        la.ListAdapter(
+                                        data=["cci #{0}".format(i) for i in xrange(30)],
+                                        selection_mode='single',
+                                        allow_empty_selection=False,
+                                        cls=lv.ListItemButton)
+                            TextInput:
+                                text: 'christmas scan....'
+                                id: classics_description
+                                size_hint_y: .25
+                                cursor_blink: False
+                                background_color: [0,0,0,0]
+                                foreground_color: [1,1,1,1]
+                                multiline: True
+                                font_size: 12
+                                readonly: True
+
+
+                    AccordionItem:
+                        title: 'custom'
+                        orientation: 'vertical'
+            AccordionItem:
+                title: 'probes and passive scans'
+                orientation: 'vertical'
+            AccordionItem:
+                title: 'king console'
+                GridLayout
+                    orientation: 'horizontal'
+                    cols: 1
+                    ActionBar:
+                        pos_hint: {'top':1}
+                        ActionView:
+                            use_separator: True
+                            ActionPrevious:
+                                id: cci_action_prev
+                                title: 'king console'
+                                with_previous: False
+                                on_press: app._on_full_screen()
+                                app_icon: 'king-console32.png'
+                            ActionButton:
+                                icon: 'history.png'
+                                on_press: app._on_view_manager()
+                            ActionButton:
+                                icon: 'menu-icon.png'
+                                on_press: app._on_view_manager()
+                    BoxLayout:
+                        orientation: 'vertical'
+
 
 

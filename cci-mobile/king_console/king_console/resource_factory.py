@@ -7,6 +7,8 @@ from time import gmtime, strftime , sleep
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
 
+
+
 # kv resources
 const_resource_ids = { 'text_scroller' :
 """
@@ -34,6 +36,7 @@ ActionBar:
 			title: 'king console'
 			with_previous: False
 			app_icon: 'king-console32.png'
+			on_press: app._manip_extended_window()
 		ActionButton:
 			icon: 'history.png'
 			on_press: app._manip_extended_window()
