@@ -21,7 +21,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.config import ConfigParser
 from kivy.uix.progressbar import ProgressBar
-from kivy.clock import Clock
+from kivy.clock import Clock , mainthread
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.properties import StringProperty, ObjectProperty
@@ -42,12 +42,14 @@ import importlib
 from time import gmtime, strftime , sleep
 import subprocess as proc
 import threading
+import requests
+
+from elasticsearch import Elasticsearch
 
 #cci
 from king_console import resource_factory \
 	                     as resources , \
 						 screen
-
 
 
 kivy.require( '1.9.1' )
@@ -86,6 +88,8 @@ class ConsoleAccordion( Accordion ) :
 		_inner_orientation = StringProperty( 'horizontal' )
 		orientation_handler = ObjectProperty(None)
 
+		stop = threading.Event()
+
 		def __init__( self, *args, **kwargs):
 			super( ConsoleAccordion , self ).__init__( *args, **kwargs)
 
@@ -97,7 +101,13 @@ class ConsoleAccordion( Accordion ) :
 			self._inner_orientation =  'vertical' if self.orientation == 'horizontal' else 'horizontal'
 
 
-		def check_orientation(self, width, height):
+		def check_orientation( self , width , height ) :
+			"""
+
+			:param width:
+			:param height:
+			:return:
+			"""
 
 			orientation = 'vertical' if height > width else 'horizontal'
 			if orientation != self._orientation:
@@ -106,10 +116,18 @@ class ConsoleAccordion( Accordion ) :
 
 
 
-		def orientation_cb(self, orientation):
+		def orientation_cb( self , orientation ) :
+			"""
+
+			:param orientation:
+			:return:
+			"""
 			self.btn_text = orientation
 			self.orientation = 'horizontal' if Window.width > Window.height else 'vertical'
 			self._inner_orientation =  'vertical' if self._orientation == 'horizontal' else 'horizontal'
+
+
+
 
 
 
@@ -299,6 +317,7 @@ class kingconsoleApp( App ) :
 			return True
 
 
+
 		def on_resume( self ):
 			# something
 			self._logger.info( self.__class__.__name__ + '...'  + 'on_resume' )
@@ -306,7 +325,16 @@ class kingconsoleApp( App ) :
 			pass
 
 
-		def on_start(self) :
+		def on_stop( self ) :
+			"""
+
+			:return:
+			"""
+
+			pass
+
+
+		def on_start( self ) :
 			"""
 
 			:return:
@@ -315,6 +343,7 @@ class kingconsoleApp( App ) :
 			self.root.current_screen.ids.console_real_id.text = self._console_real
 			self.root.current_screen.ids.console_interfaces.text = self._console_ifconfig
 			self._cur_console_buffer = self.root.current_screen.ids.console_interfaces.text
+
 
 
 		# icmp handlers
@@ -328,8 +357,8 @@ class kingconsoleApp( App ) :
 			b_ret = True
 			self._logger.info( self.__class__.__name__ + '...on_ping_ip_input'  )
 
-			self._move_to_accordion_item( self.root.current_screen.ids.cci_accordion ,
-										  self.root.current_screen.ids.ip_input )
+			#self._move_to_accordion_item( self.root.current_screen.ids.cci_accordion ,
+			#							  self.root.current_screen.ids.ip_input )
 			ip = self.root.current_screen.ids.ip_input.text
 			try :
 
@@ -427,7 +456,9 @@ class kingconsoleApp( App ) :
 					pass
 
 
-		def _move_to_accordion_item( self , acc , tag = None ) :
+
+
+		def move_to_accordion_item( self , acc , tag = None ) :
 			"""
 			workaround for android nesting bug
 			:param acc:

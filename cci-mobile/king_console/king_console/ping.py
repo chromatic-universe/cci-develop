@@ -1,5 +1,6 @@
 # ping.py   william k. johnson 2016
 
+
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
 import os
@@ -18,7 +19,8 @@ import fcntl
 import struct
 import subprocess as proc
 import urllib2
-
+import requests
+from flask import Flask
 
 ##############
 '''disable ipv6 console annoyance'''
@@ -104,6 +106,8 @@ def ping_atom( destination = None ) :
 		:param  destination : parses local subnet from addr:
 		:return : reply obj
 		"""
+
+
 
 		ip = IP()
 		ip.dst = destination

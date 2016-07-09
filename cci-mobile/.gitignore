@@ -8,11 +8,13 @@ __pycache__/
 
 # Distribution / packaging
 scapy/
+pymongo/
 netifaces/
 bin/
 kafka/
 plyer/
 elasticsearch/
+multiprocess/
 .buildozer/
 .idea/
 .Python

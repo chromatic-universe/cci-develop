@@ -7,7 +7,11 @@ from kivy.uix import image
 from kivy.uix.settings import SettingsWithSidebar , SettingsWithSpinner
 from kivy.core.window import Window
 
+
 import elasticsearch
+
+#cci
+import urnack.cci_mini_elastic as cci_elastic
 
 #from scapy.all import *
 
@@ -28,6 +32,8 @@ class urnackApp( App ) :
 				super( urnackApp , self ).__init__()
 
 				self.settings_cls = SettingsWithSpinner
+
+
 
 			# settings
 			def build_settings( self , settings ) :
@@ -51,6 +57,7 @@ class urnackApp( App ) :
 				self.use_kivy_settings = False
 
 
+
 			def build_config( self , config ) :
 				"""
 
@@ -68,10 +75,24 @@ class urnackApp( App ) :
 												} )
 
 
+			def on_start( self ) :
+				"""
+
+				:return:
+				"""
+
+				server_param =  [{ 'host' :'search-chromatic-search-p647s4rdqjcgub7tt7neealjn4.us-west-2.es.amazonaws.com' ,
+                           			'port' : 80}]
+				elastic_cci = cci_elastic.cci_mini_elastic( server_param , True )
+				self.root.ids.acc_item_elastic.text = elastic_cci.server_banner
+
+
 
 			def on_pause(self):
 				# save data
 				return True
+
+
 
 			def on_resume(self):
 				# something

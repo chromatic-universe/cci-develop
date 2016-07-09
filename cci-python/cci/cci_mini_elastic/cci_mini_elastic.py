@@ -279,7 +279,7 @@ class cci_mini_elastic( cci_elastic_skel ) :
               :rtype: basestring
               :return: str
               """
-              return self.__class__.__name__ +  ' 2015 , william k. johnson'
+              return self.__class__.__name__ +  ' 2016 , william k. johnson'
 
 
         def connect( self  ) :
