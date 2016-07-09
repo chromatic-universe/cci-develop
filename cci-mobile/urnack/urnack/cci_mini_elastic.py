@@ -38,6 +38,7 @@ class cci_mini_elastic( cci_mini_mobile.cci_mobile ) :
 				"""
 				super( cci_mini_elastic , self ).__init__()
 
+				"""
 				try :
 					client = MongoClient( 'mongodb://cci-aws-3:27017' )
 					db = client.cci_urnack
@@ -47,6 +48,7 @@ class cci_mini_elastic( cci_mini_mobile.cci_mobile ) :
 					self._logger.info( '....mongo ok....' )
 				except Exception as e :
 					self._logger.error( e.message )
+				"""
 
 
 				# elasticsearch can connect to multiple hosts concurrently

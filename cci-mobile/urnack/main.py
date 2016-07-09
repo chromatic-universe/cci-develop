@@ -7,11 +7,9 @@ from kivy.uix import image
 from kivy.uix.settings import SettingsWithSidebar , SettingsWithSpinner
 from kivy.core.window import Window
 
-
-import elasticsearch
-
 #cci
 import urnack.cci_mini_elastic as cci_elastic
+import urnack.cci_mini_mongo as cci_mongo
 
 #from scapy.all import *
 
@@ -86,7 +84,8 @@ class urnackApp( App ) :
 				elastic_cci = cci_elastic.cci_mini_elastic( server_param , True )
 				self.root.ids.acc_item_elastic.text = elastic_cci.server_banner
 
-
+				mongo_cci = cci_mongo.cci_mini_mongo( 'cci-aws-3' )
+				self.root.ids.acc_item_mongo.text = mongo_cci.device_info
 
 			def on_pause(self):
 				# save data
