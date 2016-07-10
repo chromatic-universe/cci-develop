@@ -11,19 +11,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/bin/cciurnack-0.1-debug.apk" afterPath="$PROJECT_DIR$/cci-mobile/urnack/bin/cciurnack-0.1-debug.apk" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/urnack/cci_mini_elastic.py" afterPath="$PROJECT_DIR$/cci-mobile/urnack/urnack/cci_mini_elastic.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci/cci_mini_tools/cci_mini_interface.py" afterPath="$PROJECT_DIR$/cci-python/cci/cci_mini_tools/cci_mini_interface.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/urnack/cci_mini_mongo.py" afterPath="$PROJECT_DIR$/cci-mobile/urnack/urnack/cci_mini_mongo.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv" afterPath="$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/main.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/main.py" afterPath="$PROJECT_DIR$/cci-mobile/urnack/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/main.py" afterPath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/king_console/ping.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/king_console/ping.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/state.db" afterPath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/state.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/urnack.kv" afterPath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/android/app/urnack.kv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cci_git_1.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -50,7 +39,7 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="507" max-vertical-offset="6643">
+            <state vertical-scroll-proportion="0.0" vertical-offset="4407" max-vertical-offset="6643">
               <caret line="415" column="35" selection-start-line="415" selection-start-column="12" selection-end-line="415" selection-end-column="38" />
               <folding />
             </state>
@@ -70,11 +59,21 @@
       <file leaf-file-name="screen.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.1148648" vertical-offset="3280" max-vertical-offset="4602">
-              <caret line="156" column="60" selection-start-line="156" selection-start-column="60" selection-end-line="156" selection-end-column="60" />
+            <state vertical-scroll-proportion="0.5371622" vertical-offset="2555" max-vertical-offset="5031">
+              <caret line="221" column="41" selection-start-line="221" selection-start-column="41" selection-end-line="221" selection-end-column="41" />
               <folding>
                 <element signature="e#40#56#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="clock.py" pinned="false" current-in-tab="false">
+        <entry file="file:///usr/lib/python2.7/dist-packages/kivy/clock.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="8736" max-vertical-offset="9256">
+              <caret line="706" column="0" selection-start-line="706" selection-start-column="0" selection-end-line="706" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -94,7 +93,7 @@
       <file leaf-file-name="ping.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/ping.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1371" max-vertical-offset="2782">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1800" max-vertical-offset="2782">
               <caret line="139" column="46" selection-start-line="139" selection-start-column="46" selection-end-line="139" selection-end-column="46" />
               <folding>
                 <element signature="e#134#143#0" expanded="true" />
@@ -106,8 +105,8 @@
       <file leaf-file-name="kingconsole.kv" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2699" max-vertical-offset="5837">
-              <caret line="173" column="51" selection-start-line="173" selection-start-column="51" selection-end-line="173" selection-end-column="51" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2465" max-vertical-offset="5837">
+              <caret line="213" column="63" selection-start-line="213" selection-start-column="63" selection-end-line="213" selection-end-column="63" />
               <folding />
             </state>
           </provider>
@@ -167,10 +166,10 @@
         <option value="$PROJECT_DIR$/cci-python/cci/cci_mini_tools/cci_mini_interface.py" />
         <option value="$PROJECT_DIR$/cci-mobile/urnack/urnack/cci_mini_elastic.py" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/main.py" />
-        <option value="$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/buildozer.spec" />
         <option value="$PROJECT_DIR$/cci-mobile/urnack/urnack/cci_mini_mongo.py" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/ping.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" />
       </list>
     </option>
@@ -771,6 +770,11 @@
           <line>121</line>
           <option name="timeStamp" value="130" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py</url>
+          <line>226</line>
+          <option name="timeStamp" value="138" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
@@ -782,32 +786,11 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="131" />
+      <option name="time" value="139" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/cci-mobile/settings/my.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="551">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/carousel_id">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="551">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/urnack/kfk.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="551">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/urnack/Male-Face-O4-icon.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -817,13 +800,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.72958255" vertical-offset="7502" max-vertical-offset="9295">
           <caret line="624" column="29" selection-start-line="624" selection-start-column="29" selection-end-line="624" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/clock.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.93186" vertical-offset="3498" max-vertical-offset="9256">
-          <caret line="316" column="14" selection-start-line="316" selection-start-column="14" selection-end-line="316" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -965,14 +941,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.29222974" vertical-offset="399" max-vertical-offset="11414">
           <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44594595" vertical-offset="10383" max-vertical-offset="13494">
-          <caret line="833" column="17" selection-start-line="833" selection-start-column="17" selection-end-line="833" selection-end-column="17" />
           <folding />
         </state>
       </provider>
@@ -1141,14 +1109,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1763" max-vertical-offset="5837">
-          <caret line="173" column="51" selection-start-line="173" selection-start-column="51" selection-end-line="173" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/ping.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1371" max-vertical-offset="2782">
@@ -1159,9 +1119,65 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2465" max-vertical-offset="5837">
+          <caret line="213" column="63" selection-start-line="213" selection-start-column="63" selection-end-line="213" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="11241" max-vertical-offset="13494">
+          <caret line="892" column="0" selection-start-line="892" selection-start-column="0" selection-end-line="892" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/context.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="282" max-vertical-offset="1391">
+          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python2.7/threading.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7826923" vertical-offset="9733" max-vertical-offset="17381">
+          <caret line="780" column="28" selection-start-line="780" selection-start-column="28" selection-end-line="780" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/core/window/window_sdl2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3326923" vertical-offset="7952" max-vertical-offset="9035">
+          <caret line="638" column="0" selection-start-line="638" selection-start-column="0" selection-end-line="638" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="2.103846" vertical-offset="5237" max-vertical-offset="6474">
+          <caret line="494" column="6" selection-start-line="494" selection-start-column="6" selection-end-line="494" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python2.7/dist-packages/kivy/clock.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="8736" max-vertical-offset="9256">
+          <caret line="706" column="0" selection-start-line="706" selection-start-column="0" selection-end-line="706" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="507" max-vertical-offset="6643">
+        <state vertical-scroll-proportion="0.0" vertical-offset="4407" max-vertical-offset="6643">
           <caret line="415" column="35" selection-start-line="415" selection-start-column="12" selection-end-line="415" selection-end-column="38" />
           <folding />
         </state>
@@ -1169,8 +1185,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.1148648" vertical-offset="3280" max-vertical-offset="4602">
-          <caret line="156" column="60" selection-start-line="156" selection-start-column="60" selection-end-line="156" selection-end-column="60" />
+        <state vertical-scroll-proportion="0.5371622" vertical-offset="2555" max-vertical-offset="5031">
+          <caret line="221" column="41" selection-start-line="221" selection-start-column="41" selection-end-line="221" selection-end-column="41" />
           <folding>
             <element signature="e#40#56#0" expanded="true" />
           </folding>

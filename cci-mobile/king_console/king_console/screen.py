@@ -109,7 +109,7 @@ class CciScreen( Screen ) :
 				accordion_id = ObjectProperty()
 				_console_text = ObjectProperty()
 				_console_count = 1
-
+				lock = threading.Lock()
 
 				@staticmethod
 				def _retr_resource( resource_id ) :
@@ -167,6 +167,13 @@ class CciScreen( Screen ) :
 																 'ids_ping' )
 						self._update_main_console( App.get_running_app()._console_count )
 						func()
+					elif func == self.on_ping_ip_subnet :
+						# update main thread from decorator
+						self.move_to_accordion_item( self.ids.cci_accordion ,
+																 'ids_ping_subnet' )
+						self._update_main_console( App.get_running_app()._console_count )
+						func()
+
 
 
 				@mainthread
@@ -186,6 +193,7 @@ class CciScreen( Screen ) :
 					layout.add_widget( Label( text = 'icmp ping console #'  + str( App.get_running_app()._console_count ),
 											color = [ 1, 0 , 0 , 1] ,
 											font_size = 16 ,
+											id = 'content' ,
 											size_hint_y = 0.1 ) )
 
 					scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
@@ -199,9 +207,28 @@ class CciScreen( Screen ) :
 											size_hint_y = 0.2 ,
 											color = [ 1, 0 , 0 , 1] ) )
 
+					self.lock.acquire()
+					try :
+						carousel.add_widget( layout )
+						carousel.index = len( carousel.slides ) - 1
+					finally :
+						self.lock.release()
 
-					carousel.add_widget( layout )
-					carousel.index = len( carousel.slides ) - 1
+
+				@mainthread
+				def _update_console_content( self , idx , content ) :
+					"""
+
+					:param console slide:
+
+					:return:
+					"""
+
+					idx.children[0].children[0].text = content
+					self.canvas.ask_update()
+
+					print content
+
 
 
 				def _on_full_screen( self ) :
@@ -273,13 +300,19 @@ class CciScreen( Screen ) :
 
 
 					ip = self.ids.ip_subnet_input.text
-					prefix = chomp( source_str = ip , delimiter = '.' , keep_trailing_delim = True )
+					prefix = ping.chomp( source_str = ip , delimiter = '.' , keep_trailing_delim = True )
+
+					self.lock.acquire()
+					try :
+						idx = self.ids.maelstrom_carousel_id.current_slide
+					finally :
+						self.lock.release()
 
 					# for each address in subnet
 					for addr in range( 0 , 254 ):
 						try :
-							#put request on wire
-							print prefix + str( addr )
+							self._update_console_content( idx , prefix + str( addr ) )
+							sleep( 3 )
 							"""
 							reply = ping_atom( prefix + str( addr ) )
 							if reply is not None :
