@@ -201,7 +201,7 @@ class cci_mini_clang_tool( cci_mini_tool ) :
         @property
         def clang_lib( self ) :
             return self._clang_lib_path
-        @clang_args.setter
+        @clang_lib.setter
         def clang_lib( self , path ) :
             self._clang_lib_path = path
 

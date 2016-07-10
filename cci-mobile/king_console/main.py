@@ -44,7 +44,6 @@ import subprocess as proc
 import threading
 import requests
 
-from elasticsearch import Elasticsearch
 
 #cci
 from king_console import resource_factory \
@@ -230,16 +229,6 @@ class kingconsoleApp( App ) :
 			pass
 
 
-		def _update_main_console( self , count ) :
-			"""
-
-			:return:
-			"""
-
-			scr = self.root.get_screen( 'screen_cci' )
-			scr.ids.cci_action_prev.title = 'king console(' + str( count ) + ')'
-			print 'foo'
-
 		def _Local_net_info( self ) :
 			"""
 
@@ -346,81 +335,6 @@ class kingconsoleApp( App ) :
 
 
 
-		# icmp handlers
-		def on_ping_ip_input( self , ip_base = None ) :
-			"""
-			input ping variable
-			:return:
-			"""
-
-			out = str()
-			b_ret = True
-			self._logger.info( self.__class__.__name__ + '...on_ping_ip_input'  )
-
-			#self._move_to_accordion_item( self.root.current_screen.ids.cci_accordion ,
-			#							  self.root.current_screen.ids.ip_input )
-			ip = self.root.current_screen.ids.ip_input.text
-			try :
-
-				cmd = ["su" ,
-					   "-c" ,
-					   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-					   "./king_console/ping.pyo" ,
-					   "-s" ,
-					   ip
-					  ]
-
-				try :
-					out = proc.check_output( cmd  )
-					self._logger.info( out )
-				except proc.CalledProcessError as e :
-					b_ret = False
-			except Exception as e :
-				b_ret = False
-				self._logger.error( e.message )
-
-			carousel = self.root.current_screen.ids.maelstrom_carousel_id
-
-			boiler = 'maelstrom[icmp]->ping: ' + \
-					  ' ' + self.root.current_screen.ids.ip_input.text
-			boiler += '\n'
-			boiler += out
-			self._logger.info( self.__class__.__name__ + '...boiler='  + boiler)
-
-			pos = boiler.find( '#[QPython]' )
-			if pos :
-				boiler = boiler[:pos]
-
-			layout = GridLayout( cols = 1 ,
-								 padding = [0 , 5 , 0 ,5]
-								  )
-			self._console_count += 1
-			layout.add_widget( Label( text = 'icmp ping console #'+ str( self._console_count ),
-									color = [ 1, 0 , 0 , 1] ,
-									font_size = 16 ,
-									size_hint_y = 0.1 ) )
-
-
-
-			scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
-			tx = scrolly.children[0]
-			tx.text = boiler
-			self._cur_console_buffer = tx.text
-			layout.add_widget( scrolly )
-
-			layout.add_widget( Label( text = strftime("%Y-%m-%d %H:%M:%S", gmtime()) ,
-									font_size = 16  ,
-									size_hint_y = 0.2 ,
-									color = [ 1, 0 , 0 , 1] ) )
-
-
-
-			carousel.add_widget( layout )
-
-			carousel.index = len( carousel.slides ) - 1
-
-			self._update_main_console( self._console_count )
-
 
 		def _selected_accordion_item( self ) :
 			"""
@@ -500,7 +414,6 @@ class kingconsoleApp( App ) :
 
 
 			if not self._full_screen :
-
 
 
 				self._full_screen = screen.FullScreen()

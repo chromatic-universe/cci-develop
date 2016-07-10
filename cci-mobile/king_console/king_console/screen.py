@@ -21,8 +21,74 @@ from king_console import resource_factory \
 
 from time import gmtime, strftime , sleep
 import subprocess as proc
+import ping
+
+# ---------------------------------------------------------------------------------------------
+def ping_subnet( destination = None ) :
+			"""
+			ping subnet
+			:param  destination , parses local subnet from addr:
+			:return ping reply obj list:
+			"""
+
+			prefix = chomp( source_str = destination , delimiter = '.' , keep_trailing_delim = True )
+			replies = list()
+
+			'''
+			for each address in subnet
+			'''
+			for addr in range( 0 , 254 ):
+				try :
+					#put request on wire
+					print prefix + str( addr )
+					reply = ping_atom( prefix + str( addr ) )
+					if reply is not None :
+						replies.append( reply )
+						print reply.display()
+				except Exception as err :
+					print err
+
+			return replies
 
 
+# -------------------------------------------------------------------------------------------------
+def add_console( self ,
+				  parent ,
+				  content ,
+				  console_count ,
+				  tag  ) :
+				"""
+				:param parent:
+				:param content:
+				:param: console_count:
+				:param tag:
+
+				:return:
+				"""
+
+				layout = GridLayout( cols = 1 ,
+									 padding = [0 , 5 , 0 ,5]
+									  )
+				self._console_count += 1
+				layout.add_widget( Label( text = tag + str( console_count ) ,
+										color = [ 1, 0 , 0 , 1] ,
+										font_size = 16 ,
+										size_hint_y = 0.1 ) )
+
+				scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
+				tx = scrolly.children[0]
+				tx.text = content
+				layout.add_widget( scrolly )
+				layout.add_widget( Label( text = strftime("%Y-%m-%d %H:%M:%S", gmtime()) ,
+										font_size = 16  ,
+										size_hint_y = 0.2 ,
+										color = [ 1, 0 , 0 , 1] ) )
+				parent,add_widget( layout )
+
+
+
+
+# -------------------------------------------------------------------------------------------------
 class TreeManagerLabel( TreeViewLabel ) :
 	"""
 
@@ -31,149 +97,204 @@ class TreeManagerLabel( TreeViewLabel ) :
 
 
 
+# -------------------------------------------------------------------------------------------------
 # screens
 class CciScreen( Screen ) :
-		"""
+				"""
 
-		"""
+				"""
 
-		stop = threading.Event()
+				stop = threading.Event()
 
-		accordion_id = ObjectProperty()
-		_console_text = ObjectProperty()
-		_console_count = 1
-
-
-		@staticmethod
-		def _retr_resource( resource_id ) :
-			"""
-
-			:param resource_id:
-			:return ui resource:
-			"""
-
-			return resources.const_resource_ids[resource_id]
+				accordion_id = ObjectProperty()
+				_console_text = ObjectProperty()
+				_console_count = 1
 
 
-		def _on_ping_start( self ) :
-			"""
+				@staticmethod
+				def _retr_resource( resource_id ) :
+					"""
 
-			:return:
-			"""
-			threading.Thread( target = self.ping_thread_exec ).start()
+					:param resource_id:
+					:return ui resource:
+					"""
 
-
-		@mainthread
-		def move_to_accordion_item( self , acc , tag = None ) :
-			"""
-			workaround for android nesting bug
-			:param acc:
-			:return:
-			"""
-
-			for child in acc.children :
-				if child.title == 'king console' :
-					child.collapse = False
-					child.canvas.ask_update()
-
-			self.ids.ping_btn.text = "execute"
+					return resources.const_resource_ids[resource_id]
 
 
-		def ping_thread_exec( self ) :
-			"""
+				def _on_ping_start( self ) :
+					"""
 
-			:return:
-			"""
-
-			# update main thread from decorator
-			self.move_to_accordion_item( self.ids.cci_accordion ,
-														 'ids_ping' )
-			self._update_main_console( App.get_running_app()._console_count )
-
-			self.on_ping_ip_input()
-
-		@mainthread
-		def _update_main_console( self , count ) :
-			"""
-
-			:return:
-			"""
-
-			self.ids.cci_action_prev.title = 'king console(' + str( count ) + ')'
-
-			carousel = self.ids.maelstrom_carousel_id
-			layout = GridLayout( cols = 1 ,
-								 padding = [0 , 5 , 0 ,5]
-								  )
-			App.get_running_app()._console_count += 1
-			layout.add_widget( Label( text = 'icmp ping console #'  + str( App.get_running_app()._console_count ),
-									color = [ 1, 0 , 0 , 1] ,
-									font_size = 16 ,
-									size_hint_y = 0.1 ) )
-
-			scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
-			tx = scrolly.children[0]
-			self._console_text = tx
-			tx.text = 'standby,,,,working...'
-			layout.add_widget( scrolly )
-
-			layout.add_widget( Label( text = strftime("%Y-%m-%d %H:%M:%S", gmtime()) ,
-									font_size = 16  ,
-									size_hint_y = 0.2 ,
-									color = [ 1, 0 , 0 , 1] ) )
+					:return:
+					"""
+					threading.Thread( target = self.ping_thread_exec ,kwargs=dict(func=self.on_ping_ip_input)).start()
 
 
-			carousel.add_widget( layout )
-			carousel.index = len( carousel.slides ) - 1
+				def _on_ping_subnet_start( self ) :
+					"""
+
+					:return:
+					"""
+					threading.Thread( target = self.ping_thread_exec ,kwargs=dict(func=self.on_ping_ip_subnet)).start()
 
 
-		# icmp handlers
-		def on_ping_ip_input( self , ip_base = None ) :
-			"""
-			input ping variable
-			:return:
-			"""
+				@mainthread
+				def move_to_accordion_item( self , acc , tag = None ) :
+					"""
+					workaround for android nesting bug
+					:param acc:
+					:return:
+					"""
 
-			out = str()
-			b_ret = True
-			App.get_running_app()._logger.info( self.__class__.__name__ + '...on_ping_ip_input'  )
+					for child in acc.children :
+						if child.title == 'king console' :
+							child.collapse = False
+							child.canvas.ask_update()
 
-
-			ip = self.ids.ip_input.text
-			try :
-
-				cmd = ["su" ,
-					   "-c" ,
-					   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-					   "./king_console/ping.pyo" ,
-					   "-s" ,
-					   ip
-					  ]
-
-				try :
-					out = proc.check_output( cmd  )
-					App.get_running_app()._logger.info( out )
-				except proc.CalledProcessError as e :
-					b_ret = False
-			except Exception as e :
-				b_ret = False
-				App.get_running_app()._logger.error( e.message )
+					self.ids.ping_btn.text = "execute"
 
 
-			boiler = 'maelstrom[icmp]->ping: ' + \
-					  ' ' + self.ids.ip_input.text
-			boiler += '\n'
-			boiler += out
-			App.get_running_app()._logger.info( self.__class__.__name__ + '...boiler='  + boiler)
+				def ping_thread_exec( self , func = None ) :
+					"""
 
-			pos = boiler.find( '#[QPython]' )
-			if pos :
-				boiler = boiler[:pos]
-
-			self._console_text.text = boiler
+					:return:
+					"""
 
 
+					if func == self.on_ping_ip_input :
+						# update main thread from decorator
+						self.move_to_accordion_item( self.ids.cci_accordion ,
+																 'ids_ping' )
+						self._update_main_console( App.get_running_app()._console_count )
+						func()
 
+
+				@mainthread
+				def _update_main_console( self , count ) :
+					"""
+
+					:return:
+					"""
+
+					self.ids.cci_action_prev.title = 'king console(' + str( count ) + ')'
+
+					carousel = self.ids.maelstrom_carousel_id
+					layout = GridLayout( cols = 1 ,
+										 padding = [0 , 5 , 0 ,5]
+										  )
+					App.get_running_app()._console_count += 1
+					layout.add_widget( Label( text = 'icmp ping console #'  + str( App.get_running_app()._console_count ),
+											color = [ 1, 0 , 0 , 1] ,
+											font_size = 16 ,
+											size_hint_y = 0.1 ) )
+
+					scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
+					tx = scrolly.children[0]
+					self._console_text = tx
+					tx.text = 'standby,,,,working...'
+					layout.add_widget( scrolly )
+
+					layout.add_widget( Label( text = strftime("%Y-%m-%d %H:%M:%S", gmtime()) ,
+											font_size = 16  ,
+											size_hint_y = 0.2 ,
+											color = [ 1, 0 , 0 , 1] ) )
+
+
+					carousel.add_widget( layout )
+					carousel.index = len( carousel.slides ) - 1
+
+
+				def _on_full_screen( self ) :
+					"""
+
+					:return:
+					"""
+
+					if not App.get_running_app()._full_screen :
+						pass
+
+
+				# icmp handlers
+				def on_ping_ip_input( self  ) :
+					"""
+					input ping variable
+					:return:
+					"""
+
+					out = str()
+					b_ret = True
+					App.get_running_app()._logger.info( self.__class__.__name__ + '...on_ping_ip_input'  )
+
+
+					ip = self.ids.ip_input.text
+					try :
+
+						cmd = ["su" ,
+							   "-c" ,
+							   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
+							   "./king_console/ping.pyo" ,
+							   "-s" ,
+							   ip
+							  ]
+
+						try :
+							out = proc.check_output( cmd  )
+							App.get_running_app()._logger.info( out )
+						except proc.CalledProcessError as e :
+							b_ret = False
+					except Exception as e :
+						b_ret = False
+						App.get_running_app()._logger.error( e.message )
+
+
+					boiler = 'maelstrom[icmp]->ping: ' + \
+							  ' ' + self.ids.ip_input.text
+					boiler += '\n'
+					boiler += out
+					App.get_running_app()._logger.info( self.__class__.__name__ + '...boiler='  + boiler)
+
+					pos = boiler.find( '#[QPython]' )
+					if pos :
+						boiler = boiler[:pos]
+
+					self._console_text.text = boiler
+
+
+
+				def on_ping_ip_subnet( self  ) :
+					"""
+					input ping variable
+					:return:
+					"""
+
+					out = str()
+					b_ret = True
+					App.get_running_app()._logger.info( self.__class__.__name__ + '...on_ping_ip_subnet'  )
+
+
+					ip = self.ids.ip_subnet_input.text
+					prefix = chomp( source_str = ip , delimiter = '.' , keep_trailing_delim = True )
+
+					# for each address in subnet
+					for addr in range( 0 , 254 ):
+						try :
+							#put request on wire
+							print prefix + str( addr )
+							"""
+							reply = ping_atom( prefix + str( addr ) )
+							if reply is not None :
+								replies.append( reply )
+								print reply.display()
+							"""
+						except Exception as err :
+							print err
+
+
+
+
+
+
+# -------------------------------------------------------------------------------------------------
 class NetworkScreen( Screen ) :
 		"""
 
@@ -182,6 +303,7 @@ class NetworkScreen( Screen ) :
 		pass
 
 
+# -------------------------------------------------------------------------------------------------
 class TcpScreen( Screen ) :
 		"""
 
@@ -190,13 +312,14 @@ class TcpScreen( Screen ) :
 		pass
 
 
+# -------------------------------------------------------------------------------------------------
 class FullScreen( Screen ) :
 		"""
 
 		"""
-		pass
+		_visible = ObjectProperty()
 
-
+# -------------------------------------------------------------------------------------------------
 class ViewManagerScreen( Screen ) :
 		"""
 
@@ -214,14 +337,12 @@ class ViewManagerScreen( Screen ) :
 
 
 
-
+# -------------------------------------------------------------------------------------------------
 class ScreenManagement( ScreenManager ) :
 		"""
 
 
 		"""
-
-
 
 		transition = SlideTransition()
 

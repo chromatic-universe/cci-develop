@@ -17,7 +17,7 @@ from pymongo import MongoClient
 import cci_mini_mobile
 
 
-# ------------------------------------------------------------------------------
+# ---------------r---------------------------------------------------------------
 class cci_mini_mongo( cci_mini_mobile.cci_mobile ) :
 			"""
 			minimal elasticsearch implementation

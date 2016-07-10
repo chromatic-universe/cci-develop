@@ -20,7 +20,7 @@ import struct
 import subprocess as proc
 import urllib2
 import requests
-from flask import Flask
+
 
 ##############
 '''disable ipv6 console annoyance'''

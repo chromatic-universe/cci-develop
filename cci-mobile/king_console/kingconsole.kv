@@ -171,9 +171,11 @@
                             orientation: 'horizontal'
                             size_hint_y: 0.15
                             Label:
-                                text: 'timeout:'
+                                text: 'timesout: ' + '{0:}'.format( single_slider.value )
                             Slider:
                                 orientation: 'horizontal'
+                                id: single_slider
+                                step: 1
                                 min: 1
                                 max: 15
                                 value: 1
@@ -221,16 +223,18 @@
                             orientation: 'horizontal'
                             size_hint_y: 0.15
                             Label:
-                                text: 'greedy trace:'
+                                text: 'mark reply only:'
                             Switch:
                                 active: False
                         BoxLayout
                             orientation: 'horizontal'
                             size_hint_y: 0.15
                             Label:
-                                text: 'timeout:'
+                                text: 'timeout: ' + '{0:}'.format( subnet_slider.value )
                             Slider:
                                 orientation: 'horizontal'
+                                id: subnet_slider
+                                step: 1
                                 min: 1
                                 max: 15
                                 value: 1
@@ -241,7 +245,7 @@
                             Label:
                                 text: 'subnet:'
                             TextInput:
-                                text: '192.168.0.35'
+                                text: '192.168.0.135'
                                 id: ip_subnet_input
                                 cursor_blink: True
                                 readonly: False

@@ -11,6 +11,9 @@ from kivy.core.window import Window
 import urnack.cci_mini_elastic as cci_elastic
 import urnack.cci_mini_mongo as cci_mongo
 
+import pika
+from pika import BlockingConnection
+
 #from scapy.all import *
 
 kivy.require( '1.9.1' )
