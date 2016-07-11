@@ -168,6 +168,8 @@ class kingconsoleApp( App ) :
 			self._console_count = 1
 			self._console_constructed = list()
 			self._cur_console_buffer = str()
+			self._thrd = None
+			self.stop_event = threading.Event()
 
 			Window.on_rotate = self._on_rotate
 
@@ -243,7 +245,7 @@ class kingconsoleApp( App ) :
 					cmd = ["su" ,
 						   "-c" ,
 						   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-						   "./king_console/ping.pyo" ,
+						   "./king_console/kc_ping.pyo" ,
 						   "-x"
 						  ]
 					try :
@@ -320,7 +322,10 @@ class kingconsoleApp( App ) :
 			:return:
 			"""
 
-			pass
+			self.stop_event.set()
+			# Wait for thread to exit.
+			if self._thrd :
+				self._thrd.join()
 
 
 		def on_start( self ) :
@@ -380,7 +385,7 @@ class kingconsoleApp( App ) :
 			"""
 
 			for child in acc.children :
-				if child.title == 'king console' :
+				if child.title == 'cci-maelstrom' :
 					child.collapse = False
 					child.canvas.ask_update()
 

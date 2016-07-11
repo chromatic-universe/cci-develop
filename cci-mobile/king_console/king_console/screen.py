@@ -21,7 +21,7 @@ from king_console import resource_factory \
 
 from time import gmtime, strftime , sleep
 import subprocess as proc
-import ping
+import kc_ping
 
 # ---------------------------------------------------------------------------------------------
 def ping_subnet( destination = None ) :
@@ -109,7 +109,7 @@ class CciScreen( Screen ) :
 				accordion_id = ObjectProperty()
 				_console_text = ObjectProperty()
 				_console_count = 1
-				lock = threading.Lock()
+
 
 				@staticmethod
 				def _retr_resource( resource_id ) :
@@ -135,7 +135,8 @@ class CciScreen( Screen ) :
 
 					:return:
 					"""
-					threading.Thread( target = self.ping_thread_exec ,kwargs=dict(func=self.on_ping_ip_subnet)).start()
+					App.get_running_app()._thrd = threading.Thread( target = self.ping_thread_exec ,
+																	kwargs=dict(func=self.on_ping_ip_subnet) ).start()
 
 
 				@mainthread
@@ -147,7 +148,7 @@ class CciScreen( Screen ) :
 					"""
 
 					for child in acc.children :
-						if child.title == 'king console' :
+						if child.title == 'cci-maelstrom' :
 							child.collapse = False
 							child.canvas.ask_update()
 
@@ -171,17 +172,19 @@ class CciScreen( Screen ) :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
 																 'ids_ping_subnet' )
-						self._update_main_console( App.get_running_app()._console_count )
-						func()
+						self._update_main_console( App.get_running_app()._console_count , True )
+
 
 
 
 				@mainthread
-				def _update_main_console( self , count ) :
+				def _update_main_console( self , count , threaded = False ) :
 					"""
 
 					:return:
 					"""
+
+
 
 					self.ids.cci_action_prev.title = 'king console(' + str( count ) + ')'
 
@@ -199,7 +202,7 @@ class CciScreen( Screen ) :
 					scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
 					tx = scrolly.children[0]
 					self._console_text = tx
-					tx.text = 'standby,,,,working...'
+					tx.text = 'standby...working...'
 					layout.add_widget( scrolly )
 
 					layout.add_widget( Label( text = strftime("%Y-%m-%d %H:%M:%S", gmtime()) ,
@@ -207,16 +210,19 @@ class CciScreen( Screen ) :
 											size_hint_y = 0.2 ,
 											color = [ 1, 0 , 0 , 1] ) )
 
-					self.lock.acquire()
-					try :
-						carousel.add_widget( layout )
-						carousel.index = len( carousel.slides ) - 1
-					finally :
-						self.lock.release()
+
+					carousel.add_widget( layout )
+					carousel.index = len( carousel.slides ) - 1
+					self.canvas.ask_update()
+
+					if threaded :
+						self.on_ping_ip_subnet()
+
+
 
 
 				@mainthread
-				def _update_console_content( self , idx , content ) :
+				def _update_console_content( self , content , container ) :
 					"""
 
 					:param console slide:
@@ -224,11 +230,8 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 
-					idx.children[0].children[0].text = content
+					container.text += content + '\n'
 					self.canvas.ask_update()
-
-					print content
-
 
 
 				def _on_full_screen( self ) :
@@ -242,7 +245,7 @@ class CciScreen( Screen ) :
 
 
 				# icmp handlers
-				def on_ping_ip_input( self  ) :
+				def on_ping_ip_input( self  , in_ip = None ) :
 					"""
 					input ping variable
 					:return:
@@ -252,14 +255,18 @@ class CciScreen( Screen ) :
 					b_ret = True
 					App.get_running_app()._logger.info( self.__class__.__name__ + '...on_ping_ip_input'  )
 
+					ip = str()
+					if in_ip is None :
+						ip = self.ids.ip_input.text
+					else :
+						ip = in_ip
 
-					ip = self.ids.ip_input.text
 					try :
 
 						cmd = ["su" ,
 							   "-c" ,
 							   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-							   "./king_console/ping.pyo" ,
+							   "./king_console/kc_ping.pyo" ,
 							   "-s" ,
 							   ip
 							  ]
@@ -284,7 +291,10 @@ class CciScreen( Screen ) :
 					if pos :
 						boiler = boiler[:pos]
 
-					self._console_text.text = boiler
+					if in_ip is None :
+						self._console_text.text = boiler
+
+					return boiler
 
 
 
@@ -294,31 +304,51 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 
-					out = str()
-					b_ret = True
+					# sentinel function so we don't have to use  lock object
+					# started at at end of ui update
+					threading.Thread( target = self._ping_ip_subnet ).start()
+
+
+
+
+				def _ping_ip_subnet( self ) :
+					"""
+
+					:return:
+					"""
+
+
 					App.get_running_app()._logger.info( self.__class__.__name__ + '...on_ping_ip_subnet'  )
 
 
 					ip = self.ids.ip_subnet_input.text
-					prefix = ping.chomp( source_str = ip , delimiter = '.' , keep_trailing_delim = True )
+					prefix = kc_ping.chomp( source_str = ip , delimiter = '.' , keep_trailing_delim = True )
 
-					self.lock.acquire()
-					try :
-						idx = self.ids.maelstrom_carousel_id.current_slide
-					finally :
-						self.lock.release()
-
+					slide = self.ids.maelstrom_carousel_id.current_slide
+					#text box
+					container = slide.children[1].children[0]
+					container.text = 'working...\n'
 					# for each address in subnet
 					for addr in range( 0 , 254 ):
+						if App.get_running_app().stop_event.isSet() :
+							break
 						try :
-							self._update_console_content( idx , prefix + str( addr ) )
-							sleep( 3 )
-							"""
-							reply = ping_atom( prefix + str( addr ) )
-							if reply is not None :
-								replies.append( reply )
-								print reply.display()
-							"""
+
+							reply = self.on_ping_ip_input( in_ip=prefix + str( addr ) )
+							pos = reply.find( '<reply>' )
+							rejoinder = str()
+							if pos == -1 :
+								rejoinder = 'failed'
+							else :
+								rejoinder = 'succeeded'
+
+							# have to update main thread by proxy - opengl
+							self._update_console_content( prefix + str( addr ) + '... ' + rejoinder , container )
+							#container.text += reply + '\n'
+
+							sleep( 0.5 )
+
+
 						except Exception as err :
 							print err
 
