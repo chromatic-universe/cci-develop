@@ -6,6 +6,7 @@
 #include <cci_concurrent_utils.h>
 #include <exception>
 #include <atomic>
+#include <algorithm>
 
 using namespace cci_expansion;
 
