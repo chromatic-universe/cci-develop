@@ -3,6 +3,7 @@
 #:import la kivy.adapters.listadapter
 
 
+
 <CciScreen>:
     id: cci_screen
     accordion_id: cci_accordion
@@ -137,14 +138,14 @@
                                 id: more_ping_btn
                                 text: '...'
                                 font_size: 24
-                                color: 1,0,0,1
-                                background_color: [0,0,0,0]
+                                color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                #background_color: [0,0,0,0]
                                 on_press: app._open_extended_window()
                             Button:
                                 id: ping_btn
                                 text: 'execute ping'
-                                color: 1,0,0,1
-                                background_color: [0,0,0,0]
+                                color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                #background_color: [0,0,0,0]
                                 on_press: root._on_ping_start()
                         BoxLayout
                             orientation: 'horizontal'
@@ -203,14 +204,14 @@
                                 id: more_ping_sub_btn
                                 text: '...'
                                 font_size: 24
-                                color: 1,0,0,1
-                                background_color: [0,0,0,0]
+                                color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                #background_color: [0,0,0,0]
                                 on_press: app._open_extended_window()
                             Button:
                                 id: ping_sub_btn
                                 text: 'execute sub ping'
-                                color: 1,0,0,1
-                                background_color: [0,0,0,0]
+                                color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                #background_color: [0,0,0,0]
                                 on_press: root._on_ping_subnet_start()
                         BoxLayout
                             orientation: 'horizontal'
@@ -265,7 +266,52 @@
             Accordion:
                 orientation: root.accordion_id._inner_orientation
                 AccordionItem:
-                    title: 'local'
+                    title: 'data'
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        ScrollView:
+                             #size: self.size
+                            GridLayout:
+                                orientation: 'horizontal'
+                                cols: 1
+                                size_hint_y: None
+                                size: (400,400)
+                                Button:
+                                    text: 'update....'
+                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                    size_hint_y: 1.80
+                                Label:
+                                    text: 'current document context:'
+                                    color: [1,0,0,1]
+
+                                Label:
+                                    text: 'mongdb'
+                                Label:
+                                    text: 'bootstrap metadata:'
+                                    color: [1,0,0,1]
+                                Label:
+                                    text: 'cci-aws-3'
+                                Label:
+                                    text: 'current search context:'
+                                    color: [1,0,0,1]
+                                    #size_hint_y: .15
+                                Label:
+                                    text: 'elasticsearch'
+                                Label:
+                                    text: 'bootstrap metadata:'
+                                    #size_hint_y: .15
+                                    color: [1,0,0,1]
+                                Label:
+                                    text: 'search-chromatic-search-p647s4rdqjcgub7tt7neealjn4.us-west-2.es.amazonaws.com'
+                                    text_size: (500,None)
+                                    shorten: True
+                                Label:
+                                    text: 'local:'
+                                    color: [1,0,0,1]
+                                Label:
+                                    text: 'sqllite3'
+
+
                 AccordionItem:
                     title: 'publish~subscribe'
         AccordionItem:

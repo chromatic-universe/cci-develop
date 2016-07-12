@@ -17,6 +17,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.config import ConfigParser
 from kivy.uix.progressbar import ProgressBar
+from kivy.uix.dropdown import DropDown
 from kivy.clock import Clock , mainthread
 from kivy.core.window import Window
 from kivy.lang import Builder
@@ -53,6 +54,7 @@ except ImportError:  # python 3
 from bimini import resource_factory \
 	                     as resources , \
 						 screen
+
 
 kivy.require( '1.9.1' )
 
@@ -130,6 +132,16 @@ class biminiApp( App ) :
 					self._logger.addHandler( fh )
 					self._logger.info( self.__class__.__name__ + '...'  )
 
+					try :
+
+						from kivy.support import install_twisted_reactor
+						install_twisted_reactor()
+						from twisted.internet import reactor, protocol
+
+						self._logger.info( '...twisted..ok' )
+					except Exception as e :
+						self._logger.error( e.message )
+
 					self.settings_cls = SettingsWithSpinner
 					Window.on_rotate = self._on_rotate
 
@@ -190,7 +202,7 @@ class biminiApp( App ) :
 						if self.root.current == 'login':
 							self.root.current = 'desktop'
 							self.move_to_accordion_item( self.root.ids.cci_bimini_accordion ,
-														 'remote viewer' )
+														 'remote console' )
 					except IOError as e :
 						self._logger.error( e.message )
 
@@ -253,6 +265,6 @@ if __name__ == '__main__':
 				Config.set( 'input', 'mouse', 'mouse,disable_multitouch' )
 
 				from kivy.core.window import Window  # load after Config.set
-				Window.clearcolor = get_color_from_hex('#95a5a6')
+				#Window.clearcolor = get_color_from_hex('#95a5a6')
 
 				biminiApp().run()

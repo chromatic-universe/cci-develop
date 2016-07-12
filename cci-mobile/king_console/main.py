@@ -14,6 +14,7 @@ from kivy.uix.switch import Switch
 from kivy.uix.slider import Slider
 from kivy.uix.textinput import TextInput
 from kivy.uix.scrollview import ScrollView
+from kivy.uix.dropdown import DropDown
 from kivy.uix.popup import Popup
 from kivy.uix.treeview import TreeView , TreeViewLabel , TreeViewNode
 from kivy.uix.gridlayout import GridLayout
@@ -126,7 +127,8 @@ class ConsoleAccordion( Accordion ) :
 			self._inner_orientation =  'vertical' if self._orientation == 'horizontal' else 'horizontal'
 
 
-
+class CustomDropDown( DropDown ):
+    pass
 
 
 
