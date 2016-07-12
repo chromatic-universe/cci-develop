@@ -1,7 +1,7 @@
 [app]
 
 # (str) Title of your application
-title = cci-binini
+title = cci-bimini
 
 # (str) Package name
 package.name = cci_bimini
@@ -36,7 +36,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma seperated e.g. requirements = sqlite3,kivy
-requirements = kivy
+requirements = kivy,requests
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -46,10 +46,11 @@ requirements = kivy
 #garden_requirements =
 
 # (str) Presplash of the application
-#presplash.filename = %(source.dir)s/data/presplash.png
+presplash.filename = ./ramask.png
+
 
 # (str) Icon of the application
-#icon.filename = %(source.dir)s/data/icon.png
+icon.filename = ./Male-Face-O4-icon.png
 
 # (str) Supported orientation (one of landscape, portrait or all)
 orientation = landscape
@@ -72,13 +73,13 @@ orientation = landscape
 fullscreen = 1
 
 # (list) Permissions
-#android.permissions = INTERNET
+android.permissions = INTERNET
 
 # (int) Android API to use
 #android.api = 19
 
 # (int) Minimum API required
-#android.minapi = 9
+android.minapi = 13
 
 # (int) Android SDK version to use
 #android.sdk = 20
@@ -177,7 +178,7 @@ fullscreen = 1
 [buildozer]
 
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
-log_level = 1
+log_level = 2
 
 # (int) Display warning if buildozer is run as root (0 = False, 1 = True)
 warn_on_root = 1

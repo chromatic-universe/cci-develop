@@ -1,0 +1,68 @@
+#:import lv kivy.uix.listview
+#:import la kivy.adapters.listadapter
+#:import ScrollEffect kivy.effects.scroll.ScrollEffect
+
+
+
+ScreenManager:
+    Screen:
+        name: 'login'
+        GridLayout:
+            orientation: 'horizontal'
+            cols: 1
+            GridLayout:
+                orientation:  'horizontal'
+                cols: 6
+                Label:
+                    text: '   '
+                Label:
+                    text: '   '
+                Image:
+                    source: 'king-console128.png'
+                Label:
+                    text: '   '
+                Label:
+                    text: '   '
+            Label:
+                text: 'cci-bimini client'
+                halign: 'center'
+                valign: 'middle'
+                size_hint: (0.25, .2)
+            Label:
+                text: 'enter ip or address:'
+                halign: 'center'
+                valign: 'middle'
+                size_hint: (0.25, .2)
+
+            TextInput:
+                id: server
+                text: '192.168.0.176'
+                halign: 'center'
+                size_hint: (0.25, .2)
+
+            Button:
+                text: 'Connect'
+                on_press: app.on_connect()
+
+
+
+
+
+    Screen:
+        name: 'desktop'
+        Accordion:
+            orientation: 'horizontal'
+            id: cci_bimini_accordion
+            AccordionItem
+                title: 'remote viewer'
+                ScrollView:
+                    effect_cls: ScrollEffect
+
+                    Image:
+                        id: desktop
+                        nocache: True
+                        on_touch_down: app.send_click(args[1])
+                        size: self.texture_size
+                        size_hint: (None, None)
+            AccordionItem
+                title: 'cci-bimini'

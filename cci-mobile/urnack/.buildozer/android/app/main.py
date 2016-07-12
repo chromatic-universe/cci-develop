@@ -152,18 +152,15 @@ class urnackApp( App ) :
 					:param settings:
 					:return:
 					"""
-					with open( "settings.json", "r" ) as settings_json :
-						settings.add_json_panel( 'cci-urnack contexts',
-												 self.config ,
-												 data=settings_json.read() )
-					with open( "settings_env.json", "r" ) as settings_json :
-						settings.add_json_panel( 'cci-urnack environment',
-												 self.config ,
-												 data=settings_json.read() )
-					with open( "settings_stream.json", "r" ) as settings_json :
-						settings.add_json_panel( 'cci-urnack stream data',
-												 self.config ,
-												 data=settings_json.read() )
+					settings.add_json_panel( 'cci-urnack contexts',
+											  self.config ,
+											  data=resources.settings_json )
+					settings.add_json_panel( 'cci-urnack environment',
+											  self.config ,
+											  data=resources.settings_env_json )
+					settings.add_json_panel( 'cci-urnack streams',
+											 self.config ,
+											 data=resources.settings_stream_json )
 					self.use_kivy_settings = False
 
 
@@ -174,7 +171,7 @@ class urnackApp( App ) :
 					:param config:
 					:return:
 					"""
-					config.setdefaults( 'physical', {
+					config.setdefaults( 'stream',  {
 													'packet_timeout': 3 ,
 													'show_stream': 1 ,
 													} )
@@ -183,6 +180,7 @@ class urnackApp( App ) :
 													'show_stream': 1 ,
 													'default_address' : 'www.chromaticuniverse.xyz'
 													} )
+
 
 
 				def on_start( self ) :
@@ -227,19 +225,6 @@ class urnackApp( App ) :
 
 					pass
 
-				def move_to_accordion_item( self , acc , tag = None ) :
-					"""
-					workaround for android nesting bug
-					:param acc:
-					:return:
-					"""
-
-					for child in acc.children :
-						if child.title == 'king console' :
-							child.collapse = False
-							child.canvas.ask_update()
-
-					self.root.current_screen.ids.ping_btn.text = "execute"
 
 
 
