@@ -41,7 +41,7 @@ from time import gmtime, strftime , sleep
 import subprocess as proc
 import threading
 import requests
-import sqlite3
+
 
 
 #cci
@@ -51,8 +51,6 @@ from urnack import resource_factory \
 	                     as resources , \
 						 screen
 
-import pika
-from pika import BlockingConnection
 
 #from scapy.all import *
 
@@ -204,6 +202,7 @@ class urnackApp( App ) :
 					with open( 'cci_mini_elastic.log-debug.log' ) as f :
 						content = f.readlines()
 					self.root.current_screen.ids.console_interfaces.text = '\n'.join( content )
+
 
 
 				def on_pause(self):

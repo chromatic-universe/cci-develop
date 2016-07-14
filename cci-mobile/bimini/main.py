@@ -161,6 +161,7 @@ class biminiApp( App ) :
 
 
 						self.reload_desktop()
+						Window.screenshot( name = 'screen.png' )
 					except IOError as e :
 						self._logger.error( e.message )
 					except Exception as e :
@@ -230,6 +231,14 @@ class biminiApp( App ) :
 
 				def on_resume(self):
 					# something
+					pass
+
+
+				def on_start( self ) :
+					"""
+
+					:return:
+					"""
 					pass
 
 
