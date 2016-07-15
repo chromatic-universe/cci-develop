@@ -19,6 +19,12 @@
         on_touch_up: app._selected_accordion_item()
         AccordionItem:
             title: 'application'
+            Accordion:
+                orientation: root.accordion_id._inner_orientation
+                AccordionItem:
+                    title: 'p0f'
+                AccordionItem:
+                    title: 'quick fuzz'
         AccordionItem:
             title: 'tcp'
             Accordion:
@@ -35,14 +41,14 @@
                                 id: more_tcp_btn
                                 text: '...'
                                 font_size: 24
-                                color: 1,0,0,1
-                                background_color: [0,0,0,0]
+                                color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                #background_color: [0,0,0,0]
                                 on_press: app._open_extended_window()
                             Button:
                                 id: syn_ack_btn
                                 text: 'execute syn ack'
-                                color: 1,0,0,1
-                                background_color: [0,0,0,0]
+                                color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                #background_color: [0,0,0,0]
                                 on_press: app.on_ping_ip_input()
                         BoxLayout
                             orientation: 'horizontal'
@@ -85,14 +91,14 @@
                                 id: more_tcp_btn
                                 text: '...'
                                 font_size: 24
-                                color: 1,0,0,1
-                                background_color: [0,0,0,0]
+                                color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                #background_color: [0,0,0,0]
                                 on_press: app._open_extended_window()
                             Button:
                                 id: syn_ack_btn
-                                text: 'execute mini scan'
-                                color: 1,0,0,1
-                                background_color: [0,0,0,0]
+                                text: 'execute scan'
+                                color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                #background_color: [0,0,0,0]
                                 on_press: app.on_ping_ip_input()
                         BoxLayout
                             orientation: 'horizontal'
@@ -277,39 +283,48 @@
                                 size_hint_y: None
                                 size: (400,400)
                                 Button:
-                                    text: 'update....'
+                                    text: 'configure transport atoms....'
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
-                                    size_hint_y: 1.80
+                                    size_hint_y: 1.90
                                 Label:
                                     text: 'current document context:'
                                     color: [1,0,0,1]
-
-                                Label:
+                                Button:
+                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                     text: 'mongdb'
                                 Label:
-                                    text: 'bootstrap metadata:'
+                                    text: 'bootstrap doc metadata:'
                                     color: [1,0,0,1]
-                                Label:
+                                Button:
                                     text: 'cci-aws-3'
+                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                 Label:
                                     text: 'current search context:'
                                     color: [1,0,0,1]
-                                    #size_hint_y: .15
-                                Label:
+                                Button:
+                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                     text: 'elasticsearch'
                                 Label:
-                                    text: 'bootstrap metadata:'
+                                    text: 'bootstrap search metadata:'
                                     #size_hint_y: .15
                                     color: [1,0,0,1]
-                                Label:
+                                Button:
                                     text: 'search-chromatic-search-p647s4rdqjcgub7tt7neealjn4.us-west-2.es.amazonaws.com'
+                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                     text_size: (500,None)
                                     shorten: True
                                 Label:
                                     text: 'local:'
                                     color: [1,0,0,1]
-                                Label:
+                                Button:
                                     text: 'sqllite3'
+                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                Label:
+                                    text: 'stream encryption:'
+                                    color: [1,0,0,1]
+                                Button:
+                                    text: 'tls'
+                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
 
 
                 AccordionItem:
