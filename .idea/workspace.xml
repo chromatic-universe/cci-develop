@@ -10,17 +10,7 @@
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/bimini/server/server.py" line="43" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-mobile/trinity/cci-trinity.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/trinity/Male-Face-O4-icon.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/trinity/bw_ra.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/trinity/main.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/bin/cciurnack-0.1-debug.apk" afterPath="$PROJECT_DIR$/cci-mobile/urnack/bin/cciurnack-0.1-debug.apk" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv" afterPath="$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/bimini/main.py" afterPath="$PROJECT_DIR$/cci-mobile/bimini/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/state.db" afterPath="$PROJECT_DIR$/cci-mobile/urnack/.buildozer/state.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="" />
     <ignored path="cci_git_1.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
