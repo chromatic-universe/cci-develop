@@ -4,6 +4,9 @@ from kivy.app import App
 from kivy.clock import Clock , mainthread
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
+from kivy.uix.bubble import Bubble
+from kivy.uix.actionbar import ActionBar , ActionButton
+from kivy.uix.popup import Popup
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import StringProperty, ObjectProperty
@@ -24,6 +27,7 @@ from king_console import kc_ping , \
 import random
 from time import gmtime, strftime , sleep
 import subprocess as proc
+
 
 
 # -------------------------------------------------------------------------------------------------
@@ -66,17 +70,41 @@ def add_console( self ,
 										font_size = 16  ,
 										size_hint_y = 0.2 ,
 										color = [ 1, 0 , 0 , 1] ) )
-				parent,add_widget( layout )
+				parent.add_widget( layout )
+
 
 
 
 
 # -------------------------------------------------------------------------------------------------
 class TreeManagerLabel( TreeViewLabel ) :
-	"""
+				"""
 
-	"""
-	font_size = 18
+				"""
+				font_size = 18
+
+
+# -------------------------------------------------------------------------------------------------
+class ConsolePopup( Popup  ) :
+				"""
+
+				"""
+				def on_press_dismiss( self , *args) :
+
+					self.dismiss()
+
+					return False
+
+
+				def on_press_context( self , *args) :
+
+					self.dismiss()
+
+					return False
+
+
+				def on_dismiss( self ) :
+					pass
 
 
 
@@ -104,6 +132,24 @@ class CciScreen( Screen ) :
 					"""
 
 					return resources.const_resource_ids[resource_id]
+
+
+
+				def _on_show_history( self ) :
+					"""
+
+					:return:
+					"""
+
+					layout = GridLayout( orientation = 'horizontal' ,
+									  cols = 1 )
+
+					action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar' ) )
+					layout.add_widget( action_bar )
+					popup = ConsolePopup( title='console history' , content=layout, size=( 200,200 ) )
+					btn = popup.content.children[0].children[0].children[0]
+					btn.on_press = popup.on_press_context
+					popup.open()
 
 
 				def _on_ping_start( self ) :
@@ -291,13 +337,14 @@ class CciScreen( Screen ) :
 											font_size = 16 ,
 											id = 'content' ,
 											size_hint_y = 0.1 ) )
-
+					# console text
 					scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
 					tx = scrolly.children[0]
 					self._console_text = tx
 					tx.text = 'standby...working...'
+					#scrollbox
 					layout.add_widget( scrolly )
-
+					#footer
 					layout.add_widget( Label( text = strftime("%Y-%m-%d %H:%M:%S", gmtime()) ,
 											font_size = 16  ,
 											size_hint_y = 0.2 ,

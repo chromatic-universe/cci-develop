@@ -20,6 +20,7 @@ from kivy.uix.treeview import TreeView , TreeViewLabel , TreeViewNode
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
+from kivy.uix.bubble import Bubble
 from kivy.config import ConfigParser
 from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock , mainthread
@@ -45,6 +46,8 @@ import subprocess as proc
 import threading
 import requests
 
+import sqlite3
+
 
 #cci
 from king_console import resource_factory \
@@ -55,6 +58,7 @@ from king_console.kc_thread_manager \
 
 
 kivy.require( '1.9.1' )
+
 
 
 # dynamic

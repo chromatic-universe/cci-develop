@@ -459,12 +459,16 @@
                             with_previous: False
                             on_press: app._on_full_screen()
                             app_icon: 'king-console32.png'
-                        ActionButton:
-                            icon: 'history.png'
-                            on_press: app._on_view_manager()
+                            #size_hint_x: .15
                         ActionButton:
                             icon: 'menu-icon.png'
+                            text: 'layout'
                             on_press: app._on_view_manager()
+                        ActionButton:
+                            icon: 'history.png'
+                            text: 'history'
+                            on_press: root._on_show_history()
+
                 BoxLayout:
                     orientation: 'vertical'
                     Carousel:

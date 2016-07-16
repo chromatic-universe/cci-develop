@@ -45,6 +45,21 @@ ActionBar:
 			on_press: app._manip_extended_window()
 """
 ,
+				       'dlg_action_bar' :
+"""
+ActionBar:
+	pos_hint: {'top':1}
+	ActionView:
+		use_separator: True
+		ActionPrevious:
+			title: 'king console'
+			with_previous: False
+			app_icon: 'king-console32.png'
+		ActionButton:
+			icon: 'menu-icon.png'
+
+"""
+,
 					   'application_acc_item' :
 """
 Accordion:
