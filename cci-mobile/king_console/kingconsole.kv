@@ -265,8 +265,123 @@
                 orientation: root.accordion_id._inner_orientation
                 AccordionItem:
                     title: 'arp'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 2
+                            size_hint_y: 0.20
+                            Button:
+                                id: more_arp_btn
+                                text: '...'
+                                font_size: 24
+                                color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                #background_color: [0,0,0,0]
+                                on_press: app._open_extended_window()
+                            Button:
+                                id: arp_btn
+                                text: 'execute arp'
+                                color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                #background_color: [0,0,0,0]
+                                on_press: root._on_arp_start()
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'show trace:'
+                            Switch:
+                                active: True
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'greedy trace:'
+                            Switch:
+                                active: False
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'timeout: ' + '{0:}'.format( single_slider.value )
+                            Slider:
+                                orientation: 'horizontal'
+                                id: single_slider
+                                step: 1
+                                min: 1
+                                max: 15
+                                value: 1
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 1
+                            size_hint_y: .30
+                            Label:
+                                text: 'ip or address:'
+                            TextInput:
+                                text: '192.168.0.133'
+                                id: ip_arp_input
+                                cursor_blink: True
+                                readonly: False
+                                multiline: True
                 AccordionItem:
                     title: 'arp scan'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 2
+                            size_hint_y: 0.20
+                            Button:
+                                id: more_stp_sub_btn
+                                text: '...'
+                                font_size: 24
+                                color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                #background_color: [0,0,0,0]
+                                on_press: app._open_extended_window()
+                            Button:
+                                id: ping_arp_btn
+                                text: 'execute sub arp'
+                                color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                #background_color: [0,0,0,0]
+                                on_press: root._on_arp_scan_start()
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'show trace:'
+                            Switch:
+                                active: True
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'verbose:'
+                            Switch:
+                                active: False
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.15
+                            Label:
+                                text: 'timeout: ' + '{0:}'.format( subnet_slider.value )
+                            Slider:
+                                orientation: 'horizontal'
+                                id: subnet_slider
+                                step: 1
+                                min: 1
+                                max: 15
+                                value: 1
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 1
+                            size_hint_y: .30
+                            Label:
+                                text: 'subnet(0.0.0.0./24):'
+                            TextInput:
+                                text: '192.168.0.0/24'
+                                id: arp_subnet_input
+                                cursor_blink: True
+                                readonly: False
+                                multiline: False
+
         AccordionItem:
             title: 'stream'
             Accordion:

@@ -50,6 +50,8 @@ import requests
 from king_console import resource_factory \
 	                     as resources , \
 						 screen
+from king_console.kc_thread_manager \
+				  import kc_thread_manager
 
 
 kivy.require( '1.9.1' )
@@ -170,7 +172,7 @@ class kingconsoleApp( App ) :
 			self._console_count = 1
 			self._console_constructed = list()
 			self._cur_console_buffer = str()
-			self._thrd = None
+			self._thrd = kc_thread_manager( self._logger )
 			self.stop_event = threading.Event()
 
 			Window.on_rotate = self._on_rotate
@@ -324,10 +326,18 @@ class kingconsoleApp( App ) :
 			:return:
 			"""
 
-			self.stop_event.set()
-			# Wait for thread to exit.
+			#stop threads
+			for moniker,atom in self._thrd.thrds.iteritems() :
+				atom['stop_alert'].set()
+				if atom['instance'] :
+					atom['instance'].join()
+			#self.stop_event.set()
+			#wait for all threads to exit.
+
+			"""
 			if self._thrd :
 				self._thrd.join()
+			"""
 
 
 		def on_start( self ) :
