@@ -49,7 +49,7 @@
                                 text: 'execute syn ack'
                                 color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                 #background_color: [0,0,0,0]
-                                on_press: app.on_ping_ip_input()
+                                on_press: root._on_tcp_syn_scan_start()
                         BoxLayout
                             orientation: 'horizontal'
                             size_hint_y: .25
@@ -72,10 +72,10 @@
                             cols: 1
                             size_hint_y: .35
                             Label:
-                                text: 'ip syn ack'
+                                text: 'ip syn ack(0.0.0.0:port)'
                             TextInput:
-                                text: '192.168.0.135'
-                                id: ip_input_syn
+                                text: '192.168.0.156:7081'
+                                id: ip_input_syn_ack
                                 cursor_blink: True
                                 readonly: False
                                 multiline: False
@@ -123,7 +123,7 @@
                                 text: 'ports'
                             TextInput:
                                 text: '443 993'
-                                id: port_input_syn
+                                id: ip_input_syn_ack_scan
                                 cursor_blink: True
                                 readonly: False
                                 multiline: True

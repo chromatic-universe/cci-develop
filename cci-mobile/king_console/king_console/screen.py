@@ -19,7 +19,8 @@ from kivy.uix.screenmanager import ScreenManager, \
 from king_console import resource_factory \
 	                     as resources
 from king_console import kc_ping , \
-						 kc_arp
+						 kc_arp , \
+						 kc_tcp
 import random
 from time import gmtime, strftime , sleep
 import subprocess as proc
@@ -169,10 +170,30 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 
-					#add thread oject to manager
+					#add thread object to manager
 					thred = threading.Thread( target = self._thread_exec ,kwargs=dict(func=self.on_arp_ip_scan))
 					if thred :
 						moniker = 'arp console #'  + str( App.get_running_app()._console_count + 1 )
+						thread_atom = { 'thread_id' : str( thred.ident ) ,
+										'stop_alert'  : threading.Event() ,
+										'instance' : thred
+									  }
+						App.get_running_app()._thrd.thrds[moniker] = thread_atom
+
+					thred.start()
+
+
+
+				def _on_tcp_syn_scan_start( self ) :
+					"""
+
+					:return:
+					"""
+
+					#add thread object to manager
+					thred = threading.Thread( target = self._thread_exec ,kwargs=dict( func=self.on_tcp_syn_ack_scan ) )
+					if thred :
+						moniker = 'tcp console #'  + str( App.get_running_app()._console_count + 1 )
 						thread_atom = { 'thread_id' : str( thred.ident ) ,
 										'stop_alert'  : threading.Event() ,
 										'instance' : thred
@@ -235,6 +256,15 @@ class CciScreen( Screen ) :
 						self._update_main_console( count=App.get_running_app()._console_count ,
 												   moniker='arp console #' )
 						func()
+					elif func == self.on_tcp_syn_ack_scan :
+						# update main thread from decorator
+						self.move_to_accordion_item( self.ids.cci_accordion ,
+																 'ids_tcp_syn_scan' )
+						self._update_main_console( count=App.get_running_app()._console_count ,
+												   moniker='tcp console #' )
+						func()
+
+
 
 				@mainthread
 				def _update_main_console( self ,
@@ -383,7 +413,7 @@ class CciScreen( Screen ) :
 
 				def on_arp_ip_input( self  ) :
 					"""
-					input ping variable
+					input arp variable
 					:return:
 					"""
 
@@ -395,13 +425,28 @@ class CciScreen( Screen ) :
 
 				def on_arp_ip_scan( self  ) :
 					"""
-					input ping variable
+					input arp variable
 					:return:
 					"""
 
 					# sentinel function so we don't have to use  lock object
 					# started at at end of ui update
 					threading.Thread( target = self._on_arp_ip_scan( range=True ) ).start()
+
+
+
+				def on_tcp_syn_ack_scan( self , in_ip = None , range = False ) :
+					"""
+
+					:param in_ip:
+					:param range:
+					:return:
+					"""
+
+					# sentinel function so we don't have to use  lock object
+					# started at at end of ui update
+					threading.Thread( target = self._on_tcp_syn_ack_scan() ).start()
+
 
 
 
@@ -453,60 +498,60 @@ class CciScreen( Screen ) :
 				
 				# arp handlers
 				def _on_arp_ip_input( self  , range = False ) :
-					"""
-					:param in_ip : input arp variable
-					:return:
-					"""
-										
-					out = str()					
-					App.get_running_app()._thrd.rlk.acquire()
-					App.get_running_app()._logger.info( self.__class__.__name__ + '...on_arp_ip_input'  )
-					App.get_running_app()._thrd.rlk.release()
+						"""
+						:param in_ip : input arp variable
+						:return:
+						"""
 
-					ip = str()
-					sw = str()
-					if range is False :
-						ip = self.ids.ip_arp_input.text
-						sw = '-s'
-					else :
-						ip = self.ids.arp_subnet_input.text
-						sw = '-n'
+						out = str()
+						App.get_running_app()._thrd.rlk.acquire()
+						App.get_running_app()._logger.info( self.__class__.__name__ + '...on_arp_ip_input'  )
+						App.get_running_app()._thrd.rlk.release()
 
-					try :
-
-						cmd = ["su" ,
-							   "-c" ,
-							   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-							   "./king_console/kc_arp.pyo" ,
-							   sw ,
-							   ip
-							  ]
+						ip = str()
+						sw = str()
+						if range is False :
+							ip = self.ids.ip_arp_input.text
+							sw = '-s'
+						else :
+							ip = self.ids.arp_subnet_input.text
+							sw = '-n'
 
 						try :
-							out = proc.check_output( cmd  )
-							App.get_running_app()._logger.info( out )
-						except proc.CalledProcessError as e :
+
+							cmd = ["su" ,
+								   "-c" ,
+								   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
+								   "./king_console/kc_arp.pyo" ,
+								   sw ,
+								   ip
+								  ]
+
+							try :
+								out = proc.check_output( cmd  )
+								App.get_running_app()._logger.info( out )
+							except proc.CalledProcessError as e :
+								b_ret = False
+						except Exception as e :
 							b_ret = False
-					except Exception as e :
-						b_ret = False
-						App.get_running_app()._logger.error( e.message )
+							App.get_running_app()._logger.error( e.message )
 
-					thr = App.get_running_app()._thrd.thrds['arp console #'  + str( App.get_running_app()._console_count )]
-					if thr :
-						if thr['stop_alert'].isSet() :
-							return
+						thr = App.get_running_app()._thrd.thrds['arp console #'  + str( App.get_running_app()._console_count )]
+						if thr :
+							if thr['stop_alert'].isSet() :
+								return
 
-					boiler = 'maelstrom[arp]->scan1: ' + \
-							  ' ' + ip
-					boiler += '\n'
-					boiler += out
-					App.get_running_app()._logger.info( self.__class__.__name__ + '...boiler='  + boiler)
+						boiler = 'maelstrom[arp]->scan1: ' + \
+								  ' ' + ip
+						boiler += '\n'
+						boiler += out
+						App.get_running_app()._logger.info( self.__class__.__name__ + '...boiler='  + boiler)
 
-					pos = boiler.find( '#[QPython]' )
-					if pos :
-						boiler = boiler[:pos]
+						pos = boiler.find( '#[QPython]' )
+						if pos :
+							boiler = boiler[:pos]
 
-					self._console_text.text = boiler
+						self._console_text.text = boiler
 
 
 
@@ -516,6 +561,73 @@ class CciScreen( Screen ) :
 						:return:
 						"""
 						self._on_arp_ip_input( range=range )
+
+
+
+				# tcp handlers
+				def _on_tcp_syn_ack_scan( self , in_ip = None , range = False ) :
+						"""
+						:param in_ip :
+						:param range :
+						:return
+						"""
+						ip = str()
+						port = 80
+						if range is False :
+							ip , port = self.ids.ip_input_syn_ack.text.split( ':' )
+
+						else :
+							ip = self.ids.ip_input_syn_ack_scan.text
+							sw = '-n'
+
+						out = str()
+						App.get_running_app()._thrd.rlk.acquire()
+						App.get_running_app()._logger.info( self.__class__.__name__ + '...on_tcp_syn_ack_scan'  )
+						App.get_running_app()._thrd.rlk.release()
+
+						try :
+
+							cmd = ["su" ,
+								   "-c" ,
+								   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
+								   "./king_console/kc_tcp.pyo" ,
+								   '-s' ,
+								   ip ,
+								   '-p' ,
+								   port
+								  ]
+
+							try :
+								out = proc.check_output( cmd  )
+								App.get_running_app()._logger.info( out )
+							except proc.CalledProcessError as e :
+								b_ret = False
+						except Exception as e :
+							b_ret = False
+							App.get_running_app()._logger.error( e.message )
+
+						thr = App.get_running_app()._thrd.thrds['tcp console #'  + str( App.get_running_app()._console_count )]
+						if thr :
+							if thr['stop_alert'].isSet() :
+								return
+
+						boiler = 'maelstrom[tcp]->scan1: ' + \
+								  ' ' + ip
+						boiler += '\n'
+						boiler += out
+						App.get_running_app()._logger.info( self.__class__.__name__ + '...boiler='  + boiler)
+
+						pos = boiler.find( '#[QPython]' )
+						if pos :
+							boiler = boiler[:pos]
+
+						self._console_text.text = boiler
+
+
+
+
+
+
 
 
 # -------------------------------------------------------------------------------------------------
