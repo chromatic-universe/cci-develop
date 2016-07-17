@@ -40,7 +40,7 @@ import subprocess as proc
 import threading
 import requests
 
-
+from kivy.core.window import Window
 
 try:  # python 2
     from urllib import urlencode
@@ -108,7 +108,8 @@ class ConsoleAccordion( Accordion ) :
 
 
 
-
+def win_cb( window, width, height):
+		print 'width: %d  height: %d' % ( width , height )
 # ------------------------------------------------------------------------------------------------
 class biminiApp( App ) :
 				"""
@@ -133,19 +134,12 @@ class biminiApp( App ) :
 					fh.setFormatter( formatter )
 					self._logger.addHandler( fh )
 					self._logger.info( self.__class__.__name__ + '...'  )
-
-					try :
-
-						from kivy.support import install_twisted_reactor
-						install_twisted_reactor()
-						from twisted.internet import reactor, protocol
-
-						self._logger.info( '...twisted..ok' )
-					except Exception as e :
-						self._logger.error( e.message )
+					self._screen_width = 0
+					self._screen_heught = 0
 
 					self.settings_cls = SettingsWithSpinner
 					Window.on_rotate = self._on_rotate
+					#Window.bind(on_resize=win_cb)
 
 
 				def on_connect( self ) :
@@ -156,14 +150,20 @@ class biminiApp( App ) :
 
 					try :
 						self._logger.info( ',,,on_connect...'  )
-						self.url = ('http://%s:7080/desktop.jpeg' %
+						self.url = ('http://%s:7080/trinity' %
 									self.root.ids.server.text )
 						self.send_url = ('http://%s:7080/click?' %
 										 self.root.ids.server.text)
 
 
+						self._screen_width = int( self.root.ids.window_width_slider.value )
+						self._screen_height = int( self.root.ids.window_height_slider.value )
+
+						Window.size = ( self._screen_width , self._screen_height )
+
+
 						self.reload_desktop()
-						Window.screenshot( name = 'screen.png' )
+
 					except IOError as e :
 						self._logger.error( e.message )
 					except Exception as e :
@@ -271,11 +271,16 @@ class biminiApp( App ) :
 # --------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
 
-				Config.set( 'graphics', 'width', '960' )
-				Config.set( 'graphics', 'height', '540' )
+				#Config.set('graphics','resizable',0 )
+
+				Config.set( 'graphics', 'width', '640' )
+				Config.set( 'graphics', 'height', '480' )
 				Config.set( 'input', 'mouse', 'mouse,disable_multitouch' )
 
-				from kivy.core.window import Window  # load after Config.set
+				#from kivy.core.window import Window
+				#Window.size = ( 480, 850 )
+
+
 				#Window.clearcolor = get_color_from_hex('#95a5a6')
 
 				biminiApp().run()

@@ -63,7 +63,7 @@ def cci_trinity():
 # ------------------------------------------------------------------------------
 if __name__ == "__main__" :
 			_logger.info( '....cci_trinity...' )
-			app.run( host= '0.0.0.0' , port=7081, debug=True  )
+			app.run( host= '0.0.0.0' , port=7080, debug=True  )
 
 
 

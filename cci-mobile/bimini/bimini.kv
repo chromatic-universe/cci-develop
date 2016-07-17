@@ -8,48 +8,66 @@ ScreenManager:
     Screen:
         name: 'login'
         GridLayout:
-            orientation: 'horizontal'
+            orientation: 'vertical'
             cols: 1
             GridLayout:
-                orientation:  'horizontal'
-                cols: 6
-                Label:
-                    text: '   '
-                Label:
-                    text: '   '
+                orientation:  'vertical'
+                cols: 1
                 Image:
                     source: 'king-console128.png'
+                    size_hint_y: .25
                 Label:
-                    text: '   '
+                    text: 'cci-bimini client'
+                    halign: 'center'
+                    valign: 'middle'
+                    size_hint_y: .2
+                GridLayout:
+                    orientation: 'horizontal'
+                    cols: 2
+                    size_hint_y: .75
+                    Slider:
+                        orientation: 'vertical'
+                        id: window_width_slider
+                        step: 1
+                        min: 300
+                        max: 1600
+                        value: 480
+                        size_hint_y: 1.5
+                    Slider:
+                        orientation: 'vertical'
+                        id: window_height_slider
+                        step: 1
+                        min: 400
+                        max: 1600
+                        value: 850
+                        size_hint_y: 1.5
+                    Label:
+                        text: 'width ' + '{0:}'.format( window_width_slider.value )
+                    Label:
+                        text: 'height ' + '{0:}'.format( window_height_slider.value )
+            GridLayout:
+                orientation: 'horizontal'
+                cols: 2
+                size_hint_y:  .15
                 Label:
-                    text: '   '
-            Label:
-                text: 'cci-bimini client'
-                halign: 'center'
-                valign: 'middle'
-                size_hint: (0.25, .2)
-            Label:
-                text: 'enter ip or address:'
-                halign: 'center'
-                valign: 'middle'
-                size_hint: (0.25, .2)
-
-            TextInput:
-                id: server
-                text: '192.168.0.176'
-                halign: 'center'
-                size_hint: (0.25, .2)
-
+                    text: 'enter ip or address:'
+                    halign: 'center'
+                    valign: 'middle'
+                TextInput:
+                    id: server
+                    text: '192.168.0.156'
+                    halign: 'center'
+                    size_hint_y: .1
             Button:
                 text: 'Connect'
                 background_color: [0,0,0,0]
                 on_press: app.on_connect()
-
+                size_hint_y: .35
 
     Screen:
         name: 'desktop'
         Accordion:
-            orientation: 'horizontal'
+            orientation: 'vertical'
             id: cci_bimini_accordion
             AccordionItem
                 title: 'remote console'
