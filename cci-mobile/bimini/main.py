@@ -26,6 +26,8 @@ from kivy.uix.settings import SettingsWithSidebar , SettingsWithSpinner
 from kivy.config import Config
 from kivy.loader import Loader
 from kivy.utils import get_color_from_hex
+from kivy.core.window import Window
+from kivy.clock import Clock , mainthread
 
 
 Window.softinput_mode = 'pan'
@@ -40,7 +42,6 @@ import subprocess as proc
 import threading
 import requests
 
-from kivy.core.window import Window
 
 try:  # python 2
     from urllib import urlencode
@@ -135,7 +136,9 @@ class biminiApp( App ) :
 					self._logger.addHandler( fh )
 					self._logger.info( self.__class__.__name__ + '...'  )
 					self._screen_width = 0
-					self._screen_heught = 0
+					self._screen_height = 0
+					self.url  = str()
+					self.send_url = str()
 
 					self.settings_cls = SettingsWithSpinner
 					Window.on_rotate = self._on_rotate
@@ -148,7 +151,28 @@ class biminiApp( App ) :
 					:return:
 					"""
 
+
+					self.root.current = 'desktop'
+					self.move_to_accordion_item( self.root.ids.cci_bimini_accordion ,
+												 'remote console' )
+
+					from kivy.core.window import Window
+
+					Window.size = ( 640 , 480 )
+
+
+					thred = threading.Thread( target = self._on_connect )
+					thred.start()
+
+
+
+				def _on_connect( self ) :
+					"""
+
+					:return:
+					"""
 					try :
+
 						self._logger.info( ',,,on_connect...'  )
 						self.url = ('http://%s:7080/trinity' %
 									self.root.ids.server.text )
@@ -160,7 +184,7 @@ class biminiApp( App ) :
 						self._screen_height = int( self.root.ids.window_height_slider.value )
 
 						Window.size = ( self._screen_width , self._screen_height )
-
+						self.root.ids.cci_bimini_accordion.canvas.ask_update()
 
 						self.reload_desktop()
 
@@ -171,6 +195,7 @@ class biminiApp( App ) :
 
 
 
+				@mainthread
 				def reload_desktop( self , *args ) :
 					"""
 
@@ -186,7 +211,7 @@ class biminiApp( App ) :
 						self._logger.error( e.message )
 
 
-
+				@mainthread
 				def desktop_loaded( self , desktop ) :
 					"""
 
@@ -201,11 +226,12 @@ class biminiApp( App ) :
 						del desktop
 
 						Clock.schedule_once(self.reload_desktop, 1)
+						self.root.current = 'desktop'
+						self.move_to_accordion_item( self.root.ids.cci_bimini_accordion ,
+													 'remote console' )
 
-						if self.root.current == 'login':
-							self.root.current = 'desktop'
-							self.move_to_accordion_item( self.root.ids.cci_bimini_accordion ,
-														 'remote console' )
+
+
 					except IOError as e :
 						self._logger.error( e.message )
 
@@ -253,7 +279,7 @@ class biminiApp( App ) :
 
 					pass
 
-
+				@mainthread
 				def move_to_accordion_item( self , acc , tag = None ) :
 					"""
 					workaround for android nesting bug
@@ -266,19 +292,25 @@ class biminiApp( App ) :
 							child.collapse = False
 							child.canvas.ask_update()
 
+							return child
+					return None
+
 
 
 # --------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
 
-				#Config.set('graphics','resizable',0 )
+				Config.set('graphics','resizable',0 )
 
-				Config.set( 'graphics', 'width', '640' )
-				Config.set( 'graphics', 'height', '480' )
-				Config.set( 'input', 'mouse', 'mouse,disable_multitouch' )
+
+				#Config.set( 'graphics', 'width', '640' )
+				#Config.set( 'graphics', 'height', '480' )
+				#Config.set( 'input', 'mouse', 'mouse,disable_multitouch' )
+
 
 				#from kivy.core.window import Window
-				#Window.size = ( 480, 850 )
+
+				#Window.size = ( 640 , 480 )
 
 
 				#Window.clearcolor = get_color_from_hex('#95a5a6')

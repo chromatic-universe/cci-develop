@@ -40,7 +40,7 @@ def cci_trinity():
 			io = StringIO()
 			try :
 
-				b_ret , out = capture_screen()
+				b_ret , out = capture_screen( _logger )
 				if not b_ret :
 					_logger.error( out )
 				else :
