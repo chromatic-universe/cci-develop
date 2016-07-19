@@ -12,7 +12,7 @@
 
         _orientation: 'vertical'
         _inner_orientation: 'horizontal'
-        listner -call every root width or height change-
+        #listner -call every root width or height change-
         orientation_handler: self.check_orientation(root.width, root.height)
 
         id: cci_accordion
@@ -99,30 +99,31 @@
                                 text: 'execute scan'
                                 color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                 #background_color: [0,0,0,0]
-                                on_press: app.on_ping_ip_input()
+                                on_press: root._on_tcp_syn_scan_ports_start()
                         BoxLayout
                             orientation: 'horizontal'
-                            size_hint_y: 0.25
+                            size_hint_y: 0.2
                             Label:
                                 text: 'show trace:'
                             Switch:
                                 active: True
+                        BoxLayout
+                            orientation: 'horizontal'
+                            size_hint_y: 0.2
+                            Label:
+                                text: 'unanswered:'
+                            Switch:
+                                active: False
                         GridLayout
                             orientation: 'horizontal'
                             cols: 1
-                            size_hint_y: .50
+                            size_hint_y: .35
                             Label:
-                                text: 'ip scan'
-                            TextInput:
-                                text: '192.168.0.135'
-                                id: ip_input_syn
-                                cursor_blink: True
-                                readonly: False
-                                multiline: False
+                                text: '~port range(443:993)~'
                             Label:
-                                text: 'ports'
+                                text: '~port set(443,993,8080...)~'
                             TextInput:
-                                text: '443 993'
+                                text: '443:993 or 443,993,8080'
                                 id: ip_input_syn_ack_scan
                                 cursor_blink: True
                                 readonly: False
@@ -444,6 +445,43 @@
 
                 AccordionItem:
                     title: 'publish~subscribe'
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        ScrollView:
+                             #size: self.size
+                            GridLayout:
+                                orientation: 'horizontal'
+                                cols: 1
+                                size_hint_y: None
+                                size: (400,400)
+                                Button:
+                                    text: 'configure pubsub atoms....'
+                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                    size_hint_y: 1.90
+                                Label:
+                                    text: 'current publishing context:'
+                                    color: [1,0,0,1]
+                                Button:
+                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                    text: 'kafka'
+                                Label:
+                                    text: 'bootstrap pub metadata:'
+                                    color: [1,0,0,1]
+                                Button:
+                                    text: 'cci-aws-2'
+                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                Label:
+                                    text: 'current sub context:'
+                                    color: [1,0,0,1]
+                                Button:
+                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                    text: 'kafka'
+                                Label:
+                                    text: 'bootstrap sub metadata:'
+                                    color: [1,0,0,1]
+                                Button:
+                                    text: 'cci-aws-2'
+                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
         AccordionItem:
             title: 'cci-maelstrom'
             GridLayout

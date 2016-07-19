@@ -63,7 +63,10 @@ def cci_trinity():
 # ------------------------------------------------------------------------------
 if __name__ == "__main__" :
 			_logger.info( '....cci_trinity...' )
-			app.run( host= '0.0.0.0' , port=7080, debug=True  )
+			try :
+				app.run( host= '0.0.0.0' , port=7080, debug=True  )
+			except Exception as e:
+				_logger.error( '...error in  trinity server...' + e.message )
 
 
 

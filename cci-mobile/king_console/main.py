@@ -263,7 +263,7 @@ class kingconsoleApp( App ) :
 							if pos :
 								out = out[:pos]
 							out , out2 = out.split( ':' )
-							cmd = ['ip' , 'addr' , 'show']
+							cmd = ['busybox' , 'ifconfig']
 							ifconfig = proc.check_output( cmd  )
 							self.logger.info( ifconfig )
 					except proc.CalledProcessError as e :

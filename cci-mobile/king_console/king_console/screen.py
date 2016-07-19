@@ -152,6 +152,28 @@ class CciScreen( Screen ) :
 					popup.open()
 
 
+
+				def  _start_( self  , slug  , func ) :
+					"""
+
+					:param moniker:
+					:param func:
+					:return:
+					"""
+					#add thread object to manager
+					thred = threading.Thread( target = self._thread_exec ,kwargs=dict( func=func ) )
+					if thred :
+						moniker = slug +  ' #'  + str( App.get_running_app()._console_count + 1 )
+						thread_atom = { 'thread_id' : str( thred.ident ) ,
+										'stop_alert'  : threading.Event() ,
+										'instance' : thred
+									  }
+						App.get_running_app()._thrd.thrds[moniker] = thread_atom
+
+					thred.start()
+
+
+
 				def _on_ping_start( self ) :
 					"""
 
@@ -230,6 +252,7 @@ class CciScreen( Screen ) :
 
 
 
+
 				def _on_tcp_syn_scan_start( self ) :
 					"""
 
@@ -247,6 +270,16 @@ class CciScreen( Screen ) :
 						App.get_running_app()._thrd.thrds[moniker] = thread_atom
 
 					thred.start()
+
+
+				def _on_tcp_syn_scan_ports_start( self ) :
+					"""
+
+					:return:
+					"""
+
+					#add thread object to manager
+					self._start_( 'tcp scan console' , self.on_tcp_syn_scan_ports )
 
 
 
@@ -482,7 +515,7 @@ class CciScreen( Screen ) :
 
 
 
-				def on_tcp_syn_ack_scan( self , in_ip = None , range = False ) :
+				def on_tcp_syn_ack_scan( self ) :
 					"""
 
 					:param in_ip:
@@ -493,6 +526,20 @@ class CciScreen( Screen ) :
 					# sentinel function so we don't have to use  lock object
 					# started at at end of ui update
 					threading.Thread( target = self._on_tcp_syn_ack_scan() ).start()
+
+
+
+				def on_tcp_syn_scan_ports( self , in_ip = None , range = False ) :
+					"""
+
+					:param in_ip:
+					:param range:
+					:return:
+					"""
+
+					# sentinel function so we don't have to use  lock object
+					# started at at end of ui update
+					threading.Thread( target = self._on_tcp_syn_scan_ports() ).start()
 
 
 
@@ -612,7 +659,7 @@ class CciScreen( Screen ) :
 
 
 				# tcp handlers
-				def _on_tcp_syn_ack_scan( self , in_ip = None , range = False ) :
+				def _on_tcp_syn_ack_scan( self ) :
 						"""
 						:param in_ip :
 						:param range :
@@ -620,12 +667,9 @@ class CciScreen( Screen ) :
 						"""
 						ip = str()
 						port = 80
-						if range is False :
-							ip , port = self.ids.ip_input_syn_ack.text.split( ':' )
+						ip , port = self.ids.ip_input_syn_ack.text.split( ':' )
 
-						else :
-							ip = self.ids.ip_input_syn_ack_scan.text
-							sw = '-n'
+
 
 						out = str()
 						App.get_running_app()._thrd.rlk.acquire()
@@ -669,6 +713,65 @@ class CciScreen( Screen ) :
 							boiler = boiler[:pos]
 
 						self._console_text.text = boiler
+
+
+
+
+				def _on_tcp_syn_scan_ports( self ) :
+						"""
+						:param in_ip :
+						:param range :
+						:return
+						"""
+						ip = str()
+						port = 80
+						ip , ports = self.ip_input_syn_ack_scan
+
+
+
+						out = str()
+						App.get_running_app()._thrd.rlk.acquire()
+						App.get_running_app()._logger.info( self.__class__.__name__ + '...on_tcp_syn_ack_scan'  )
+						App.get_running_app()._thrd.rlk.release()
+
+						try :
+
+							cmd = ["su" ,
+								   "-c" ,
+								   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
+								   "./king_console/kc_tcp.pyo" ,
+								   '-s' ,
+								   ip ,
+								   '-r' ,
+								   ports
+								  ]
+
+							try :
+								out = proc.check_output( cmd  )
+								App.get_running_app()._logger.info( out )
+							except proc.CalledProcessError as e :
+								b_ret = False
+						except Exception as e :
+							b_ret = False
+							App.get_running_app()._logger.error( e.message )
+
+						thr = App.get_running_app()._thrd.thrds['tcp console #'  + str( App.get_running_app()._console_count )]
+						if thr :
+							if thr['stop_alert'].isSet() :
+								return
+
+						boiler = 'maelstrom[tcp]->scan1: ' + \
+								  ' ' + ip
+						boiler += '\n'
+						boiler += out
+						App.get_running_app()._logger.info( self.__class__.__name__ + '...boiler='  + boiler)
+
+						pos = boiler.find( '#[QPython]' )
+						if pos :
+							boiler = boiler[:pos]
+
+						self._console_text.text = boiler
+
 
 
 

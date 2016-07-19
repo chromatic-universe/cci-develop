@@ -34,6 +34,7 @@ Window.softinput_mode = 'pan'
 
 # python standard
 import os
+import sys
 import copy
 import logging
 import importlib
@@ -139,10 +140,13 @@ class biminiApp( App ) :
 					self._screen_height = 0
 					self.url  = str()
 					self.send_url = str()
+					self._is_android = False
 
 					self.settings_cls = SettingsWithSpinner
 					Window.on_rotate = self._on_rotate
 					#Window.bind(on_resize=win_cb)
+
+
 
 
 				def on_connect( self ) :
@@ -158,7 +162,7 @@ class biminiApp( App ) :
 
 					from kivy.core.window import Window
 
-					Window.size = ( 640 , 480 )
+					#Window.size = ( 640 , 480 )
 
 
 					thred = threading.Thread( target = self._on_connect )
@@ -227,8 +231,8 @@ class biminiApp( App ) :
 
 						Clock.schedule_once(self.reload_desktop, 1)
 						self.root.current = 'desktop'
-						self.move_to_accordion_item( self.root.ids.cci_bimini_accordion ,
-													 'remote console' )
+						#self.move_to_accordion_item( self.root.ids.cci_bimini_accordion ,
+						#							 'remote console' )
 
 
 
@@ -303,14 +307,14 @@ if __name__ == '__main__':
 				Config.set('graphics','resizable',0 )
 
 
-				#Config.set( 'graphics', 'width', '640' )
-				#Config.set( 'graphics', 'height', '480' )
+				Config.set( 'graphics', 'width', '480' )
+				Config.set( 'graphics', 'height', '780' )
 				#Config.set( 'input', 'mouse', 'mouse,disable_multitouch' )
 
 
 				#from kivy.core.window import Window
 
-				#Window.size = ( 640 , 480 )
+				Window.size = ( 480 , 780 )
 
 
 				#Window.clearcolor = get_color_from_hex('#95a5a6')

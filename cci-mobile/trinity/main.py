@@ -59,7 +59,6 @@ class ccitrinityApp( App ) :
 							sys.exit( 1 )
 
 
-						self._logger.info(  '..bootstrap succeeded...' )
 						try :
 
 								self._logger.info( "bootstrapping cci_trinity....." )
@@ -77,10 +76,8 @@ class ccitrinityApp( App ) :
 
 
 								p = proc.Popen( cmd  )
-
+								self._logger.info( '...process id: %d...' % p.pid )
 								sleep( 2 )
-
-								self._logger.info( '....process...' )
 
 
 						except OSError as e :
@@ -92,34 +89,6 @@ class ccitrinityApp( App ) :
 						except Exception as e :
 							self._logger.error(  e.message )
 							sys.exit( 1 )
-
-
-						# we checked already to see if the
-						# port was in use , so if this bites
-						# bootstrap has failed
-						# because another shell is actually
-						# spawning the server , the process
-						# may be created , i.e. success
-						# so if thpse script fails
-						# we have to check to see if our listener
-						# is active on selected port again with a domain socket
-						#
-						try:
-							s = socket.socket()
-							s.setsockopt( socket.SOL_SOCKET , socket.SO_REUSEADDR , 1 )
-							s.bind( ( socket.gethostname()  , 7080 ) )
-							self._logger.error(  '..bootstrap failed...'  )
-							sys.exit( 1 )
-						except socket.error as e:
-							if e[0] == 98 :
-								#this indicates success actually , in our context
-								self._logger.info(  '..bootstrap succeeded...' )
-							else :
-								self._logger.error(  '..bootstrap failed...errno:%d...%s' % ( e[0] , e[1] ) )
-								sys.exit( 1 )
-							sys.exit( 0 )
-						except Exception as e :
-							self._logger.error(  '..bootstrap failed...' + e.message )
 
 
 
