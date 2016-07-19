@@ -117,13 +117,23 @@
                         GridLayout
                             orientation: 'horizontal'
                             cols: 1
-                            size_hint_y: .35
+                            size_hint_y: .25
                             Label:
-                                text: '~port range(443:993)~'
-                            Label:
-                                text: '~port set(443,993,8080...)~'
+                                text: 'ip syn (0.0.0.0)'
                             TextInput:
-                                text: '443:993 or 443,993,8080'
+                                text: '192.168.0.176'
+                                id: ip_input_syn_ack_port
+                                cursor_blink: True
+                                readonly: False
+                                multiline: False
+                        GridLayout
+                            orientation: 'horizontal'
+                            cols: 1
+                            size_hint_y: .25
+                            Label:
+                                text: 'port range or set:'
+                            TextInput:
+                                text: '440:443 or 443,993,8080'
                                 id: ip_input_syn_ack_scan
                                 cursor_blink: True
                                 readonly: False

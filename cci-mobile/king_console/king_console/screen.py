@@ -279,7 +279,7 @@ class CciScreen( Screen ) :
 					"""
 
 					#add thread object to manager
-					self._start_( 'tcp scan console' , self.on_tcp_syn_scan_ports )
+					self._start_( 'tcp console scan' , self.on_tcp_syn_scan_ports )
 
 
 
@@ -341,6 +341,13 @@ class CciScreen( Screen ) :
 																 'ids_tcp_syn_scan' )
 						self._update_main_console( count=App.get_running_app()._console_count ,
 												   moniker='tcp console #' )
+						func()
+					elif func == self.on_tcp_syn_scan_ports :
+						# update main thread from decorator
+						self.move_to_accordion_item( self.ids.cci_accordion ,
+																 'ids_tcp_syn_scan_ports' )
+						self._update_main_console( count=App.get_running_app()._console_count ,
+												   moniker='tcp console scan #' )
 						func()
 
 
@@ -723,15 +730,13 @@ class CciScreen( Screen ) :
 						:param range :
 						:return
 						"""
-						ip = str()
-						port = 80
-						ip , ports = self.ip_input_syn_ack_scan
-
-
+						ip = self.ids.ip_input_syn_ack_port.text
+						ports = self.ids.ip_input_syn_ack_scan.text
 
 						out = str()
+						boiler = str()
 						App.get_running_app()._thrd.rlk.acquire()
-						App.get_running_app()._logger.info( self.__class__.__name__ + '...on_tcp_syn_ack_scan'  )
+						App.get_running_app()._logger.info( self.__class__.__name__ + '...on_tcp_syn_scan_ports'  )
 						App.get_running_app()._thrd.rlk.release()
 
 						try :
@@ -755,13 +760,14 @@ class CciScreen( Screen ) :
 							b_ret = False
 							App.get_running_app()._logger.error( e.message )
 
-						thr = App.get_running_app()._thrd.thrds['tcp console #'  + str( App.get_running_app()._console_count )]
+						t = App.get_running_app()._thrd.thrds
+						thr = App.get_running_app()._thrd.thrds['tcp console scan #'  + str( App.get_running_app()._console_count )]
 						if thr :
 							if thr['stop_alert'].isSet() :
 								return
 
-						boiler = 'maelstrom[tcp]->scan1: ' + \
-								  ' ' + ip
+						boiler = 'maelstrom[tcp]->scan_ports1: '
+						boiler += ip
 						boiler += '\n'
 						boiler += out
 						App.get_running_app()._logger.info( self.__class__.__name__ + '...boiler='  + boiler)
