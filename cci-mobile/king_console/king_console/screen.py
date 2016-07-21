@@ -23,7 +23,8 @@ from king_console import resource_factory \
 	                     as resources
 from king_console import kc_ping , \
 						 kc_arp , \
-						 kc_tcp
+						 kc_tcp , \
+						 kc_nmap
 import random
 from time import gmtime, strftime , sleep
 import subprocess as proc
@@ -181,16 +182,8 @@ class CciScreen( Screen ) :
 					"""
 
 					#add thread object to manager
-					thred = threading.Thread( target = self._thread_exec ,kwargs=dict(func=self.on_ping_ip_input))
-					if thred :
-						moniker = 'icmp ping console #'  + str( App.get_running_app()._console_count + 1 )
-						thread_atom = { 'thread_id' : str( thred.ident ) ,
-										'stop_alert'  : threading.Event() ,
-										'instance' : thred
-									  }
-						App.get_running_app()._thrd.thrds[moniker] = thread_atom
+					self._start_( 'icmp ping console' , self.on_ping_ip_input )
 
-					thred.start()
 
 
 				def _on_ping_subnet_start( self ) :
@@ -198,18 +191,15 @@ class CciScreen( Screen ) :
 
 					:return:
 					"""
-					thred = threading.Thread( target = self._thread_exec ,
-													  kwargs=dict(func=self.on_ping_ip_subnet) )
-					thred.start()
-					if thred :
-						moniker = 'icmp ping console #'  + str( App.get_running_app()._console_count + 1 )
-						thread_atom = { 'thread_id' : str( thred.ident ) ,
-										'stop_alert'  : threading.Event() ,
-										'instance' : thred
-									  }
-						App.get_running_app()._thrd.thrds[moniker] = thread_atom
-						
-						
+					self._start_( 'icmp ping console' , self.on_ping_ip_subnet )
+
+
+				def _on_nmap_fingerprint_start( self ) :
+					"""
+
+					:return:
+					"""
+					self._start_( 'nmap fingerprint console' , self.on_nmap_fingerprint )
 						
 						
 				def _on_arp_start( self ) :
@@ -349,6 +339,14 @@ class CciScreen( Screen ) :
 						self._update_main_console( count=App.get_running_app()._console_count ,
 												   moniker='tcp console scan #' )
 						func()
+					elif func == self.on_nmap_fingerprint :
+						# update main thread from decorator
+						self.move_to_accordion_item( self.ids.cci_accordion ,
+																 'ids_nmap_fingerprint' )
+						self._update_main_console( count=App.get_running_app()._console_count ,
+												   moniker='nmap fingerprint console #' )
+						func()
+
 
 
 
@@ -525,8 +523,7 @@ class CciScreen( Screen ) :
 				def on_tcp_syn_ack_scan( self ) :
 					"""
 
-					:param in_ip:
-					:param range:
+
 					:return:
 					"""
 
@@ -547,6 +544,19 @@ class CciScreen( Screen ) :
 					# sentinel function so we don't have to use  lock object
 					# started at at end of ui update
 					threading.Thread( target = self._on_tcp_syn_scan_ports() ).start()
+
+
+
+				def on_nmap_fingerprint( self ) :
+					"""
+
+					:return:
+					"""
+
+					# sentinel function so we don't have to use  lock object
+					# started at at end of ui update
+					threading.Thread( target = self._on_nmap_fingerprint() ).start()
+
 
 
 
@@ -781,7 +791,37 @@ class CciScreen( Screen ) :
 
 
 
+				def _on_nmap_fingerprint( self )  :
+						"""
 
+						:return
+						"""
+
+						ip = self.ids.ip_input_nmap_finger
+						out = str()
+						boiler = str()
+						App.get_running_app()._thrd.rlk.acquire()
+						App.get_running_app()._logger.info( self.__class__.__name__ + '...on_nmap_fingerprint'  )
+						App.get_running_app()._thrd.rlk.release()
+
+						try :
+							out = kc_nmap.quick_fingerprint( ip )
+						except Exception as e :
+							b_ret = False
+							App.get_running_app()._logger.error( e.message )
+
+
+						thr = App.get_running_app()._thrd.thrds['nmap fingerprint console #'  + str( App.get_running_app()._console_count )]
+						if thr :
+							if thr['stop_alert'].isSet() :
+								return
+
+						boiler = 'maelstrom[tcp]->nmap_quick_fingerprint1: '
+						boiler += ip
+						boiler += '\n'
+						boiler += out
+
+						self._console_text.text = boiler
 
 
 

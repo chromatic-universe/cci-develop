@@ -18,15 +18,63 @@
         id: cci_accordion
         on_touch_up: app._selected_accordion_item()
         AccordionItem:
-            title: 'application'
+            title: 'application & penetration'
             Accordion:
                 orientation: root.accordion_id._inner_orientation
                 AccordionItem:
-                    title: 'p0f'
-                AccordionItem:
                     title: 'quick fuzz'
+                AccordionItem:
+                    title: 'quick nmap fingerprint'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        ScrollView:
+                            GridLayout:
+                                cols: 1
+                                orientation: 'horizontal'
+                                size_hint_y: None
+                                size: (400,400)
+                                GridLayout:
+                                    orientation: 'horizontal'
+                                    cols: 2
+                                    Button:
+                                        id: more_apps_btn
+                                        text: '...'
+                                        font_size: 24
+                                        size_hint_x: .35
+                                        color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                    Button:
+                                        id: exec_fingerprint
+                                        text: 'execute fingerprint'
+                                        color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                        on_press: root._on_nmap_fingerprint()
+                                BoxLayout
+                                    orientation: 'horizontal'
+                                    Label:
+                                        text: 'show trace:'
+                                    Switch:
+                                        id: switch_trace_nfinger
+                                        active: True
+                                BoxLayout
+                                    orientation: 'horizontal'
+                                    Label:
+                                        text: 'verbose'
+                                    Switch:
+                                        id: switch_trace_nfinger
+                                        active: True
+                                GridLayout
+                                    orientation: 'horizontal'
+                                    cols: 1
+                                    Label:
+                                        text: 'ip quick fingerprint'
+                                    TextInput:
+                                        text: '192.168.0.165'
+                                        id: ip_input_nmap_finger
+                                        cursor_blink: True
+                                        readonly: False
+                                        multiline: False
+
         AccordionItem:
-            title: 'tcp'
+            title: 'transport'
             Accordion:
                 orientation: root.accordion_id._inner_orientation
                 AccordionItem:

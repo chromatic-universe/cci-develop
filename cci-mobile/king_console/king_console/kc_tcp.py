@@ -68,15 +68,27 @@ def syn_ack_ports( ip  = None , port_range = None ) :
 
 						ans , unans = sr( IP ( dst= ip )/TCP( sport = 666 ,
 															   dport = ( int( begin ) , int( end ) ) ,
-															   flags = "S" ) )
+															   flags = "S" ) , timeout=20 )
 						print 'answered:'
 						print ans.summary( lambda( s ,r ) : r.sprintf( "%TCP.sport% \t %TCP.flags%" ) )
 
 					except Exception  as e :
 						print e.message
 						sys.exit( 1 )
-				elif r.find( ',' ) != -1 :
-					pass
+				elif port_range.find( ',' ) != -1 :
+					# set
+					try :
+						p =  [int(x) for x in port_range.split( ',' )]
+						ans , unans = sr( IP ( dst= ip )/TCP( sport = 666 ,
+															   dport = ( p ) ,
+															   flags = "S" ) , timeout=10)
+						print 'answered:'
+						print ans.summary( lambda( s ,r ) : r.sprintf( "%TCP.sport% \t %TCP.flags%" ) )
+
+					except Exception  as e :
+						print e.message
+						sys.exit( 1 )
+
 
 
 
