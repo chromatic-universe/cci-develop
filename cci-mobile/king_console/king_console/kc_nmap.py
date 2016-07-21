@@ -44,7 +44,7 @@ def quick_fingerprint( ip = None ) :
 				cmd = ["su" ,
 					   "-c" ,
 					   "/system/bin/nmap" ,
-					   ".-O" ,
+					   "-O" ,
 					   '-v' ,
 					   ip
 					  ]
@@ -55,9 +55,9 @@ def quick_fingerprint( ip = None ) :
 					b_ret = False
 			except Exception as e :
 				b_ret = False
-				raise Exception(  'quicl fingerprint...' + e.message )
+				raise Exception(  'quick fingerprint...' + e.message )
 
 
-			return out
+			return b_ret , out
 
 

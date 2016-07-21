@@ -797,26 +797,31 @@ class CciScreen( Screen ) :
 						:return
 						"""
 
-						ip = self.ids.ip_input_nmap_finger
+						ip = self.ids.ip_input_nmap_finger.text
 						out = str()
-						boiler = str()
+						boiler = 'maelstrom[tcp]->nmap_quick_fingerprint1: '
 						App.get_running_app()._thrd.rlk.acquire()
 						App.get_running_app()._logger.info( self.__class__.__name__ + '...on_nmap_fingerprint'  )
 						App.get_running_app()._thrd.rlk.release()
 
+						b_ret = False
 						try :
-							out = kc_nmap.quick_fingerprint( ip )
+							b_ret , out = kc_nmap.quick_fingerprint( ip )
+							if b_ret is False :
+								self._console_text.text = boiler + '...nmap call interface exception...check nmap config'
+								return
 						except Exception as e :
 							b_ret = False
 							App.get_running_app()._logger.error( e.message )
+							self._console_text.text = boiler + out + '\n' + e.message
 
 
+						t = App.get_running_app()._thrd.thrds
 						thr = App.get_running_app()._thrd.thrds['nmap fingerprint console #'  + str( App.get_running_app()._console_count )]
 						if thr :
 							if thr['stop_alert'].isSet() :
 								return
 
-						boiler = 'maelstrom[tcp]->nmap_quick_fingerprint1: '
 						boiler += ip
 						boiler += '\n'
 						boiler += out
