@@ -1,0 +1,15 @@
+export TERM=screen
+export PATH=/data/data/com.hipipal.qpyplus/files/bin:/system/bin:/system/xbin
+export LD_LIBRARY_PATH=.:/data/data/com.hipipal.qpyplus/files/lib/:/data/data/com.hipipal.qpyplus/files/:/data/data/com.hipipal.qpyplus/lib/
+export PYTHONHOME=/data/data/com.hipipal.qpyplus/files
+export ANDROID_PRIVATE=/data/data/com.hipipal.qpyplus/files
+export PYTHONPATH=/data/data/com.hipipal.qpyplus/files/lib/python2.7/site-packages/:/data/data/com.hipipal.qpyplus/files/lib/python2.7/:/data/data/com.hipipal.qpyplus/files/lib/python27.zip:/data/data/com.hipipal.qpyplus/files/lib/python2.7/lib-dynload/:/storage/sdcard0/com.hipipal.qpyplus/lib/python2.7/site-packages/:/storage/sdcard0/com.hipipal.qpyplus/scripts
+export PYTHONSTARTUP=/data/data/com.hipipal.qpyplus/files/lib/python2.7/site-packages/qpy.py
+export PYTHONOPTIMIZE=2
+export TMPDIR=/storage/sdcard0/com.hipipal.qpyplus/cache
+export AP_HOST=127.0.0.1
+export AP_PORT=58612
+export AP_HANDSHAKE=667a6510-d875-47fc-bf97-97fca05c87a4
+export ANDROID_PUBLIC=/storage/sdcard0/com.hipipal.qpyplus
+export ANDROID_PRIVATE=/data/data/com.hipipal.qpyplus/files
+export ANDROID_ARGUMENT=/storage/sdcard0/com.hipipal.qpyplus/scripts
