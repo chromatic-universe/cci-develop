@@ -229,7 +229,7 @@ class biminiApp( App ) :
 								desktop.image.texture
 						del desktop
 
-						Clock.schedule_once(self.reload_desktop, 1)
+						Clock.schedule_once(self.reload_desktop, .5 )
 						self.root.current = 'desktop'
 						#self.move_to_accordion_item( self.root.ids.cci_bimini_accordion ,
 						#							 'remote console' )

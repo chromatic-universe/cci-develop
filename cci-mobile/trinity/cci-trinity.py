@@ -8,8 +8,10 @@ import logging
 from flask import Flask , request , send_file
 import subprocess as proc
 
+
+
 #cci
-from trinity import capture_screen
+import trinity
 
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
@@ -40,13 +42,12 @@ def cci_trinity():
 			io = StringIO()
 			try :
 
-				b_ret , out = capture_screen( _logger )
+				b_ret , out = trinity.capture_screen( _logger )
 				if not b_ret :
 					_logger.error( out )
 				else :
 					io.write( out )
 					io.seek( 0 )
-					_logger.info( 'cci ok....' )
 
 
 			except Exception as e :
@@ -56,6 +57,20 @@ def cci_trinity():
 
 			return send_file( io , mimetype='image/png' )
 
+
+
+
+
+# ------------------------------------------------------------------------
+@app.route('/click')
+def click() :
+			"""
+
+			:return:
+			"""
+
+			return trinity.capture_clicks( log = _logger ,
+										   request = request )
 
 
 

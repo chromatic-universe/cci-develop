@@ -770,6 +770,7 @@ class CciScreen( Screen ) :
 							b_ret = False
 							App.get_running_app()._logger.error( e.message )
 
+
 						t = App.get_running_app()._thrd.thrds
 						thr = App.get_running_app()._thrd.thrds['tcp console scan #'  + str( App.get_running_app()._console_count )]
 						if thr :
@@ -814,6 +815,8 @@ class CciScreen( Screen ) :
 							b_ret = False
 							App.get_running_app()._logger.error( e.message )
 							self._console_text.text = boiler + out + '\n' + e.message
+						finally :
+							pass
 
 
 						t = App.get_running_app()._thrd.thrds

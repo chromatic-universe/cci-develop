@@ -62,11 +62,6 @@ class ccitrinityApp( App ) :
 						try :
 
 								self._logger.info( "bootstrapping cci_trinity....." )
-								"""
-								cmd = ["python" ,
-								  "./cci-trinity.py"
-								  ]
-								"""
 								cmd = [
 								  "su" ,
 								  "-c" ,
