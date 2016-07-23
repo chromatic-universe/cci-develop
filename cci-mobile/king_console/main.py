@@ -55,6 +55,7 @@ from king_console import resource_factory \
 						 screen
 from king_console.kc_thread_manager \
 				  import kc_thread_manager
+from king_console.kc_db_manager import kc_db_manager
 
 
 kivy.require( '1.9.1' )
@@ -177,6 +178,7 @@ class kingconsoleApp( App ) :
 			self._console_constructed = list()
 			self._cur_console_buffer = str()
 			self._thrd = kc_thread_manager( self._logger )
+			self._db = kc_db_manager( 'king_console.sqlite' , self._logger )
 			self.stop_event = threading.Event()
 
 			Window.on_rotate = self._on_rotate

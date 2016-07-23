@@ -66,20 +66,103 @@ enum
 static int print_actions = 0;
 static int action_level = 0;
 
+//
+//
+////prototypes////
+//
+//logging
+void logger( const char* buf );
+//open device
+int open_device( const char* device );
+//process tap
+void process_tap( int handle ,
+                  uint32_t  dev ,
+                  int x ,
+                  int y  ,
+                  int rep ,
+                  int period );
+//execute tap instruction
+void execute_tap( int fd ,
+                  uint32_t device_flags ,
+                  int x ,
+                  int y ,
+                  int num_times ,
+                  int duration_msec );
 
 
+
+//
+//
+////implementation////
+//
 //--------------------------------------------------------------------------------------------
 void logger ( const char* buf )
 {
-	struct timeval tv;
-	gettimeofday( &tv, NULL );
+            //timestamp
+            struct timeval tv;
+            gettimeofday( &tv, NULL );
 
-    fprintf(  stderr ,
-             "\033[22;32m%u.%03u ORANGUTANG-\033[0m%i-%s\n" ,
-		     (int) tv.tv_sec ,
-             (int) ( tv.tv_usec / 1000 ) ,
-		     1 ,
-             buf );
+            fprintf(  stderr ,
+                     "\033[22;32m%u.%03u ORANGUTANG-\033[0m%i-%s\n" ,
+                     (int) tv.tv_sec ,
+                     (int) ( tv.tv_usec / 1000 ) ,
+                     1 ,
+                     buf );
+}
+
+
+//----------------------------------------------------------------------------------------------
+int open_device( const char* device )
+{
+
+              char err_buffer [250];
+
+              int fd = open( device , O_RDWR ) ;
+              if( fd < 0 )
+              {
+                    fprintf( stderr ,
+                            "could not open %s, %s\n" ,
+                            device ,
+                            strerror (errno ) );
+
+                    exit( 1 );
+              }
+              else
+              {
+                  sprintf( err_buffer ,
+                          "...opened device %s for manipulation...." ,
+                          device );
+                  logger( err_buffer );
+              }
+
+              return fd;
+
+}
+
+
+//-----------------------------------------------------------------------------------------------
+void process_tap( int handle ,
+                  uint32_t dev ,
+                  int x ,
+                  int y  ,
+                  int rep ,
+                  int period )
+{
+                //process tap
+                char err_buffer [250];
+
+                logger( "..executing tap...."  );
+
+                sprintf(  err_buffer , "tap requested at x:%d : y:%d"  , x , y );
+                logger( err_buffer )  ;
+
+                execute_tap(    handle ,
+                                dev ,
+                                x ,
+                                y ,
+                                rep ,
+                                period );
+
 }
 
 //---------------------------------------------------------------------------------------------
@@ -504,35 +587,7 @@ int main( int argc , char *argv[] )
                   }
 
                   device = argv[optind];
-                  move_x= argv[optind + 1];
-                  move_y= argv[optind + 2];
-
-                  int x_move  = 0;
-                  int y_move  = 0;
-
-                  x_move = atoi( move_x );
-                  y_move = atoi( move_y );
-
-                  sprintf(  err_buffer , "tap requested at x:%d : y:%d"  , x_move , y_move );
-                  logger( err_buffer )  ;
-                  fd = open( device, O_RDWR ) ;
-                  if( fd < 0 )
-                  {
-                        fprintf( stderr ,
-                                "could not open %s, %s\n" ,
-                                device ,
-                                strerror (errno ) );
-
-                        return 1;
-                  }
-                  else
-                  {
-                      sprintf( err_buffer ,
-                              "...opened device %s for manipulation...." ,
-                              device );
-                      logger( err_buffer );
-                  }
-
+                  fd = open_device( device ) ;
 
                   uint32_t device_flags = figure_out_events_device_reports( fd );
                   if (print_device_diagnostics)
@@ -556,14 +611,21 @@ int main( int argc , char *argv[] )
 
                   if ( strcmp( cmd, "tap" ) == 0 )
                   {
-                        logger( "..executing tap...."  );
+                            move_x= argv[optind + 1];
+                            move_y= argv[optind + 2];
 
-                        execute_tap( fd ,
-                                device_flags ,
-                                x_move ,
-                                y_move ,
-                                default_rep ,
-                                default_period );
+                            int x_move  = 0;
+                            int y_move  = 0;
+
+                            x_move = atoi( move_x );
+                            y_move = atoi( move_y );
+
+                            process_tap(    fd ,
+                                            device_flags ,
+                                            x_move ,
+                                            y_move ,
+                                            default_rep ,
+                                            default_period );
                   }
 
                   /*else if (strcmp(cmd, "drag") == 0) {

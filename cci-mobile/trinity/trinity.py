@@ -61,11 +61,22 @@ def process_android_clicks( log=None  ) :
 				while not click_queue.empty() :
 					x , y = click_queue.get()
 					log.info( '..remote click....x%d:y%d'  % ( x , y  ) )
+					cmd = [ '/system/bin/orng' ,
+							'-t' ,
+							'/dev/input/event3' ,
+							str( x )  ,
+							str( y ) ]
+					out = proc.check_output( cmd )
+					log.info( out )
 
+			except proc.CalledProcessError as e :
+				log.error( e.message )
 			except Exception as e :
 				log.error( '...click....'  )
 				log.error( e.message )
 				return 'error'
+
+			return 'done'
 
 
 
@@ -79,7 +90,7 @@ def capture_screen( log=None ) :
 
 			"""
 
-			log.info( '...capture..screen,,,' )
+
 			b_ret = False
 			buf = StringIO.StringIO()
 			out = str()
@@ -88,12 +99,9 @@ def capture_screen( log=None ) :
 					pos = sys.platform.find( 'linux4' )
 					if pos == -1 :
 						andr = False
-						log.info( '...android is false'  )
 					else :
 						andr = True
-						log.info( '...android is true'  )
 					if andr is True :
-						log.info( '...sub proc output'  )
 						process_android_clicks( log )
 						out = proc.check_output( ['/system/bin/screencap' ,
 									              '-p' ] )
