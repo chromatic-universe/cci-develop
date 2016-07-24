@@ -47,7 +47,8 @@ import threading
 import requests
 
 import sqlite3
-
+import Queue
+import uuid
 
 #cci
 from king_console import resource_factory \
@@ -61,6 +62,19 @@ from king_console.kc_db_manager import kc_db_manager
 kivy.require( '1.9.1' )
 
 
+
+
+# -----------------------------------------------------------------------------------
+def local_mac_addr() :
+		"""
+
+		:return mac string:
+		"""
+
+		try :
+			return proc.check_output( ['cat' , '/sys/class/net/wlan0/address'] ).strip()
+		except :
+			pass
 
 
 
@@ -183,11 +197,11 @@ class kingconsoleApp( App ) :
 			self._console_constructed = list()
 			self._cur_console_buffer = str()
 			self._thrd = kc_thread_manager( self._logger )
-			self._db = kc_db_manager( './king_console.sqlite' , self._logger )
 			self.stop_event = threading.Event()
+			self._db_call_queue = Queue.Queue()
+
 
 			Window.on_rotate = self._on_rotate
-
 
 		# helpers
 		@staticmethod
@@ -244,7 +258,36 @@ class kingconsoleApp( App ) :
 			:return:
 			"""
 
-			self._session_id = self._db.insert_session( 'wiljoh' , 'level1' , 'latenight review' )
+			# we don't use db queue in main thread
+			uid = str( uuid.uuid4() )
+			package = ( ( 'insert_session'  ,
+						[uid ,
+						 'wiljoh' ,
+						 'level1' ,
+						 'king console' ,
+						  local_mac_addr()] ) )
+			self.dbq.put( package )
+			id = '(session_id=%s)' % uid
+			package = ( ( 'insert_session_call'  ,
+						[uid ,
+						 'application' ,
+						 'init' ,
+						 id] ) )
+			self.dbq.put( package )
+			self._session_id = uid
+
+
+
+		def _close_session( self ) :
+			"""
+
+			:return:
+			"""
+
+			# we don't use db queue in main thread
+			package = ( ( 'update_session_status'  ,
+						[0 , self._session_id] ) )
+			self.dbq.put( package )
 
 
 
@@ -349,18 +392,40 @@ class kingconsoleApp( App ) :
 			:return:
 			"""
 
+			# mark session as closed
+			self._close_session()
+
 			#stop threads
 			for moniker,atom in self._thrd.thrds.iteritems() :
 				atom['stop_alert'].set()
 				if atom['instance'] :
 					atom['instance'].join()
-			#self.stop_event.set()
 			#wait for all threads to exit.
 
+
+
+
+		def _db_queue_thred( self ) :
 			"""
-			if self._thrd :
-				self._thrd.join()
+
+			:return:
 			"""
+
+			db = kc_db_manager( './king_console.sqlite' , self._logger )
+			while not self._thrd.thrds['db_queue_thred']['stop_alert'].isSet() :
+				while not self.dbq.empty() :
+					db.db_lk.acquire()
+					package  = self.dbq.get()
+					# call
+					try :
+						db._call_map[package[0]] ( package[1] )
+					except Exception as e :
+						self._logger.error( '..in db function call...' + e.message )
+					finally :
+						db.db_lk.release()
+
+					sleep( 0.25 )
+
 
 
 		def on_start( self ) :
@@ -368,12 +433,28 @@ class kingconsoleApp( App ) :
 
 			:return:
 			"""
+
+			self._create_session()
+
+			# db queue thread
+			thred = threading.Thread( target = self._db_queue_thred )
+			moniker = 'db_queue_thred'
+			if thred :
+					thread_atom = { 'thread_id' : str( thred.ident ) ,
+									'stop_alert'  : threading.Event() ,
+									'instance' : thred
+								  }
+					App.get_running_app()._thrd.thrds[moniker] = thread_atom
+			thred.start()
+
+
 			self.root.current_screen.ids.console_local_id.text = self._console_local
 			self.root.current_screen.ids.console_real_id.text = self._console_real
 			self.root.current_screen.ids.console_interfaces.text = self._console_ifconfig
 			self._cur_console_buffer = self.root.current_screen.ids.console_interfaces.text
 
-			self._create_session()
+
+
 
 
 		def _selected_accordion_item( self ) :
@@ -531,6 +612,12 @@ class kingconsoleApp( App ) :
 		@logger.setter
 		def logger( self , log ) :
 			self._logger = log
+		@property
+		def dbq( self ) :
+			return self._db_call_queue
+		@dbq.setter
+		def dbq( self , q ) :
+			self._db_call_queue = q
 
         
 

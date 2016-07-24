@@ -20,6 +20,7 @@ import urllib2
 import requests
 import sqlite3
 import uuid
+import threading
 
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
@@ -34,22 +35,16 @@ sql_cursor_dictionary = {  'sd_insert_session' : 'insert into sessions  (session
 														 'call_segment ,'
 														 'call_moniker ,'
 														 'call_params) '
-														 'values ( %s , %s , %s , %s )'
-								}
+														 'values ( %s , %s , %s , %s )' ,
+							'sd_update_session_status_closed' : 'update sessions set status = 0 '
+														 		'where session_name = %s' ,
+							'sd_update_session_status_open' :   'update sessions set status = 1 '
+														 		'where session_name = %s'
+						}
 
 
 
-# -----------------------------------------------------------------------------------
-def local_mac_addr() :
-		"""
 
-		:return mac string:
-		"""
-
-		try :
-			return proc.check_output( ['cat' , '/sys/class/net/wlan0/address'] ).strip()
-		except :
-			pass
 
 
 # -----------------------------------------------------------------------------------
@@ -85,17 +80,24 @@ class kc_db_manager( object ) :
 
 					if logger is None :
 						raise Exception( 'no logging instance specified...' )
-					self._logger = logger
-					self._logger.info( '...db manager initialized...' )
+					self.logger = logger
+					self.logger.info( '...db manager initialized...' )
 
 					# default db
 					try :
 						self._current_db = sqlite3.connect( default_db  )
 					except sqlite3.DatabaseError as e :
-						self._logger.error( e.message )
+						self.logger.error( e.message )
 				    # cursor
 					self._db_cursor = self._current_db.cursor()
+					self.uid = None
+					self._db_rlk = threading.RLock()
 
+					self._call_map = {
+									   'insert_session' : self.insert_session ,
+									   'insert_session_call' : self.insert_session_call ,
+									   'update_session_status' : self.update_session_status
+									 }
 
 
 				def __del__( self ) :
@@ -105,7 +107,7 @@ class kc_db_manager( object ) :
 					"""
 
 					if self._current_db :
-						self._logger.info( '...db manager uninitialized...' )
+						self.logger.info( '...db manager uninitialized...' )
 						self._current_db.close()
 
 
@@ -128,23 +130,22 @@ class kc_db_manager( object ) :
 							self._db_cursor.execute( s )
 							self.db.commit()
 
-							self._logger.info( '...' +  sql_key  + 'executed...'  + str( params ) )
+							self.logger.info( '...' +  sql_key  + ' executed...'  + str( params ) )
 
 					except sqlite3.IntegrityError as e :
-						self._logger.error( 'integrity error in update statement '
+						self.logger.error( 'integrity error in update statement '
 							+ e.message )
 					except sqlite3.OperationalError as e :
-						self._logger.error( 'statement failed: '
+						self.logger.error( 'statement failed: '
 							+ e.message )
 					except TypeError as e :
-						self._logger.error( '...not enough aruments for db update...' )
+						self.logger.error( '...not enough aruments for db update...' )
+						
 
 
 
 				def insert_session( self ,
-									user ,
-									level ,
-									moniker ) :
+									params ) :
 					"""
 
 					:param user:
@@ -153,20 +154,14 @@ class kc_db_manager( object ) :
 					:return session uid:
 					"""
 
-					uid = str( uuid.uuid4() )
-					params = [uid , user , level  , moniker ,  local_mac_addr() ]
 					self._execute_sql_update( 'sd_insert_session' , params )
 
-					return uid
+					self.uid = params[0]
 
 
 
 
-				def insert_session_call( self ,
-										 session_id ,
-										 segment ,
-										 function ,
-										 params ) :
+				def insert_session_call( self , call_params ) :
 					"""
 
 					:param session_id:
@@ -176,18 +171,33 @@ class kc_db_manager( object ) :
 					:return:
 					"""
 
-					params = [ session_id , segment , function , params ]
-					self._execute_sql_update( 'sd_insert_session_call' , params )
+
+					self._execute_sql_update( 'sd_insert_session_call' , call_params )
 
 
 
+				def update_session_status( self , call_params ) :
+					"""
+
+					:param call_params:
+					:return:
+					"""
+
+					if call_params[0] == 0 :
+						call_params.remove( 0 )
+						self._execute_sql_update( 'sd_update_session_status_closed' , call_params )
+					else :
+						call_params.remove( 1 )
+						self._execute_sql_update( 'sd_update_session_status_open' , call_params )
+					
+					
 
 				@property
 				def log( self ) :
-					return self._logger
+					return self.logger
 				@log.setter
 				def log( self , lg ) :
-					self._logger = lg
+					self.logger = lg
 				@property
 				def db( self ) :
 					return self._current_db
@@ -200,6 +210,14 @@ class kc_db_manager( object ) :
 				@cursor.setter
 				def cursor( self  , cur ) :
 					self._db_cursor = cur
+				@property
+				def db_lk( self ) :
+					return self._db_rlk
+				@db_lk.setter
+				def db_lk( self , lk ) :
+					self._db_rlk = lk
+
+
 
 
 

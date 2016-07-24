@@ -147,7 +147,7 @@ class CciScreen( Screen ) :
 
 					action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar' ) )
 					layout.add_widget( action_bar )
-					popup = ConsolePopup( title='console history' , content=layout, size=( 200,200 ) )
+					popup = ConsolePopup( title='console history' , content=layout )
 					btn = popup.content.children[0].children[0].children[0]
 					btn.on_press = popup.on_press_context
 					popup.open()
@@ -422,6 +422,19 @@ class CciScreen( Screen ) :
 						pass
 
 
+				def _post_function_call( self , func , params ) :
+					"""
+
+					:param func:
+					:param params:
+					:return:
+					"""
+
+					package = ( func , params )
+					App.get_running_app().dbq.put( package )
+
+
+
 
 				# icmp handlers
 				def on_ping_ip_input( self  , in_ip = None ) :
@@ -479,6 +492,14 @@ class CciScreen( Screen ) :
 
 					if in_ip is None :
 						self._console_text.text = boiler
+
+					id = '(ip=%s)' % ip
+					self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
+																		'datalink' ,
+																		'ping_ip_input' ,
+																		id ] )
+
+
 
 					return boiler
 

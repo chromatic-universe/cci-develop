@@ -69,6 +69,21 @@ Accordion:
     AccordionItem:
         title: 'ssh verify'
 """
+,
+					   'list_scrollview' :
+"""
+ScrollView:
+	ListView:
+		id: list_view_id
+		size_hint_y: .75
+		adapter:
+			la.ListAdapter(
+			data=["cci #{0}".format(i) for i in xrange(30)],
+			selection_mode='single',
+			allow_empty_selection=False,
+			cls=lv.ListItemButton)
+"""
+
 }
 
 # json
