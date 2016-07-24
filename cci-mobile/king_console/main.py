@@ -62,6 +62,8 @@ kivy.require( '1.9.1' )
 
 
 
+
+
 # dynamic
 class dynamic_import :
 		"""
@@ -174,11 +176,14 @@ class kingconsoleApp( App ) :
 			self._console_local , \
 			self._console_real , \
 			self._console_ifconfig = self._console_host_name = self._Local_net_info()
+			self._session_id = None
+
+			self._current_ip = self._console_ifconfig
 			self._console_count = 1
 			self._console_constructed = list()
 			self._cur_console_buffer = str()
 			self._thrd = kc_thread_manager( self._logger )
-			self._db = kc_db_manager( 'king_console.sqlite' , self._logger )
+			self._db = kc_db_manager( './king_console.sqlite' , self._logger )
 			self.stop_event = threading.Event()
 
 			Window.on_rotate = self._on_rotate
@@ -230,6 +235,18 @@ class kingconsoleApp( App ) :
 											'show_stream': 1 ,
 											'default_address' : 'www.chromaticuniverse.xyz'
 											} )
+
+
+
+		def _create_session( self ) :
+			"""
+
+			:return:
+			"""
+
+			self._session_id = self._db.insert_session( 'wiljoh' , 'level1' , 'latenight review' )
+
+
 
 
 		def _retr_proc_atom( self , proc_str = None ) :
@@ -356,7 +373,7 @@ class kingconsoleApp( App ) :
 			self.root.current_screen.ids.console_interfaces.text = self._console_ifconfig
 			self._cur_console_buffer = self.root.current_screen.ids.console_interfaces.text
 
-
+			self._create_session()
 
 
 		def _selected_accordion_item( self ) :
