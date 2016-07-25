@@ -22,6 +22,8 @@ import sqlite3
 import uuid
 import threading
 
+from kivy.app import App
+
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
 sql_cursor_dictionary = {  'sd_insert_session' : 'insert into sessions  (session_name ,'
@@ -39,7 +41,9 @@ sql_cursor_dictionary = {  'sd_insert_session' : 'insert into sessions  (session
 							'sd_update_session_status_closed' : 'update sessions set status = 0 '
 														 		'where session_name = %s' ,
 							'sd_update_session_status_open' :   'update sessions set status = 1 '
-														 		'where session_name = %s'
+														 		'where session_name = %s'  ,
+							'sql_retrieve_call_history' : 	'select * from session_call_history '
+															'where session_name = %s'
 						}
 
 
@@ -98,6 +102,9 @@ class kc_db_manager( object ) :
 									   'insert_session_call' : self.insert_session_call ,
 									   'update_session_status' : self.update_session_status
 									 }
+					self._query_call_map =  {
+											   'query_call_history' :  self.query_call_history
+									 		}
 
 
 				def __del__( self ) :
@@ -141,6 +148,49 @@ class kc_db_manager( object ) :
 					except TypeError as e :
 						self.logger.error( '...not enough aruments for db update...' )
 						
+
+
+				def _execute_sql_result_set( self , sql_key , params , event , queue_id  ) :
+					"""
+
+					:param sql_key:
+					:param params:
+					:param event:
+					:return:
+					"""
+
+					q = App.get_running_app().dbpq
+
+
+					if not event.isSet() :
+						try :
+
+							s = sql_cursor_dictionary[sql_key]
+							s = s % quoted_list_to_tuple( params )
+
+							rs = ( None , None )
+							payload = list()
+							self._db_cursor.execute( s )
+							while True :
+								rs = self._db_cursor.fetchone()
+								if rs is None :
+									break
+								payload.append( rs )
+
+							App.get_running_app().dbpq_lk.acquire()
+							q.put( payload )
+							self.logger.info( '...' +  sql_key  + ' executed...'  + str( params ) )
+							event.set()
+
+						except sqlite3.OperationalError as e :
+							self.logger.error( 'statement failed: '
+								+ e.message )
+						except TypeError as e :
+							self.logger.error( '...not enough aruments for db query...' )
+						finally :
+							App.get_running_app().dbpq_lk.release()
+
+
 
 
 
@@ -189,8 +239,30 @@ class kc_db_manager( object ) :
 					else :
 						call_params.remove( 1 )
 						self._execute_sql_update( 'sd_update_session_status_open' , call_params )
-					
-					
+
+
+
+
+				def query_call_history( self , call_params ) :
+						"""
+
+						:param call_params:
+						:return:
+						"""
+
+						# wait trigger
+
+						event = call_params[0]
+						id = call_params[1]
+						call_params.remove( event )
+						call_params.remove( id )
+
+
+						self._execute_sql_result_set( 'sql_retrieve_call_history' ,
+													  call_params ,
+													  event ,
+													  id )
+
 
 				@property
 				def log( self ) :
@@ -238,5 +310,3 @@ if __name__ == '__main__' :
 				kcdb = kc_db_manager( '../king_console.sqlite'  , logger )
 				params = [str( uuid.uuid4() )  , 'wiljoh' , 'level1' , 'latenight review' ,  local_mac_addr() ]
 
-				uid = kcdb.insert_session( 'wiljoh' , 'level1' , 'latenight review'  )
-				kcdb.insert_session_call( uid , 'application' , 'init' , '(session_id)' )

@@ -7,7 +7,9 @@ from kivy.uix.label import Label
 from kivy.uix.bubble import Bubble
 from kivy.uix.actionbar import ActionBar , ActionButton
 from kivy.uix.popup import Popup
+from kivy.uix.button import Button
 from kivy.lang import Builder
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import StringProperty, ObjectProperty
 from kivy.uix.treeview import TreeViewLabel
@@ -136,6 +138,20 @@ class CciScreen( Screen ) :
 
 
 
+				def _post_function_call( self , func , params ) :
+					"""
+
+					:param func:
+					:param params:
+					:return:
+					"""
+
+					package = ( func , params )
+					App.get_running_app().dbq.put( package )
+
+
+
+
 				def _on_show_history( self ) :
 					"""
 
@@ -147,9 +163,40 @@ class CciScreen( Screen ) :
 
 					action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar' ) )
 					layout.add_widget( action_bar )
-					popup = ConsolePopup( title='console history' , content=layout )
-					btn = popup.content.children[0].children[0].children[0]
-					btn.on_press = popup.on_press_context
+					scroll = ScrollView( )
+					grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 800 ) )
+					event = threading.Event()
+
+					self._post_function_call( 'query_call_history' , [  event ,
+																		 '0' ,
+																	     App.get_running_app()._session_id ] )
+					# wait for payload
+					try:
+						event.wait( timeout=5 )
+		     			#get payload
+						App.get_running_app().dbpq_lk.acquire()
+						lst = list()
+						while not App.get_running_app().dbpq.empty() :
+							payload = App.get_running_app().dbpq.get()
+							#m = [ str( x )  for x in payload]
+							#lst.append( m )
+							for x in payload :
+								s = '%s segment=%s \ncall moniker=%s \nparams=%s' \
+										% ( str( x[5] ) ,
+												 x[2] ,
+											     x[3] ,
+											     x[4]
+											)
+								grid.add_widget( Button( text = s , halign = 'center' , font_size = 14 ,
+														 size_hint_y = None , size_hint_x = 480  ) )
+						scroll.add_widget( grid )
+						layout.add_widget( scroll )
+						popup = ConsolePopup( title='console history' , content=layout )
+						btn = popup.content.children[1].children[0].children[0]
+						btn.on_press = popup.on_press_context
+					finally :
+						App.get_running_app().dbpq_lk.release()
+
 					popup.open()
 
 
@@ -420,19 +467,6 @@ class CciScreen( Screen ) :
 
 					if not App.get_running_app()._full_screen :
 						pass
-
-
-				def _post_function_call( self , func , params ) :
-					"""
-
-					:param func:
-					:param params:
-					:return:
-					"""
-
-					package = ( func , params )
-					App.get_running_app().dbq.put( package )
-
 
 
 

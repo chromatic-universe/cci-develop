@@ -199,6 +199,8 @@ class kingconsoleApp( App ) :
 			self._thrd = kc_thread_manager( self._logger )
 			self.stop_event = threading.Event()
 			self._db_call_queue = Queue.Queue()
+			self._db_payload_queue = Queue.Queue()
+			self._db_payload_lk = threading.RLock()
 
 
 			Window.on_rotate = self._on_rotate
@@ -348,6 +350,8 @@ class kingconsoleApp( App ) :
 
 			pass
 
+
+
 		def on_config_change(self, config, section, key, value):
 			"""
 
@@ -420,7 +424,11 @@ class kingconsoleApp( App ) :
 					try :
 						db._call_map[package[0]] ( package[1] )
 					except Exception as e :
-						self._logger.error( '..in db function call...' + e.message )
+						# a query?
+						try :
+							db._query_call_map[package[0]] ( package[1] )
+						except Exception as e:
+							self._logger.error( '..in db function call...' + e.message )
 					finally :
 						db.db_lk.release()
 
@@ -618,6 +626,19 @@ class kingconsoleApp( App ) :
 		@dbq.setter
 		def dbq( self , q ) :
 			self._db_call_queue = q
+		@property
+		def dbpq( self ) :
+			return self._db_payload_queue
+		@dbpq.setter
+		def dbpq( self , q ) :
+			self._db_payload_queue = q
+		@property
+		def dbpq_lk( self ) :
+			return self._db_payload_lk
+		@dbpq_lk.setter
+		def dbpq_lk( self , lk ) :
+			self._db_payload_lk = lk
+
 
         
 
