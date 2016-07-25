@@ -15,12 +15,7 @@
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" line="189" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_db_manager.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_db_manager.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/main.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="" />
     <ignored path="cci_git_1.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -46,8 +41,8 @@
       <file leaf-file-name="screen.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33151183" vertical-offset="1989" max-vertical-offset="12337">
-              <caret line="167" column="0" selection-start-line="166" selection-start-column="0" selection-end-line="167" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.30783242" vertical-offset="1989" max-vertical-offset="12337">
+              <caret line="166" column="0" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
               <folding>
                 <element signature="e#40#56#0" expanded="true" />
               </folding>
@@ -1226,8 +1221,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33151183" vertical-offset="1989" max-vertical-offset="12337">
-          <caret line="167" column="0" selection-start-line="166" selection-start-column="0" selection-end-line="167" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.30783242" vertical-offset="1989" max-vertical-offset="12337">
+          <caret line="166" column="0" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
           <folding>
             <element signature="e#40#56#0" expanded="true" />
           </folding>
