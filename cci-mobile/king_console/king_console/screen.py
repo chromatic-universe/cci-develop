@@ -247,7 +247,17 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 					self._start_( 'nmap fingerprint console' , self.on_nmap_fingerprint )
-						
+
+
+
+				def _on_nmap_fat_finger_start( self ) :
+					"""
+
+					:return:
+					"""
+					self._start_( 'nmap fingerprint console' , self.on_nmap_fat_finger )
+
+
 						
 				def _on_arp_start( self ) :
 					"""
@@ -394,6 +404,13 @@ class CciScreen( Screen ) :
 												   moniker='nmap fingerprint console #' )
 						func()
 
+					elif func == self.on_nmap_fat_finger :
+						# update main thread from decorator
+						self.move_to_accordion_item( self.ids.cci_accordion ,
+																 'ids_nmap_fat_finger' )
+						self._update_main_console( count=App.get_running_app()._console_count ,
+												   moniker='nmap fingerprint console #' )
+						func()
 
 
 
@@ -529,7 +546,7 @@ class CciScreen( Screen ) :
 
 					id = '(ip=%s)' % ip
 					self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
-																		'datalink' ,
+																		'network' ,
 																		'ping_ip_input' ,
 																		id ] )
 
@@ -612,6 +629,17 @@ class CciScreen( Screen ) :
 					# started at at end of ui update
 					threading.Thread( target = self._on_nmap_fingerprint() ).start()
 
+
+
+				def on_nmap_fat_finger( self ) :
+					"""
+
+					:return:
+					"""
+
+					# sentinel function so we don't have to use  lock object
+					# started at at end of ui update,
+					threading.Thread( target = self._on_nmap_fingerprint( fat=True ) ).start()
 
 
 
@@ -717,6 +745,12 @@ class CciScreen( Screen ) :
 						if pos :
 							boiler = boiler[:pos]
 
+						id = '(ip=%s)' % ip
+						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
+																			'datalink' ,
+																			'arp_ip_input' ,
+																			id ] )
+
 						self._console_text.text = boiler
 
 
@@ -784,6 +818,13 @@ class CciScreen( Screen ) :
 						if pos :
 							boiler = boiler[:pos]
 
+						id = '(ip=%s port=%s)' % ( ip , port )
+						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
+																			'transport' ,
+																			'tcp_syn_ack_scan' ,
+																			id ] )
+
+
 						self._console_text.text = boiler
 
 
@@ -842,12 +883,18 @@ class CciScreen( Screen ) :
 						if pos :
 							boiler = boiler[:pos]
 
+						id = '(ip=%s port=%s)' % ( ip , ports )
+						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
+																			'transport' ,
+																			'tcp_syn_scan_ports' ,
+																			id ] )
+
 						self._console_text.text = boiler
 
 
 
 
-				def _on_nmap_fingerprint( self )  :
+				def _on_nmap_fingerprint( self , fat = False )  :
 						"""
 
 						:return
@@ -855,14 +902,20 @@ class CciScreen( Screen ) :
 
 						ip = self.ids.ip_input_nmap_finger.text
 						out = str()
-						boiler = 'maelstrom[tcp]->nmap_quick_fingerprint1: '
+						if fat is False :
+							boiler = 'maelstrom[tcp]->nmap_quick_fingerprint1: '
+						else :
+							boiler = 'maelstrom[tcp]->nmap_fat_fingerprint1...:this could be lengthy.. '
 						App.get_running_app()._thrd.rlk.acquire()
 						App.get_running_app()._logger.info( self.__class__.__name__ + '...on_nmap_fingerprint'  )
 						App.get_running_app()._thrd.rlk.release()
 
 						b_ret = False
 						try :
-							b_ret , out = kc_nmap.quick_fingerprint( ip )
+							if fat is False :
+								b_ret , out = kc_nmap.quick_fingerprint( ip )
+							else :
+								b_ret , out = kc_nmap.fat_fingerprint( ip )
 							if b_ret is False :
 								self._console_text.text = boiler + '...nmap call interface exception...check nmap config'
 								return
@@ -883,6 +936,16 @@ class CciScreen( Screen ) :
 						boiler += ip
 						boiler += '\n'
 						boiler += out
+
+						id = '(ip=%s)' % ( ip  )
+						if fat is True :
+							s = 'on_nmap_fat)finger'
+						else  :
+							s = 'on_nmap_fingerprint'
+						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
+																			'application & penetration' ,
+																			s ,
+																			id ] )
 
 						self._console_text.text = boiler
 

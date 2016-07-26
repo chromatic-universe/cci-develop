@@ -22,7 +22,54 @@
             Accordion:
                 orientation: root.accordion_id._inner_orientation
                 AccordionItem:
-                    title: 'quick fuzz'
+                    title: 'nmap fat fingerprint'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        ScrollView:
+                            GridLayout:
+                                cols: 1
+                                orientation: 'horizontal'
+                                size_hint_y: None
+                                size: (400,400)
+                                GridLayout:
+                                    orientation: 'horizontal'
+                                    cols: 2
+                                    Button:
+                                        id: more_apps_btn
+                                        text: '...'
+                                        font_size: 24
+                                        size_hint_x: .35
+                                        color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                    Button:
+                                        id: exec_fat_finger
+                                        text: 'execute fat finger'
+                                        color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                        on_press: root._on_nmap_fat_finger_start()
+                                BoxLayout
+                                    orientation: 'horizontal'
+                                    Label:
+                                        text: 'show trace:'
+                                    Switch:
+                                        id: switch_trace_fat_finger
+                                        active: True
+                                BoxLayout
+                                    orientation: 'horizontal'
+                                    Label:
+                                        text: 'get signatures:'
+                                    Switch:
+                                        id: switch_fat_verbose
+                                        active: True
+                                GridLayout
+                                    orientation: 'horizontal'
+                                    cols: 1
+                                    Label:
+                                        text: 'ip fat finger'
+                                    TextInput:
+                                        text: '192.168.0.155'
+                                        id: ip_input_fat_finger
+                                        cursor_blink: True
+                                        readonly: False
+                                        multiline: False
                 AccordionItem:
                     title: 'quick nmap fingerprint'
                     BoxLayout:
