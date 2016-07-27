@@ -240,7 +240,18 @@ class CciScreen( Screen ) :
 
 					:return:
 					"""
-					self._start_( 'icmp ping console' , self.on_ping_ip_subnet )
+					#self._start_( 'icmp ping console' , self.on_ping_ip_subnet )
+					#add thread object to manager
+					thred = threading.Thread( target = self._thread_exec ,kwargs=dict(func=self.on_ping_ip_subnet) )
+					if thred :
+						moniker = 'icmp ping console #'  + str( App.get_running_app()._console_count + 1 )
+						thread_atom = { 'thread_id' : str( thred.ident ) ,
+										'stop_alert'  : threading.Event() ,
+										'instance' : thred
+									  }
+						App.get_running_app()._thrd.thrds[moniker] = thread_atom
+
+					thred.start()
 
 
 				def _on_nmap_fingerprint_start( self ) :
@@ -361,13 +372,15 @@ class CciScreen( Screen ) :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
 																 'ids_ping' )
-
 						func( console = console )
 					elif func == self.on_ping_ip_subnet :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
-																 'ids_ping_subnet' )
-						func( console = console )
+													'ids_ping_subnet' )
+						self._update_main_console( count=App.get_running_app()._console_count ,
+												   moniker='icmp console #' ,
+												   func=func ,
+												   threaded=True )
 					elif func == self.on_arp_ip_input :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
@@ -400,9 +413,7 @@ class CciScreen( Screen ) :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
 																 'ids_nmap_fingerprint' )
-						self._update_main_console( count=App.get_running_app()._console_count ,
-												   moniker='nmap fingerprint console #' )
-						func()
+						func( console = console )
 
 					elif func == self.on_nmap_fat_finger :
 						# update main thread from decorator
@@ -457,13 +468,15 @@ class CciScreen( Screen ) :
 					carousel.index = len( carousel.slides ) - 1
 					self.canvas.ask_update()
 
+					if threaded :
+						func( carousel.slides[carousel.index] )
+						return
 					return carousel.slides[carousel.index]
-					#if threaded :
-					#	func()
 
 
 
-				@mainthread
+
+
 				def _update_console_content( self , content , container ) :
 					"""
 
@@ -473,7 +486,6 @@ class CciScreen( Screen ) :
 					"""
 
 					container.text += content + '\n'
-					App.get_running_app()._cur_console_buffer = container.text
 					self.canvas.ask_update()
 
 
@@ -542,11 +554,13 @@ class CciScreen( Screen ) :
 						b_ret = False
 						App.get_running_app()._logger.error( e.message )
 
-
-					thr = App.get_running_app()._thrd.thrds['icmp ping console #'  + str( App.get_running_app()._console_count )]
-					if thr :
-						if thr['stop_alert'].isSet() :
-							return
+					try :
+						thr = App.get_running_app()._thrd.thrds['icmp ping console #'  + str( App.get_running_app()._console_count )]
+						if thr :
+							if thr['stop_alert'].isSet() :
+								return
+					except Exception as e :
+						App.get_running_app()._logger.error( e.message )
 
 					boiler = 'maelstrom[icmp]->ping: ' + \
 							  ' ' + self.ids.ip_input.text
@@ -560,7 +574,7 @@ class CciScreen( Screen ) :
 
 					if in_ip is None :
 						self._update_console_payload( boiler , console.children[1].children[0] )
-						#self._console_text.text = boiler
+						App.get_running_app()._logger.info( '..update_console_payload...' )
 
 					id = '(ip=%s)' % ip
 					self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
@@ -637,7 +651,7 @@ class CciScreen( Screen ) :
 
 
 
-				def on_nmap_fingerprint( self ) :
+				def on_nmap_fingerprint( self , console ) :
 					"""
 
 					:return:
@@ -645,7 +659,8 @@ class CciScreen( Screen ) :
 
 					# sentinel function so we don't have to use  lock object
 					# started at at end of ui update
-					threading.Thread( target = self._on_nmap_fingerprint() ).start()
+
+					threading.Thread( target = self._on_nmap_fingerprint , kwargs=dict( console = console ) ).start()
 
 
 
@@ -682,13 +697,17 @@ class CciScreen( Screen ) :
 					container.text = 'working...\n'
 					# for each address in subnet
 					for addr in range( 0 , 254 ):
-						thr = App.get_running_app()._thrd.thrds['icmp ping console #'  + str( App.get_running_app()._console_count )]
-						if thr :
-							if thr['stop_alert'].isSet() :
-								break
+						try :
+							thr = App.get_running_app()._thrd.thrds['icmp ping console #'  + str( App.get_running_app()._console_count )]
+							if thr :
+								if thr['stop_alert'].isSet() :
+									break
+						except :
+							pass
+
 						try :
 
-							reply = self.on_ping_ip_input( in_ip=prefix + str( addr ) )
+							reply = self.on_ping_ip_input( in_ip=prefix + str( addr ) , console=console )
 							pos = reply.find( '<reply>' )
 							rejoinder = str()
 							if pos == -1 :
@@ -700,7 +719,6 @@ class CciScreen( Screen ) :
 							self._update_console_content( prefix + str( addr ) + '... ' + rejoinder , container )
 							#container.text += reply + '\n'
 
-							sleep( 0.25 )
 
 
 						except Exception as err :
@@ -915,7 +933,7 @@ class CciScreen( Screen ) :
 
 
 
-				def _on_nmap_fingerprint( self , fat = False )  :
+				def _on_nmap_fingerprint( self , fat = False  , console = None )  :
 						"""
 
 						:return
@@ -932,13 +950,18 @@ class CciScreen( Screen ) :
 						App.get_running_app()._thrd.rlk.release()
 
 						b_ret = False
+						slide = console
+						#text box
+						container = slide.children[1].children[0]
+						container.text = 'working...\n'
 						try :
 							if fat is False :
 								b_ret , out = kc_nmap.quick_fingerprint( ip )
 							else :
 								b_ret , out = kc_nmap.fat_fingerprint( ip )
 							if b_ret is False :
-								self._console_text.text = boiler + '...nmap call interface exception...check nmap config'
+								self._update_console_payload( boiler +  '.nmap call interface exception...check nmap config' ,
+																		container )
 								return
 						except Exception as e :
 							b_ret = False
@@ -947,16 +970,20 @@ class CciScreen( Screen ) :
 						finally :
 							pass
 
-
-						t = App.get_running_app()._thrd.thrds
-						thr = App.get_running_app()._thrd.thrds['nmap fingerprint console #'  + str( App.get_running_app()._console_count )]
-						if thr :
-							if thr['stop_alert'].isSet() :
-								return
+						try :
+							t = App.get_running_app()._thrd.thrds
+							thr = App.get_running_app()._thrd.thrds['nmap fingerprint console #'  + str( App.get_running_app()._console_count )]
+							if thr :
+								if thr['stop_alert'].isSet() :
+									return
+						except :
+							pass
 
 						boiler += ip
 						boiler += '\n'
 						boiler += out
+
+						self._update_console_payload( boiler , container  )
 
 						id = '(ip=%s)' % ( ip  )
 						if fat is True :
@@ -968,8 +995,7 @@ class CciScreen( Screen ) :
 																			s ,
 																			id ] )
 
-						self._console_text.text = boiler
-						App.get_running_app()._cur_console_buffer = boiler
+
 
 
 

@@ -184,7 +184,7 @@ class kingconsoleApp( App ) :
 			#view manager
 			self._view_manager = None
 			self._full_screen = None
-			self._full_screen_txt = str()
+			self._full_screen_lst = list()
 			self._full_item = None
 #
 			self._console_local , \
@@ -201,6 +201,7 @@ class kingconsoleApp( App ) :
 			self._db_call_queue = Queue.Queue()
 			self._db_payload_queue = Queue.Queue()
 			self._db_payload_lk = threading.RLock()
+			self._is_full_screen = False
 
 
 			Window.on_rotate = self._on_rotate
@@ -396,6 +397,10 @@ class kingconsoleApp( App ) :
 			:return:
 			"""
 
+			popup = Popup(title='Exiting',
+						  content=Label(text='..waiting on worker tasks to exit....'),
+						  size_hint=(None, None), size=( 200 , 200 ) )
+			popup.open()
 			# mark session as closed
 			self._close_session()
 
@@ -460,7 +465,6 @@ class kingconsoleApp( App ) :
 			self.root.current_screen.ids.console_real_id.text = self._console_real
 			self.root.current_screen.ids.console_interfaces.text = self._console_ifconfig
 			self._cur_console_buffer = self.root.current_screen.ids.console_interfaces.text
-
 
 
 
@@ -542,7 +546,7 @@ class kingconsoleApp( App ) :
 			:return:
 			"""
 
-
+			"""
 			if not self._full_screen :
 
 
@@ -575,6 +579,27 @@ class kingconsoleApp( App ) :
 					self._full_screen_txt.text = carousel.children[0].children[0].text
 				self.root.current = 'full_screen'
 
+			"""
+			acc = self.root.current_screen.ids.cci_accordion
+			cci = None
+			if not self._is_full_screen :
+				self._full_screen_lst = list()
+				for item in acc.children :
+					self._full_screen_lst.append( item )
+					if item.title == 'cci-maelstrom' :
+						cci = item
+				self._full_screen_lst.remove( cci )
+				for item in self._full_screen_lst :
+					acc.remove_widget( item )
+				self._is_full_screen = True
+			else :
+				cci = acc.children[0]
+				acc.remove_widget( cci )
+				self._full_screen_lst.reverse()
+				for item in self._full_screen_lst :
+					acc.add_widget( item )
+				acc.add_widget( cci )
+				self._is_full_screen = False
 
 
 		def _on_view_manager( self ) :
