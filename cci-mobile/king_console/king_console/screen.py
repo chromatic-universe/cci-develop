@@ -209,7 +209,9 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 					#add thread object to manager
-					thred = threading.Thread( target = self._thread_exec ,kwargs=dict( func=func ) )
+					console = self._update_main_console( count=App.get_running_app()._console_count ,
+											   moniker=slug + ' #' )
+					thred = threading.Thread( target = self._thread_exec ,kwargs=dict( func=func, console=console ) )
 					if thred :
 						moniker = slug +  ' #'  + str( App.get_running_app()._console_count + 1 )
 						thread_atom = { 'thread_id' : str( thred.ident ) ,
@@ -346,7 +348,9 @@ class CciScreen( Screen ) :
 					self.ids.ping_btn.text = "execute"
 
 
-				def _thread_exec( self , func = None ) :
+
+
+				def _thread_exec( self , func = None , console = None) :
 					"""
 
 					:return:
@@ -357,17 +361,13 @@ class CciScreen( Screen ) :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
 																 'ids_ping' )
-						self._update_main_console( count=App.get_running_app()._console_count ,
-												   moniker='icmp ping console #' )
-						func()
+
+						func( console = console )
 					elif func == self.on_ping_ip_subnet :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
 																 'ids_ping_subnet' )
-						self._update_main_console( count=App.get_running_app()._console_count ,
-												   threaded=True ,
-												   func=func ,
-												   moniker='icmp ping console #' )
+						func( console = console )
 					elif func == self.on_arp_ip_input :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
@@ -414,7 +414,7 @@ class CciScreen( Screen ) :
 
 
 
-				@mainthread
+				#@mainthread
 				def _update_main_console( self ,
 										  count ,
 										  threaded = False ,
@@ -457,8 +457,9 @@ class CciScreen( Screen ) :
 					carousel.index = len( carousel.slides ) - 1
 					self.canvas.ask_update()
 
-					if threaded :
-						func()
+					return carousel.slides[carousel.index]
+					#if threaded :
+					#	func()
 
 
 
@@ -472,6 +473,21 @@ class CciScreen( Screen ) :
 					"""
 
 					container.text += content + '\n'
+					App.get_running_app()._cur_console_buffer = container.text
+					self.canvas.ask_update()
+
+
+				@mainthread
+				def _update_console_payload( self , content , container ) :
+					"""
+
+					:param console slide:
+
+					:return:
+					"""
+
+					App.get_running_app()._logger.info( '...update console payload...' )
+					container.text = content
 					self.canvas.ask_update()
 					
 					
@@ -488,7 +504,7 @@ class CciScreen( Screen ) :
 
 
 				# icmp handlers
-				def on_ping_ip_input( self  , in_ip = None ) :
+				def on_ping_ip_input( self  , in_ip = None , console = None ) :
 					"""
 					input ping variable
 					:return:
@@ -496,15 +512,16 @@ class CciScreen( Screen ) :
 
 					out = str()
 					b_ret = True
-					App.get_running_app()._thrd.rlk.acquire()
+					#App.get_running_app()._thrd.rlk.acquire()
 					App.get_running_app()._logger.info( self.__class__.__name__ + '...on_ping_ip_input'  )
-					App.get_running_app()._thrd.rlk.release()
+					#App.get_running_app()._thrd.rlk.release()
 
 					ip = str()
 					if in_ip is None :
 						ip = self.ids.ip_input.text
 					else :
 						ip = in_ip
+
 
 					try :
 
@@ -542,7 +559,8 @@ class CciScreen( Screen ) :
 						boiler = boiler[:pos]
 
 					if in_ip is None :
-						self._console_text.text = boiler
+						self._update_console_payload( boiler , console.children[1].children[0] )
+						#self._console_text.text = boiler
 
 					id = '(ip=%s)' % ip
 					self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
@@ -556,7 +574,7 @@ class CciScreen( Screen ) :
 
 
 
-				def on_ping_ip_subnet( self  ) :
+				def on_ping_ip_subnet( self , console ) :
 					"""
 					input ping variable
 					:return:
@@ -564,7 +582,7 @@ class CciScreen( Screen ) :
 
 					# sentinel function so we don't have to use  lock object
 					# started at at end of ui update
-					threading.Thread( target = self._ping_ip_subnet ).start()
+					threading.Thread( target = self._ping_ip_subnet , kwargs=dict( console = console ) ).start()
 
 
 
@@ -644,7 +662,7 @@ class CciScreen( Screen ) :
 
 
 
-				def _ping_ip_subnet( self ) :
+				def _ping_ip_subnet( self , console = None ) :
 					"""
 
 					:return:
@@ -658,7 +676,7 @@ class CciScreen( Screen ) :
 					ip = self.ids.ip_subnet_input.text
 					prefix = kc_ping.chomp( source_str = ip , delimiter = '.' , keep_trailing_delim = True )
 
-					slide = self.ids.maelstrom_carousel_id.current_slide
+					slide = console
 					#text box
 					container = slide.children[1].children[0]
 					container.text = 'working...\n'
@@ -752,6 +770,7 @@ class CciScreen( Screen ) :
 																			id ] )
 
 						self._console_text.text = boiler
+						App.get_running_app()._cur_console_buffer = boiler
 
 
 
@@ -826,6 +845,7 @@ class CciScreen( Screen ) :
 
 
 						self._console_text.text = boiler
+						App.get_running_app()._cur_console_buffer = boiler
 
 
 
@@ -890,6 +910,7 @@ class CciScreen( Screen ) :
 																			id ] )
 
 						self._console_text.text = boiler
+						App.get_running_app()._cur_console_buffer = boiler
 
 
 
@@ -948,6 +969,7 @@ class CciScreen( Screen ) :
 																			id ] )
 
 						self._console_text.text = boiler
+						App.get_running_app()._cur_console_buffer = boiler
 
 
 

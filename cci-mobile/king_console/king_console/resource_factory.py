@@ -21,6 +21,7 @@ ScrollView:
 		background_color: [0,0,0,0]
 		foreground_color: [1,1,1,1]
 		multiline: True
+		id: tx_in
 		font_size: 16
 		readonly: True
 		height: max( (len(self._lines)+1) * self.line_height, scrlv.height)

@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>chromatic universe</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/modern-business.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+</head>
+
+   <body>
+      '<center>chromatic universe - king console   <br><small>william k. johnson 2016</small><br>
+      <hr>
+      <table border = 1>
+         <thead>
+            <td>timestamp</td>
+            <td>session_name</td>
+            <td>call_segment</td>
+            <td>call_moniker</td>
+            <td>call_params</td>
+         </thead>
+         
+         {% for row in rows %}
+            <tr>
+               <td>{{row["timestamp"]}}</td>
+               <td>{{row["session_name"]}}</td>
+               <td> {{ row["call_segment"]}}</td>
+               <td>{{row['call_moniker']}}</td>
+                <td>{{row['call_params']}}</td>
+            </tr>
+         {% endfor %}
+      </table>
+
+     </center>
+      <a href = "/">Go back to home page</a>
+      
+   </body>
+</html>

@@ -22,12 +22,12 @@ def process_linux_clicks( log=None  ) :
 			"""
 
 
-			log.info( '...process_linux._clicks...'  )
+
 
 
 			import pyautogui
 			try:
-				log.info( '...pyuautoggui'  )
+
 				while not click_queue.empty() :
 					x , y = click_queue.get()
 					log.info( '..remote click....x%d:y%d'  % ( x , y  ) )
@@ -53,8 +53,6 @@ def process_android_clicks( log=None  ) :
 			:return:
 			"""
 
-
-			log.info( '...process_android._clicks...'  )
 
 			try:
 

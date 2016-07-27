@@ -516,6 +516,7 @@ class kingconsoleApp( App ) :
 			self.root.current_screen.ids.ping_btn.text = "execute"
 
 
+
 		def _open_extended_window( self ) :
 			"""
 
@@ -548,6 +549,7 @@ class kingconsoleApp( App ) :
 				self._full_screen = screen.FullScreen()
 				self._full_screen.name = 'full_screen'
 				self._full_screen.id = 'screen_full'
+
 				layout = GridLayout( orientation='horizontal' , cols=1 , id = 'full_grid')
 				# action bar
 				ab = Builder.load_string( self._retr_resource( 'action_bar' ) )
@@ -555,20 +557,22 @@ class kingconsoleApp( App ) :
 				tb = Builder.load_string( self._retr_resource( 'text_scroller' ) )
 				tb.id = 'full_scroll'
 				tb.children[0].id = 'full_scroll_txt'
-				tb.children[0].text = self._cur_console_buffer
+				carousel = self.root.current_screen.ids.maelstrom_carousel_id.current_slide
+				tx = self._cur_console_buffer
+				tb.children[0].text = tx
 				self._full_screen_txt = tb.children[0]
 				layout.add_widget( tb )
 				self._full_screen.add_widget( layout )
 				self.root.add_widget( self._full_screen )
 				self.root.current = 'full_screen'
+
 			else :
 
-				carousel = self.root.current_screen.ids.maelstrom_carousel_id
-				if carousel.index == 0 :
-					tx = carousel.current_slide.children[0].children[0]
-				else :
-					tx = carousel.current_slide.children[1].children[0]
-				self._full_screen_txt.text = tx.text
+				carousel = self.root.current_screen.ids.maelstrom_carousel_id.current_slide
+				try :
+					self._full_screen_txt.text = carousel.children[1].children[0].text
+				except :
+					self._full_screen_txt.text = carousel.children[0].children[0].text
 				self.root.current = 'full_screen'
 
 

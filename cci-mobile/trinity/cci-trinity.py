@@ -5,9 +5,9 @@
 
 from StringIO import StringIO
 import logging
-from flask import Flask , request , send_file
+from flask import Flask , request , send_file , render_template
 import subprocess as proc
-
+import sqlite3
 
 
 #cci
@@ -74,6 +74,24 @@ def click() :
 
 
 
+@app.route('/session_call_history')
+def session_call_history() :
+			   """
+
+			  :return:
+
+			   """
+
+			   con = sqlite3.connect( "king_console.sqlite" )
+			   con.row_factory = sqlite3.Row
+
+			   cur = con.cursor()
+			   cur.execute( "select * from session_call_history" )
+
+			   rows = cur.fetchall();
+
+
+			   return render_template("list.html",rows = rows)
 
 # ------------------------------------------------------------------------------
 if __name__ == "__main__" :
