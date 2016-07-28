@@ -22,30 +22,50 @@
 </head>
 
    <body>
-      '<center>chromatic universe - king console   <br><small>william k. johnson 2016</small><br>
-      <hr>
-      <table border = 1>
-         <thead>
-            <td>timestamp</td>
-            <td>session_name</td>
-            <td>call_segment</td>
-            <td>call_moniker</td>
-            <td>call_params</td>
-         </thead>
-         
-         {% for row in rows %}
-            <tr>
-               <td>{{row["timestamp"]}}</td>
-               <td>{{row["session_name"]}}</td>
-               <td> {{ row["call_segment"]}}</td>
-               <td>{{row['call_moniker']}}</td>
-                <td>{{row['call_params']}}</td>
-            </tr>
-         {% endfor %}
-      </table>
 
-     </center>
+
+      '<center>
+          <img src="{{ url_for('static', filename = 'image/king-console64.png') }}"><br>
+          <b><i><u>chromatic universe - king console</u></i></b>  <br><small>william k. johnson 2016</small><br>
+          current session: {{ session_id }}
+      <br>
+      <hr>
+              {% block body %}
+
+
+              <table border = 1>
+                 <thead>
+                    <td>%</td>
+                    <td>timestamp</td>
+                    <td>session_name</td>
+                    <td>call_segment</td>
+                    <td>call_moniker</td>
+                    <td>call_params</td>
+                 </thead>
+
+                 {% for row in rows %}
+                    <tr>
+                       <td>{{ row["idx"] }} </td>
+                       <td>{{row["timestamp"]}}</td>
+                       <td>{{row["session_name"]}}</td>
+                       <td> {{ row["call_segment"]}}</td>
+                       <td>{{row['call_moniker']}}</td>
+                        <td>{{row['call_params']}}</td>
+                    </tr>
+                 {% endfor %}
+              </table>
+          <br>
+          <hr>
+              <small>  1 to {{ record_ptr }} of {{ total_count }}
+              <br>
+              <a href="/session_call_reprise/{{ session_id }}/batch/{{ max_id }}:{{ total_count }}:{{ record_ptr }}">next</a> </small>
+             </center>
+              {% endblock %}
+
+
+
+
       <a href = "/">Go back to home page</a>
-      
+
    </body>
 </html>

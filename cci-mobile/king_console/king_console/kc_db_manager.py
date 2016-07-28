@@ -43,7 +43,9 @@ sql_cursor_dictionary = {  'sd_insert_session' : 'insert into sessions  (session
 							'sd_update_session_status_open' :   'update sessions set status = 1 '
 														 		'where session_name = %s'  ,
 							'sql_retrieve_call_history' : 	'select * from session_call_history '
-															'where session_name = %s'
+															'where session_name = %s '
+															'order by timestamp DESC '
+													        'LIMIT 10'
 						}
 
 

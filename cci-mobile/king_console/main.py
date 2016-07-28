@@ -420,7 +420,7 @@ class kingconsoleApp( App ) :
 			:return:
 			"""
 
-			db = kc_db_manager( './king_console.sqlite' , self._logger )
+			db = kc_db_manager( '/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite' , self._logger )
 			while not self._thrd.thrds['db_queue_thred']['stop_alert'].isSet() :
 				while not self.dbq.empty() :
 					db.db_lk.acquire()
@@ -546,40 +546,7 @@ class kingconsoleApp( App ) :
 			:return:
 			"""
 
-			"""
-			if not self._full_screen :
 
-
-				self._full_screen = screen.FullScreen()
-				self._full_screen.name = 'full_screen'
-				self._full_screen.id = 'screen_full'
-
-				layout = GridLayout( orientation='horizontal' , cols=1 , id = 'full_grid')
-				# action bar
-				ab = Builder.load_string( self._retr_resource( 'action_bar' ) )
-				layout.add_widget( ab )
-				tb = Builder.load_string( self._retr_resource( 'text_scroller' ) )
-				tb.id = 'full_scroll'
-				tb.children[0].id = 'full_scroll_txt'
-				carousel = self.root.current_screen.ids.maelstrom_carousel_id.current_slide
-				tx = self._cur_console_buffer
-				tb.children[0].text = tx
-				self._full_screen_txt = tb.children[0]
-				layout.add_widget( tb )
-				self._full_screen.add_widget( layout )
-				self.root.add_widget( self._full_screen )
-				self.root.current = 'full_screen'
-
-			else :
-
-				carousel = self.root.current_screen.ids.maelstrom_carousel_id.current_slide
-				try :
-					self._full_screen_txt.text = carousel.children[1].children[0].text
-				except :
-					self._full_screen_txt.text = carousel.children[0].children[0].text
-				self.root.current = 'full_screen'
-
-			"""
 			acc = self.root.current_screen.ids.cci_accordion
 			cci = None
 			if not self._is_full_screen :

@@ -5,7 +5,11 @@
 
 from StringIO import StringIO
 import logging
+from math import ceil
 from flask import Flask , request , send_file , render_template
+from flask import redirect
+from flask import Blueprint
+from flask_paginate import Pagination
 import subprocess as proc
 import sqlite3
 
@@ -17,6 +21,7 @@ log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)
 
 app = Flask(__name__)
 
+
 # logger
 _logger = logging.getLogger( "cci-trinity-server" )
 _logger.setLevel( logging.DEBUG )
@@ -27,7 +32,13 @@ fh.setFormatter( formatter )
 _logger.addHandler( fh )
 
 
+const_per_page = 20
+
+
+
+
 # ------------------------------------------------------------------------------
+@app.route('/index')
 @app.route( "/" )
 def index():
     		return 'chromatic universe ~ cci-trinity  c. william k. johnson 2016'
@@ -74,30 +85,79 @@ def click() :
 
 
 
-@app.route('/session_call_history')
-def session_call_history() :
+
+@app.route( "/session_call_reprise/<session_id>/batch/<max_id>:<total_count>:<record_ptr>" )
+def session_call_reprise(  session_id , max_id , total_count , record_ptr )  :
+			"""
+
+			:param session_id:
+			:param record_ptr:
+			:return:
+			"""
+
+			con = sqlite3.connect( "/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite" )
+			con.row_factory = sqlite3.Row
+
+			cur = con.cursor()
+			cur.execute( "select * from session_call_history where session_name = %s" \
+				         " and idx < %d " \
+						 "order by timestamp DESC " \
+						 "LIMIT %d" % ( session_id , int(max_id) - 15 , 15 ) )
+			rows = cur.fetchall()
+
+			return render_template( "list.html",
+									rows = rows ,
+									session_id = session_id ,
+									total_count = total_count ,
+									record_ptr = int( record_ptr ) + 15 ,
+									max_id = int(max_id) - 15 )
+
+
+
+
+@app.route( "/session_call_history/<session_id>" )
+def session_call_history(  session_id  )  :
 			   """
 
 			  :return:
 
 			   """
 
-			   con = sqlite3.connect( "king_console.sqlite" )
+
+			   con = sqlite3.connect( "/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite" )
 			   con.row_factory = sqlite3.Row
 
 			   cur = con.cursor()
-			   cur.execute( "select * from session_call_history" )
+			   cur.execute( 'select count(*) as count , max( idx ) as max_idx from session_call_history where session_name = %s' % session_id )
+			   rows = cur.fetchone()
+			   count = rows[0]
+			   max_idx = rows[1]
+			   cur.execute( "select * from session_call_history where session_name = %s" \
+							"order by timestamp DESC " \
+							"LIMIT %s" % ( session_id , 15 ) )
+
 
 			   rows = cur.fetchall();
 
+			   return render_template( "list.html",
+									    rows = rows ,
+									    session_id = session_id ,
+										total_count = count ,
+										record_ptr = len( rows ) ,
+										max_id = max_idx )
 
-			   return render_template("list.html",rows = rows)
+
+
+
+
+
+
 
 # ------------------------------------------------------------------------------
 if __name__ == "__main__" :
 			_logger.info( '....cci_trinity...' )
 			try :
-				app.run( host= '0.0.0.0' , port=7080, debug=True  )
+				app.run( host= '0.0.0.0' , port=7081, debug=True  )
 			except Exception as e:
 				_logger.error( '...error in  trinity server...' + e.message )
 
