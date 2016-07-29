@@ -8,8 +8,6 @@ import logging
 from math import ceil
 from flask import Flask , request , send_file , render_template
 from flask import redirect
-from flask import Blueprint
-from flask_paginate import Pagination
 import subprocess as proc
 import sqlite3
 
@@ -157,7 +155,7 @@ def session_call_history(  session_id  )  :
 if __name__ == "__main__" :
 			_logger.info( '....cci_trinity...' )
 			try :
-				app.run( host= '0.0.0.0' , port=7081, debug=True  )
+				app.run( host= '0.0.0.0' , port=7080, debug=True  )
 			except Exception as e:
 				_logger.error( '...error in  trinity server...' + e.message )
 

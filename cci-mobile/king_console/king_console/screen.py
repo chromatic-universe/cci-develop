@@ -19,6 +19,7 @@ from kivy.uix.screenmanager import ScreenManager, \
 								   SwapTransition , \
 								   FallOutTransition , \
 								   SlideTransition
+from kivy.graphics import Color
 
 #cci
 from king_console import resource_factory \
@@ -278,17 +279,7 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 
-					#add thread object to manager
-					thred = threading.Thread( target = self._thread_exec ,kwargs=dict(func=self.on_arp_ip_input))
-					if thred :
-						moniker = 'arp console #'  + str( App.get_running_app()._console_count + 1 )
-						thread_atom = { 'thread_id' : str( thred.ident ) ,
-										'stop_alert'  : threading.Event() ,
-										'instance' : thred
-									  }
-						App.get_running_app()._thrd.thrds[moniker] = thread_atom
-
-					thred.start()
+					self._start_( 'arp console' , self.on_arp_ip_input )
 
 
 
@@ -298,17 +289,7 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 
-					#add thread object to manager
-					thred = threading.Thread( target = self._thread_exec ,kwargs=dict(func=self.on_arp_ip_scan))
-					if thred :
-						moniker = 'arp console #'  + str( App.get_running_app()._console_count + 1 )
-						thread_atom = { 'thread_id' : str( thred.ident ) ,
-										'stop_alert'  : threading.Event() ,
-										'instance' : thred
-									  }
-						App.get_running_app()._thrd.thrds[moniker] = thread_atom
-
-					thred.start()
+					self._start_( 'arp console' , self.on_arp_ip_scan )
 
 
 
@@ -385,16 +366,13 @@ class CciScreen( Screen ) :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
 																 'ids_arp' )
-						self._update_main_console( count=App.get_running_app()._console_count ,
-												   moniker='arp console #' )
-						func()
+
+						func( console = console )
 					elif func == self.on_arp_ip_scan :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
 																 'ids_arp_scan' )
-						self._update_main_console( count=App.get_running_app()._console_count ,
-												   moniker='arp console #' )
-						func()
+						func( console = console )
 					elif func == self.on_tcp_syn_ack_scan :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
@@ -419,9 +397,7 @@ class CciScreen( Screen ) :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
 																 'ids_nmap_fat_finger' )
-						self._update_main_console( count=App.get_running_app()._console_count ,
-												   moniker='nmap fingerprint console #' )
-						func()
+						func(console = console )
 
 
 
@@ -453,6 +429,7 @@ class CciScreen( Screen ) :
 					# console text
 					scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
 					tx = scrolly.children[0]
+
 					self._console_text = tx
 					tx.text = 'standby...working...'
 					#scrollbox
@@ -485,12 +462,13 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 
+
 					container.text += content + '\n'
 					self.canvas.ask_update()
 
 
 				@mainthread
-				def _update_console_payload( self , content , container ) :
+				def _update_console_payload( self , content , container , params = None ) :
 					"""
 
 					:param console slide:
@@ -498,9 +476,12 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 
+
 					App.get_running_app()._logger.info( '...update console payload...' )
-					container.text = content
+					container.children[1].children[0].text = content
+					container.children[0].text = params
 					self.canvas.ask_update()
+
 					
 					
 
@@ -573,7 +554,10 @@ class CciScreen( Screen ) :
 						boiler = boiler[:pos]
 
 					if in_ip is None :
-						self._update_console_payload( boiler , console.children[1].children[0] )
+						pr = 'ping_ip_input ip=(%s)' % ip
+						self._update_console_payload( boiler ,
+													  console ,
+													  pr )
 						App.get_running_app()._logger.info( '..update_console_payload...' )
 
 					id = '(ip=%s)' % ip
@@ -600,7 +584,7 @@ class CciScreen( Screen ) :
 
 
 
-				def on_arp_ip_input( self  ) :
+				def on_arp_ip_input( self , console  ) :
 					"""
 					input arp variable
 					:return:
@@ -608,11 +592,11 @@ class CciScreen( Screen ) :
 
 					# sentinel function so we don't have to use  lock object
 					# started at at end of ui update
-					threading.Thread( target = self._on_arp_ip_input() ).start()
+					threading.Thread( target = self._on_arp_ip_input , kwargs=dict( console = console ) ).start()
 
 
 
-				def on_arp_ip_scan( self  ) :
+				def on_arp_ip_scan( self , console  ) :
 					"""
 					input arp variable
 					:return:
@@ -620,7 +604,7 @@ class CciScreen( Screen ) :
 
 					# sentinel function so we don't have to use  lock object
 					# started at at end of ui update
-					threading.Thread( target = self._on_arp_ip_scan( range=True ) ).start()
+					threading.Thread( target = self._on_arp_ip_scan , kwargs=dict( range=True , console = console ) ).start()
 
 
 
@@ -664,7 +648,7 @@ class CciScreen( Screen ) :
 
 
 
-				def on_nmap_fat_finger( self ) :
+				def on_nmap_fat_finger( self , console  ) :
 					"""
 
 					:return:
@@ -672,7 +656,8 @@ class CciScreen( Screen ) :
 
 					# sentinel function so we don't have to use  lock object
 					# started at at end of ui update,
-					threading.Thread( target = self._on_nmap_fingerprint( fat=True ) ).start()
+					threading.Thread( target = self._on_nmap_fingerprint ,
+									  kwargs=dict( fat = True , console = console ) ).start()
 
 
 
@@ -683,68 +668,76 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 
-					App.get_running_app()._thrd.rlk.acquire()
+					#App.get_running_app()._thrd.rlk.acquire()
 					App.get_running_app()._logger.info( self.__class__.__name__ + '...on_ping_ip_subnet'  )
-					App.get_running_app()._thrd.rlk.release()
+					#App.get_running_app()._thrd.rlk.release()
+
+
 
 
 					ip = self.ids.ip_subnet_input.text
 					prefix = kc_ping.chomp( source_str = ip , delimiter = '.' , keep_trailing_delim = True )
 
-					slide = console
+
 					#text box
-					container = slide.children[1].children[0]
-					container.text = 'working...\n'
-					# for each address in subnet
-					for addr in range( 0 , 254 ):
-						try :
-							thr = App.get_running_app()._thrd.thrds['icmp ping console #'  + str( App.get_running_app()._console_count )]
-							if thr :
-								if thr['stop_alert'].isSet() :
-									break
-						except :
-							pass
-
-						try :
-
-							reply = self.on_ping_ip_input( in_ip=prefix + str( addr ) , console=console )
-							pos = reply.find( '<reply>' )
-							rejoinder = str()
-							if pos == -1 :
-								rejoinder = 'failed'
-							else :
-								rejoinder = 'succeeded'
-
-							# have to update main thread by proxy - opengl
-							self._update_console_content( prefix + str( addr ) + '... ' + rejoinder , container )
-							#container.text += reply + '\n'
+					container = console
+					container.children[1].children[0].text = 'working...\n'
 
 
+					try :
+						thr = App.get_running_app()._thrd.thrds['icmp ping console #'  + str( App.get_running_app()._console_count )]
+						if thr :
+							if thr['stop_alert'].isSet() :
+								return
+					except :
+						pass
 
-						except Exception as err :
-							print err
-				
+					try :
+
+						b_ret , out = kc_nmap.ping_ip_subnet( ip )
+						pr = 'ping_ip_subnet (ip_subnet=%s)' % ip
+						if b_ret is False :
+							self._update_console_payload( out +  '.nmap call interface exception...check nmap config' ,
+																	container ,
+																	pr )
+							return
+
+						# have to update main thread by proxy - opengl
+						self._update_console_payload( out , container , pr )
+
+						id = '(ip_subnet=%s)' % ip
+						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
+																			'network' ,
+																			'ping_ip_subnet' ,
+																			id ] )
+
+					except Exception as err :
+						print err
+
 				
 				
 				# arp handlers
-				def _on_arp_ip_input( self  , range = False ) :
+				def _on_arp_ip_input( self  , range = False , console = None ) :
 						"""
 						:param in_ip : input arp variable
 						:return:
 						"""
 
 						out = str()
-						App.get_running_app()._thrd.rlk.acquire()
+						call = str()
+						#App.get_running_app()._thrd.rlk.acquire()
 						App.get_running_app()._logger.info( self.__class__.__name__ + '...on_arp_ip_input'  )
-						App.get_running_app()._thrd.rlk.release()
+						#App.get_running_app()._thrd.rlk.release()
 
 						ip = str()
 						sw = str()
 						if range is False :
 							ip = self.ids.ip_arp_input.text
 							sw = '-s'
+							call = 'arp_ip_input'
 						else :
 							ip = self.ids.arp_subnet_input.text
+							call = 'arp_ip_scan'
 							sw = '-n'
 
 						try :
@@ -766,10 +759,13 @@ class CciScreen( Screen ) :
 							b_ret = False
 							App.get_running_app()._logger.error( e.message )
 
-						thr = App.get_running_app()._thrd.thrds['arp console #'  + str( App.get_running_app()._console_count )]
-						if thr :
-							if thr['stop_alert'].isSet() :
-								return
+						try :
+							thr = App.get_running_app()._thrd.thrds['arp console #'  + str( App.get_running_app()._console_count )]
+							if thr :
+								if thr['stop_alert'].isSet() :
+									return
+						except :
+							pass
 
 						boiler = 'maelstrom[arp]->scan1: ' + \
 								  ' ' + ip
@@ -781,23 +777,27 @@ class CciScreen( Screen ) :
 						if pos :
 							boiler = boiler[:pos]
 
+
+
 						id = '(ip=%s)' % ip
 						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
 																			'datalink' ,
-																			'arp_ip_input' ,
+																			call ,
 																			id ] )
+						id = call + ' ' + id
+						self._update_console_payload( boiler ,console , id )
+						App.get_running_app()._logger.info( '..update_console_payload...' )
 
-						self._console_text.text = boiler
-						App.get_running_app()._cur_console_buffer = boiler
 
 
 
-				def _on_arp_ip_scan( self  , in_ip = None , range = False ) :
+
+				def _on_arp_ip_scan( self  , in_ip = None , range = False , console = None) :
 						"""
 						:param in_ip : input arp variable
 						:return:
 						"""
-						self._on_arp_ip_input( range=range )
+						self._on_arp_ip_input( range=range , console = console )
 
 
 
@@ -815,9 +815,9 @@ class CciScreen( Screen ) :
 
 
 						out = str()
-						App.get_running_app()._thrd.rlk.acquire()
+						#App.get_running_app()._thrd.rlk.acquire()
 						App.get_running_app()._logger.info( self.__class__.__name__ + '...on_tcp_syn_ack_scan'  )
-						App.get_running_app()._thrd.rlk.release()
+						#App.get_running_app()._thrd.rlk.release()
 
 						try :
 
@@ -879,9 +879,9 @@ class CciScreen( Screen ) :
 
 						out = str()
 						boiler = str()
-						App.get_running_app()._thrd.rlk.acquire()
+						#App.get_running_app()._thrd.rlk.acquire()
 						App.get_running_app()._logger.info( self.__class__.__name__ + '...on_tcp_syn_scan_ports'  )
-						App.get_running_app()._thrd.rlk.release()
+						#App.get_running_app()._thrd.rlk.release()
 
 						try :
 
@@ -938,30 +938,33 @@ class CciScreen( Screen ) :
 
 						:return
 						"""
-
-						ip = self.ids.ip_input_nmap_finger.text
+						ip = str()
 						out = str()
 						if fat is False :
+							ip = self.ids.ip_input_nmap_finger.text
 							boiler = 'maelstrom[tcp]->nmap_quick_fingerprint1: '
 						else :
+							ip = self.ids.ip_input_fat_finger.text
 							boiler = 'maelstrom[tcp]->nmap_fat_fingerprint1...:this could be lengthy.. '
-						App.get_running_app()._thrd.rlk.acquire()
+						#App.get_running_app()._thrd.rlk.acquire()
 						App.get_running_app()._logger.info( self.__class__.__name__ + '...on_nmap_fingerprint'  )
-						App.get_running_app()._thrd.rlk.release()
+						#App.get_running_app()._thrd.rlk.release()
 
 						b_ret = False
-						slide = console
+
 						#text box
-						container = slide.children[1].children[0]
-						container.text = 'working...\n'
+						container = console
+						container.children[1].children[0].text = 'working...\n'
+
 						try :
 							if fat is False :
 								b_ret , out = kc_nmap.quick_fingerprint( ip )
 							else :
 								b_ret , out = kc_nmap.fat_fingerprint( ip )
 							if b_ret is False :
-								self._update_console_payload( boiler +  '.nmap call interface exception...check nmap config' ,
-																		container )
+								self._update_console_payload( out +  '.nmap call interface exception...check nmap config' ,
+															  container ,
+															  'nmap_fat-fingerprin (ip-%s)' % ip )
 								return
 						except Exception as e :
 							b_ret = False
@@ -983,17 +986,19 @@ class CciScreen( Screen ) :
 						boiler += '\n'
 						boiler += out
 
-						self._update_console_payload( boiler , container  )
-
-						id = '(ip=%s)' % ( ip  )
+						id = '(ip=%s)' %  ip
+						s = str()
 						if fat is True :
-							s = 'on_nmap_fat)finger'
+							s = 'nmap_fat_finger'
 						else  :
-							s = 'on_nmap_fingerprint'
+							s = 'nmap_fingerprint'
 						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
 																			'application & penetration' ,
 																			s ,
 																			id ] )
+
+						pr = s + id
+						self._update_console_payload( boiler , container , pr )
 
 
 

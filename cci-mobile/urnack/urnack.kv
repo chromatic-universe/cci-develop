@@ -9,13 +9,14 @@
     ConsoleAccordion:
         _orientation: 'vertical'
         _inner_orientation: 'horizontal'
+        _selected: 'cci-urnack'
         # listener -call every root width or height change-
         orientation_handler: self.check_orientation(root.width, root.height)
         id: cci_accordion
         AccordionItem:
             title: 'kafka/zookeeper/curator'
             Label:
-                id: acc_item_kafka'
+                id: acc_item_kafka
                 text: 'kafka'
         AccordionItem:
             title: 'redis'
@@ -58,6 +59,7 @@
                 font_size: 12
         AccordionItem:
             title: 'cci-urnack'
+            on_touch_up: app._selected_accordion_item()
             GridLayout
                 orientation: 'horizontal'
                 cols: 1

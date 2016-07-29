@@ -63,6 +63,7 @@ class ConsoleAccordion( Accordion ) :
 		_orientation = StringProperty('vertical')
 		_inner_orientation = StringProperty( 'horizontal' )
 		orientation_handler = ObjectProperty(None)
+		_selected = ObjectProperty()
 
 		stop = threading.Event()
 
@@ -74,6 +75,7 @@ class ConsoleAccordion( Accordion ) :
 			# inform user
 			self.btn_text = self._orientation
 			self.orientation = self._orientation
+			self._selected = None
 			self._inner_orientation =  'vertical' if self.orientation == 'horizontal' else 'horizontal'
 
 
@@ -125,6 +127,8 @@ class urnackApp( App ) :
 					#view manager
 					self._view_manager = None
 					self._console_count = 1
+					self._full_screen_lst = list()
+					self._is_full_screen = False
 
 					Window.on_rotate = self._on_rotate
 
@@ -223,6 +227,77 @@ class urnackApp( App ) :
 					"""
 
 					pass
+
+
+
+
+				def accordion_touch_up( self , id = None ) :
+					"""
+					:return:
+					"""
+
+					acc = self.root.current_screen.ids.cci_accordion
+					cci = None
+					selected = None
+					if not self._is_full_screen :
+						self._full_screen_lst = list()
+						for item in acc.children :
+							self._full_screen_lst.append( item )
+							if item.title == 'cci-urnack'  :
+								cci = item
+							if item.title == id  :
+								selected = item
+						self._full_screen_lst.remove( cci )
+						self._full_screen_lst.remove( selected )
+						for item in self._full_screen_lst :
+							acc.remove_widget( item )
+						self._is_full_screen = True
+					else :
+					  if id == 'cci-urnack' :
+						cci = acc.children[0]
+						acc.remove_widget( cci )
+						self._full_screen_lst.reverse()
+						for item in self._full_screen_lst :
+							acc.add_widget( item )
+						acc.add_widget( cci )
+						self._is_full_screen = False
+
+
+				def _selected_accordion_item( self  ) :
+					"""
+
+					:return accordion item selected:
+					"""
+					acc = self.root.current_screen.ids.cci_accordion
+					cci = None
+					selected = None
+					for item in acc.children :
+						try:
+							if not item.collapse :
+								if not self._is_full_screen :
+									self._full_screen_lst = list()
+									for item in acc.children :
+										self._full_screen_lst.append( item )
+										if item.title == 'cci-urnack'  :
+											cci = item
+									selected = item
+									self._full_screen_lst.remove( cci )
+									self._full_screen_lst.remove( selected )
+									for item in self._full_screen_lst :
+										acc.remove_widget( item )
+									self._is_full_screen = True
+								else :
+								  if item.title  == 'cci-urnack' :
+									cci = acc.children[0]
+									acc.remove_widget( cci )
+									self._full_screen_lst.reverse()
+									for item in self._full_screen_lst :
+										acc.add_widget( item )
+									acc.add_widget( cci )
+									self._is_full_screen = False
+						except :
+							pass
+
 
 
 

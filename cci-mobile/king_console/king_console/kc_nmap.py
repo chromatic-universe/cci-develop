@@ -101,3 +101,42 @@ def fat_fingerprint( ip = None ) :
 			return b_ret , out
 
 
+
+# ---------------------------------------------------------------------------------------------
+def ping_ip_subnet( ip = None ) :
+			"""
+
+			:param ip:
+			:return:
+			"""
+
+			if ip is None :
+				raise Exception( 'no ip supplied' )
+
+			out = str()
+			boiler = str()
+			b_ret = True
+			try :
+
+
+				cmd = ["su" ,
+					   "-c" ,
+					   "/system/bin/nmap" ,
+					   "-n" ,
+					   '-sP',
+					   ip
+					  ]
+
+				try :
+					out = proc.check_output( cmd  )
+				except proc.CalledProcessError as e :
+					b_ret = False
+					out = e.message
+			except Exception as e :
+				b_ret = False
+				raise Exception(  'quick fingerprint...' + e.message )
+
+
+			return b_ret , out
+
+

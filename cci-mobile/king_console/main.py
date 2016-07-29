@@ -375,10 +375,11 @@ class kingconsoleApp( App ) :
 					self.root.ids.label.default_user = value
 			"""
 
+
 		# android mishegas
 		def on_pause(self):
 			# save data
-			self._logger.info( self.__class__.__name__ + '...'  + 'on_pause' )
+
 
 			return True
 
@@ -386,7 +387,7 @@ class kingconsoleApp( App ) :
 
 		def on_resume( self ):
 			# something
-			self._logger.info( self.__class__.__name__ + '...'  + 'on_resume' )
+
 
 			pass
 
