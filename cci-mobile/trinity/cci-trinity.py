@@ -6,8 +6,9 @@
 from StringIO import StringIO
 import logging
 from math import ceil
-from flask import Flask , request , send_file , render_template
+from flask import Flask , request , send_file , render_template , url_for
 from flask import redirect
+from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import subprocess as proc
 import sqlite3
 
@@ -32,6 +33,10 @@ _logger.addHandler( fh )
 
 const_per_page = 20
 
+class query_session_form( Form ) :
+    session_id = StringField( 'session_id:' )
+    submit = SubmitField('Submit')
+
 
 # -----------------------------------------------------------------------------------
 def local_mac_addr() :
@@ -53,6 +58,17 @@ def index():
 
     		return render_template( "index.html" ,
 									device = '"' + local_mac_addr() + '"' )
+
+
+# -----------------------------------------------------------------------------
+@app.route('/query_session/', methods=('GET', 'POST') )
+def query_session() :
+
+			id=request.form['session_id']
+
+			return redirect( url_for( 'session_call_history' ,
+									  device = '"' + local_mac_addr() + '"' ,
+									  session_id = '"' + id + '"' ) )
 
 
 
@@ -146,40 +162,56 @@ def session_call_history(  device , session_id )  :
 								 'inner join  sessions on session_call_history.session_name = sessions.session_name '
 								 'where sessions.session_name = %s and sessions.device_id = %s'	 % ( session_id , device ) )
 					rows = cur.fetchone()
-					count = rows[0]
-					max_idx = rows[1]
-					cur.execute( 'select * from session_call_history  ' \
-						         'inner join  sessions on session_call_history.session_name = sessions.session_name '
-								 'where sessions.session_name = %s and sessions.device_id = %s ' \
-								 'order by session_call_history.timestamp DESC ' \
-								 'LIMIT %d' % ( session_id , device , 15 ) )
+					if rows is not None :
+						count = rows[0]
+						max_idx = rows[1]
+						cur.execute( 'select * from session_call_history  ' \
+									 'inner join  sessions on session_call_history.session_name = sessions.session_name '
+									 'where sessions.session_name = %s and sessions.device_id = %s ' \
+									 'order by session_call_history.timestamp DESC ' \
+									 'LIMIT %d' % ( session_id , device , 15 ) )
 
 
-					rows = cur.fetchall()
+						rows = cur.fetchall()
+						return render_template( "list.html" ,
+											rows = rows ,
+											session_id = session_id ,
+											total_count = count ,
+											record_ptr = len( rows ) ,
+											max_id = max_idx )
 
 			   else :
-					cur.execute( 'select count(session_call_history.idx) as count , max( session_call_history.idx ) as max_idx from session_call_history '
-								 'inner join  sessions on session_call_history.session_name = sessions.session_name ' \
-								 'where sessions.status = 1 and sessions.device_id = %s '  % device )
+					# grab newest session marked as active
+					cur.execute( 	'select  max(session_call_history.idx)  as max_id  , session_call_history.session_name ' \
+									'from session_call_history ' \
+									'inner join  sessions on session_call_history.session_name = sessions.session_name ' \
+									'where sessions.status = 1 and sessions.device_id = %s ' \
+									'group by session_call_history.session_name ' \
+									'order by session_call_history.timestamp desc ' \
+									'limit 1'  % device )
 
-			   		rows = cur.fetchone()
-					count = rows[0]
-					max_idx = rows[1]
-					cur.execute(   'select session_call_history.idx  , session_call_history.session_name ,' \
-								   'session_call_history.call_segment , ' \
-								   'session_call_history.call_moniker , session_call_history.call_params , ' \
-								   'session_call_history.timestamp , sessions.device_id from session_call_history '\
-								   'inner join  sessions on session_call_history.session_name = sessions.session_name ' \
-								   'where sessions.status = 1 and sessions.device_id = %s ' \
-								   'order by session_call_history.timestamp desc ' \
-								   'limit 15' % device )
-					rows = cur.fetchall()
-			   return render_template( "list.html" ,
-									    rows = rows ,
-									    session_id = 'current' ,
-										total_count = count ,
-										record_ptr = len( rows ) ,
-										max_id = max_idx )
+					rows = cur.fetchone()
+					if rows is not None :
+						max_idx = rows[0]
+						session_id = rows[1]
+
+						cur.execute(   'select session_call_history.idx  , session_call_history.session_name ,' \
+									   'session_call_history.call_segment , ' \
+									   'session_call_history.call_moniker , session_call_history.call_params , ' \
+									   'session_call_history.timestamp , sessions.device_id from session_call_history '\
+									   'inner join  sessions on session_call_history.session_name = sessions.session_name ' \
+									   'where session_call_history.session_name = "%s"' % session_id )
+
+						rows = cur.fetchall()
+						return render_template( "list.html" ,
+												rows = rows ,
+												session_id = '"' + session_id + '"' ,
+												total_count = len( rows ) ,
+												record_ptr = len( rows ) ,
+												max_id = max_idx )
+
+					return render_template( "index.html" ,
+										message = 'no current sessions' )
 
 
 

@@ -19,16 +19,30 @@
 
      <font color="black"  face="courier" size="2">
 
-      <center>
+
+              {% block body %}
+                <center>
           <img src="{{ url_for('static', filename = 'image/king-console64.png') }}"><br><br>
           <b><i><u>chromatic universe - king console</u></i></b><br><br>
       <br>
       <hr>
-              {% block body %}
+              device: {{ device }}
 
+              {{ message }}<br>
              <form action="/session_call_history/{{ device }}">
                 <input type="submit" value="currrent session">
             </form>
+            <br>
+             <br>
+            <div id="content">
+                <form method="post" action="{{ url_for('query_session') }}">
+                  <label for="session_id">session_id:</label><br>
+                  <input type="text" name="session_id" /><br />
+                  <input type="submit" value="query session"/>
+                </form>
+            </div>
+            <br>
+                    <hr>
              <br><small>william k. johnson 2016</small><br>
              </center>
               {% endblock %}
