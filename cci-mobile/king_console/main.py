@@ -20,6 +20,7 @@ from kivy.uix.treeview import TreeView , TreeViewLabel , TreeViewNode
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
+from kivy.uix.image import Image
 from kivy.uix.bubble import Bubble
 from kivy.config import ConfigParser
 from kivy.uix.progressbar import ProgressBar
@@ -45,6 +46,7 @@ from time import gmtime, strftime , sleep
 import subprocess as proc
 import threading
 import requests
+from functools import partial
 
 import sqlite3
 import Queue
@@ -55,14 +57,32 @@ from king_console import resource_factory \
 	                     as resources , \
 						 screen
 from king_console.kc_thread_manager \
-				  import kc_thread_manager
+				  				import kc_thread_manager
 from king_console.kc_db_manager import kc_db_manager
+from king_console.kc_stream 	import kc_mongo_config
+
+kivy.require(  '1.9.1'  )
 
 
-kivy.require( '1.9.1' )
+dlabel = \
+"""
+Label:
+	text_size: self.size
+	valign: 'middle'
+	halign: 'center'
+"""
 
-
-
+update_content = \
+"""
+GridLayout:
+	orientation: 'horizontal'
+	cols: 1
+	Label:
+		text: '...updating...'
+	ProgressBar:
+		max:1000
+		value: 250
+"""
 
 # -----------------------------------------------------------------------------------
 def local_mac_addr() :
@@ -202,6 +222,8 @@ class kingconsoleApp( App ) :
 			self._db_payload_queue = Queue.Queue()
 			self._db_payload_lk = threading.RLock()
 			self._is_full_screen = False
+			self._is_dirty_payload = False
+			self._dlg_param = None
 
 
 			Window.on_rotate = self._on_rotate
@@ -398,10 +420,6 @@ class kingconsoleApp( App ) :
 			:return:
 			"""
 
-			popup = Popup(title='Exiting',
-						  content=Label(text='..waiting on worker tasks to exit....'),
-						  size_hint=(None, None), size=( 200 , 200 ) )
-			popup.open()
 			# mark session as closed
 			self._close_session()
 
@@ -442,12 +460,45 @@ class kingconsoleApp( App ) :
 
 
 
-		def on_start( self ) :
+
+
+
+		def _handle_payload_update( self , touch  ) :
 			"""
 
 			:return:
 			"""
 
+			self._dlg_param.dismiss()
+
+
+
+		def on_start( self ) :
+			"""
+
+			:return:
+			"""
+			layout = GridLayout( cols = 1 , orientation = 'horizontal' )
+			layout.add_widget( Image( source = 'king-console32bw.png' , size_hint_y = .50 ))
+			lbl = Builder.load_string( dlabel )
+			lbl.text = 'you have non-exported payloads cached locally , export now?'
+			layout.add_widget( lbl )
+			btns = BoxLayout( orientation = 'horizontal' )
+			yes_btn = Button(text='ok', background_color = [0,0,0,0]  )
+			no_btn = Button(text='no' , background_color = [0,0,0,0] )
+			btns.add_widget( yes_btn )
+			btns.add_widget( no_btn )
+			layout.add_widget( btns  )
+			content = layout
+			self._dlg_param = Popup( title='document disposition' ,
+						           content=content, auto_dismiss=False , size_hint=(None, None), size=( 400 , 300 ))
+
+			# bind the on_press event of the button to the dismiss function
+			yes_btn.bind(on_press=self._handle_payload_update )
+			#yes_btn.bind(on_press=self._handle_payload_update( pop=popup ) )
+			no_btn.bind(on_press=self._dlg_param.dismiss )
+
+			self._dlg_param.open()
 			self._create_session()
 
 			# db queue thread

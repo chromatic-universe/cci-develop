@@ -112,6 +112,8 @@ class ConsolePopup( Popup  ) :
 
 
 
+
+
 # -------------------------------------------------------------------------------------------------
 # screens
 class CciScreen( Screen ) :
@@ -567,7 +569,7 @@ class CciScreen( Screen ) :
 																		id ] )
 
 
-
+					App.get_running_app()._is_dirty_payload = True
 					return boiler
 
 

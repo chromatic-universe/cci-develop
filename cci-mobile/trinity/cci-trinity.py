@@ -33,13 +33,26 @@ _logger.addHandler( fh )
 const_per_page = 20
 
 
+# -----------------------------------------------------------------------------------
+def local_mac_addr() :
+		"""
+
+		:return mac string:
+		"""
+
+		try :
+			return proc.check_output( ['cat' , '/sys/class/net/wlan0/address'] ).strip()
+		except :
+			pass
 
 
 # ------------------------------------------------------------------------------
 @app.route('/index')
 @app.route( "/" )
 def index():
-    		return 'chromatic universe ~ cci-trinity  c. william k. johnson 2016'
+
+    		return render_template( "index.html" ,
+									device = '"' + local_mac_addr() + '"' )
 
 
 
@@ -113,8 +126,9 @@ def session_call_reprise(  session_id , max_id , total_count , record_ptr )  :
 
 
 
-@app.route( "/session_call_history/<session_id>" )
-def session_call_history(  session_id  )  :
+@app.route( "/session_call_history/<device>" , defaults={'session_id': None})
+@app.route( "/session_call_history/<device>/<session_id>" )
+def session_call_history(  device , session_id )  :
 			   """
 
 			  :return:
@@ -126,20 +140,43 @@ def session_call_history(  session_id  )  :
 			   con.row_factory = sqlite3.Row
 
 			   cur = con.cursor()
-			   cur.execute( 'select count(*) as count , max( idx ) as max_idx from session_call_history where session_name = %s' % session_id )
-			   rows = cur.fetchone()
-			   count = rows[0]
-			   max_idx = rows[1]
-			   cur.execute( "select * from session_call_history where session_name = %s" \
-							"order by timestamp DESC " \
-							"LIMIT %s" % ( session_id , 15 ) )
+			   if session_id is not None :
+					cur.execute( 'select count(*) as count , max( session_call_history.idx ) as ' \
+								 'max_idx  from sessions  session_call_history '
+								 'inner join  sessions on session_call_history.session_name = sessions.session_name '
+								 'where sessions.session_name = %s and sessions.device_id = %s'	 % ( session_id , device ) )
+					rows = cur.fetchone()
+					count = rows[0]
+					max_idx = rows[1]
+					cur.execute( 'select * from session_call_history  ' \
+						         'inner join  sessions on session_call_history.session_name = sessions.session_name '
+								 'where sessions.session_name = %s and sessions.device_id = %s ' \
+								 'order by session_call_history.timestamp DESC ' \
+								 'LIMIT %d' % ( session_id , device , 15 ) )
 
 
-			   rows = cur.fetchall();
+					rows = cur.fetchall()
 
-			   return render_template( "list.html",
+			   else :
+					cur.execute( 'select count(session_call_history.idx) as count , max( session_call_history.idx ) as max_idx from session_call_history '
+								 'inner join  sessions on session_call_history.session_name = sessions.session_name ' \
+								 'where sessions.status = 1 and sessions.device_id = %s '  % device )
+
+			   		rows = cur.fetchone()
+					count = rows[0]
+					max_idx = rows[1]
+					cur.execute(   'select session_call_history.idx  , session_call_history.session_name ,' \
+								   'session_call_history.call_segment , ' \
+								   'session_call_history.call_moniker , session_call_history.call_params , ' \
+								   'session_call_history.timestamp , sessions.device_id from session_call_history '\
+								   'inner join  sessions on session_call_history.session_name = sessions.session_name ' \
+								   'where sessions.status = 1 and sessions.device_id = %s ' \
+								   'order by session_call_history.timestamp desc ' \
+								   'limit 15' % device )
+					rows = cur.fetchall()
+			   return render_template( "list.html" ,
 									    rows = rows ,
-									    session_id = session_id ,
+									    session_id = 'current' ,
 										total_count = count ,
 										record_ptr = len( rows ) ,
 										max_id = max_idx )

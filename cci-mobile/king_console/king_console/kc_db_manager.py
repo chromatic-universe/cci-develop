@@ -45,7 +45,7 @@ sql_cursor_dictionary = {  'sd_insert_session' : 'insert into sessions  (session
 							'sql_retrieve_call_history' : 	'select * from session_call_history '
 															'where session_name = %s '
 															'order by timestamp DESC '
-													        'LIMIT 10'
+													        'LIMIT 15'
 						}
 
 
@@ -200,9 +200,11 @@ class kc_db_manager( object ) :
 									params ) :
 					"""
 
-					:param user:
+					:param uid:
+					:param user
 					:param level:
 					:param moniker:
+					:param device:
 					:return session uid:
 					"""
 
