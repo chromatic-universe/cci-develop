@@ -61,9 +61,10 @@ from king_console.kc_thread_manager \
 from king_console.kc_db_manager import kc_db_manager
 from king_console.kc_stream 	import kc_mongo_config
 
+
 kivy.require(  '1.9.1'  )
 
-
+#todo
 dlabel = \
 """
 Label:
@@ -339,7 +340,7 @@ class kingconsoleApp( App ) :
 
 					cmd = ["su" ,
 						   "-c" ,
-						   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
+						   " " ,
 						   "./king_console/kc_ping.pyo" ,
 						   "-x"
 						  ]
@@ -478,6 +479,13 @@ class kingconsoleApp( App ) :
 
 			:return:
 			"""
+
+			try :
+				import cci_mini_mobile
+				self._logger.info( '..imported cci_mini_mobile...' )
+			except :
+				self._logger.error( '..failed to import cci_mini_mobile...' )
+
 			layout = GridLayout( cols = 1 , orientation = 'horizontal' )
 			layout.add_widget( Image( source = 'king-console32bw.png' , size_hint_y = .50 ))
 			lbl = Builder.load_string( dlabel )

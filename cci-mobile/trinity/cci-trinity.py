@@ -200,7 +200,8 @@ def session_call_history(  device , session_id )  :
 									   'session_call_history.call_moniker , session_call_history.call_params , ' \
 									   'session_call_history.timestamp , sessions.device_id from session_call_history '\
 									   'inner join  sessions on session_call_history.session_name = sessions.session_name ' \
-									   'where session_call_history.session_name = "%s"' % session_id )
+									   'where session_call_history.session_name = "%s" '  \
+									   'order by session_call_history.timestamp desc '  % session_id )
 
 						rows = cur.fetchall()
 						return render_template( "list.html" ,
