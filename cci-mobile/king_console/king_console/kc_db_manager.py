@@ -24,6 +24,14 @@ import threading
 
 from kivy.app import App
 
+"""
+select  a.session_name ,  a.context , a.session_moniker ,
+            b.timestamp , b.call_segment  , b.call_moniker , b.call_params  ,
+            c.size , c.payload
+from sessions a , session_call_history  b   , session_payload_atoms c
+where a.session_name =  b.session_name and b.idx = c.session_call_idx\
+"""
+
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
 sql_cursor_dictionary = {  'sd_insert_session' : 'insert into sessions  (session_name ,'
@@ -36,8 +44,13 @@ sql_cursor_dictionary = {  'sd_insert_session' : 'insert into sessions  (session
 														 '  (session_name ,'
 														 'call_segment ,'
 														 'call_moniker ,'
-														 'call_params) '
-														 'values ( %s , %s , %s , %s )' ,
+														 'call_params , '
+														 'payload) '
+														 'values ( %s , %s , %s , %s , %s )' ,
+							'sd_insert_payload' : 		 'insert into session_payload_atoms ( payload ,'
+														 'size , '
+														 'cache_pending) '
+							                             'values ( %s , %d , %d )' ,
 							'sd_update_session_status_closed' : 'update sessions set status = 0 '
 														 		'where session_name = %s' ,
 							'sd_update_session_status_open' :   'update sessions set status = 1 '
@@ -102,6 +115,7 @@ class kc_db_manager( object ) :
 					self._call_map = {
 									   'insert_session' : self.insert_session ,
 									   'insert_session_call' : self.insert_session_call ,
+									   'insert_payload' : self.insert_payload ,
 									   'update_session_status' : self.update_session_status
 									 }
 					self._query_call_map =  {
@@ -122,7 +136,7 @@ class kc_db_manager( object ) :
 
 
 
-				def _execute_sql_update( self , sql_key , params  ) :
+				def _execute_sql_update( self , sql_key , params  , raw = False) :
 					"""
 
 					:param sql_key:
@@ -134,12 +148,17 @@ class kc_db_manager( object ) :
 					try :
 
 							s = sql_cursor_dictionary[sql_key]
-							s = s % quoted_list_to_tuple( params )
+							if not raw :
+								# params is a string list
+								s = s % quoted_list_to_tuple( params )
+							else :
+								# params is a tuple
+								s = s % params
 
 							self._db_cursor.execute( s )
 							self.db.commit()
 
-							self.logger.info( '...' +  sql_key  + ' executed...'  + str( params ) )
+							self.logger.info( '...' +  sql_key  + ' executed...' )
 
 					except sqlite3.IntegrityError as e :
 						self.logger.error( 'integrity error in update statement '
@@ -148,7 +167,7 @@ class kc_db_manager( object ) :
 						self.logger.error( 'statement failed: '
 							+ e.message )
 					except TypeError as e :
-						self.logger.error( '...not enough aruments for db update...' )
+						self.logger.error( e.message )
 						
 
 
@@ -196,8 +215,7 @@ class kc_db_manager( object ) :
 
 
 
-				def insert_session( self ,
-									params ) :
+				def insert_session( self ,	params ) :
 					"""
 
 					:param uid:
@@ -222,11 +240,29 @@ class kc_db_manager( object ) :
 					:param segment:
 					:param function:
 					:param params:
+					:payload( to be stubbed on insert )
 					:return:
 					"""
 
 
 					self._execute_sql_update( 'sd_insert_session_call' , call_params )
+
+
+
+				def insert_payload( self , call_params ) :
+					"""
+
+					:param payload:
+					:param size:
+					:param cache_pending:
+					:return:
+					"""
+
+					params = ( '"' + call_params[0] + '"'  ,
+							   int( call_params[1] ) ,
+							   int( call_params[2] ) )
+					self._execute_sql_update( 'sd_insert_payload' , params , raw = True  )
+
 
 
 

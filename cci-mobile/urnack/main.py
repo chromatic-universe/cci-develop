@@ -236,6 +236,7 @@ class urnackApp( App ) :
 					:return:
 					"""
 
+					"""
 					acc = self.root.current_screen.ids.cci_accordion
 					cci = None
 					selected = None
@@ -262,11 +263,17 @@ class urnackApp( App ) :
 						acc.add_widget( cci )
 						self._is_full_screen = False
 
+					"""
+					pass
+
+
 
 				def _selected_accordion_item( self  ) :
 					"""
 
 					:return accordion item selected:
+					"""
+
 					"""
 					acc = self.root.current_screen.ids.cci_accordion
 					cci = None
@@ -297,7 +304,8 @@ class urnackApp( App ) :
 									self._is_full_screen = False
 						except :
 							pass
-
+					"""
+					pass
 
 
 

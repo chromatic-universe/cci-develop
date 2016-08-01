@@ -218,6 +218,8 @@ class kingconsoleApp( App ) :
 			self._console_constructed = list()
 			self._cur_console_buffer = str()
 			self._thrd = kc_thread_manager( self._logger )
+
+
 			self.stop_event = threading.Event()
 			self._db_call_queue = Queue.Queue()
 			self._db_payload_queue = Queue.Queue()
@@ -298,7 +300,8 @@ class kingconsoleApp( App ) :
 						[uid ,
 						 'application' ,
 						 'init' ,
-						 id] ) )
+						 id ,
+						 '(empty)'] ) )
 			self.dbq.put( package )
 			self._session_id = uid
 
@@ -327,6 +330,7 @@ class kingconsoleApp( App ) :
 			pass
 
 
+
 		def _Local_net_info( self ) :
 			"""
 
@@ -340,7 +344,7 @@ class kingconsoleApp( App ) :
 
 					cmd = ["su" ,
 						   "-c" ,
-						   " " ,
+						   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh"  ,
 						   "./king_console/kc_ping.pyo" ,
 						   "-x"
 						  ]
@@ -480,11 +484,8 @@ class kingconsoleApp( App ) :
 			:return:
 			"""
 
-			try :
-				import cci_mini_mobile
-				self._logger.info( '..imported cci_mini_mobile...' )
-			except :
-				self._logger.error( '..failed to import cci_mini_mobile...' )
+			self._logger.info( '...on_start...' )
+
 
 			layout = GridLayout( cols = 1 , orientation = 'horizontal' )
 			layout.add_widget( Image( source = 'king-console32bw.png' , size_hint_y = .50 ))
@@ -525,7 +526,6 @@ class kingconsoleApp( App ) :
 			self.root.current_screen.ids.console_real_id.text = self._console_real
 			self.root.current_screen.ids.console_interfaces.text = self._console_ifconfig
 			self._cur_console_buffer = self.root.current_screen.ids.console_interfaces.text
-
 
 
 
@@ -627,6 +627,19 @@ class kingconsoleApp( App ) :
 					acc.add_widget( item )
 				acc.add_widget( cci )
 				self._is_full_screen = False
+
+
+
+
+		def _on_document_context( self ) :
+				"""
+
+				:return:
+				"""
+
+				mongo = kc_mongo_config( bootstrap ='cci-aws-1' , log = self._logger )
+				mongo.show_mongo_config()
+
 
 
 		def _on_view_manager( self ) :

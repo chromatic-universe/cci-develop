@@ -155,6 +155,21 @@ class CciScreen( Screen ) :
 
 
 
+				def _post_payload( self , func , params ) :
+					"""
+
+					:param func:
+					:param params:
+					:return:
+					"""
+
+					if not App.get_running_app()._call_stack_debug :
+						package = ( func , params )
+						App.get_running_app().dbq.put( package )
+
+
+
+
 				def _on_show_history( self ) :
 					"""
 
@@ -302,17 +317,9 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 
-					#add thread object to manager
-					thred = threading.Thread( target = self._thread_exec ,kwargs=dict( func=self.on_tcp_syn_ack_scan ) )
-					if thred :
-						moniker = 'tcp console #'  + str( App.get_running_app()._console_count + 1 )
-						thread_atom = { 'thread_id' : str( thred.ident ) ,
-										'stop_alert'  : threading.Event() ,
-										'instance' : thred
-									  }
-						App.get_running_app()._thrd.thrds[moniker] = thread_atom
+					self._start_( 'tcp console' , self.on_tcp_syn_ack_scan )
 
-					thred.start()
+
 
 
 				def _on_tcp_syn_scan_ports_start( self ) :
@@ -368,7 +375,6 @@ class CciScreen( Screen ) :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
 																 'ids_arp' )
-
 						func( console = console )
 					elif func == self.on_arp_ip_scan :
 						# update main thread from decorator
@@ -379,16 +385,13 @@ class CciScreen( Screen ) :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
 																 'ids_tcp_syn_scan' )
-						self._update_main_console( count=App.get_running_app()._console_count ,
-												   moniker='tcp console #' )
-						func()
+
+						func( console = console )
 					elif func == self.on_tcp_syn_scan_ports :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
 																 'ids_tcp_syn_scan_ports' )
-						self._update_main_console( count=App.get_running_app()._console_count ,
-												   moniker='tcp console scan #' )
-						func()
+						func( console = console )
 					elif func == self.on_nmap_fingerprint :
 						# update main thread from decorator
 						self.move_to_accordion_item( self.ids.cci_accordion ,
@@ -563,10 +566,12 @@ class CciScreen( Screen ) :
 						App.get_running_app()._logger.info( '..update_console_payload...' )
 
 					id = '(ip=%s)' % ip
+
 					self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
 																		'network' ,
 																		'ping_ip_input' ,
-																		id ] )
+																		id  ,
+																		boiler ] )
 
 
 					App.get_running_app()._is_dirty_payload = True
@@ -610,7 +615,7 @@ class CciScreen( Screen ) :
 
 
 
-				def on_tcp_syn_ack_scan( self ) :
+				def on_tcp_syn_ack_scan( self , console ) :
 					"""
 
 
@@ -619,11 +624,13 @@ class CciScreen( Screen ) :
 
 					# sentinel function so we don't have to use  lock object
 					# started at at end of ui update
-					threading.Thread( target = self._on_tcp_syn_ack_scan() ).start()
+					threading.Thread( target = self._on_tcp_syn_ack_scan , kwargs=dict( console = console ) ).start()
 
 
 
-				def on_tcp_syn_scan_ports( self , in_ip = None , range = False ) :
+				def on_tcp_syn_scan_ports( self , in_ip = None , range = None  , console = None  ) :
+
+
 					"""
 
 					:param in_ip:
@@ -633,7 +640,8 @@ class CciScreen( Screen ) :
 
 					# sentinel function so we don't have to use  lock object
 					# started at at end of ui update
-					threading.Thread( target = self._on_tcp_syn_scan_ports() ).start()
+					threading.Thread( target = self._on_tcp_syn_scan_ports,kwargs=dict( console = console ) ).start()
+
 
 
 
@@ -803,8 +811,9 @@ class CciScreen( Screen ) :
 
 
 
+
 				# tcp handlers
-				def _on_tcp_syn_ack_scan( self ) :
+				def _on_tcp_syn_ack_scan( self , range = None , console = None  ) :
 						"""
 						:param in_ip :
 						:param range :
@@ -842,10 +851,13 @@ class CciScreen( Screen ) :
 							b_ret = False
 							App.get_running_app()._logger.error( e.message )
 
-						thr = App.get_running_app()._thrd.thrds['tcp console #'  + str( App.get_running_app()._console_count )]
-						if thr :
-							if thr['stop_alert'].isSet() :
-								return
+						try :
+							thr = App.get_running_app()._thrd.thrds['tcp console #'  + str( App.get_running_app()._console_count )]
+							if thr :
+								if thr['stop_alert'].isSet() :
+									return
+						except :
+							pass
 
 						boiler = 'maelstrom[tcp]->scan1: ' + \
 								  ' ' + ip
@@ -861,16 +873,16 @@ class CciScreen( Screen ) :
 						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
 																			'transport' ,
 																			'tcp_syn_ack_scan' ,
-																			id ] )
+																			id ,
+																			boiler] )
+
+						id = 'tcp_syn_ack_scan ' + id
+						self._update_console_payload( boiler , console , id )
 
 
-						self._console_text.text = boiler
-						App.get_running_app()._cur_console_buffer = boiler
 
 
-
-
-				def _on_tcp_syn_scan_ports( self ) :
+				def _on_tcp_syn_scan_ports( self , console = None) :
 						"""
 						:param in_ip :
 						:param range :
@@ -906,12 +918,14 @@ class CciScreen( Screen ) :
 							b_ret = False
 							App.get_running_app()._logger.error( e.message )
 
-
-						t = App.get_running_app()._thrd.thrds
-						thr = App.get_running_app()._thrd.thrds['tcp console scan #'  + str( App.get_running_app()._console_count )]
-						if thr :
-							if thr['stop_alert'].isSet() :
-								return
+						try :
+							t = App.get_running_app()._thrd.thrds
+							thr = App.get_running_app()._thrd.thrds['tcp console scan #'  + str( App.get_running_app()._console_count )]
+							if thr :
+								if thr['stop_alert'].isSet() :
+									return
+						except :
+							pass
 
 						boiler = 'maelstrom[tcp]->scan_ports1: '
 						boiler += ip
@@ -927,10 +941,12 @@ class CciScreen( Screen ) :
 						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
 																			'transport' ,
 																			'tcp_syn_scan_ports' ,
-																			id ] )
+																			id ,
+																			boiler ] )
 
-						self._console_text.text = boiler
-						App.get_running_app()._cur_console_buffer = boiler
+						id = 'tcp_syn_scan_ports ' + id
+						self._update_console_payload( boiler , console , id )
+
 
 
 
@@ -997,7 +1013,8 @@ class CciScreen( Screen ) :
 						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
 																			'application & penetration' ,
 																			s ,
-																			id ] )
+																			id  ,
+																			boiler ] )
 
 						pr = s + id
 						self._update_console_payload( boiler , container , pr )

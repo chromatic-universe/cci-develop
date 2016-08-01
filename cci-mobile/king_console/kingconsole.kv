@@ -502,29 +502,34 @@
                                 orientation: 'horizontal'
                                 cols: 1
                                 size_hint_y: None
-                                size: (400,400)
+                                size: (400,600)
                                 Button:
                                     text: 'configure transport atoms....'
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
-                                    size_hint_y: 1.90
+                                    size_hint_y: 2
                                 Label:
                                     text: 'current document context:'
                                     color: [1,0,0,1]
                                 Button:
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                    id:    id_document_context
                                     text: 'mongdb'
+                                    on_press: app._on_document_context()
+                                    size_hint_y: 2
                                 Label:
                                     text: 'bootstrap doc metadata:'
                                     color: [1,0,0,1]
                                 Button:
                                     text: 'cci-aws-3'
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                    size_hint_y: 2
                                 Label:
                                     text: 'current search context:'
                                     color: [1,0,0,1]
                                 Button:
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                     text: 'elasticsearch'
+                                    size_hint_y: 2
                                 Label:
                                     text: 'bootstrap search metadata:'
                                     #size_hint_y: .15
@@ -534,18 +539,21 @@
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                     text_size: (500,None)
                                     shorten: True
+                                    size_hint_y: 2
                                 Label:
                                     text: 'local:'
                                     color: [1,0,0,1]
                                 Button:
                                     text: 'sqllite3'
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                    size_hint_y: 2
                                 Label:
                                     text: 'stream encryption:'
                                     color: [1,0,0,1]
                                 Button:
                                     text: 'tls'
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                    size_hint_y: 2
 
 
                 AccordionItem:
@@ -693,7 +701,7 @@ ScreenManagement:
 # tcp screen
 <TcpScreen>
     id: tcp_screen
-    name: 'screen_tcp'
+    name: 'screen_transport'
     GridLayout
         orientation: 'horizontal'
         cols: 1

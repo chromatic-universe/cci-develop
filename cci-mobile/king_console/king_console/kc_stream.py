@@ -41,65 +41,104 @@ from king_console.screen import ConsolePopup
 from king_console import resource_factory \
 	                     as resources
 
+import cci_mini_mongo
+import cci_mini_elastic
+
 
 # ------------------------------------------------------------------------------------------
 class kc_mongo_config( object ) :
-			"""
-
-			"""
-
-			def __init__( self  , bootstrap = None , log = None ) :
-						"""
-
-						:param bootstrap:
-						:return:
-						"""
-
-						if log is None :
-							raise Exception( 'no logger provided' )
-
-						self._booststrap = bootstrap
-
-
-
-			@staticmethod
-			def _retr_resource( resource_id ) :
 				"""
 
-				:param resource_id:
-				:return ui resource:
 				"""
 
-				return resources.const_resource_ids[resource_id]
+				def __init__( self  , bootstrap = None , log = None ) :
+							"""
+
+							:param bootstrap:
+							:return:
+							"""
+
+							if log is None :
+								raise Exception( 'no logger provided' )
+
+							self._booststrap = bootstrap
 
 
 
-			def _post_function_call( self , func , params ) :
-				"""
+				@staticmethod
+				def _retr_resource( resource_id ) :
+					"""
 
-				:param func:
-				:param params:
-				:return:
-				"""
+					:param resource_id:
+					:return ui resource:
+					"""
 
-				package = ( func , params )
-				App.get_running_app().dbq.put( package )
-
+					return resources.const_resource_ids[resource_id]
 
 
-			def show_mongo_config( self ) :
-						"""
+				@staticmethod
+				def _post_function_call( func , params ) :
+					"""
 
-						:param bootstrap:
-						:return:
-						"""
+					:param func:
+					:param params:
+					:return:
+					"""
+
+					package = ( func , params )
+					App.get_running_app().dbq.put( package )
 
 
-						layout = GridLayout( orientation = 'horizontal' ,
-										  cols = 1 )
 
-						action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar' ) )
-						layout.add_widget( action_bar )
-						scroll = ScrollView()
-						grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 800 ) )
-						event = threading.Event()
+				def show_mongo_config( self ) :
+							"""
+
+							:param bootstrap:
+							:return:
+							"""
+
+
+							layout = GridLayout( orientation = 'horizontal' ,
+											  cols = 1 )
+
+							action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar' ) )
+							layout.add_widget( action_bar )
+							scroll = ScrollView()
+							grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 400 ) )
+							grid.add_widget( Image( source = './image/mongodb-log.png' , pos_hint_y = 0 , size_hint_y = .2 ) )
+							bx = BoxLayout( orientation = 'horizontal' )
+							bx.add_widget( Label(  text = 'mongo' ) )
+							grid.add_widget( bx )
+							#event = threading.Event()
+
+							try :
+								#event.wait( timeout=5 )
+								#get payload
+								"""
+								App.get_running_app().dbpq_lk.acquire()
+								lst = list()
+								while not App.get_running_app().dbpq.empty() :
+									payload = App.get_running_app().dbpq.get()
+									#m = [ str( x )  for x in payload]
+									#lst.append( m )
+									for x in payload :
+										s = '%s segment=%s \ncall moniker=%s \nparams=%s' \
+												% ( str( x[5] ) ,
+														 x[2] ,
+														 x[3] ,
+														 x[4]
+													)
+										grid.add_widget( Button( text = s , halign = 'center' , font_size = 14 ,
+																 size_hint_y = None , size_hint_x = 480  ) )
+								"""
+								scroll.add_widget( grid )
+								layout.add_widget( scroll )
+
+								popup = ConsolePopup( title='document context' , content=layout )
+								btn = popup.content.children[1].children[0].children[0]
+								btn.on_press = popup.on_press_context
+							finally :
+								#App.get_running_app().dbpq_lk.release()
+								pass
+
+							popup.open()
