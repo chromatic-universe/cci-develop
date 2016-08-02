@@ -719,7 +719,8 @@ class CciScreen( Screen ) :
 						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
 																			'network' ,
 																			'ping_ip_subnet' ,
-																			id ] )
+																			id ,
+																			out ] )
 
 					except Exception as err :
 						print err

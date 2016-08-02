@@ -16,8 +16,26 @@ Accordion:
                         app_icon: 'king-console32.png'
                     ActionButton:
                         icon: 'history.png'
-
-
+            Label:
+                text: 'tornado http/https/wsgi server version 4.4.1'
+                color: [1,0,0,1]
+                size_hint_y: .15
+            Label:
+                text: 'port 7080'
+                color: [1,0,0,1]
+                size_hint_y: .15
+            Label:
+                text: 'more'
+                color: [1,0,0,1]
+                size_hint_y: .15
+            Label:
+                text: 'servicing:\n cci-maelstrom\n cci-bimini'
+                color: [1,0,0,1]
+                size_hint_y: .15
+                halign: 'center'
             Button:
                 text: 'bootstrap'
                 on_press: app._bootstrap_trinity()
+                color: [1,1,1,1]
+                background_color: [1,0,0,1]
+                size_hint_y: .15
