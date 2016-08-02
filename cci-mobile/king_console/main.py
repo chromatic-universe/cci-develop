@@ -21,7 +21,6 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.image import Image
-from kivy.uix.bubble import Bubble
 from kivy.config import ConfigParser
 from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock , mainthread

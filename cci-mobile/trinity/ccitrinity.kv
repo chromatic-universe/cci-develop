@@ -1,0 +1,23 @@
+Accordion:
+    orientation: 'vertical'
+    AccordionItem:
+        title: 'cci-trinity'
+        GridLayout
+            orientation: 'horizontal'
+            cols: 1
+            ActionBar:
+                pos_hint: {'top':1}
+                ActionView:
+                    use_separator: True
+                    ActionPrevious:
+                        id: cci_action_prev
+                        title: 'king console'
+                        with_previous: False
+                        app_icon: 'king-console32.png'
+                    ActionButton:
+                        icon: 'history.png'
+
+
+            Button:
+                text: 'bootstrap'
+                on_press: app._bootstrap_trinity()

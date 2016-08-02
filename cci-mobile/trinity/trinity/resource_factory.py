@@ -37,10 +37,6 @@ ActionBar:
 			title: 'king console'
 			with_previous: False
 			app_icon: 'king-console32.png'
-			on_press: app._manip_extended_window()
-		ActionButton:
-			icon: 'menu-icon.png'
-			on_press: app._manip_extended_window()
 """
 ,
 				       'dlg_action_bar' :

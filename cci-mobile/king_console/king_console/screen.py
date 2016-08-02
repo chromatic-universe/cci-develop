@@ -793,7 +793,8 @@ class CciScreen( Screen ) :
 						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
 																			'datalink' ,
 																			call ,
-																			id ] )
+																			id ,
+																			boiler] )
 						id = call + ' ' + id
 						self._update_console_payload( boiler ,console , id )
 						App.get_running_app()._logger.info( '..update_console_payload...' )

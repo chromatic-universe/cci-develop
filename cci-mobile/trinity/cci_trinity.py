@@ -2,8 +2,7 @@
 # cci-trinity.py    william k. johnson  2016
 
 
-import os
-import sys
+
 from StringIO import StringIO
 import logging
 from math import ceil
@@ -12,24 +11,15 @@ from flask import redirect
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import subprocess as proc
 import sqlite3
-import time
-import signal
-
-from tornado.wsgi import WSGIContainer
-from tornado.httpserver import HTTPServer
-from tornado.ioloop import IOLoop
-
 
 
 #cci
 import trinity
 
-max_wait_seconds_before_shutdown  = 3
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
 app = Flask(__name__)
 
-http_server = None
 
 # logger
 _logger = logging.getLogger( "cci-trinity-server" )
@@ -61,8 +51,6 @@ def local_mac_addr() :
 			pass
 
 
-
-
 # ------------------------------------------------------------------------------
 @app.route('/index')
 @app.route( "/" )
@@ -70,10 +58,6 @@ def index():
 
     		return render_template( "index.html" ,
 									device = '"' + local_mac_addr() + '"' )
-
-
-
-
 
 
 # -----------------------------------------------------------------------------
@@ -85,8 +69,6 @@ def query_session() :
 			return redirect( url_for( 'session_call_history' ,
 									  device = '"' + local_mac_addr() + '"' ,
 									  session_id = '"' + id + '"' ) )
-
-
 
 
 
@@ -234,90 +216,18 @@ def session_call_history(  device , session_id )  :
 
 
 
-def sig_handler( sig , frame ) :
-		"""
 
-		:param sig:
-		:param frame:
-		:return:
-		"""
-		_logger.warning('...caught signal: %s', sig )
-		IOLoop.instance().add_callback( shutdown )
-
-
-def shutdown() :
-		"""
-
-		:return:
-		"""
-		_logger.info(' ...stopping http server...')
-		http_server.stop()
-
-		_logger.info( '....will shutdown in %s seconds ...' , max_wait_seconds_before_shutdown )
-		io_loop = IOLoop.instance()
-
-		deadline = time.time() + max_wait_seconds_before_shutdown
-
-		def stop_loop():
-			now = time.time()
-			if now < deadline and (io_loop._callbacks or io_loop._timeouts ) :
-				io_loop.add_timeout( now + 1 , stop_loop )
-				io_loop.add_timeout( now + 1 , stop_loop )
-			else:
-				io_loop.stop()
-				_logger.info( '...shutdown....' )
-
-		stop_loop()
 
 
 
 
 # ------------------------------------------------------------------------------
-if __name__ == "__main__"  :
-
-		_logger.info( '....cci_trinity...'  )
-		is_running = False
-		try :
-			 pid = None
-			 try :
-				 with open( 'pid' , 'r' ) as pidfile :
-					pid = pidfile.read().strip()
-			 except :
-				 pass
-
-			 # check if process is running
-			 if pid :
-				 try :
-					# throws exception if process doesn't exist
-					os.kill( int( pid ) , 0 )
-					is_running = True
-				 except :
-					# pid not running
-					pass
-
-			 if not is_running :
-				 # tornado wsgi server , flask application
-				 http_server = HTTPServer( WSGIContainer( app ) )
-				 http_server.listen( 7080 )
-
-				 # signal handlers
-				 signal.signal( signal.SIGTERM, sig_handler )
-				 signal.signal( signal.SIGINT, sig_handler )
-
-				 # write pid
-				 with open( 'pid' , 'w' ) as pidfile :
-					 pidfile.write( str( os.getpid() ) + '\n'  )
-				 # start server
-				 IOLoop.instance().start()
-
-			 else :
-				 _logger.info( '...server already running... pid %s....'  % pid )
-				 sys,exit( 1 )
-
-
-		except Exception as e:
-			_logger.error( '...error in  trinity server...' + e.message )
-			sys.exit( 1 )
+if __name__ == "__main__" :
+			_logger.info( '....cci_trinity...' )
+			try :
+				app.run( host= '0.0.0.0' , port=7080, debug=True  )
+			except Exception as e:
+				_logger.error( '...error in  trinity server...' + e.message )
 
 
 

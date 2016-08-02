@@ -724,12 +724,12 @@ ScreenManagement:
                                     size_hint_y: .75
                                     adapter:
                                         la.ListAdapter(
-                                        data=["cci #{0}".format(i) for i in xrange(30)],
+                                        data=["firewalk(internal)" , "firewalk(external)"],
                                         selection_mode='single',
                                         allow_empty_selection=False,
                                         cls=lv.ListItemButton)
                             TextInput:
-                                text: 'christmas scan....'
+                                text: 'firewalk scan....'
                                 id: classics_description
                                 size_hint_y: .25
                                 cursor_blink: False
@@ -766,7 +766,7 @@ ScreenManagement:
                                 on_press: app._on_view_manager()
                             ActionButton:
                                 icon: 'menu-icon.png'
-                                on_press: app._on_view_manager()
+                                on_press: app._manip_extended_window()
                     BoxLayout:
                         orientation: 'vertical'
 
