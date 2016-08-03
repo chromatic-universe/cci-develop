@@ -300,7 +300,7 @@ class kingconsoleApp( App ) :
 						 'application' ,
 						 'init' ,
 						 id ,
-						 '(empty)'] ) )
+						 self._console_ifconfig] ) )
 			self.dbq.put( package )
 			self._session_id = uid
 

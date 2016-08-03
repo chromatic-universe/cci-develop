@@ -1,6 +1,7 @@
 
 
 import sys
+import os
 import copy
 import logging
 import importlib
@@ -8,6 +9,8 @@ from time import gmtime, strftime , sleep
 import subprocess as proc
 import threading
 import socket
+import datetime
+from functools import partial
 
 import kivy
 from kivy.uix.accordion import Accordion, AccordionItem
@@ -38,7 +41,8 @@ from kivy.uix.settings import SettingsWithSidebar , SettingsWithSpinner
 kivy.require( '1.9.1' )
 
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
-
+timestamp = 'cci-trinity~ {:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())
+t = 3
 
 # -------------------------------------------------------------------------------------------------
 class ConsolePopup( Popup  ) :
@@ -89,6 +93,8 @@ class ccitrinityApp( App ) :
 				fh.setFormatter( formatter )
 				self._logger.addHandler( fh )
 				self._logger.info( self.__class__.__name__ + '...'  )
+				self._pid = None
+				self._clock_event = None
 
 
 
@@ -97,8 +103,57 @@ class ccitrinityApp( App ) :
 
 						:return:
 						"""
-						#self._bootstrap_trinity()
-						pass
+
+
+						self._update_status( self.root.ids.status_text , '...initializing...' )
+						is_running = False
+						try :
+							 pid = None
+							 try :
+								 with open( 'pid' , 'r' ) as pidfile :
+									pid = pidfile.read().strip()
+							 except :
+								 pass
+
+							 # check if process is running
+							 if pid :
+								 try :
+									# throws exception if process doesn't exist
+									is_running = os.path.exists( '/proc/%s' % pid )
+									self._pid = pid
+								 except :
+									# pid not running
+									pass
+
+							 if is_running is False :
+
+
+								self.root.ids.bootstrap_btn.background_color = [0,1,0,1]
+								self.root.ids.bootstrap_btn.text = 'start trinity'
+								self._update_status( self.root.ids.status_text , ' ....trinity....' )
+
+								"""
+								 # wrqputite pid
+								 with open( 'pid' , 'w' ) as pidfile :
+									 pidfile.write( str( os.getpid() ) + '\n'  )
+								 # start server
+								 IOLoop.instance().start()
+								"""
+
+							 else :
+								self._update_status( self.root.ids.status_text , ' ....trinity running....' )
+								self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
+								self.root.ids.bootstrap_btn.text = 'stop trinity'
+								self.root.ids.process_info.text = 'pid: %s  port 7080' % self._pid
+								self._logger.info( '...server already running... pid %s....'  % self._pid )
+
+
+
+						except Exception as e:
+							_logger.error( '...error in  trinity server...' + e.message )
+							sys.exit( 1 )
+
+
 
 
 			# android mishegas
@@ -117,7 +172,112 @@ class ccitrinityApp( App ) :
 				pass
 
 
-			def _bootstrap_trinity( self ):
+
+			def _debug_log_snippet( self ) :
+				"""
+
+				:return:
+				"""
+
+				try :
+
+					cmd = [ 'tail' ,
+							'-n' ,
+							'10' ,
+							'cci-trinity-server.log-debug.log'
+						   ]
+					return proc.check_output( cmd )
+				except proc.CalledProcessError as e:
+					self._logger.error( '..._debug_log_snippet...' + e.message )
+
+
+
+			@staticmethod
+			def _update_status( container , status ) :
+				"""
+
+				:param status:
+				:return:
+				"""
+				container.text = container.text + timestamp + status + '\n'
+
+
+
+
+
+
+			def _on_start_trinity( self ) :
+				"""
+
+				:return:
+				"""
+
+				pid = str()
+
+				if self.root.ids.bootstrap_btn.text == 'start trinity' :
+					try :
+						self._update_status( self.root.ids.status_text , ' ....starting trinity....' )
+
+						b_ret = self._bootstrap_trinity()
+
+						if not b_ret :
+							self._update_status( self.root.ids.status_text , ' ....trinity bootstrap failed....' )
+						else :
+
+							self._update_status( self.root.ids.status_text , ' ....trinity bootstrapped..running....' )
+							self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
+							self.root.ids.bootstrap_btn.text = 'stop trinity'
+							self._update_status( self.root.ids.status_text , ' ...trinity started...' )
+							self._clock_event = Clock.schedule_interval( self._pid_callback, 2 )
+							#self.root.ids.process_info.text = 'pid: %s port: 7080' % pid
+					except Exception as e :
+						self._logger.error( '..._on_start_trinity...' + e.message )
+						self._update_status( self.root.ids.status_text , e.message )
+				else :
+					try :
+						try :
+							 with open( 'pid' , 'r' ) as pidfile :
+								pid = pidfile.read().strip()
+							 self._pid = pid
+						except :
+							 pass
+
+						try :
+							cmd = ['su' ,
+								   '-c' ,
+								   'kill' ,
+								   '-9' ,
+								   pid]
+
+							proc.check_output( cmd )
+
+							self._update_status( self.root.ids.status_text , ' ....trinity server stopped ....' )
+							self.root.ids.bootstrap_btn.background_color = [0,1,0,1]
+							self.root.ids.bootstrap_btn.text = 'start trinity'
+							if self._clock_event :
+								self._clock_event.cancel()
+							self.root.ids.process_info.text = 'port: 7080'
+						except proc.CalledProcessError as e:
+							self._logger.error( 'kill server failed...' + e.message )
+							self._update_status( self.root.ids.status_text , ' ...kill server failed...' + e.message )
+
+					except Exception as e :
+						self._logger.error( '..._on_stop_trinity...' + e.message )
+						self._update_status( self.root.ids.status_text , e.message )
+
+
+
+			def _pid_callback( self , dt ) :
+					pid = str()
+
+
+					with open( 'pid' , 'r' ) as pidfile :
+						pid = pidfile.read().strip()
+					self.root.ids.process_info.text = 'pid: %s port: 7080' % pid
+
+
+
+			def _bootstrap_trinity( self ) :
 						"""
 
 						:return:
@@ -125,6 +285,8 @@ class ccitrinityApp( App ) :
 
 						# another process ont that port?
 						#
+
+						b_ret = False
 						try:
 							s = socket.socket()
 							s.setsockopt( socket.SOL_SOCKET , socket.SO_REUSEADDR , 1 )
@@ -133,26 +295,44 @@ class ccitrinityApp( App ) :
 							self._logger.error(  '..bootstrap failed...errno:%d...%s' % ( e[0] , e[1] ) )
 							return
 
-
+						pid = str()
 						try :
 
 								self._logger.info( "...bootstrapping cci_trinity....." )
+
 								cmd = [
 								  "su" ,
 								  "-c" ,
 								  "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-								  "./cci-trinity.pyo"
+								  "./cci-trinity.pyo" ,
+								  "&"
 								  ]
+
+								"""
+								cmd = [
+								  "python" ,
+								  "./cci-trinity.py" ,
+								  "&
+								  ]
+								"""
 
 
 								proc.Popen( cmd )
 
+								try:
+									s = socket.socket()
+									s.setsockopt( socket.SOL_SOCKET , socket.SO_REUSEADDR , 1 )
+									s.bind( ( socket.gethostname()  , 7080 ) )
+									b_ret = True
+									self._logger.info( "bootstrapped cci_trinity....." )
+								except socket.error as e:
+									self._logger.info( "failed tp bootstrap cci_trinity....." )
+									b_ret = False
 
-								self._logger.info( "bootstrapped cci_trinity....." )
+
 
 						except proc.CalledProcessError as e:
 							self._logger.error( 'bootstrap failed...' + e.message )
-							#sys.exit( 1 )
 						except OSError as e :
 							self._logger.error( 'file does not exist?...' + e.message )
 							#sys.exit( 1 )
@@ -162,6 +342,9 @@ class ccitrinityApp( App ) :
 						except Exception as e :
 							self._logger.error(  e.message )
 							#sys.exit( 1 )
+
+						return b_ret
+
 
 
 
