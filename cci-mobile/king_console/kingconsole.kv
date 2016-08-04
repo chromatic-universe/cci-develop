@@ -502,11 +502,11 @@
                                 orientation: 'horizontal'
                                 cols: 1
                                 size_hint_y: None
-                                size: (400,600)
+                                size: (400,800)
                                 Button:
                                     text: 'configure transport atoms....'
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
-                                    size_hint_y: 2
+                                    size_hint_y: 2.5
                                 Label:
                                     text: 'current document context:'
                                     color: [1,0,0,1]
@@ -515,45 +515,45 @@
                                     id:    id_document_context
                                     text: 'mongdb'
                                     on_press: app._on_document_context()
-                                    size_hint_y: 2
+                                    size_hint_y: 2.5
                                 Label:
                                     text: 'bootstrap doc metadata:'
                                     color: [1,0,0,1]
                                 Button:
                                     text: 'cci-aws-3'
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
-                                    size_hint_y: 2
+                                    size_hint_y: 2.5
                                 Label:
                                     text: 'current search context:'
                                     color: [1,0,0,1]
                                 Button:
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                     text: 'elasticsearch'
-                                    size_hint_y: 2
+                                    size_hint_y: 2.5
                                 Label:
                                     text: 'bootstrap search metadata:'
-                                    #size_hint_y: .15
+                                    #size_hint_y: 1.75
                                     color: [1,0,0,1]
                                 Button:
                                     text: 'search-chromatic-search-p647s4rdqjcgub7tt7neealjn4.us-west-2.es.amazonaws.com'
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                     text_size: (500,None)
                                     shorten: True
-                                    size_hint_y: 2
+                                    size_hint_y: 2.5
                                 Label:
                                     text: 'local:'
                                     color: [1,0,0,1]
                                 Button:
                                     text: 'sqllite3'
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
-                                    size_hint_y: 2
+                                    size_hint_y: 2.5
                                 Label:
                                     text: 'stream encryption:'
                                     color: [1,0,0,1]
                                 Button:
                                     text: 'tls'
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
-                                    size_hint_y: 2
+                                    size_hint_y: 2.5
 
 
                 AccordionItem:
@@ -566,35 +566,39 @@
                                 orientation: 'horizontal'
                                 cols: 1
                                 size_hint_y: None
-                                size: (400,400)
+                                size: (400,800)
                                 Button:
                                     text: 'configure pubsub atoms....'
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
-                                    size_hint_y: 1.90
+                                    size_hint_y: 1.75
                                 Label:
                                     text: 'current publishing context:'
                                     color: [1,0,0,1]
                                 Button:
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                     text: 'kafka'
+                                    size_hint_y: 1.75
                                 Label:
                                     text: 'bootstrap pub metadata:'
                                     color: [1,0,0,1]
                                 Button:
                                     text: 'cci-aws-2'
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                    size_hint_y: 1.75
                                 Label:
                                     text: 'current sub context:'
                                     color: [1,0,0,1]
                                 Button:
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                     text: 'kafka'
+                                    size_hint_y: 1.75
                                 Label:
                                     text: 'bootstrap sub metadata:'
                                     color: [1,0,0,1]
                                 Button:
                                     text: 'cci-aws-2'
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+                                    size_hint_y: 1.75
         AccordionItem:
             title: 'cci-maelstrom'
             GridLayout

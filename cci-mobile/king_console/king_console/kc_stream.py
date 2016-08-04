@@ -99,16 +99,36 @@ class kc_mongo_config( object ) :
 
 
 							layout = GridLayout( orientation = 'horizontal' ,
-											  cols = 1 )
-
+											  cols = 1 ,
+											  background_color = [0,0,0,0])
 							action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar' ) )
 							layout.add_widget( action_bar )
+							layout.add_widget( Image( source = './image/mongodb-log.png' , pos_hint_y = 0 ,
+													  size_hint_y = .2 ) )
 							scroll = ScrollView()
-							grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 400 ) )
-							grid.add_widget( Image( source = './image/mongodb-log.png' , pos_hint_y = 0 , size_hint_y = .2 ) )
-							bx = BoxLayout( orientation = 'horizontal' )
-							bx.add_widget( Label(  text = 'mongo' ) )
-							grid.add_widget( bx )
+							grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 500 ) )
+							grid.add_widget( Label(  text = 'active:' ) )
+							grid.add_widget( Switch( active = True ) )
+							grid.add_widget( Label(  text = 'bootstrap:' ) )
+							grid.add_widget( TextInput(  text = 'cci-aws-3' ,
+														id = 'mongo_bootstrap' ,
+														cursor_blink =  True ,
+														readonly = False ,
+														multiline =  True ) )
+							grid.add_widget( Label(  text = 'booststrap port:' ) )
+							grid.add_widget( TextInput(  text = '27017' ,
+														id = 'mongo_bootstrap_port' ,
+														cursor_blink =  True ,
+														readonly = False ,
+														multiline =  True ) )
+							grid.add_widget( Button( text = 'test connect'  ,
+													 valign = 'middle',
+													 background_color = [0,0,0,0] ,
+											         color = [1,0,0,1] ) )
+							scroll.add_widget( grid )
+							layout.add_widget( scroll )
+
+
 							#event = threading.Event()
 
 							try :
@@ -131,12 +151,10 @@ class kc_mongo_config( object ) :
 										grid.add_widget( Button( text = s , halign = 'center' , font_size = 14 ,
 																 size_hint_y = None , size_hint_x = 480  ) )
 								"""
-								scroll.add_widget( grid )
-								layout.add_widget( scroll )
 
 								popup = ConsolePopup( title='document context' , content=layout )
-								btn = popup.content.children[1].children[0].children[0]
-								btn.on_press = popup.on_press_context
+								#btn = popup.content.children[1].children[0].children[0]
+								#btn.on_press = popup.on_press_context
 							finally :
 								#App.get_running_app().dbpq_lk.release()
 								pass

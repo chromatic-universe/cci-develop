@@ -60,6 +60,8 @@ from king_console.kc_thread_manager \
 from king_console.kc_db_manager import kc_db_manager
 from king_console.kc_stream 	import kc_mongo_config
 
+import paramiko
+
 
 kivy.require(  '1.9.1'  )
 

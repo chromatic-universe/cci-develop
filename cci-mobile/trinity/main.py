@@ -273,7 +273,7 @@ class ccitrinityApp( App ) :
 
 					with open( 'pid' , 'r' ) as pidfile :
 						pid = pidfile.read().strip()
-					self.root.ids.process_info.text = 'pid: %s port: 7080' % pid
+					self.root.ids.process_info.text = 'pid: %s   ~  port: 7080' % pid
 
 
 
