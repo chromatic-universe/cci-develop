@@ -11,6 +11,7 @@ import requests
 import pprint
 import StringIO
 import pymongo
+import json
 from pymongo import MongoClient
 
 #cci
@@ -47,6 +48,7 @@ class cci_mini_mongo( cci_mini_mobile.cci_mobile ) :
 				self._mongo_port = port
 				self._device_moniker = device_moniker
 				self._device_info = dict()
+				self._connected = False
 
 
 				if not self._bootstrap :
@@ -61,6 +63,12 @@ class cci_mini_mongo( cci_mini_mobile.cci_mobile ) :
 			@bootstrap.setter
 			def bootstrap( self , server ) :
 				self._bootstrap = servers
+			@property
+			def connected( self ) :
+				return self._connected
+			@connected.setter
+			def connected( self , conn ) :
+				self._connected = conn
 			@property
 			def device_moniker( self ) :
 				return self._device_moniker
@@ -126,15 +134,16 @@ class cci_mini_mongo( cci_mini_mobile.cci_mobile ) :
 									  ':'  + \
 									 str( self._mongo_port )
 
-						client = MongoClient( connect_str )
-						self._mongo_dbs = client.database_names()
-						db = client['cci_maelstrom']
+						self._mongo = MongoClient( connect_str )
+						self._mongo_dbs = self._mongo.database_names()
+						db = self._mongo['cci_maelstrom']
 						cursor = db['auth_devices'].find({'moniker' : self._device_moniker})
 						for document in cursor :
-							s = StringIO.StringIO()
-							pprint.pprint( document , s )
-							self._device_info = s.getvalue()
+							self._device_info = document
 						self._logger.info( '....mongo ok....' )
 
 				 except Exception as e :
 						self._logger.error( e.message )
+						self._connected = False
+				 self._connected = True
+

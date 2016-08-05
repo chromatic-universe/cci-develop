@@ -40,9 +40,7 @@ import uuid
 from king_console.screen import ConsolePopup
 from king_console import resource_factory \
 	                     as resources
-
-import cci_mini_mongo
-import cci_mini_elastic
+from king_console import cci_mini_mongo as mongo_client
 
 
 # ------------------------------------------------------------------------------------------
@@ -76,6 +74,7 @@ class kc_mongo_config( object ) :
 					return resources.const_resource_ids[resource_id]
 
 
+
 				@staticmethod
 				def _post_function_call( func , params ) :
 					"""
@@ -90,6 +89,44 @@ class kc_mongo_config( object ) :
 
 
 
+
+
+				def _on_mongo_test_connect( self ) :
+							"""
+
+							:return:
+							"""
+
+							mongo = mongo_client.cci_mini_mongo( bootstrap = 'cci-aws-3' )
+							layout = GridLayout( orientation = 'horizontal' ,
+											  cols = 1 ,
+											  background_color = [0,0,0,0])
+							grid = GridLayout( cols=1 , orientation = 'horizontal', size_hint_y = None , size=(400 , 500  ) )
+							if mongo.connected :
+									action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_2' ) )
+									layout.add_widget( action_bar )
+									for key , value in mongo.device_info.iteritems() :
+										grid.add_widget( Label( text = str( key ) + ':  '  + str( value )  ,
+										                        text_size = (400 , None ) ) )
+
+									scroller = ScrollView( )
+									scroller.add_widget( grid )
+									layout.add_widget( scroller )
+									popup = ConsolePopup( title='connected...auth_devices info...' ,
+														  content = layout )
+									popup.open()
+							else :
+								popup = ConsolePopup( title='mongo disconnected....no route to host...' ,
+													  content = Label( text = 'could not connect to mongo host...' ) ,
+													  size = ( 400 ,400 ) )
+								popup.open()
+
+
+
+
+
+
+
 				def show_mongo_config( self ) :
 							"""
 
@@ -101,7 +138,7 @@ class kc_mongo_config( object ) :
 							layout = GridLayout( orientation = 'horizontal' ,
 											  cols = 1 ,
 											  background_color = [0,0,0,0])
-							action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar' ) )
+							action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_2' ) )
 							layout.add_widget( action_bar )
 							layout.add_widget( Image( source = './image/mongodb-log.png' , pos_hint_y = 0 ,
 													  size_hint_y = .2 ) )
@@ -121,10 +158,13 @@ class kc_mongo_config( object ) :
 														cursor_blink =  True ,
 														readonly = False ,
 														multiline =  True ) )
-							grid.add_widget( Button( text = 'test connect'  ,
-													 valign = 'middle',
-													 background_color = [0,0,0,0] ,
-											         color = [1,0,0,1] ) )
+							btn = Button(    text = 'test connect'  ,
+											 valign = 'middle',
+											 id = 'test_btn' ,
+											 background_color = [0,0,0,0] ,
+											 color = [1,0,0,1] )
+
+							grid.add_widget( btn )
 							scroll.add_widget( grid )
 							layout.add_widget( scroll )
 
@@ -132,29 +172,12 @@ class kc_mongo_config( object ) :
 							#event = threading.Event()
 
 							try :
-								#event.wait( timeout=5 )
-								#get payload
-								"""
-								App.get_running_app().dbpq_lk.acquire()
-								lst = list()
-								while not App.get_running_app().dbpq.empty() :
-									payload = App.get_running_app().dbpq.get()
-									#m = [ str( x )  for x in payload]
-									#lst.append( m )
-									for x in payload :
-										s = '%s segment=%s \ncall moniker=%s \nparams=%s' \
-												% ( str( x[5] ) ,
-														 x[2] ,
-														 x[3] ,
-														 x[4]
-													)
-										grid.add_widget( Button( text = s , halign = 'center' , font_size = 14 ,
-																 size_hint_y = None , size_hint_x = 480  ) )
-								"""
 
 								popup = ConsolePopup( title='document context' , content=layout )
+								b = popup.content.children[0].children[0].children[0]
 								#btn = popup.content.children[1].children[0].children[0]
-								#btn.on_press = popup.on_press_context
+								b.bind( on_press = lambda a:self._on_mongo_test_connect() )
+
 							finally :
 								#App.get_running_app().dbpq_lk.release()
 								pass
