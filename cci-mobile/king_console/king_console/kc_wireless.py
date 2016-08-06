@@ -39,11 +39,31 @@ def quick_wireless_sniff() :
 
 
 
+# ---------------------------------------------------------------------------------------------
+def essid_scan() :
+			"""
+
+			:return:
+			"""
+
+			out = str()
+			try :
+				cmd = ['su' ,'-c' , '/system/bin/iwlist' , 'scan']
+				out = proc.check_output( cmd )
+
+			except proc.CalledProcessError as e :
+
+				return e.message
+
+			return out
+
+
 
 # ------------------------------------------------------------------------------------
 if __name__ == '__main__' :
 
-			quick_wireless_sniff()
+			#quick_wireless_sniff()
+			print essid_scan()
 
 
 

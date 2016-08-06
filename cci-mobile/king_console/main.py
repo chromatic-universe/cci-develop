@@ -59,6 +59,7 @@ from king_console.kc_thread_manager \
 				  				import kc_thread_manager
 from king_console.kc_db_manager import kc_db_manager
 from king_console.kc_stream 	import kc_mongo_config
+from king_console.kc_wireless import *
 
 import paramiko
 
@@ -208,10 +209,11 @@ class kingconsoleApp( App ) :
 			self._full_screen = None
 			self._full_screen_lst = list()
 			self._full_item = None
-#
+
 			self._console_local , \
 			self._console_real , \
-			self._console_ifconfig = self._console_host_name = self._Local_net_info()
+			self._console_ifconfig , \
+			self._console_iwlist =  self._Local_net_info()
 			self._session_id = None
 
 			self._current_ip = self._console_ifconfig
@@ -228,6 +230,7 @@ class kingconsoleApp( App ) :
 			self._is_full_screen = False
 			self._is_dirty_payload = False
 			self._dlg_param = None
+			self._diaspora = True
 
 
 			Window.on_rotate = self._on_rotate
@@ -306,6 +309,13 @@ class kingconsoleApp( App ) :
 			self.dbq.put( package )
 			self._session_id = uid
 
+			# document repository
+			mongo = kc_mongo_config( bootstrap ='cci-aws-1' ,
+									 log = self._logger ,
+									 device_moniker = 'cci_dev_device_1' )
+			mongo._update_device_session()
+
+
 
 
 		def _close_session( self ) :
@@ -340,6 +350,7 @@ class kingconsoleApp( App ) :
 			out = str()
 			out2 = str()
 			ifconfig = str()
+			iw = str()
 
 			try :
 
@@ -359,6 +370,9 @@ class kingconsoleApp( App ) :
 							cmd = ['busybox' , 'ifconfig']
 							ifconfig = proc.check_output( cmd  )
 							self.logger.info( ifconfig )
+							iw =  essid_scan()
+
+
 					except proc.CalledProcessError as e :
 						self._logger.error( e.message )
 						b_ret = False
@@ -366,7 +380,7 @@ class kingconsoleApp( App ) :
 				b_ret = False
 				self._logger.error( e.message )
 
-			return out , out2 , ifconfig
+			return out , out2 , ifconfig , iw
 
 
 
@@ -525,8 +539,9 @@ class kingconsoleApp( App ) :
 
 			self.root.current_screen.ids.console_local_id.text = self._console_local
 			self.root.current_screen.ids.console_real_id.text = self._console_real
-			self.root.current_screen.ids.console_interfaces.text = self._console_ifconfig
+			self.root.current_screen.ids.console_interfaces.text = self._console_ifconfig + '\n\n' + self._console_iwlist
 			self._cur_console_buffer = self.root.current_screen.ids.console_interfaces.text
+
 
 
 
@@ -539,16 +554,11 @@ class kingconsoleApp( App ) :
 			for item in acc.children :
 				try:
 					if not item.collapse :
-						"""
-						if not item.title in self._console_constructed :
-							res = item.title + '_acc_item'
-							ai = Builder.load_string( self._retr_resource( res ) )
-							item.add_widget( ai )
-							self._console_constructed.append( item.title )
-						"""
 						return item
 				except :
 					pass
+
+
 
 
 		def accordion_touch_up( self ) :
@@ -562,6 +572,7 @@ class kingconsoleApp( App ) :
 										   item.title + '...accordion_item_touch_down' )
 				except :
 					pass
+
 
 
 
@@ -582,6 +593,8 @@ class kingconsoleApp( App ) :
 
 
 
+
+
 		def _open_extended_window( self ) :
 			"""
 
@@ -592,6 +605,8 @@ class kingconsoleApp( App ) :
 			self.root.current = 'screen_' + item.title
 
 
+
+
 		def _manip_extended_window( self ) :
 			"""
 
@@ -599,6 +614,8 @@ class kingconsoleApp( App ) :
 			"""
 
 			self.root.current = 'screen_cci'
+
+
 
 
 		def _on_full_screen( self ) :
@@ -638,8 +655,11 @@ class kingconsoleApp( App ) :
 				:return:
 				"""
 
-				mongo = kc_mongo_config( bootstrap ='cci-aws-1' , log = self._logger )
+				mongo = kc_mongo_config( bootstrap ='cci-aws-1' ,
+										 log = self._logger ,
+										 device_moniker = 'cci_dev_device_1' )
 				mongo.show_mongo_config()
+
 
 
 

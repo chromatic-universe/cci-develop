@@ -49,7 +49,9 @@ class kc_mongo_config( object ) :
 
 				"""
 
-				def __init__( self  , bootstrap = None , log = None ) :
+				def __init__( self  , bootstrap = None ,
+							          log = None ,
+									  device_moniker = None) :
 							"""
 
 							:param bootstrap:
@@ -60,6 +62,8 @@ class kc_mongo_config( object ) :
 								raise Exception( 'no logger provided' )
 
 							self._booststrap = bootstrap
+							self._logger = log
+							self._moniker = device_moniker
 
 
 
@@ -89,6 +93,27 @@ class kc_mongo_config( object ) :
 
 
 
+				def _show_mongo_info( self, container ) :
+							"""
+
+							:param container:
+							:return:
+							"""
+
+							mongo = mongo_client.cci_mini_mongo( bootstrap = self._bootstrap ,
+																 device_moniker = self._moniker )
+							s = str()
+							if mongo.connected :
+								for key , value in mongo.device_info.iteritems() :
+									s += str( key ) + ':   '  + str( value ) + '\n'
+							else :
+								s = 'mongo disconnected....no route to host...' ,
+								s += 'could not connect to mongo host...'
+
+							container.text = s
+
+
+
 
 
 				def _on_mongo_test_connect( self ) :
@@ -97,33 +122,31 @@ class kc_mongo_config( object ) :
 							:return:
 							"""
 
-							mongo = mongo_client.cci_mini_mongo( bootstrap = 'cci-aws-3' )
+
 							layout = GridLayout( orientation = 'horizontal' ,
 											  cols = 1 ,
 											  background_color = [0,0,0,0])
 							grid = GridLayout( cols=1 , orientation = 'horizontal', size_hint_y = None , size=(400 , 500  ) )
-							if mongo.connected :
-									action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_2' ) )
-									layout.add_widget( action_bar )
-									for key , value in mongo.device_info.iteritems() :
-										grid.add_widget( Label( text = str( key ) + ':  '  + str( value )  ,
-										                        text_size = (400 , None ) ) )
 
-									scroller = ScrollView( )
-									scroller.add_widget( grid )
-									layout.add_widget( scroller )
-									popup = ConsolePopup( title='connected...auth_devices info...' ,
-														  content = layout )
-									popup.open()
-							else :
-								popup = ConsolePopup( title='mongo disconnected....no route to host...' ,
-													  content = Label( text = 'could not connect to mongo host...' ) ,
-													  size = ( 400 ,400 ) )
-								popup.open()
+							action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_2' ) )
+							layout.add_widget( action_bar )
+							grid.add_widget( Image( source = './image/mongodb-log.png'  , size_hint_y = .25 ) )
+							view = Builder.load_string( self._retr_resource( 'text_scroller') )
+							view.children[0].text = ''
+							vx = view.children[0]
+							grid.add_widget( view )
+							btn = Button(    text = 'test'  ,
+											 valign = 'middle',
+											 id = 'test_btn' ,
+											 background_color = [0,0,0,0] ,
+											 color = [1,0,0,1]  ,
+											 size_hint_y = .15 )
+							btn.bind( on_press = lambda a:self._show_mongo_info( vx ) )
+							grid.add_widget( btn )
+							layout.add_widget( grid )
 
-
-
-
+							popup = ConsolePopup( title='mongo connect' , content = layout )
+							popup.open()
 
 
 
@@ -151,14 +174,16 @@ class kc_mongo_config( object ) :
 														id = 'mongo_bootstrap' ,
 														cursor_blink =  True ,
 														readonly = False ,
-														multiline =  True ) )
+														multiline =  True ,
+														size_hint_y = .5 ) )
 							grid.add_widget( Label(  text = 'booststrap port:' ) )
 							grid.add_widget( TextInput(  text = '27017' ,
 														id = 'mongo_bootstrap_port' ,
 														cursor_blink =  True ,
 														readonly = False ,
-														multiline =  True ) )
-							btn = Button(    text = 'test connect'  ,
+														multiline =  True ,
+														size_hint_y = .5 ) )
+							btn = Button(    text = 'manip'  ,
 											 valign = 'middle',
 											 id = 'test_btn' ,
 											 background_color = [0,0,0,0] ,
@@ -177,9 +202,44 @@ class kc_mongo_config( object ) :
 								b = popup.content.children[0].children[0].children[0]
 								#btn = popup.content.children[1].children[0].children[0]
 								b.bind( on_press = lambda a:self._on_mongo_test_connect() )
+								popup.open()
 
 							finally :
 								#App.get_running_app().dbpq_lk.release()
 								pass
 
-							popup.open()
+
+
+
+				def _update_device_session( self ) :
+							"""
+
+							:return:
+							"""
+
+
+							mongo = mongo_client.cci_mini_mongo( bootstrap = self._bootstrap ,
+																 device_moniker = self._moniker )
+							s = str()
+							if mongo.connected :
+								db = mongo.mongo['cci_maelstrom']
+								result = db['auth_devices'].update_one (
+									{"moniker": self._moniker } ,
+										{
+											"$set":
+											{
+												"active ": "true"
+											},
+											"$currentDate": { "last_active" : True }
+
+										}
+
+								)
+
+								if result.matched_count == 0 :
+									self._logger.error( '..could not update mongo db device info...' )
+								else :
+									self._logger.info( '..could not update mongo db device info...' )
+
+
+
