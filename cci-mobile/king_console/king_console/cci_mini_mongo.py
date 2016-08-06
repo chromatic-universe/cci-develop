@@ -28,7 +28,7 @@ class cci_mini_mongo( cci_mini_mobile.cci_mobile ) :
 			def __init__( self ,
 						  bootstrap=None ,
 						  port=27017 ,
-						  device_moniker='cci_dev_device_1' ,
+						  device_id=None ,
 						  connect_on_construct=True ) :
 				"""
 				init
@@ -46,7 +46,7 @@ class cci_mini_mongo( cci_mini_mobile.cci_mobile ) :
 				self._mongo = None
 				self._mongo_dbs = None
 				self._mongo_port = port
-				self._device_moniker = device_moniker
+				self._device_id = device_id
 				self._device_info = dict()
 				self._connected = False
 
@@ -70,11 +70,11 @@ class cci_mini_mongo( cci_mini_mobile.cci_mobile ) :
 			def connected( self , conn ) :
 				self._connected = conn
 			@property
-			def device_moniker( self ) :
-				return self._device_moniker
-			@device_moniker.setter
-			def device_moniker( self , moniker  ) :
-				self._device_moniker = moniker
+			def device_id( self ) :
+				return self._device_id
+			@device_id.setter
+			def device_id( self , id  ) :
+				self._device_id = id
 			@property
 			def device_info( self ) :
 				return self._device_info
@@ -134,10 +134,13 @@ class cci_mini_mongo( cci_mini_mobile.cci_mobile ) :
 									  ':'  + \
 									 str( self._mongo_port )
 
-						self._mongo = MongoClient( connect_str )
+						self._mongo = MongoClient( connect_str ,
+												   tz_aware = True ,
+												   socketTimeoutMS = 10000 ,
+												   connectTimeoutMS = 10000 )
 						self._mongo_dbs = self._mongo.database_names()
 						db = self._mongo['cci_maelstrom']
-						cursor = db['auth_devices'].find({'moniker' : self._device_moniker})
+						cursor = db['auth_devices'].find({'device_id' : self._device_id})
 						for document in cursor :
 							self._device_info = document
 						self._logger.info( '....mongo ok....' )

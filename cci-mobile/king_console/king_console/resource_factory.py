@@ -18,12 +18,29 @@ ScrollView:
 		text: 'foo'
 		size_hint: 1, None
 		cursor_blink: True
-		background_color: [0,0,0,0]
+		background_color: [1,0,0,0]
 		foreground_color: [1,1,1,1]
 		multiline: True
 		id: tx_in
 		font_size: 16
 		readonly: True
+		height: max( (len(self._lines)+1) * self.line_height, scrlv.height)
+"""
+,
+					   'note_scroller' :
+"""
+ScrollView:
+	id: scrlv
+	TextInput:
+		text: ''
+		size_hint: 1, None
+		cursor_blink: True
+		#foreground_color: [0,0,0,0]
+		#background_color: [1,1,1,1]
+		multiline: True
+		id: tx_in
+		font_size: 16
+		readonly: False
 		height: max( (len(self._lines)+1) * self.line_height, scrlv.height)
 """
 ,

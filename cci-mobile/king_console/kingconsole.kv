@@ -623,6 +623,10 @@
                             icon: 'history.png'
                             text: 'history'
                             on_press: root._on_show_history()
+                        ActionButton:
+                            icon: './image/note.png'
+                            text: 'notes'
+                            on_press: root._on_show_session_note()
 
                 BoxLayout:
                     orientation: 'vertical'
@@ -668,7 +672,7 @@
                                     foreground_color: [1,1,1,1]
                                     multiline: True
                                     font_size: 14
-                                    readonly: True
+                                    readonly: False
                                     height: max( (len(self._lines)+1) * self.line_height, console_scrlv.height)
 
 

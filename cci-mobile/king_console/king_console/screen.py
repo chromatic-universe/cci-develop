@@ -10,6 +10,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.button import Button
 from kivy.lang import Builder
 from kivy.uix.scrollview import ScrollView
+from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import StringProperty, ObjectProperty
 from kivy.uix.treeview import TreeViewLabel
@@ -20,6 +21,7 @@ from kivy.uix.screenmanager import ScreenManager, \
 								   FallOutTransition , \
 								   SlideTransition
 from kivy.graphics import Color
+from kivy.core.window import Window
 
 #cci
 from king_console import resource_factory \
@@ -104,12 +106,34 @@ class ConsolePopup( Popup  ) :
 
 					self.dismiss()
 
+
+
 					return False
 
 
 				def on_dismiss( self ) :
 					pass
 
+
+
+# -------------------------------------------------------------------------------------------------
+class EditPopup( ConsolePopup ) :
+
+
+
+				def on_press_context( self , *args) :
+
+					self.dismiss()
+
+					"""
+					self._post_function_call( 'insert_session_call' , [  session_id ,
+																		'application' ,
+																		'insert_session_call' ,
+																		'(non-idempotent)'  ,
+																		boiler ] )
+					"""
+
+					return False
 
 
 
@@ -141,6 +165,8 @@ class CciScreen( Screen ) :
 
 
 
+
+
 				def _post_function_call( self , func , params ) :
 					"""
 
@@ -166,6 +192,33 @@ class CciScreen( Screen ) :
 					if not App.get_running_app()._call_stack_debug :
 						package = ( func , params )
 						App.get_running_app().dbq.put( package )
+
+
+
+
+
+				def _on_show_session_note( self ) :
+					"""
+
+					:return:
+					"""
+
+					count = App.get_running_app()._console_count
+					"""
+					self._update_main_console(  count ,
+											    threaded = False ,
+											    func = None ,
+											    moniker = 'session note #' ,
+											    edit = True
+										      )
+					"""
+					layout = GridLayout( orientation = 'horizontal' ,
+									  cols = 1 )
+					tx = Builder.load_string( self._retr_resource( 'note_scroller' ) )
+					layout.add_widget( tx )
+					popup = ConsolePopup( title='note for session ' + App.get_running_app().session ,
+										  content=layout )
+					popup.open()
 
 
 
@@ -211,7 +264,7 @@ class CciScreen( Screen ) :
 						layout.add_widget( scroll )
 						popup = ConsolePopup( title='console history' , content=layout )
 						btn = popup.content.children[1].children[0].children[0]
-						btn.on_press = popup.on_press_context
+						btn.bind( on_press = lambda a:self._on_show_session_note() )
 					finally :
 						App.get_running_app().dbpq_lk.release()
 
@@ -411,7 +464,9 @@ class CciScreen( Screen ) :
 										  count ,
 										  threaded = False ,
 										  func = None ,
-										  moniker = None ) :
+										  moniker = None ,
+										  edit = False
+										  ) :
 					"""
 
 					:return:
@@ -432,11 +487,16 @@ class CciScreen( Screen ) :
 											id = 'content' ,
 											size_hint_y = 0.1 ) )
 					# console text
-					scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
+					if edit :
+						scrolly = Builder.load_string( self._retr_resource( 'note_scroller' ) )
+					else :
+						scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
 					tx = scrolly.children[0]
-
+					if edit :
+						tx.text = ''
+					else :
+ 						tx.text = 'standby...working...'
 					self._console_text = tx
-					tx.text = 'standby...working...'
 					#scrollbox
 					layout.add_widget( scrolly )
 					#footer

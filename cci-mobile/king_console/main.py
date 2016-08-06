@@ -95,7 +95,7 @@ def local_mac_addr() :
 		"""
 
 		try :
-			return proc.check_output( ['cat' , '/sys/class/net/wlan0/address'] ).strip()
+			return proc.check_output( ['cat' , '/sys/class/net/wlan0/address'] ).strip().lower()
 		except :
 			pass
 
@@ -310,10 +310,12 @@ class kingconsoleApp( App ) :
 			self._session_id = uid
 
 			# document repository
-			mongo = kc_mongo_config( bootstrap ='cci-aws-1' ,
+			mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
 									 log = self._logger ,
-									 device_moniker = 'cci_dev_device_1' )
-			mongo._update_device_session()
+									 device_id = local_mac_addr() ,
+									 last_ip = self._console_local ,
+									 last_real_ip = self._console_real )
+			mongo._update_device_session( True )
 
 
 
@@ -328,6 +330,13 @@ class kingconsoleApp( App ) :
 			package = ( ( 'update_session_status'  ,
 						[0 , self._session_id] ) )
 			self.dbq.put( package )
+			# document repository
+			mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
+									 log = self._logger ,
+									 device_id = local_mac_addr() ,
+									 last_ip = self._console_local ,
+									 last_real_ip = self._console_real)
+			mongo._update_device_session( False )
 
 
 
@@ -434,11 +443,30 @@ class kingconsoleApp( App ) :
 			pass
 
 
+
+		@mainthread
+		def _show_exit( self ) :
+			"""
+
+			:return:
+			"""
+			layout = Label( text = '...closing streams...standby...' )
+			pop = Popup( title='break down' ,
+						           content=layout , size=( 400 , 300 ) )
+			pop.open()
+
+
+
 		def on_stop( self ) :
 			"""
 
 			:return:
 			"""
+
+			layout = Label( text = '...closing streams...standby...' )
+			pop = Popup( title='break down' ,
+						           content=layout , size=( 400 , 300 ) )
+			pop.open()
 
 			# mark session as closed
 			self._close_session()
@@ -500,6 +528,13 @@ class kingconsoleApp( App ) :
 			"""
 
 			self._logger.info( '...on_start...' )
+
+			try :
+				from OpenSSL import SSL
+				ctx = SSL.Context(SSL.SSLv23_METHOD)
+				self._logger.info( '..imported pyopenssl...' )
+			except :
+				self._logger.error( '..could not import pyopenssl...' )
 
 
 			layout = GridLayout( cols = 1 , orientation = 'horizontal' )
@@ -655,9 +690,9 @@ class kingconsoleApp( App ) :
 				:return:
 				"""
 
-				mongo = kc_mongo_config( bootstrap ='cci-aws-1' ,
+				mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
 										 log = self._logger ,
-										 device_moniker = 'cci_dev_device_1' )
+										 device_id = local_mac_addr() )
 				mongo.show_mongo_config()
 
 
@@ -728,6 +763,12 @@ class kingconsoleApp( App ) :
 		@dbpq_lk.setter
 		def dbpq_lk( self , lk ) :
 			self._db_payload_lk = lk
+		@property
+		def session( self ) :
+			return self._session_id
+		@session.setter
+		def session( self , sess ) :
+			self._session_id = sess
 
 
         

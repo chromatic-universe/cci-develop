@@ -51,6 +51,10 @@ sql_cursor_dictionary = {  'sd_insert_session' : 'insert into sessions  (session
 														 'size , '
 														 'cache_pending) '
 							                             'values ( %s , %d , %d )' ,
+							'sd_insert_session_note' : 	 'insert into session_notes ( session_name ,'
+														 'snippet , '
+														 'metatag) '
+							                             'values ( %s , %s , %s )' ,
 							'sd_update_session_status_closed' : 'update sessions set status = 0 '
 														 		'where session_name = %s' ,
 							'sd_update_session_status_open' :   'update sessions set status = 1 '
@@ -116,6 +120,7 @@ class kc_db_manager( object ) :
 									   'insert_session' : self.insert_session ,
 									   'insert_session_call' : self.insert_session_call ,
 									   'insert_payload' : self.insert_payload ,
+									   'insert_session_note' : self.insert_session_note ,
 									   'update_session_status' : self.update_session_status
 									 }
 					self._query_call_map =  {
@@ -262,6 +267,24 @@ class kc_db_manager( object ) :
 							   int( call_params[1] ) ,
 							   int( call_params[2] ) )
 					self._execute_sql_update( 'sd_insert_payload' , params , raw = True  )
+
+
+
+
+				def insert_session_note( self , call_params ) :
+					"""
+
+					:param session_id:
+					:param snippet:
+					:param comment:
+
+					:return:
+					"""
+
+					params = ( '"' + call_params[0] + '"'  ,
+							   int( call_params[1] ) ,
+							   int( call_params[2] ) )
+					self._execute_sql_update( 'sd_insert_session_note' , params   )
 
 
 

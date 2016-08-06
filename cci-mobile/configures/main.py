@@ -1,131 +1,62 @@
-from kivy.lang import Builder
 from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import StringProperty, ObjectProperty
-from kivy.core.window import Window
-from kivy.uix.accordion import Accordion, AccordionItem
+from kivy.uix.floatlayout import FloatLayout
+from kivy.factory import Factory
+from kivy.properties import ObjectProperty
+from kivy.uix.popup import Popup
 
-kv = '''
-#:kivy 1.9.1
-#:import rgb kivy.utils.get_color_from_hex
+import os
 
 
-<ConsoleAccordion>:
-
-	_orientation: 'vertical'
-    # My size "Listner" -call every root width or height change-
-    orientation_handler: self.check_orientation(root.width, root.height)
-
-	AccordionItem:
-		title: 'application'
-		Label:
-			text: root.btn_text
-			font_size: sp(20)
-	AccordionItem:
-		title: 'tcp'
-		Accordion
-			orientation: root._inner_orientation
-			AccordionItem:
-				title: 'syn ack'
-				Label:
-					text: root.btn_text
-					font_size: sp(20)
-			AccordionItem:
-				title: 'mini_port_scan'
-				Label:
-					text: root.btn_text
-					font_size: sp(20)
-	AccordionItem:
-		title: 'network'
-		Accordion:
-			orientation: root._inner_orientation
-			AccordionItem:
-				title: 'ping'
-			AccordionItem:
-				title: 'ping subnet'
-
-	AccordionItem:
-		title: 'datalink'
-		id: acc_item_datalink
-		Accordion:
-			orientation: root._inner_orientation
-			AccordionItem:
-				title: 'arp'
-			AccordionItem:
-				title: 'arp scan'
-	AccordionItem:
-		title: 'stream'
-		Accordion:
-			orientation: root._inner_orientation
-			AccordionItem:
-				title: 'local'
-			AccordionItem:
-				title: 'publish~subscribe'
-	AccordionItem:
-        title: 'king console'
-'''
+class LoadDialog(FloatLayout):
+    load = ObjectProperty(None)
+    cancel = ObjectProperty(None)
 
 
-class ConsoleAccordion( Accordion ) :
-
-		btn_text = StringProperty('')
-		_orientation = StringProperty('vertical')
-		_inner_orientation = StringProperty( 'horizontal' )
-		orientation_handler = ObjectProperty(None)
-
-		def __init__( self, *args, **kwargs):
-			super( ConsoleAccordion , self ).__init__( *args, **kwargs)
-
-			# get the original orientation
-			self._orientation = 'horizontal' if Window.width > Window.height else 'vertical'
-			# inform user
-			self.btn_text = self._orientation
-			self.orientation = self._orientation
-			self._inner_orientation =  'vertical' if self.orientation == 'horizontal' else 'horizontal'
+class SaveDialog(FloatLayout):
+    save = ObjectProperty(None)
+    text_input = ObjectProperty(None)
+    cancel = ObjectProperty(None)
 
 
-		def check_orientation(self, width, height):
+class Root(FloatLayout):
+    loadfile = ObjectProperty(None)
+    savefile = ObjectProperty(None)
+    text_input = ObjectProperty(None)
 
-			orientation = 'vertical' if height > width else 'horizontal'
-			if orientation != self._orientation:
-				self._orientation = orientation
-				self.orientation_cb(orientation)
+    def dismiss_popup(self):
+        self._popup.dismiss()
 
+    def show_load(self):
+        content = LoadDialog(load=self.load, cancel=self.dismiss_popup)
+        self._popup = Popup(title="Load file", content=content,
+                            size_hint=(0.9, 0.9))
+        self._popup.open()
 
+    def show_save(self):
+        content = SaveDialog(save=self.save, cancel=self.dismiss_popup)
+        self._popup = Popup(title="Save file", content=content,
+                            size_hint=(0.9, 0.9))
+        self._popup.open()
 
-		def orientation_cb(self, orientation):
-			self.btn_text = orientation
-			self.orientation = 'horizontal' if Window.width > Window.height else 'vertical'
-			self._inner_orientation =  'vertical' if self._orientation == 'horizontal' else 'horizontal'
+    def load(self, path, filename):
+        with open(os.path.join(path, filename[0])) as stream:
+            self.text_input.text = stream.read()
 
+        self.dismiss_popup()
 
-class ConsoleApp( App ) :
+    def save(self, path, filename):
+        with open(os.path.join(path, filename), 'w') as stream:
+            stream.write(self.text_input.text)
 
-		# android mishegas
-		def on_pause(self):
-			# save data
-
-
-			return True
-
-
-		def on_resume( self ):
-			# something
-
-			pass
-
-
-		def build(self):
-
-			return ConsoleAccordion()
+        self.dismiss_popup()
 
 
+class Editor(App):
+    pass
 
+Factory.register('Root', cls=Root)
+Factory.register('LoadDialog', cls=LoadDialog)
+Factory.register('SaveDialog', cls=SaveDialog)
 
-
-Builder.load_string( kv )
-
-
-if __name__ == '__main__' :
-
-    ConsoleApp().run()
+if __name__ == '__main__':
+    Editor().run()

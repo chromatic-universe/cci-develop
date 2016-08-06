@@ -42,6 +42,18 @@ from king_console import resource_factory \
 	                     as resources
 from king_console import cci_mini_mongo as mongo_client
 
+# -----------------------------------------------------------------------------------
+def local_mac_addr() :
+		"""
+
+		:return mac string:
+		"""
+
+		try :
+			return proc.check_output( ['cat' , '/sys/class/net/wlan0/address'] ).strip().lower()
+		except :
+			pass
+
 
 # ------------------------------------------------------------------------------------------
 class kc_mongo_config( object ) :
@@ -51,7 +63,9 @@ class kc_mongo_config( object ) :
 
 				def __init__( self  , bootstrap = None ,
 							          log = None ,
-									  device_moniker = None) :
+									  device_id = None ,
+									  last_ip = None ,
+									  last_real_ip = None ) :
 							"""
 
 							:param bootstrap:
@@ -61,9 +75,11 @@ class kc_mongo_config( object ) :
 							if log is None :
 								raise Exception( 'no logger provided' )
 
-							self._booststrap = bootstrap
+							self._bootstrap = bootstrap
 							self._logger = log
-							self._moniker = device_moniker
+							self._id = device_id
+							self._last_ip = last_ip
+							self._last_real_ip = last_real_ip
 
 
 
@@ -101,7 +117,7 @@ class kc_mongo_config( object ) :
 							"""
 
 							mongo = mongo_client.cci_mini_mongo( bootstrap = self._bootstrap ,
-																 device_moniker = self._moniker )
+																 device_id = self._id )
 							s = str()
 							if mongo.connected :
 								for key , value in mongo.device_info.iteritems() :
@@ -170,7 +186,7 @@ class kc_mongo_config( object ) :
 							grid.add_widget( Label(  text = 'active:' ) )
 							grid.add_widget( Switch( active = True ) )
 							grid.add_widget( Label(  text = 'bootstrap:' ) )
-							grid.add_widget( TextInput(  text = 'cci-aws-3' ,
+							grid.add_widget( TextInput(  text = self._bootstrap ,
 														id = 'mongo_bootstrap' ,
 														cursor_blink =  True ,
 														readonly = False ,
@@ -211,24 +227,33 @@ class kc_mongo_config( object ) :
 
 
 
-				def _update_device_session( self ) :
+				def _update_device_session( self ,
+											open = True
+											 ) :
 							"""
 
 							:return:
 							"""
 
+							s = str()
+							if open :
+								s = 'true'
+							else :
+								s = 'false'
 
 							mongo = mongo_client.cci_mini_mongo( bootstrap = self._bootstrap ,
-																 device_moniker = self._moniker )
-							s = str()
+																 device_id = self._id )
+
 							if mongo.connected :
 								db = mongo.mongo['cci_maelstrom']
 								result = db['auth_devices'].update_one (
-									{"moniker": self._moniker } ,
+									{"device_id": self._id } ,
 										{
 											"$set":
 											{
-												"active ": "true"
+												"active" : s ,
+												"last_known_ip" : self._last_ip ,
+												"last_known_remote_ip" : self._last_real_ip
 											},
 											"$currentDate": { "last_active" : True }
 
@@ -239,7 +264,7 @@ class kc_mongo_config( object ) :
 								if result.matched_count == 0 :
 									self._logger.error( '..could not update mongo db device info...' )
 								else :
-									self._logger.info( '..could not update mongo db device info...' )
+									self._logger.info( '..updated mongo db device info...' )
 
 
 
