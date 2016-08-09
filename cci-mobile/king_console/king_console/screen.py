@@ -1222,9 +1222,7 @@ class DatalinkScreen( Screen ) :
 						"""
 
 
-						App.get_running_app()._logger.info( '...update console payload...' )
-						
-						self.ids.console_arp_monitor_txt.text += content
+						self.ids.console_arp_monitor_txt.text = content + self.ids.console_arp_monitor_txt.text
 						self.ids.console_params.text = params
 
 
@@ -1257,26 +1255,29 @@ class DatalinkScreen( Screen ) :
 
 
 						try :
-							"""
+
 							cmd = ["su" ,
 								   "-c" ,
 								   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-								   "./king_console/kc_tcp.pyo" ,
-								   '-s' ,
-								   ip ,
-								   '-r' ,
-								   ports
+								   "./king_console/kc_arp.pyo" ,
+								   '-x' ,
+								    '12'
 								  ]
 							"""
 							cmd = [ "python" ,
 								   "./king_console/kc_arp.py" ,
 								   '-x' ,
-								   '4'
+								   '8'
 								  ]
-
+							"""
 							try :
 								while not alarm.isSet() :
 									boiler = proc.check_output( cmd  )
+
+									pos = boiler.find( '[]' )
+									if pos != -1 :
+										boiler = boiler[:pos]
+
 									self._update_console_payload( boiler  )
 									sleep( 1 )
 							except proc.CalledProcessError as e :

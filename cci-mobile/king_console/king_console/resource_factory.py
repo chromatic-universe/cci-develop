@@ -71,7 +71,7 @@ ActionBar:
 			with_previous: False
 			app_icon: 'king-console32.png'
 		ActionButton:
-			icon: 'menu-icon.png'
+			text: 'notes'
 
 """
 ,

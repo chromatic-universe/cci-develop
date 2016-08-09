@@ -531,11 +531,16 @@ class kingconsoleApp( App ) :
 			self._logger.info( '...on_start...' )
 
 			try :
-				from OpenSSL import SSL
-				ctx = SSL.Context(SSL.SSLv23_METHOD)
-				self._logger.info( '..imported pyopenssl...' )
+				"""
+				k = kafka.SimpleClient( 'cci-aws-1' )
+				#self._logger.info( ''.join( k.topics ) )
+				#self._logger.info( 'opened kafka client...' )
+				"""
+				pass
+
+
 			except :
-				self._logger.error( '..could not import pyopenssl...' )
+				self._logger.error( e.message )
 
 
 			layout = GridLayout( cols = 1 , orientation = 'horizontal' )
