@@ -1183,33 +1183,31 @@ class DatalinkScreen( Screen ) :
 						"""
 
 						self.ids.console_arp_monitor_txt.text += '...standby....\n\n'
+						if self.ids.start_monitor_btn.text == 'start' :
 
-						thred = threading.Thread( target = self._on_arp_monitor ,
-												  kwargs=dict( console=self.console_arp_monitor_txt ,
-															   items = 15 ) )
-						if thred :
-							moniker = 'arp monitor console'
-							thread_atom = { 'thread_id' : str( thred.ident ) ,
-											'stop_alert'  : threading.Event() ,
-											'instance' : thred
-										  }
-							App.get_running_app()._thrd.thrds[moniker] = thread_atom
+							thred = threading.Thread( target = self._on_arp_monitor ,
+													  kwargs=dict( console=self.console_arp_monitor_txt ,
+																   items = 15 ) )
+							if thred :
+								moniker = 'arp monitor console'
+								thread_atom = { 'thread_id' : str( thred.ident ) ,
+												'stop_alert'  : threading.Event() ,
+												'instance' : thred
+											  }
+								App.get_running_app()._thrd.thrds[moniker] = thread_atom
 
 
-						thred.start()
+							thred.start()
 
-						self.ids.console_arp_monitor_txt.text += '...working.....'
-
-						jt = str()
-						try :
-
-							while jt != 'fini' :
-								jt = get( 'http://localhost:7080/arp_monitor/next').json()
-								s = jt['arp_atom']
-								self._update_console_payload( s )
-						except :
-							pass
-
+							self.ids.console_arp_monitor_txt.text += '...working.....'
+							self.ids.start_monitor_btn.text = 'stop'
+							self.ids.start_monitor_btn.color = [1,0,0.1]
+						else :
+							thr = App.get_running_app()._thrd.thrds['arp monitor console']
+							thr['stop_alert'].set()
+							self.ids.start_monitor_btn.text = 'start'
+							self.ids.start_monitor_btn.color = [0,1,0.1]
+							self.ids.console_arp_monitor_txt.text = ''
 
 
 
@@ -1225,9 +1223,9 @@ class DatalinkScreen( Screen ) :
 
 
 						App.get_running_app()._logger.info( '...update console payload...' )
-						self.ids.console_arp_monitor_txt.text += '\n'
+						
 						self.ids.console_arp_monitor_txt.text += content
-						self.console_params = params
+						self.ids.console_params.text = params
 
 
 						self.canvas.ask_update()
@@ -1273,12 +1271,14 @@ class DatalinkScreen( Screen ) :
 							cmd = [ "python" ,
 								   "./king_console/kc_arp.py" ,
 								   '-x' ,
-								   '10'
+								   '4'
 								  ]
 
 							try :
-								kc_arp.arp_monitor( 15 )
-								#App.get_running_app()._logger.info( out )
+								while not alarm.isSet() :
+									boiler = proc.check_output( cmd  )
+									self._update_console_payload( boiler  )
+									sleep( 1 )
 							except proc.CalledProcessError as e :
 								b_ret = False
 						except Exception as e :

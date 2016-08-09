@@ -23,7 +23,7 @@ import urllib2
 import requests
 import Queue
 import threading
-
+from time import gmtime, strftime , sleep
 
 
 ##############
@@ -50,7 +50,7 @@ def arp_display( pkt ) :
 		if pkt[ARP].op == 2: #is-at (response)
 			s = "*response: " + pkt[ARP].hwsrc + " has address " + pkt[ARP].psrc
 			print s
-		requests.put( 'http://localhost:7080/arp_monitor' , data={'data' : s } ).json()
+
 
 
 
@@ -132,11 +132,11 @@ def arp_monitor( items = 15 ) :
 
 		try:
 
-			requests.put( 'http://localhost:7080/arp_monitor/reset/fini' , data={'data' : 'fini!' } ).json()
-			print sniff( prn=arp_display ,
-						 filter="arp" ,
-						 store=0 ,
-						 count=items )
+
+				print sniff( prn=arp_display ,
+							 filter="arp" ,
+							 store=0 ,
+							 count=items )
 
 
 

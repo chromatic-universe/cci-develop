@@ -22,11 +22,6 @@ from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 
 
-from rest import kc_ping
-
-from scapy.all import *
-
-
 #cci
 import trinity
 
@@ -50,8 +45,6 @@ _logger.addHandler( fh )
 
 const_per_page = 20
 
-arp_atoms = Queue.Queue()
-
 
 class query_session_form( Form ) :
     session_id = StringField( 'session_id:' )
@@ -69,61 +62,6 @@ def local_mac_addr() :
 			return proc.check_output( ['cat' , '/sys/class/net/wlan0/address'] ).strip()
 		except :
 			pass
-
-
-
-class arp_monitor( Resource ) :
-
-		def get( self ) :
-			global arp_atoms
-			if not arp_atoms.empty() :
-				return { 'arp_atom' : arp_atoms.get() }
-
-			arp_atoms = Queue.Queue()
-			return 'fini'
-
-		def put( self , reset = None):
-			global arp_atoms
-			if reset is not None :
-				arp_atoms = Queue.Queue()
-				return { 'arp_atom' : request.form['data'] }
-			arp_atoms.put( request.form['data'] )
-			print request.form['data']
-			return { 'arp_atom' : request.form['data'] }
-api.add_resource( arp_monitor , '/arp_monitor' , '/arp_monitor/next' , '/arp_monitor/reset/<string:reset>' )
-
-ping_request = None
-ping_reply = None
-
-class ping_atom( Resource ) :
-
-		def get( self , ip_addr ) :
-			global ping_request
-			global ping_reply
-
-			ip = IP()
-			ip.dst = ip_addr
-
-			ping = ICMP()
-			ping_request = ( ip/ping )
-
-			ping_reply = sr1( ping_request , timeout = 1 )
-
-			return { 'request' : ping_request.display() ,
-					 'reply'   : ping_reply.display()  }
-
-		def put( self , reset = None):
-
-			try :
-				pass
-			except :
-				pass
-
-			return { 'arp_atom' : request.form['data'] }
-
-api.add_resource( ping_atom , '/ping_atom/<string:ip_addr>' )
-
-
 
 
 
