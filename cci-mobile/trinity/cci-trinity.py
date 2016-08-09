@@ -8,17 +8,23 @@ from StringIO import StringIO
 import logging
 from math import ceil
 from flask import Flask , request , send_file , render_template , url_for
-from flask import redirect
+from flask import redirect , Response
+from flask_restful import Resource, Api
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import subprocess as proc
 import sqlite3
 import time
 import signal
+import Queue
 
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 
+
+from rest import kc_ping
+
+from scapy.all import *
 
 
 #cci
@@ -28,6 +34,7 @@ max_wait_seconds_before_shutdown  = 3
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
 app = Flask(__name__)
+api = Api(app)
 
 http_server = None
 
@@ -42,6 +49,9 @@ _logger.addHandler( fh )
 
 
 const_per_page = 20
+
+arp_atoms = Queue.Queue()
+
 
 class query_session_form( Form ) :
     session_id = StringField( 'session_id:' )
@@ -62,18 +72,74 @@ def local_mac_addr() :
 
 
 
+class arp_monitor( Resource ) :
+
+		def get( self ) :
+			global arp_atoms
+			if not arp_atoms.empty() :
+				return { 'arp_atom' : arp_atoms.get() }
+
+			arp_atoms = Queue.Queue()
+			return 'fini'
+
+		def put( self , reset = None):
+			global arp_atoms
+			if reset is not None :
+				arp_atoms = Queue.Queue()
+				return { 'arp_atom' : request.form['data'] }
+			arp_atoms.put( request.form['data'] )
+			print request.form['data']
+			return { 'arp_atom' : request.form['data'] }
+api.add_resource( arp_monitor , '/arp_monitor' , '/arp_monitor/next' , '/arp_monitor/reset/<string:reset>' )
+
+ping_request = None
+ping_reply = None
+
+class ping_atom( Resource ) :
+
+		def get( self , ip_addr ) :
+			global ping_request
+			global ping_reply
+
+			ip = IP()
+			ip.dst = ip_addr
+
+			ping = ICMP()
+			ping_request = ( ip/ping )
+
+			ping_reply = sr1( ping_request , timeout = 1 )
+
+			return { 'request' : ping_request.display() ,
+					 'reply'   : ping_reply.display()  }
+
+		def put( self , reset = None):
+
+			try :
+				pass
+			except :
+				pass
+
+			return { 'arp_atom' : request.form['data'] }
+
+api.add_resource( ping_atom , '/ping_atom/<string:ip_addr>' )
+
+
+
+
+
+
 
 # ------------------------------------------------------------------------------
 @app.route('/index')
 @app.route( "/" )
-def index():
+def index() :
+				try :
+					kc_ping.ping_atom( '192.168.0.165' )
+				except Exception as e :
+					return e.message
 
-    		return render_template( "index.html" ,
-									device = '"' + local_mac_addr() + '"' )
-
-
-
-
+				return render_template( "index.html" ,
+										device = '"' + local_mac_addr() + '"' )
 
 
 # -----------------------------------------------------------------------------

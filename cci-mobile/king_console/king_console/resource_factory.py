@@ -111,6 +111,45 @@ ScrollView:
 			allow_empty_selection=False,
 			cls=lv.ListItemButton)
 """
+,
+				       'datalink_extended_screen' :
+"""
+Screen
+    id: datalink_screen
+    name: 'screen_datalink'
+    GridLayout
+        orientation: 'horizontal'
+        cols: 1
+        Accordion:
+            id: network_accordion
+            orientation: 'vertical'
+            AccordionItem:
+                title: 'arp monitor'
+"""
+,					'console_carousel' :
+"""
+Carousel:
+	id: carousel_id
+	direction: 'right'
+	GridLayout:
+		orientation: 'horizontal'
+		id: console_grid
+		cols: 1
+		pos_hint: {'top':1}
+		ScrollView:
+			id: console_scrlv
+			TextInput:
+				text: 'cci_maelstrom->arp-monitor-> '
+				id: console_arp_monitor
+				size_hint: 1, None
+				cursor_blink: True
+				background_color: [0,0,0,0]
+				foreground_color: [1,1,1,1]
+				multiline: True
+				font_size: 16
+				readonly: True
+				height: max( (len(self._lines)+1) * self.line_height, console_scrlv.height)
+"""
 
 }
 

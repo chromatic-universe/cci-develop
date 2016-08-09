@@ -194,6 +194,7 @@ class kingconsoleApp( App ) :
 
 			self.settings_cls =  SettingsWithSpinner
 
+
 			# logger
 			self._logger = logging.getLogger( "king console" )
 			self._logger.setLevel( logging.DEBUG )
@@ -576,6 +577,20 @@ class kingconsoleApp( App ) :
 			self.root.current_screen.ids.console_real_id.text = self._console_real
 			self.root.current_screen.ids.console_interfaces.text = self._console_ifconfig + '\n\n' + self._console_iwlist
 			self._cur_console_buffer = self.root.current_screen.ids.console_interfaces.text
+
+
+
+
+
+		def _screen_exists( self , scr = None ) :
+			"""
+
+			:return:
+			"""
+			for screen in self.root.screens :
+				if screen.name == scr :
+					return True , screen
+			return False , None
 
 
 

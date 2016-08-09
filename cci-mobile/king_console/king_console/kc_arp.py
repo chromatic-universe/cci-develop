@@ -21,12 +21,41 @@ import struct
 import subprocess as proc
 import urllib2
 import requests
+import Queue
+import threading
+
 
 
 ##############
 '''disable ipv6 console annoyance'''
 logging.getLogger( "scapy.runtime" ).setLevel(logging.ERROR)
 from scapy.all import *
+
+buf = str()
+
+# ---------------------------------------------------------------------------------------------
+def arp_display( pkt ) :
+		"""
+
+		:param pkt:
+		:return:
+		"""
+
+		s = str()
+
+		global buf
+		if pkt[ARP].op == 1: #who-has (request)
+			s =  "request: " + pkt[ARP].psrc + " is asking about " + pkt[ARP].pdst
+			print s
+		if pkt[ARP].op == 2: #is-at (response)
+			s = "*response: " + pkt[ARP].hwsrc + " has address " + pkt[ARP].psrc
+			print s
+		requests.put( 'http://localhost:7080/arp_monitor' , data={'data' : s } ).json()
+
+
+
+
+
 
 # ---------------------------------------------------------------------------------------------
 def chomp( source_str , delimiter = '' , keep_trailing_delim = True ) :
@@ -92,6 +121,37 @@ def arp_atom( ip=None , timeout=1 , verbose=1 ) :
 
 
 
+
+# ----------------------------------------------------------------------------------------------
+def arp_monitor( items = 15 ) :
+		"""
+
+		:return:		"""
+
+
+
+		try:
+
+			requests.put( 'http://localhost:7080/arp_monitor/reset/fini' , data={'data' : 'fini!' } ).json()
+			print sniff( prn=arp_display ,
+						 filter="arp" ,
+						 store=0 ,
+						 count=items )
+
+
+
+		except Exception as e :
+			print 'arp_monitor failed...' + e.message
+			sys.exit( 1 )
+
+
+		print buf
+
+		return buf
+
+
+
+
 # ------------------------------------------------------------------------------------
 if __name__ == '__main__' :
 
@@ -99,9 +159,11 @@ if __name__ == '__main__' :
 
 		parser = argparse.ArgumentParser()
 		parser.add_argument('-s', action='store', dest='arp_value',
-                    help='single arp value')
+                    help='single arp value' )
 		parser.add_argument('-n', action='store', dest='arp_subnet',
-                    help='arp subnet')
+                    help='arp subnet' )
+		parser.add_argument('-x', action='store', dest='arp_monitor',
+                    help='arp monitor items' )
 
 		args = parser.parse_args()
 
@@ -115,5 +177,12 @@ if __name__ == '__main__' :
 		if args.arp_value :
 
 			arp_atom( args.arp_value )
+
+			sys.exit( 0 )
+
+		if args.arp_monitor :
+
+
+			arp_monitor( int( args.arp_monitor ) )
 
 			sys.exit( 0 )
