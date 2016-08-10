@@ -55,8 +55,90 @@ def local_mac_addr() :
 			pass
 
 
+
+class kc_config( object ) :
+				"""
+				config
+				"""
+
+
+				def __init__( self  ,   log = None ) :
+
+					"""
+					:param log
+					:return:
+					"""
+
+					if log is None :
+						raise Exception( 'no logger provided' )
+
+
+
+
+				@classmethod
+				def _retr_resource( cls , resource_id ) :
+					"""
+
+					:param resource_id:
+					:return ui resource:
+					"""
+
+					return resources.const_resource_ids[resource_id]
+
+
+
+				@classmethod
+				def _post_function_call( cls , func , params ) :
+					"""
+
+					:param func:
+					:param params:
+					:return:
+					"""
+
+					package = ( func , params )
+					App.get_running_app().dbq.put( package )
+
+
+
+				def _show_info( self, container ) :
+					"""
+					:param text container
+					:return
+					"""
+
+					pass
+
+
+				def _on_test_connect( self ) :
+					"""
+					:return
+					"""
+
+					pass
+
+
+				def show_config( self ) :
+					"""
+
+					:param bootstrap:
+					:return:
+					"""
+
+					pass
+
+
+
+
+
+
+
+
+
+
+
 # ------------------------------------------------------------------------------------------
-class kc_mongo_config( object ) :
+class kc_mongo_config( kc_config ) :
 				"""
 
 				"""
@@ -72,8 +154,12 @@ class kc_mongo_config( object ) :
 							:return:
 							"""
 
+
+
 							if log is None :
 								raise Exception( 'no logger provided' )
+
+							super( kc_mongo_config , self ).__init__( log )
 
 							self._bootstrap = bootstrap
 							self._logger = log
@@ -83,33 +169,8 @@ class kc_mongo_config( object ) :
 
 
 
-				@staticmethod
-				def _retr_resource( resource_id ) :
-					"""
 
-					:param resource_id:
-					:return ui resource:
-					"""
-
-					return resources.const_resource_ids[resource_id]
-
-
-
-				@staticmethod
-				def _post_function_call( func , params ) :
-					"""
-
-					:param func:
-					:param params:
-					:return:
-					"""
-
-					package = ( func , params )
-					App.get_running_app().dbq.put( package )
-
-
-
-				def _show_mongo_info( self, container ) :
+				def _show_info( self, container ) :
 							"""
 
 							:param container:
@@ -132,7 +193,7 @@ class kc_mongo_config( object ) :
 
 
 
-				def _on_mongo_test_connect( self ) :
+				def _on_test_connect( self ) :
 							"""
 
 							:return:
@@ -157,7 +218,7 @@ class kc_mongo_config( object ) :
 											 background_color = [0,0,0,0] ,
 											 color = [1,0,0,1]  ,
 											 size_hint_y = .15 )
-							btn.bind( on_press = lambda a:self._show_mongo_info( vx ) )
+							btn.bind( on_press = lambda a:self._show_info( vx ) )
 							grid.add_widget( btn )
 							layout.add_widget( grid )
 
@@ -166,7 +227,7 @@ class kc_mongo_config( object ) :
 
 
 
-				def show_mongo_config( self ) :
+				def show_config( self ) :
 							"""
 
 							:param bootstrap:
@@ -217,7 +278,7 @@ class kc_mongo_config( object ) :
 								popup = ConsolePopup( title='document context' , content=layout )
 								b = popup.content.children[0].children[0].children[0]
 								#btn = popup.content.children[1].children[0].children[0]
-								b.bind( on_press = lambda a:self._on_mongo_test_connect() )
+								b.bind( on_press = lambda a:self._on_test_connect() )
 								popup.open()
 
 							finally :

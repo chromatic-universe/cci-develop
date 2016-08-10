@@ -29,8 +29,8 @@ import trinity
 max_wait_seconds_before_shutdown  = 3
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
-app = Flask(__name__)
-api = Api(app)
+app = Flask( __name__ )
+api = Api( app )
 
 http_server = None
 

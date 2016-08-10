@@ -513,32 +513,17 @@
                                 Button:
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                     id:    id_document_context
-                                    text: 'mongdb'
+                                    text: 'mongdb\ncci-aws-3'
+                                    halign: 'center'
                                     on_press: app._on_document_context()
-                                    size_hint_y: 2.5
-                                Label:
-                                    text: 'bootstrap doc metadata:'
-                                    color: [1,0,0,1]
-                                Button:
-                                    text: 'cci-aws-3'
-                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                     size_hint_y: 2.5
                                 Label:
                                     text: 'current search context:'
                                     color: [1,0,0,1]
                                 Button:
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
-                                    text: 'elasticsearch'
-                                    size_hint_y: 2.5
-                                Label:
-                                    text: 'bootstrap search metadata:'
-                                    #size_hint_y: 1.75
-                                    color: [1,0,0,1]
-                                Button:
-                                    text: 'search-chromatic-search-p647s4rdqjcgub7tt7neealjn4.us-west-2.es.amazonaws.com'
-                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
-                                    text_size: (500,None)
-                                    shorten: True
+                                    text: 'elasticsearch\nsearch-chromatic-search-p647s4rdqjcgub7tt7neealjn4.us-west-2.es.amazonaws.com'
+                                    halign: 'center'
                                     size_hint_y: 2.5
                                 Label:
                                     text: 'local:'
@@ -576,27 +561,19 @@
                                     color: [1,0,0,1]
                                 Button:
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
-                                    text: 'kafka'
+                                    text: 'kafka\ncci-aws-1'
+                                    halign: 'center'
                                     size_hint_y: 1.75
                                 Label:
-                                    text: 'bootstrap pub metadata:'
-                                    color: [1,0,0,1]
-                                Button:
-                                    text: 'cci-aws-2'
-                                    color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
-                                    size_hint_y: 1.75
-                                Label:
-                                    text: 'current sub context:'
+                                    text: 'current consumer context:'
                                     color: [1,0,0,1]
                                 Button:
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
-                                    text: 'kafka'
+                                    text: 'kafka\ncci-aws-1'
+                                    halign: 'center'
                                     size_hint_y: 1.75
-                                Label:
-                                    text: 'bootstrap sub metadata:'
-                                    color: [1,0,0,1]
                                 Button:
-                                    text: 'cci-aws-2'
+                                    text: 'topics/subscriptions'
                                     color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                     size_hint_y: 1.75
         AccordionItem:

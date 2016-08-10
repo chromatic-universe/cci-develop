@@ -713,7 +713,7 @@ class kingconsoleApp( App ) :
 				mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
 										 log = self._logger ,
 										 device_id = local_mac_addr() )
-				mongo.show_mongo_config()
+				mongo.show_config()
 
 
 
