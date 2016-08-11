@@ -237,6 +237,7 @@ class kc_mongo_config( kc_config ) :
 							scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
 							tx = scrolly.children[0]
 							tx.text = ''
+							tx.readonly = False
 
 							layout.add_widget( scrolly )
 							layout.add_widget( Label( text =  datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S" )  ,

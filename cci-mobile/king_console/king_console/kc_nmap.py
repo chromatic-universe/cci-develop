@@ -151,7 +151,9 @@ def mongo_extended_metadata( ip = None ) :
 			"""
 
 			cmd = [
-					"nmap" ,
+				    "su" ,
+					"-c" ,
+					"/system/bin/nmap" ,
 					"-p" ,
 					"27017" ,
 			        "--script",
