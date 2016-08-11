@@ -227,6 +227,7 @@ class CciScreen( Screen ) :
 
 
 
+
 				def _on_show_session_note( self ) :
 					"""
 

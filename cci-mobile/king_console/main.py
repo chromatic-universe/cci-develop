@@ -58,7 +58,8 @@ from king_console import resource_factory \
 from king_console.kc_thread_manager \
 				  				import kc_thread_manager
 from king_console.kc_db_manager import kc_db_manager
-from king_console.kc_stream 	import kc_mongo_config
+from king_console.kc_stream 	import kc_mongo_config , \
+								       kc_kafka_config
 from king_console.kc_wireless import *
 
 import paramiko
@@ -704,16 +705,22 @@ class kingconsoleApp( App ) :
 
 
 
-		def _on_document_context( self ) :
+		def _on_document_context( self  , context ) :
 				"""
 
 				:return:
 				"""
 
-				mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
-										 log = self._logger ,
-										 device_id = local_mac_addr() )
-				mongo.show_config()
+				if context == 'mongo' :
+					mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
+											 log = self._logger ,
+											 device_id = local_mac_addr() )
+					mongo.show_config()
+				elif context == 'kafka-publisher' :
+
+					kafka = kc_kafka_config( bootstrap = 'cci_aws_1' ,
+											 log = self._logger )
+					kafka.show_config()
 
 
 

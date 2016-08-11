@@ -515,7 +515,7 @@
                                     id:    id_document_context
                                     text: 'mongdb\ncci-aws-3'
                                     halign: 'center'
-                                    on_press: app._on_document_context()
+                                    on_press: app._on_document_context( 'mongo' )
                                     size_hint_y: 2.5
                                 Label:
                                     text: 'current search context:'
@@ -564,6 +564,7 @@
                                     text: 'kafka\ncci-aws-1'
                                     halign: 'center'
                                     size_hint_y: 1.75
+                                    on_press: app._on_document_context( 'kafka-publisher' )
                                 Label:
                                     text: 'current consumer context:'
                                     color: [1,0,0,1]

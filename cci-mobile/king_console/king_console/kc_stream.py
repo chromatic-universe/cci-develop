@@ -15,6 +15,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.image import Image
 from kivy.uix.bubble import Bubble
+from kivy.uix.actionbar import ActionButton
 from kivy.config import ConfigParser
 from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock , mainthread
@@ -26,7 +27,8 @@ import os
 import copy
 import logging
 import importlib
-from time import gmtime, strftime , sleep
+import datetime
+from time import gmtime, strftime , sleep ,time
 import subprocess as proc
 import threading
 import requests
@@ -37,10 +39,13 @@ import Queue
 import uuid
 
 
-from king_console.screen import ConsolePopup
+from king_console import screen
 from king_console import resource_factory \
 	                     as resources
 from king_console import cci_mini_mongo as mongo_client
+from king_console import kc_nmap
+
+
 
 # -----------------------------------------------------------------------------------
 def local_mac_addr() :
@@ -53,6 +58,8 @@ def local_mac_addr() :
 			return proc.check_output( ['cat' , '/sys/class/net/wlan0/address'] ).strip().lower()
 		except :
 			pass
+
+
 
 
 
@@ -134,9 +141,6 @@ class kc_config( object ) :
 
 
 
-
-
-
 # ------------------------------------------------------------------------------------------
 class kc_mongo_config( kc_config ) :
 				"""
@@ -154,11 +158,6 @@ class kc_mongo_config( kc_config ) :
 							:return:
 							"""
 
-
-
-							if log is None :
-								raise Exception( 'no logger provided' )
-
 							super( kc_mongo_config , self ).__init__( log )
 
 							self._bootstrap = bootstrap
@@ -170,7 +169,7 @@ class kc_mongo_config( kc_config ) :
 
 
 
-				def _show_info( self, container ) :
+				def _show_info( self , container ) :
 							"""
 
 							:param container:
@@ -183,11 +182,69 @@ class kc_mongo_config( kc_config ) :
 							if mongo.connected :
 								for key , value in mongo.device_info.iteritems() :
 									s += str( key ) + ':   '  + str( value ) + '\n'
+								mongo.mongo.close()
 							else :
 								s = 'mongo disconnected....no route to host...' ,
 								s += 'could not connect to mongo host...'
 
 							container.text = s
+
+
+
+
+				def _show_extended_info( self , container ) :
+							"""
+
+							:param container:
+							:return:
+							"""
+
+							container.text = '...standby..working...'
+
+							b_ret , stream = kc_nmap.mongo_extended_metadata( self._bootstrap )
+							if b_ret :
+								container.text = stream
+							else :
+								container.text = '...could not retrieve extended info....'
+
+
+
+				# -------------------------------------------------------------------------------------------------
+				def _add_console(  self ,
+								   content ,
+								   tag  ) :
+							"""
+							:param parent:
+							:param content:
+							:param: console_count:
+							:param tag:
+
+							:return:
+							"""
+
+							layout = GridLayout( cols = 1 ,
+												 padding = [0 , 5 , 0 ,5]
+												  )
+							action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_3' ) )
+							layout.add_widget( action_bar )
+							img = Image( source = './image/mongodb-log.png' , size_hint_y = .2  )
+							layout.add_widget( img )
+							layout.add_widget( Label( text = tag  ,
+													  color = [ 1, 0 , 0 , 1] ,
+													  font_size = 16 ,
+													  size_hint_y = 0.1 ) )
+
+							scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
+							tx = scrolly.children[0]
+							tx.text = ''
+
+							layout.add_widget( scrolly )
+							layout.add_widget( Label( text =  datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S" )  ,
+													font_size = 16  ,
+													size_hint_y = 0.2 ,
+													color = [ 1, 0 , 0 , 1] ) )
+
+							return layout
 
 
 
@@ -200,29 +257,35 @@ class kc_mongo_config( kc_config ) :
 							"""
 
 
-							layout = GridLayout( orientation = 'horizontal' ,
-											  cols = 1 ,
-											  background_color = [0,0,0,0])
-							grid = GridLayout( cols=1 , orientation = 'horizontal', size_hint_y = None , size=(400 , 500  ) )
 
-							action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_2' ) )
-							layout.add_widget( action_bar )
-							grid.add_widget( Image( source = './image/mongodb-log.png'  , size_hint_y = .25 ) )
-							view = Builder.load_string( self._retr_resource( 'text_scroller') )
-							view.children[0].text = ''
-							vx = view.children[0]
-							grid.add_widget( view )
-							btn = Button(    text = 'test'  ,
-											 valign = 'middle',
-											 id = 'test_btn' ,
-											 background_color = [0,0,0,0] ,
-											 color = [1,0,0,1]  ,
-											 size_hint_y = .15 )
-							btn.bind( on_press = lambda a:self._show_info( vx ) )
-							grid.add_widget( btn )
-							layout.add_widget( grid )
+							"""
+							img = Image( source = './image/mongodb-log.png' , size_hint_y = None )
+							scroll = ScrollView( id = 'scrlv' )
+							grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 800 ) )
+							grid.add_widget( img  )
+							vx =  TextInput(
+											text = '',
+											background_color = [0,0,0,0] ,
+											foreground_color =  [1,1,1,1] ,
+											multiline = True ,
+											font_size =  16 ,
+											readonly =  True  )
+							#vx.height = max( (len(vx._lines)+1) * vx.line_height, scroll.height )
+							grid.add_widget( vx )
+							scroll.add_widget( grid )
+							layout.add_widget( scroll )
+							"""
 
-							popup = ConsolePopup( title='mongo connect' , content = layout )
+							layout = self._add_console( '..mongo extended' , 'mongo extended info(from nmap)' )
+							popup = screen.ConsolePopup( title='mongo connect' , content = layout )
+							vx = popup.content.children[1].children[0]
+							b = popup.content.children[4].children[0].children[0]
+							b.text = 'test connect'
+							b.bind( on_press = lambda a:self._show_info( vx ) )
+							c = ActionButton( text = 'info' )
+							c.bind( on_press = lambda a:self._show_extended_info( vx ) )
+							popup.content.children[4].children[0].add_widget( c )
+
 							popup.open()
 
 
@@ -238,7 +301,7 @@ class kc_mongo_config( kc_config ) :
 							layout = GridLayout( orientation = 'horizontal' ,
 											  cols = 1 ,
 											  background_color = [0,0,0,0])
-							action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_2' ) )
+							action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_3' ) )
 							layout.add_widget( action_bar )
 							layout.add_widget( Image( source = './image/mongodb-log.png' , pos_hint_y = 0 ,
 													  size_hint_y = .2 ) )
@@ -253,20 +316,14 @@ class kc_mongo_config( kc_config ) :
 														readonly = False ,
 														multiline =  True ,
 														size_hint_y = .5 ) )
-							grid.add_widget( Label(  text = 'booststrap port:' ) )
+							grid.add_widget( Label(  text = 'bootstrap port:' ) )
 							grid.add_widget( TextInput(  text = '27017' ,
 														id = 'mongo_bootstrap_port' ,
 														cursor_blink =  True ,
 														readonly = False ,
 														multiline =  True ,
 														size_hint_y = .5 ) )
-							btn = Button(    text = 'manip'  ,
-											 valign = 'middle',
-											 id = 'test_btn' ,
-											 background_color = [0,0,0,0] ,
-											 color = [1,0,0,1] )
 
-							grid.add_widget( btn )
 							scroll.add_widget( grid )
 							layout.add_widget( scroll )
 
@@ -275,8 +332,8 @@ class kc_mongo_config( kc_config ) :
 
 							try :
 
-								popup = ConsolePopup( title='document context' , content=layout )
-								b = popup.content.children[0].children[0].children[0]
+								popup = screen.ConsolePopup( title='document context' , content=layout )
+								b = popup.content.children[2].children[0].children[0]
 								#btn = popup.content.children[1].children[0].children[0]
 								b.bind( on_press = lambda a:self._on_test_connect() )
 								popup.open()
@@ -328,4 +385,127 @@ class kc_mongo_config( kc_config ) :
 									self._logger.info( '..updated mongo db device info...' )
 
 
+
+
+# ------------------------------------------------------------------------------------------
+class kc_kafka_config( kc_config ) :
+				"""
+
+				"""
+
+				def __init__( self  , bootstrap = None ,
+							          log = None ) :
+							"""
+
+							:param bootstrap:
+							:return:
+							"""
+
+							super( kc_kafka_config , self ).__init__( log )
+
+							self._bootstrap = bootstrap
+							self._logger = log
+
+
+
+
+				def _show_info( self, container ) :
+							"""
+
+							:param container:
+							:return:
+							"""
+
+							pass
+
+
+
+
+				def _on_test_connect( self ) :
+							"""
+
+							:return:
+							"""
+
+
+							layout = GridLayout( orientation = 'horizontal' ,
+											  cols = 1 ,
+											  background_color = [0,0,0,0])
+							action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_3' ) )
+							layout.add_widget( action_bar )
+							img = Image( source = './image/kafka-logo.png' , size_hint_y = .15)
+							scroll = ScrollView( id = 'scrlv' )
+							grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 500 ) )
+							grid.add_widget( img  )
+							vx =  TextInput(
+											text = '',
+											background_color = [0,0,0,0] ,
+											foreground_color =  [1,1,1,1] ,
+											multiline = True ,
+											font_size =  16 ,
+											readonly =  True  )
+							#vx.height = max( (len(vx._lines)+1) * vx.line_height, scroll.height )
+							grid.add_widget( vx )
+							scroll.add_widget( grid )
+							layout.add_widget( scroll )
+
+							popup = ConsolePopup( title='kafka connect' , content = layout )
+							b = popup.content.children[1].children[0].children[0]
+							b.text = 'test connect'
+							b.bind( on_press = lambda a:self._show_info( vx ) )
+							popup.open()
+
+
+
+				def show_config( self ) :
+							"""
+
+							:param bootstrap:
+							:return:
+							"""
+
+
+							layout = GridLayout( orientation = 'horizontal' ,
+											  cols = 1 ,
+											  background_color = [0,0,0,0])
+							action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_3' ) )
+							layout.add_widget( action_bar )
+							layout.add_widget( Image( source = './image/kafka-logo.png' , pos_hint_y = 0 ,
+													  size_hint_y = .2 ) )
+							scroll = ScrollView()
+							grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 500 ) )
+							grid.add_widget( Label(  text = 'active:' ) )
+							grid.add_widget( Switch( active = True ) )
+							grid.add_widget( Label(  text = 'bootstrap broker:' ) )
+							grid.add_widget( TextInput(  text = self._bootstrap ,
+														id = 'kafka_bootstrap' ,
+														cursor_blink =  True ,
+														readonly = False ,
+														multiline =  True ,
+														size_hint_y = .5 ) )
+							grid.add_widget( Label(  text = 'booststrap broker port:' ) )
+							grid.add_widget( TextInput(  text = '9092' ,
+														id = 'kafka_bootstrap_port' ,
+														cursor_blink =  True ,
+														readonly = False ,
+														multiline =  True ,
+														size_hint_y = .5 ) )
+
+							scroll.add_widget( grid )
+							layout.add_widget( scroll )
+
+
+							#event = threading.Event()
+
+							try :
+
+								popup = ConsolePopup( title='publish/subscribe context' , content=layout )
+								b = popup.content.children[2].children[0].children[0]
+								#btn = popup.content.children[1].children[0].children[0]
+								b.bind( on_press = lambda a:self._on_test_connect() )
+								popup.open()
+
+							finally :
+								#App.get_running_app().dbpq_lk.release()
+								pass
 

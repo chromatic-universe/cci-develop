@@ -140,3 +140,64 @@ def ping_ip_subnet( ip = None ) :
 			return b_ret , out
 
 
+
+
+# ---------------------------------------------------------------------------------------------
+def mongo_extended_metadata( ip = None ) :
+			"""
+
+			:param ip:
+			:return exntended info:
+			"""
+
+			cmd = [
+					"nmap" ,
+					"-p" ,
+					"27017" ,
+			        "--script",
+					"mongodb-info" ,
+					ip
+				 ]
+			return spawn_nmap_output(  cmd , 'mongo_extended_metadata' )
+
+
+
+
+
+# ---------------------------------------------------------------------------------------------
+def spawn_nmap_output( cmdline = None , moniker = 'nmap' ) :
+			"""
+
+			:param cmdline:
+			:return output:
+			"""
+
+			if cmdline is None :
+				raise Exception( '..spawn_nmap_output...no cmdline supplied' )
+
+			out = str()
+			boiler = str()
+			b_ret = True
+			try :
+
+				try :
+					out = proc.check_output( cmdline  )
+				except proc.CalledProcessError as e :
+					b_ret = False
+					out = e.message
+			except Exception as e :
+				b_ret = False
+				raise Exception(  moniker + ' '  + e.message )
+
+
+			return b_ret , out
+
+
+
+
+# ------------------------------------------------------------------------------------
+if __name__ == '__main__' :
+
+			b_ret , out = mongo_extended_metadata( 'cci-aws-3'  )
+
+			print out
