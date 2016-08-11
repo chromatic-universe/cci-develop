@@ -31,6 +31,9 @@ from king_console import kc_ping , \
 						 kc_arp , \
 						 kc_tcp , \
 						 kc_nmap
+from king_console import screen_extended
+
+
 import random
 import datetime
 from time import gmtime, strftime , sleep
@@ -217,11 +220,29 @@ class CciScreen( Screen ) :
 
 
 
-					b_ret , screen = App.get_running_app()._screen_exists( 'screen_datalink' )
+					b_ret , scr = App.get_running_app()._screen_exists( 'screen_datalink' )
 					if not b_ret :
-						screen = DatalinkScreen()
-						App.get_running_app().root.add_widget( screen )
-					screen.ids.console_timestamp.text = datetime.datetime.now().strftime( "%Y-%m-%d %H:%M:%S" )
+						scr = screen_extended.DatalinkScreen()
+						App.get_running_app().root.add_widget( scr )
+					scr.ids.console_timestamp.text = datetime.datetime.now().strftime( "%Y-%m-%d %H:%M:%S" )
+
+					App.get_running_app()._open_extended_window()
+
+
+
+
+				def _on_show_network_extended( self ) :
+					"""
+
+					:return:
+					"""
+
+					b_ret , scr = App.get_running_app()._screen_exists( 'screen_network' )
+					if not b_ret :
+						scr = screen_extended.NetworkScreen()
+						scr.add_widget( scr.add_console( '' , 'beaucoup #1' ) )
+						App.get_running_app().root.add_widget( scr )
+
 
 					App.get_running_app()._open_extended_window()
 
@@ -1114,253 +1135,6 @@ class CciScreen( Screen ) :
 
 						pr = s + id
 						self._update_console_payload( boiler , container , pr )
-
-
-
-
-
-# -------------------------------------------------------------------------------------------------
-class DatalinkScreen( Screen ) :
-					"""
-
-
-					"""
-					stop = threading.Event()
-
-					accordion_id = ObjectProperty()
-					console_arp_monitor_txt = ObjectProperty()
-					start_monitor_btn = ObjectProperty()
-					console_params = ObjectProperty()
-
-
-
-
-					@staticmethod
-					def _retr_resource( resource_id ) :
-						"""
-
-						:param resource_id:
-						:return ui resource:
-						"""
-
-						return resources.const_resource_ids[resource_id]
-
-
-
-
-
-					def _post_function_call( self , func , params ) :
-						"""
-
-						:param func:
-						:param params:
-						:return:
-						"""
-
-						package = ( func , params )
-						App.get_running_app().dbq.put( package )
-
-
-
-
-					def _post_payload( self , func , params ) :
-						"""
-
-						:param func:
-						:param params:
-						:return:
-						"""
-
-						if not App.get_running_app()._call_stack_debug :
-							package = ( func , params )
-							App.get_running_app().dbq.put( package )
-
-
-
-					def _on_arp_monitor_start( self ) :
-						"""
-
-						:return:
-						"""
-
-						self.ids.console_arp_monitor_txt.text += '...standby....\n\n'
-						if self.ids.start_monitor_btn.text == 'start' :
-
-							thred = threading.Thread( target = self._on_arp_monitor ,
-													  kwargs=dict( console=self.console_arp_monitor_txt ,
-																   items = 15 ) )
-							if thred :
-								moniker = 'arp monitor console'
-								thread_atom = { 'thread_id' : str( thred.ident ) ,
-												'stop_alert'  : threading.Event() ,
-												'instance' : thred
-											  }
-								App.get_running_app()._thrd.thrds[moniker] = thread_atom
-
-
-							thred.start()
-
-							self.ids.console_arp_monitor_txt.text += '...working.....'
-							self.ids.start_monitor_btn.text = 'stop'
-							self.ids.start_monitor_btn.color = [1,0,0.1]
-						else :
-							thr = App.get_running_app()._thrd.thrds['arp monitor console']
-							thr['stop_alert'].set()
-							self.ids.start_monitor_btn.text = 'start'
-							self.ids.start_monitor_btn.color = [0,1,0.1]
-							self.ids.console_arp_monitor_txt.text = ''
-
-
-
-
-					@mainthread
-					def _update_console_payload( self , content , params = '(no params)' ) :
-						"""
-
-						:param console slide:
-
-						:return:
-						"""
-
-
-						self.ids.console_arp_monitor_txt.text = content + self.ids.console_arp_monitor_txt.text
-						self.ids.console_params.text = params
-
-
-						self.canvas.ask_update()
-
-
-
-
-					def _on_arp_monitor( self , console = None , items = 15 ) :
-						"""
-						:param console:
-						:param items:
-						:return
-						"""
-
-
-						thr = App.get_running_app()._thrd.thrds['arp monitor console']
-						alarm = thr['stop_alert']
-
-						App.get_running_app()._logger.info( self.__class__.__name__ + '...on_arp_monitor'  )
-
-						boiler = str()
-
-						try :
-
-							if alarm.isSet() :
-									return
-						except :
-							pass
-
-
-						try :
-
-							cmd = ["su" ,
-								   "-c" ,
-								   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-								   "./king_console/kc_arp.pyo" ,
-								   '-x' ,
-								    '12'
-								  ]
-							"""
-							cmd = [ "python" ,
-								   "./king_console/kc_arp.py" ,
-								   '-x' ,
-								   '8'
-								  ]
-							"""
-							try :
-								while not alarm.isSet() :
-									boiler = proc.check_output( cmd  )
-
-									pos = boiler.find( '[]' )
-									if pos != -1 :
-										boiler = boiler[:pos]
-
-									self._update_console_payload( boiler  )
-									sleep( 1 )
-							except proc.CalledProcessError as e :
-								b_ret = False
-						except Exception as e :
-							b_ret = False
-							App.get_running_app()._logger.error( e.message )
-
-
-						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
-																			'datalink' ,
-																			'arp_monitor' ,
-							  												'(no_params)' ,
-																			boiler ] )
-
-
-
-
-
-
-
-# -------------------------------------------------------------------------------------------------
-class NetworkScreen( Screen ) :
-					"""
-
-
-					"""
-					stop = threading.Event()
-
-					accordion_id = ObjectProperty()
-					_console_text = ObjectProperty()
-
-
-
-					@staticmethod
-					def _retr_resource( resource_id ) :
-						"""
-
-						:param resource_id:
-						:return ui resource:
-						"""
-
-						return resources.const_resource_ids[resource_id]
-
-
-
-
-
-					def _post_function_call( self , func , params ) :
-						"""
-
-						:param func:
-						:param params:
-						:return:
-						"""
-
-						package = ( func , params )
-						App.get_running_app().dbq.put( package )
-
-
-
-
-					def _post_payload( self , func , params ) :
-						"""
-
-						:param func:
-						:param params:
-						:return:
-						"""
-
-						if not App.get_running_app()._call_stack_debug :
-							package = ( func , params )
-							App.get_running_app().dbq.put( package )
-
-
-
-
-
-
-
-
-
 
 
 

@@ -252,7 +252,7 @@
                                 font_size: 24
                                 color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                 #background_color: [0,0,0,0]
-                                on_press: app._open_extended_window()
+                                on_press: root._on_show_network_extended()
                             Button:
                                 id: ping_btn
                                 text: 'execute ping'
@@ -318,7 +318,7 @@
                                 font_size: 24
                                 color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
                                 #background_color: [0,0,0,0]
-                                on_press: app._open_extended_window()
+                                on_press: root._on_show_network_extended()
                             Button:
                                 id: ping_sub_btn
                                 text: 'execute sub ping'
@@ -671,17 +671,18 @@ ScreenManagement:
     ConsoleAccordion:
 
 
-
+#network screen
 <NetworkScreen>
     id: network_screen
     name: 'screen_network'
-    BoxLayout:
-        orientation: 'vertical'
-        Image:
-            source: 'Male-Face-O4-icon.png'
-            on_touch_down: app._manip_extended_window()
-        Label:
-            text: 'extended network screen'
+    GridLayout
+        orientation: 'horizontal'
+        cols: 1
+        Accordion:
+            id: tcp_accordion
+            orientation: 'vertical'
+            AccordionItem:
+                title: 'beaucoup ping'
 
 # tcp screen
 <TcpScreen>

@@ -134,12 +134,29 @@ Screen
         orientation: 'horizontal'
         cols: 1
         Accordion:
-            id: network_accordion
+            id: datalink_accordion
             orientation: 'vertical'
             AccordionItem:
                 title: 'arp monitor'
 """
-,					'console_carousel' :
+,
+
+					   'network_extended_screen' :
+"""
+Screen
+    id: datalink_screen
+    name: 'screen_network'
+    GridLayout
+        orientation: 'horizontal'
+        cols: 1
+        Accordion:
+            id: network_accordion
+            orientation: 'vertical'
+
+"""
+,
+
+					   'console_carousel' :
 """
 Carousel:
 	id: carousel_id

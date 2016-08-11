@@ -207,6 +207,13 @@ class kc_mongo_config( kc_config ) :
 							else :
 								container.text = '...could not retrieve extended info....'
 
+							id = '(bootstrap=%s)' % self._bootstrap
+							self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
+																				'stream_config' ,
+																				'_show_extended_info' ,
+																				id ,
+																				stream ] )
+
 
 
 				# -------------------------------------------------------------------------------------------------
@@ -450,7 +457,7 @@ class kc_kafka_config( kc_config ) :
 							scroll.add_widget( grid )
 							layout.add_widget( scroll )
 
-							popup = ConsolePopup( title='kafka connect' , content = layout )
+							popup = screen.ConsolePopup( title='kafka connect' , content = layout )
 							b = popup.content.children[1].children[0].children[0]
 							b.text = 'test connect'
 							b.bind( on_press = lambda a:self._show_info( vx ) )
@@ -484,7 +491,7 @@ class kc_kafka_config( kc_config ) :
 														readonly = False ,
 														multiline =  True ,
 														size_hint_y = .5 ) )
-							grid.add_widget( Label(  text = 'booststrap broker port:' ) )
+							grid.add_widget( Label(  text = 'bootstrap broker port:' ) )
 							grid.add_widget( TextInput(  text = '9092' ,
 														id = 'kafka_bootstrap_port' ,
 														cursor_blink =  True ,
@@ -500,7 +507,7 @@ class kc_kafka_config( kc_config ) :
 
 							try :
 
-								popup = ConsolePopup( title='publish/subscribe context' , content=layout )
+								popup = screen.ConsolePopup( title='publish/subscribe context' , content=layout )
 								b = popup.content.children[2].children[0].children[0]
 								#btn = popup.content.children[1].children[0].children[0]
 								b.bind( on_press = lambda a:self._on_test_connect() )
