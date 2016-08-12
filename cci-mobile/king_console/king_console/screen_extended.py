@@ -232,9 +232,11 @@ class NetworkScreen( Screen ) :
 					"""
 					stop = threading.Event()
 
+					action_bar = ObjectProperty()
 					accordion_id = ObjectProperty()
 					_console_text = ObjectProperty()
-
+					view_btn_a = ObjectProperty()
+					action_view = ObjectProperty()
 
 
 					@staticmethod
@@ -293,10 +295,13 @@ class NetworkScreen( Screen ) :
 							"""
 
 							layout = GridLayout( cols = 1 ,
-												 padding = [0 , 5 , 0 ,5]
+												 orientation = 'horizontal'
 												  )
-							action_bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_3' ) )
-							layout.add_widget( action_bar )
+							bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_3' ) )
+							bar.ids.view_btn_a.text = 'back'
+							bar.ids.view_btn_a.bind( on_press =
+								lambda a:App.get_running_app()._manip_extended_window() )
+							layout.add_widget( bar )
 							layout.add_widget( Label( text = tag  ,
 													  color = [ 1, 0 , 0 , 1] ,
 													  font_size = 16 ,

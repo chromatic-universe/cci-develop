@@ -240,7 +240,7 @@ class CciScreen( Screen ) :
 					b_ret , scr = App.get_running_app()._screen_exists( 'screen_network' )
 					if not b_ret :
 						scr = screen_extended.NetworkScreen()
-						scr.add_widget( scr.add_console( '' , 'beaucoup #1' ) )
+						scr.ids.ping_beaucoup.add_widget( scr.add_console( '' , 'beaucoup #1' ) )
 						App.get_running_app().root.add_widget( scr )
 
 
@@ -538,7 +538,7 @@ class CciScreen( Screen ) :
 					App.get_running_app()._console_count += 1
 					layout.add_widget( Label( text = moniker  + str( App.get_running_app()._console_count ),
 											color = [ 1, 0 , 0 , 1] ,
-											font_size = 16 ,
+											font_size = 14 ,
 											id = 'content' ,
 											size_hint_y = 0.1 ) )
 					# console text
@@ -555,12 +555,10 @@ class CciScreen( Screen ) :
 					#scrollbox
 					layout.add_widget( scrolly )
 					#footer
-					layout.add_widget( Label( text = strftime("%Y-%m-%d %H:%M:%S", gmtime()) ,
+					layout.add_widget( Label( text = datetime.datetime.now().strftime( "%Y-%m-%d %H:%M:%S" )   ,
 											font_size = 16  ,
 											size_hint_y = 0.2 ,
 											color = [ 1, 0 , 0 , 1] ) )
-
-
 					carousel.add_widget( layout )
 					carousel.index = len( carousel.slides ) - 1
 					self.canvas.ask_update()
@@ -599,7 +597,8 @@ class CciScreen( Screen ) :
 
 					App.get_running_app()._logger.info( '...update console payload...' )
 					container.children[1].children[0].text = content
-					container.children[0].text = params
+					container.children[0].text = params + '\n' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+					container.children[0].halign = 'center'
 					self.canvas.ask_update()
 
 					
@@ -919,12 +918,16 @@ class CciScreen( Screen ) :
 
 
 
+
+
 				def _on_arp_ip_scan( self  , in_ip = None , range = False , console = None) :
 						"""
 						:param in_ip : input arp variable
 						:return:
 						"""
 						self._on_arp_ip_input( range=range , console = console )
+
+
 
 
 

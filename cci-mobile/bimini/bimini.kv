@@ -13,16 +13,33 @@ ScreenManager:
             id: cci_bimini_accordion
             AccordionItem
                 title: 'remote console'
-                ScrollView:
-                    effect_cls: ScrollEffect
+                GridLayout:
+                    cols: 1
+                    orientation: 'horizontal'
+                    ScrollView:
+                        effect_cls: ScrollEffect
+                        Image:
+                            id: desktop
+                            nocache: True
+                            source: 'remote.png'
+                            on_touch_down: app.send_click(args[1])
+                            size: self.texture_size
+                            size_hint: (None, None)
+                    GridLayout:
+                        cols: 3
+                        orientation: 'horizontal'
+                        size_hint_y: .1
+                        Image:
+                            id: back_btn
+                            source: './img/back-button.png'
+                        Image:
+                            id: home_btn
+                            source: './img/home.png'
+                        Image:
+                            id: overview_btn
+                            source: './img/overview.png'
 
-                    Image:
-                        id: desktop
-                        nocache: True
-                        source: 'remote.png'
-                        on_touch_down: app.send_click(args[1])
-                        size: self.texture_size
-                        size_hint: (None, None)
+
             AccordionItem:
                 title: 'cci-bimini'
                 GridLayout
@@ -41,12 +58,15 @@ ScreenManager:
                                 on_press: app._on_full_screen()
                                 app_icon: 'king-console32.png'
                             ActionButton:
-                                icon: 'menu-icon.png'
+                                text: 'connect'
                                 on_press: app.on_connect()
+                            ActionButton:
+                                text: 'config'
+
                     GridLayout:
                         orientation: 'horizontal'
                         cols: 2
-                        size_hint_y: .60
+                        size_hint_y: .75
                         Slider:
                             orientation: 'vertical'
                             id: window_width_slider
@@ -54,7 +74,7 @@ ScreenManager:
                             min: 100
                             max: 1600
                             value: 480
-
+                            size_hint_y: .4
                         Slider:
                             orientation: 'vertical'
                             id: window_height_slider
@@ -62,15 +82,17 @@ ScreenManager:
                             min: 100
                             max: 1600
                             value: 785
-
+                            size_hint_y: .4
                         Label:
                             text: 'width: ' + '{0:}'.format( window_width_slider.value )
+                            size_hint_y: .1
                         Label:
                             text: 'height: ' + '{0:}'.format( window_height_slider.value )
+                            size_hint_y: .1
                     GridLayout:
                         orientation: 'horizontal'
                         cols: 1
-                        size_hint_y:  .25
+                        size_hint_y:  .15
                         Label:
                             text: 'enter ip or address:'
                             halign: 'center'

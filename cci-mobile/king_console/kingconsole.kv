@@ -679,9 +679,10 @@ ScreenManagement:
         orientation: 'horizontal'
         cols: 1
         Accordion:
-            id: tcp_accordion
+            id: network_accordion
             orientation: 'vertical'
             AccordionItem:
+                id: ping_beaucoup
                 title: 'beaucoup ping'
 
 # tcp screen
@@ -748,10 +749,10 @@ ScreenManagement:
                                 on_press: app._on_full_screen()
                                 app_icon: 'king-console32.png'
                             ActionButton:
-                                icon: 'history.png'
+                                text: 'history'
                                 on_press: app._on_view_manager()
                             ActionButton:
-                                icon: 'menu-icon.png'
+                                text: 'back'
                                 on_press: app._manip_extended_window()
                     BoxLayout:
                         orientation: 'vertical'

@@ -70,7 +70,7 @@ orientation = all
 #
 
 # (bool) Indicate if the application should be fullscreen or not
-fullscreen = 0
+fullscreen = 1
 
 # (list) Permissions
 android.permissions = INTERNET

@@ -90,8 +90,10 @@ ActionBar:
  					 'dlg_action_bar_3' :
 """
 ActionBar:
+	id: action_bar
 	pos_hint: {'top':1}
 	ActionView:
+	    id: action_view
 		use_separator: True
 		ActionPrevious:
 			title: 'king console'
@@ -99,6 +101,7 @@ ActionBar:
 			app_icon: 'king-console32.png'
 		ActionButton:
 			text: 'manip'
+			id: view_btn_a
 """
 ,
 					   'application_acc_item' :
