@@ -11,6 +11,7 @@ import Queue
 
 
 click_queue = Queue.Queue()
+key_queue = Queue.Queue()
 
 # ---------------------------------------------------------------------
 def process_linux_clicks( log=None  ) :
@@ -20,9 +21,6 @@ def process_linux_clicks( log=None  ) :
 			:param q:
 			:return:
 			"""
-
-
-
 
 
 			import pyautogui
@@ -77,7 +75,26 @@ def process_android_clicks( log=None  ) :
 			return 'done'
 
 
+# ---------------------------------------------------------------------
+def process_linux_keys( log=None  ) :
+			"""
 
+			:param log:
+			:return:
+			"""
+			try:
+
+				while not key_queue.empty() :
+
+					key = key_queue.get()
+					log.info( '..remote key....%d' % key  )
+
+			except Exception as e :
+				log.error( '...click....'  )
+				log.error( e.message )
+				return 'error'
+
+			return 'done'
 
 
 # ---------------------------------------------------------------------
@@ -109,6 +126,7 @@ def capture_screen( log=None ) :
 						import pyscreenshot as ImageGrab
 
 						process_linux_clicks( log )
+						process_linux_keys( log )
 						screen = ImageGrab.grab()
 						buf = StringIO.StringIO()
 						screen.save( buf , 'PNG', quality=75)
@@ -151,6 +169,23 @@ def capture_clicks( log=None  , request = None ) :
 			clk = ( x , y )
 
 			click_queue.put( clk )
+
+			return 'done'
+
+
+
+# ---------------------------------------------------------------------
+def capture_keys( log=None  , request = None ) :
+			"""
+
+			:param log:
+			:return:
+			"""
+
+			log.info( '...capture_keys....' )
+			k = int( request.args.get( 'key' ) )
+
+			key_queue.put( k )
 
 			return 'done'
 

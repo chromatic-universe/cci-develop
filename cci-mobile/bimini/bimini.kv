@@ -13,12 +13,13 @@ ScreenManager:
             id: cci_bimini_accordion
             AccordionItem
                 title: 'remote console'
+                id: remote_accordion
                 GridLayout:
                     cols: 1
                     orientation: 'horizontal'
                     ScrollView:
                         effect_cls: ScrollEffect
-                        Image:
+                        FocusImage:
                             id: desktop
                             nocache: True
                             source: 'remote.png'
@@ -32,13 +33,13 @@ ScreenManager:
                         Image:
                             id: back_btn
                             source: './img/back-button.png'
+                            #on_touch_down: app._on_back_btn()
                         Image:
                             id: home_btn
                             source: './img/home.png'
                         Image:
                             id: overview_btn
                             source: './img/overview.png'
-
 
             AccordionItem:
                 title: 'cci-bimini'
@@ -101,4 +102,3 @@ ScreenManager:
                             id: server
                             text: '192.168.0.165'
                             halign: 'center'
-

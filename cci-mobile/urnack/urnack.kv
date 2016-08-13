@@ -26,7 +26,8 @@
                     title: 'server def'
                     BoxLayout:
                         orientation: 'vertical'
-                        GridLayout
+                        GridLayout:
+                            cols: 1
                             orientation: 'horizontal'
                             Button:
                                 id: redis_server_btn
@@ -35,7 +36,8 @@
                     title: 'client manip'
                     BoxLayout:
                         orientation: 'vertical'
-                        GridLayout
+                        GridLayout:
+                            cols: 1
                             orientation: 'horizontal'
                             Button:
                                 id: redis_client_btn
@@ -60,7 +62,7 @@
         AccordionItem:
             title: 'cci-urnack'
             on_touch_up: app._selected_accordion_item()
-            GridLayout
+            GridLayout:
                 orientation: 'horizontal'
                 cols: 1
                 ActionBar:

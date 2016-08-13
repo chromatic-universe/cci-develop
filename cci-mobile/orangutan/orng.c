@@ -17,7 +17,7 @@
 */
 
 
-// william k. johnson chromatic universe 2016
+// modified william k. johnson chromatic universe 2016
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -89,6 +89,8 @@ void execute_tap( int fd ,
                   int num_times ,
                   int duration_msec );
 
+//execute  keydown
+void execute_keydown( int fd , int key );
 
 
 //
@@ -549,6 +551,8 @@ int main( int argc , char *argv[] )
                   int argcount;
                   int print_device_diagnostics = 0;
                   int is_tap = 0;
+                  int is_key_down = 0;
+                  int is_key_up = 0;
                   const char* device;
                   const char* move_x;
                   const char* move_y;
@@ -567,6 +571,16 @@ int main( int argc , char *argv[] )
                       is_tap = 1;
                       cmd = "tap";
                     }
+                    else if( c == 'k' )
+                    {
+                        is_key_down = 0;
+                        cmd = "keydown";
+                    }
+                    else if( c == 'u' )
+                    {
+                        is_key_up = 0;
+                        cmd = "keyup";
+                    }
                     else
                     {
                       fprintf( stderr ,
@@ -579,9 +593,10 @@ int main( int argc , char *argv[] )
                   argcount = (argc - optind);
                   if ( argcount != 3  )
                   {
-                    fprintf( stderr , "Usage: %s [options] <device> [x][y]\n\n"
+                    fprintf( stderr , "Usage: %s [options] <device> [x][y] or [key][expr-key]\n\n"
                              "Options:\n"
-                             "  -t  emulate tabs\n", argv[0]);
+                             "  -t  emulate tabs\n"
+                             "  -k  key down\n" , argv[0] );
 
                     return 1;
                   }
@@ -626,6 +641,10 @@ int main( int argc , char *argv[] )
                                             y_move ,
                                             default_rep ,
                                             default_period );
+                  }
+                  else if( strcmp( cmd ,  "keyup" ) == 0 )
+                  {
+
                   }
 
                   /*else if (strcmp(cmd, "drag") == 0) {

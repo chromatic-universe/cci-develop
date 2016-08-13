@@ -130,6 +130,19 @@ def click() :
 										   request = request )
 
 
+# ------------------------------------------------------------------------
+@app.route('/key')
+def key() :
+			"""
+
+			:return:
+			"""
+
+			return trinity.capture_keys( log = _logger ,
+										 request = request )
+
+
+
 
 
 @app.route( "/session_call_reprise/<session_id>/batch/<max_id>:<total_count>:<record_ptr>" )
