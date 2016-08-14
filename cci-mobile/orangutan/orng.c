@@ -200,6 +200,10 @@ void write_event( int fd , int type , int code , int value)
                         strerror( errno ) );
                 return;
               }
+              else
+              {
+                  printf( "write event type %d  succeeded....\n" , type );
+              }
 }
 
 
@@ -557,14 +561,14 @@ int main( int argc , char *argv[] )
                   const char* move_x;
                   const char* move_y;
                   char err_buffer [250];
-                  int default_rep = 2;
+                  int default_rep = 1;
                   int default_period = 200;
 
                   int num_args = 0;
                   int args[MAX_COMMAND_ARGS];
                   char *line, *cmd, *arg;
 
-                  while ( ( c = getopt ( argc, argv, "t" ) ) != -1 )
+                  while ( ( c = getopt ( argc, argv, "tku" ) ) != -1 )
                   {
                     if ( c == 't' )
                     {
@@ -642,10 +646,22 @@ int main( int argc , char *argv[] )
                                             default_rep ,
                                             default_period );
                   }
+                  else if( strcmp( cmd ,  "keydown" ) == 0 )
+                  {
+                        int key = atoi( argv[optind + 1] );
+                        int expr_key = atoi( argv[optind + 2 ] );
+
+                        execute_keydown( fd , key );
+                  }
                   else if( strcmp( cmd ,  "keyup" ) == 0 )
                   {
+                        int key = atoi( argv[optind + 1] );
+                        int expr_key = atoi( argv[optind + 2 ] );
 
+                        execute_keyup( fd , key );
                   }
+
+
 
                   /*else if (strcmp(cmd, "drag") == 0) {
                     execute_drag(fd, device_flags, args[0], args[1], args[2],

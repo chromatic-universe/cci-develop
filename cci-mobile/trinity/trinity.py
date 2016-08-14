@@ -13,10 +13,14 @@ import Queue
 click_queue = Queue.Queue()
 key_queue = Queue.Queue()
 
+key_motions = {
+				'key_down' : 0 ,
+				'key_up' : 1
+			  }
+
 # ---------------------------------------------------------------------
 def process_linux_clicks( log=None  ) :
 			"""
-
 			:param log:
 			:param q:
 			:return:
@@ -46,7 +50,6 @@ def process_linux_clicks( log=None  ) :
 # ---------------------------------------------------------------------
 def process_android_clicks( log=None  ) :
 			"""
-
 			:param log:
 			:return:
 			"""
@@ -76,25 +79,75 @@ def process_android_clicks( log=None  ) :
 
 
 # ---------------------------------------------------------------------
-def process_linux_keys( log=None  ) :
+def process_android_keys( log=None , key_motion = 'key_down' ) :
 			"""
-
 			:param log:
 			:return:
 			"""
+
+
 			try:
+				motion =  '-k'
+				if key_motions[key_motion] :
+					motion = '-u'
 
 				while not key_queue.empty() :
 
 					key = key_queue.get()
 					log.info( '..remote key....%d' % key  )
 
+					cmd = [ 'su' ,
+							'-c' ,
+							'/system/bin/orng' ,
+							'-k' ,
+							'/dev/input/event3' ,
+							str( key )  ,
+							'0' ]
+					out = proc.check_output( cmd )
+					log.info( out )
+
 			except Exception as e :
-				log.error( '...click....'  )
+				log.error( '...keys....'  )
 				log.error( e.message )
 				return 'error'
 
 			return 'done'
+
+
+
+# ---------------------------------------------------------------------
+def process_linux_keys( log=None , key_motion = 'key_down' ) :
+			"""
+			:param log:
+			:return:
+			"""
+
+			import pyautogui
+			try:
+
+				motion =  '-k'
+				if key_motions[key_motion] :
+					motion = '-u'
+
+
+				while not key_queue.empty() :
+
+					key = key_queue.get()
+
+					log.info( '..remote key....%d' % key  )
+					pyautogui.keyDown( chr( key ) , 0.15 )
+					log.info( out )
+
+
+
+			except Exception as e :
+				log.error( '...keys....'  )
+				log.error( e.message )
+				return 'error'
+
+			return 'done'
+
+
 
 
 # ---------------------------------------------------------------------
@@ -102,7 +155,6 @@ def capture_screen( log=None ) :
 			"""
 			:param path to saved image:
 			:return
-
 			"""
 
 
@@ -117,7 +169,8 @@ def capture_screen( log=None ) :
 					else :
 						andr = True
 					if andr is True :
-						process_android_clicks( log )
+						process_android_clicks( log=log )
+						process_android_keys( log=log )
 						out = proc.check_output( ['/system/bin/screencap' ,
 									              '-p' ] )
 						b_ret = True
@@ -125,8 +178,8 @@ def capture_screen( log=None ) :
 						# linux
 						import pyscreenshot as ImageGrab
 
-						process_linux_clicks( log )
-						process_linux_keys( log )
+						process_linux_clicks( log=log )
+						process_linux_keys( log=log )
 						screen = ImageGrab.grab()
 						buf = StringIO.StringIO()
 						screen.save( buf , 'PNG', quality=75)
@@ -158,7 +211,6 @@ def capture_screen( log=None ) :
 # ---------------------------------------------------------------------
 def capture_clicks( log=None  , request = None ) :
 			"""
-
 			:param log:
 			:return:
 			"""
@@ -179,6 +231,7 @@ def capture_keys( log=None  , request = None ) :
 			"""
 
 			:param log:
+			:param request:
 			:return:
 			"""
 
@@ -188,6 +241,7 @@ def capture_keys( log=None  , request = None ) :
 			key_queue.put( k )
 
 			return 'done'
+
 
 
 # ------------------------------------------------------------------------------
