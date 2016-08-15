@@ -22,19 +22,26 @@ import sqlite3
 import uuid
 import threading
 from kivy.clock import Clock
+from kivy.app import App
 
-
-
-import cci_mini_mongo
+# dbs
 import sqlite3
+# docs
+import cci_mini_mongo
+# streams
+import kafka
+
+
 # cci
 from kc_db_manager import kc_db_manager
 from cci_mini_mobile import cci_mobile
 
 
-document_monikers = ['mongodb' , 'elasticsearch']
-stream_monikers = ['kafka' , 'redis' , 'rabbitmq']
-
+sql_cursor_dictionary = {  'sql_retrieve_tagged_payloads' : 'select * from session_call_history '
+															'where session_name = %s '
+															'order by timestamp DESC '
+													        'LIMIT 15'
+						}
 
 # -------------------------------------------------------------------------------------------
 class kc_payload_stalker( cci_mobile ) :
@@ -60,6 +67,17 @@ class kc_payload_stalker( cci_mobile ) :
 
 					super( kc_payload_stalker , self ).__init__()
 
+					document_monikers = {
+										   'mongodb' : self._on_mongo_document ,
+										   'elasticsearch' : self._on_elasticsearch_document
+										}
+					stream_monikers =   {
+											'kafka' : self._on_kafka_stream  ,
+											'redis' : self._on_redis_stream ,
+											'rabbitmq' : self._on_rabbitmq_stream
+										}
+
+
 					if db_connect_str is None :
 						raise ValueError( '%s cannot proceed , no database specified' % \
 										          self.__class__.__name__  )
@@ -70,6 +88,8 @@ class kc_payload_stalker( cci_mobile ) :
 						raise ValueError( '%s cannot proceed , stream context not supported' % \
 										          self.__class__.__name__  )
 
+
+
 					self._signal_event = threading.Event()
 					self._policy = policy
 					self._policies = dict()
@@ -78,8 +98,8 @@ class kc_payload_stalker( cci_mobile ) :
 					self._doc_moniker = document_moniker
 					self._stream_bootstrap = stream_bootstrap
 					self._stream_moniker = stream_moniker
-					self._db_manager = None
-
+					self._db_manager = kc_db_manager( default_db = db_connect_str ,
+													  logger = self._logger )
 
 
 
@@ -133,6 +153,62 @@ class kc_payload_stalker( cci_mobile ) :
 					:return:
 					"""
 
+					try :
+
+						pass
+					except Exception as e :
+						pass
+					finally :
+						pass
+
+
+
+				def _on_mongo_document( self )  :
+					"""
+
+					:return
+					"""
+
+					pass
+
+
+
+				def _on_elasticsearch_document( self ) :
+					"""
+
+					:return
+					"""
+
+					pass
+
+
+
+				def _on_kafka_stream( self ) :
+					"""
+
+					:return
+					"""
+
+					pass
+
+
+
+				def _on_redis_stream( self ) :
+					"""
+
+					:return
+					"""
+
+					pass
+
+
+
+				def _on_rabbitmq_stream( self ) :
+					"""
+
+					:return
+					"""
+
 					pass
 
 
@@ -184,6 +260,8 @@ class kc_payload_stalker( cci_mobile ) :
 
 
 
+
+
 # -------------------------------------------------------------------------------------------
 def stalker_main() :
 				"""
@@ -191,9 +269,10 @@ def stalker_main() :
 				:return:
 				"""
 
+
 				try :
-					stalker = kc_payload_stalker( db_connect_str='/data/media/com.chromaticuniverse. \
-																  cci_trinity/king_console.sqlite' )
+					stalker = kc_payload_stalker( db_connect_str='/data/media/com.chromaticuniverse.' \
+																  'cci_trinity/king_console.sqlite' )
 				except ValueError as e :
 					print  'parameter snafu: ' %  e.message
 				except Exception as e :

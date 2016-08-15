@@ -24,13 +24,7 @@ import threading
 
 from kivy.app import App
 
-"""
-select  a.session_name ,  a.context , a.session_moniker ,
-            b.timestamp , b.call_segment  , b.call_moniker , b.call_params  ,
-            c.size , c.payload
-from sessions a , session_call_history  b   , session_payload_atoms c
-where a.session_name =  b.session_name and b.idx = c.session_call_idx\
-"""
+
 
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
@@ -141,7 +135,7 @@ class kc_db_manager( object ) :
 
 
 
-				def _execute_sql_update( self , sql_key , params  , raw = False) :
+				def _execute_sql_update( self , sql_key , params  , raw = False ) :
 					"""
 
 					:param sql_key:
@@ -174,6 +168,7 @@ class kc_db_manager( object ) :
 					except TypeError as e :
 						self.logger.error( e.message )
 						
+
 
 
 				def _execute_sql_result_set( self , sql_key , params , event , queue_id  ) :
@@ -216,6 +211,43 @@ class kc_db_manager( object ) :
 						finally :
 							App.get_running_app().dbpq_lk.release()
 
+
+
+
+				def _execute_naked_sql_result_set( self ,
+												   sql_statement ,
+												   params ) :
+					"""
+
+					:param sql_statement:
+					:param params:
+					:return:
+					"""
+
+					payload = list()
+					try :
+
+						s = sql_statement
+						s = s % quoted_list_to_tuple( params )
+
+						rs = ( None , None )
+
+						self._db_cursor.execute( s )
+						while True :
+							rs = self._db_cursor.fetchone()
+							if rs is None :
+								break
+							payload.append( rs )
+
+						self.logger.info( '...' +  sql_statement  + ' executed...'  + str( params ) )
+
+					except sqlite3.OperationalError as e :
+						self.logger.error( 'statement failed: '
+							+ e.message )
+					except TypeError as e :
+						self.logger.error( '...not enough aruments for db query...' )
+
+					return payload
 
 
 
