@@ -191,6 +191,7 @@ class urnackApp( App ) :
 					:return:
 					"""
 
+					"""
 					server_param =  [{ 'host' :'search-chromatic-search-p647s4rdqjcgub7tt7neealjn4.us-west-2.es.amazonaws.com' ,
 										'port' : 80}]
 					elastic_cci = cci_elastic.cci_mini_elastic( server_param , True )
@@ -206,6 +207,8 @@ class urnackApp( App ) :
 					with open( 'cci_mini_elastic.log-debug.log' ) as f :
 						content = f.readlines()
 					self.root.current_screen.ids.console_interfaces.text = '\n'.join( content )
+					"""
+					pass
 
 
 

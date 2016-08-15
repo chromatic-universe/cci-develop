@@ -56,7 +56,7 @@ ActionBar:
 			app_icon: 'king-console32.png'
 			on_press: app._manip_extended_window()
 		ActionButton:
-			icon: 'menu-icon.png'
+			text: 'back'
 			on_press: app._manip_extended_window()
 """
 ,

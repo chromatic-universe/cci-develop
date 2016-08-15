@@ -247,6 +247,21 @@ class CciScreen( Screen ) :
 					App.get_running_app()._open_extended_window()
 
 
+				def _on_show_appdiscovery_extended( self ) :
+					"""
+
+					:return:
+					"""
+
+					b_ret , scr = App.get_running_app()._screen_exists( 'screen_app_dicovery' )
+					if not b_ret :
+						scr = screen_extended.AppDiscoveryScreen()
+						scr.ids.console_timestamp.text = datetime.datetime.now().strftime( "%Y-%m-%d %H:%M:%S"  )
+						App.get_running_app().root.add_widget( scr )
+
+					App.get_running_app()._open_extended_window()
+
+
 
 
 				def _on_show_session_note( self ) :
@@ -273,7 +288,6 @@ class CciScreen( Screen ) :
 
 
 					popup.open()
-
 
 
 

@@ -105,7 +105,7 @@ class cci_mini_mongo( cci_mini_mobile.cci_mobile ) :
 				 :return:
 				 """
 				 return "{__class__.__name__}(bootstraps={_bootstrap!r}," \
-						"connect_on_construct{_connect_on_construct})". \
+						"connect_on_construct={_connect_on_construct})". \
 						format( __class__=self.__class__ , **self.__dict__ )
 
 

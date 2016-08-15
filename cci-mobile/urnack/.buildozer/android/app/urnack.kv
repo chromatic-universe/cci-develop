@@ -24,41 +24,19 @@
                 orientation: root.accordion_id._inner_orientation
                 AccordionItem:
                     title: 'server def'
-                    BoxLayout:
-                        orientation: 'vertical'
-                        GridLayout:
-                            cols: 1
-                            orientation: 'horizontal'
-                            Button:
-                                id: redis_server_btn
-                                text: 'server'
+
                 AccordionItem:
                     title: 'client manip'
-                    BoxLayout:
-                        orientation: 'vertical'
-                        GridLayout:
-                            cols: 1
-                            orientation: 'horizontal'
-                            Button:
-                                id: redis_client_btn
-                                text: 'client manip'
+
         AccordionItem:
             title: 'elasticsearch'
-            Label:
-                id: acc_item_elastic
-                text: 'elasticsearch'
-                font_size: 12
+
         AccordionItem:
             title: 'rabbitmq'
-            Label:
-                id: acc_item_rabbit
-                text: 'rabbitmq'
+
         AccordionItem:
             title: 'mongo'
-            Label:
-                id: acc_item_mongo
-                text: 'mongo'
-                font_size: 12
+
         AccordionItem:
             title: 'cci-urnack'
             on_touch_up: app._selected_accordion_item()

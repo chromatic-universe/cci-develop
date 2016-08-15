@@ -370,27 +370,33 @@ class kc_mongo_config( kc_config ) :
 							mongo = mongo_client.cci_mini_mongo( bootstrap = self._bootstrap ,
 																 device_id = self._id )
 
-							if mongo.connected :
-								db = mongo.mongo['cci_maelstrom']
-								result = db['auth_devices'].update_one (
-									{"device_id": self._id } ,
-										{
-											"$set":
+							try :
+								if mongo.connected :
+									db = mongo.mongo['cci_maelstrom']
+									result = db['auth_devices'].update_one (
+										{"device_id": self._id } ,
 											{
-												"active" : s ,
-												"last_known_ip" : self._last_ip ,
-												"last_known_remote_ip" : self._last_real_ip
-											},
-											"$currentDate": { "last_active" : True }
+												"$set":
+												{
+													"active" : s ,
+													"last_known_ip" : self._last_ip ,
+													"last_known_remote_ip" : self._last_real_ip
+												},
+												"$currentDate": { "last_active" : True }
 
-										}
+											}
 
-								)
+									)
 
-								if result.matched_count == 0 :
-									self._logger.error( '..could not update mongo db device info...' )
-								else :
-									self._logger.info( '..updated mongo db device info...' )
+									if result.matched_count == 0 :
+										self._logger.error( '..could not update mongo db device info...' )
+									else :
+										self._logger.info( '..updated mongo db device info...' )
+							finally :
+								if mongo.connected :
+									mongo.mongo.close()
+
+
 
 
 

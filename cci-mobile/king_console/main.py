@@ -212,10 +212,12 @@ class kingconsoleApp( App ) :
 			self._full_screen_lst = list()
 			self._full_item = None
 
+
 			self._console_local , \
 			self._console_real , \
 			self._console_ifconfig , \
 			self._console_iwlist =  self._Local_net_info()
+
 			self._session_id = None
 
 			self._current_ip = self._console_ifconfig
@@ -293,6 +295,7 @@ class kingconsoleApp( App ) :
 			"""
 
 			# we don't use db queue in main thread
+
 			uid = str( uuid.uuid4() )
 			package = ( ( 'insert_session'  ,
 						[uid ,
@@ -311,6 +314,7 @@ class kingconsoleApp( App ) :
 			self.dbq.put( package )
 			self._session_id = uid
 
+
 			# document repository
 			mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
 									 log = self._logger ,
@@ -322,11 +326,13 @@ class kingconsoleApp( App ) :
 
 
 
+
 		def _close_session( self ) :
 			"""
 
 			:return:
 			"""
+
 
 			# we don't use db queue in main thread
 			package = ( ( 'update_session_status'  ,
@@ -341,6 +347,7 @@ class kingconsoleApp( App ) :
 			mongo._update_device_session( False )
 
 
+			pass
 
 
 		def _retr_proc_atom( self , proc_str = None ) :
@@ -531,17 +538,6 @@ class kingconsoleApp( App ) :
 
 			self._logger.info( '...on_start...' )
 
-			try :
-				"""
-				k = kafka.SimpleClient( 'cci-aws-1' )
-				#self._logger.info( ''.join( k.topics ) )
-				#self._logger.info( 'opened kafka client...' )
-				"""
-				pass
-
-
-			except :
-				self._logger.error( e.message )
 
 
 			layout = GridLayout( cols = 1 , orientation = 'horizontal' )
@@ -583,6 +579,7 @@ class kingconsoleApp( App ) :
 			self.root.current_screen.ids.console_real_id.text = self._console_real
 			self.root.current_screen.ids.console_interfaces.text = self._console_ifconfig + '\n\n' + self._console_iwlist
 			self._cur_console_buffer = self.root.current_screen.ids.console_interfaces.text
+
 
 
 
