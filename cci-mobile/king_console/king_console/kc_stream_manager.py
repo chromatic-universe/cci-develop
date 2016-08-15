@@ -18,6 +18,7 @@ import struct
 import subprocess as proc
 import urllib2
 import requests
+import json
 import sqlite3
 import uuid
 import threading
@@ -37,21 +38,21 @@ from kc_db_manager import kc_db_manager
 from cci_mini_mobile import cci_mobile
 
 
-sql_cursor_dictionary = {  'sql_retrieve_tagged_payloads' : 'select * from session_call_history '
-															'where session_name = %s '
-															'order by timestamp DESC '
-													        'LIMIT 15'
+sql_cursor_dictionary = {  'sql_retrieve_default_policy' :  'select * from payload_policy '
+														    'where moniker = %s '
+															'and active = 1'
+
 						}
 
 # -------------------------------------------------------------------------------------------
 class kc_payload_stalker( cci_mobile ) :
 				"""
-				payload staker
+				payload stalker
 				"""
 
 
 				def __init__( self ,
-							  policy = None ,
+							  policies = None ,
 							  db_connect_str = None ,
 							  document_bootstrap = 'localhost' ,
 							  stream_bootstrap =  'localhost' ,
@@ -91,8 +92,7 @@ class kc_payload_stalker( cci_mobile ) :
 
 
 					self._signal_event = threading.Event()
-					self._policy = policy
-					self._policies = dict()
+					self._policies = policies
 					self._db_connect_str = db_connect_str
 					self._doc_bootstrap = document_bootstrap
 					self._doc_moniker = document_moniker
@@ -100,6 +100,10 @@ class kc_payload_stalker( cci_mobile ) :
 					self._stream_moniker = stream_moniker
 					self._db_manager = kc_db_manager( default_db = db_connect_str ,
 													  logger = self._logger )
+
+					if self._policies is None :
+						self._policies = self._retrieve_default_policies()
+					print self._policies
 
 
 
@@ -110,7 +114,7 @@ class kc_payload_stalker( cci_mobile ) :
 					 :return:
 					 """
 
-					 return "{__class__.__name__}(policy={_policy!r}," \
+					 return "{__class__.__name__}(policies={_policies!r}," \
 							"db_manager=(_db_manager})". \
 							format( __class__=self.__class__ , **self.__dict__ )
 
@@ -137,13 +141,17 @@ class kc_payload_stalker( cci_mobile ) :
 
 
 
-				def _retrieve_default_policy( self ) :
+				def _retrieve_default_policies( self ) :
 					"""
 
 					:return default policy dictioary:
 					"""
 
-					pass
+
+					return self._db_manager. \
+						               execute_naked_sql_result_set( sql_cursor_dictionary['sql_retrieve_default_policy'] ,
+									   ['default'] )
+
 
 
 

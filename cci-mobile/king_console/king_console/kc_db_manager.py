@@ -60,13 +60,19 @@ sql_cursor_dictionary = {  'sd_insert_session' : 'insert into sessions  (session
 						}
 
 
-
+# -----------------------------------------------------------------------------------
+def dict_factory( cursor, row)  :
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
 
 
 
 # -----------------------------------------------------------------------------------
 def quoted( s ) :
 	return '"' +  s  + '"'
+
 
 
 # -----------------------------------------------------------------------------------
@@ -214,7 +220,7 @@ class kc_db_manager( object ) :
 
 
 
-				def _execute_naked_sql_result_set( self ,
+				def execute_naked_sql_result_set( self ,
 												   sql_statement ,
 												   params ) :
 					"""
@@ -232,9 +238,11 @@ class kc_db_manager( object ) :
 
 						rs = ( None , None )
 
-						self._db_cursor.execute( s )
+						self._current_db.row_factory = dict_factory
+						cursor = self._current_db.cursor()
+						cursor.execute( s )
 						while True :
-							rs = self._db_cursor.fetchone()
+							rs = cursor.fetchone()
 							if rs is None :
 								break
 							payload.append( rs )
