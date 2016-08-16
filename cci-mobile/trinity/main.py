@@ -243,11 +243,23 @@ class ccitrinityApp( App ) :
 							 pass
 
 						try :
-							cmd = ['su' ,
-								   '-c' ,
-								   'kill' ,
-								   '-9' ,
-								   pid]
+							pos = sys.platform.find( 'linux4' )
+							cmd = list()
+							if pos == -1 :
+								andr = False
+							else :
+								andr = True
+							if andr :
+								cmd = ['su' ,
+									   '-c' ,
+									   'kill' ,
+									   '-9' ,
+									   pid]
+							else :
+									 cmd = [
+									   'kill' ,
+									   '-9' ,
+									   pid ]
 
 							proc.check_output( cmd )
 
@@ -299,22 +311,28 @@ class ccitrinityApp( App ) :
 						try :
 
 								self._logger.info( "...bootstrapping cci_trinity....." )
+								pos = sys.platform.find( 'linux4' )
+								if pos == -1 :
+									andr = False
+								else :
+									andr = True
+								cmd = list()
+								if andr :
+									cmd = [
+									  "su" ,
+									  "-c" ,
+									  "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
+									  "./cci-trinity.pyo" ,
+									  "&"
+									  ]
+								else :
 
-								cmd = [
-								  "su" ,
-								  "-c" ,
-								  "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-								  "./cci-trinity.pyo" ,
-								  "&"
-								  ]
+									cmd = [
+									  "python" ,
+									  "./cci-trinity.py" ,
+									  "&"
+									  ]
 
-								"""
-								cmd = [
-								  "python" ,
-								  "./cci-trinity.py" ,
-								  "&
-								  ]
-								"""
 
 
 								proc.Popen( cmd )

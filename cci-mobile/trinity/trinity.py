@@ -136,9 +136,6 @@ def process_linux_keys( log=None , key_motion = 'key_down' ) :
 
 					log.info( '..remote key....%d' % key  )
 					pyautogui.keyDown( chr( key ) , 0.15 )
-					log.info( out )
-
-
 
 			except Exception as e :
 				log.error( '...keys....'  )

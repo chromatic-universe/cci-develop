@@ -45,8 +45,10 @@ from time import gmtime, strftime , sleep
 import subprocess as proc
 import threading
 import requests
+import urllib2
 from functools import partial
-
+from kivy.utils import platform
+from jnius import autoclass
 import sqlite3
 import Queue
 import uuid
@@ -212,11 +214,17 @@ class kingconsoleApp( App ) :
 			self._full_screen_lst = list()
 			self._full_item = None
 
-
-			self._console_local , \
-			self._console_real , \
-			self._console_ifconfig , \
-			self._console_iwlist =  self._Local_net_info()
+			if self._check_connectivity() :
+				self._console_local , \
+				self._console_real , \
+				self._console_ifconfig , \
+				self._console_iwlist =  self._Local_net_info()
+			else :
+				self._console_local = 'None'
+				self._console_real = 'None'
+				self._console_ifconfig = 'None'
+				self._console_iwlist  = 'None'
+				self._logger.error( '...no connectivity...' )
 
 			self._session_id = None
 
@@ -314,14 +322,16 @@ class kingconsoleApp( App ) :
 			self.dbq.put( package )
 			self._session_id = uid
 
-
-			# document repository
-			mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
-									 log = self._logger ,
-									 device_id = local_mac_addr() ,
-									 last_ip = self._console_local ,
-									 last_real_ip = self._console_real )
-			mongo._update_device_session( True )
+			if self._check_connectivity() :
+				# document repository
+				mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
+										 log = self._logger ,
+										 device_id = local_mac_addr() ,
+										 last_ip = self._console_local ,
+										 last_real_ip = self._console_real )
+				mongo._update_device_session( True )
+			else :
+				self._logger.error( '...could not update session remote info...no connectivity...' )
 
 
 
@@ -339,12 +349,16 @@ class kingconsoleApp( App ) :
 						[0 , self._session_id] ) )
 			self.dbq.put( package )
 			# document repository
-			mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
-									 log = self._logger ,
-									 device_id = local_mac_addr() ,
-									 last_ip = self._console_local ,
-									 last_real_ip = self._console_real)
-			mongo._update_device_session( False )
+			if self._check_connectivity() :
+				mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
+										 log = self._logger ,
+										 device_id = local_mac_addr() ,
+										 last_ip = self._console_local ,
+										 last_real_ip = self._console_real)
+				mongo._update_device_session( False )
+			else :
+				self._logger.error( '...could not update session remote info...no connectivity...' )
+
 
 
 			pass
@@ -515,6 +529,49 @@ class kingconsoleApp( App ) :
 
 					sleep( 0.25 )
 
+
+
+
+
+		def _check_connectivity( self ) :
+					"""
+
+					:return:
+					"""
+
+
+					if platform == 'android':
+						try:
+							Activity = autoclass( 'android.app.Activity' )
+							PythonActivity = autoclass( 'org.renpy.android.PythonActivity' )
+							activity = PythonActivity.mActivity
+							ConnectivityManager = autoclass( 'android.net.ConnectivityManager')
+
+							con_mgr = activity.getSystemService( Activity.CONNECTIVITY_SERVICE )
+
+							conn = con_mgr.getNetworkInfo( ConnectivityManager.TYPE_WIFI ).isConnectedOrConnecting()
+							if conn :
+								return True
+							else:
+								conn = con_mgr.getNetworkInfo( ConnectivityManager.TYPE_MOBILE ).isConnectedOrConnecting()
+								if conn:
+									return True
+								else:
+									return False
+						except Exception as e :
+							self._logger.error( 'check connectivity failed....' +  e.message )
+							return False
+					else :
+							"""
+							try:
+								# google , use ip so no dns lookup
+								response=urllib2.urlopen( 'http://209.85.232.106' ,timeout=3 )
+								return True
+							except urllib2.URLError as err :
+								pass
+							return False
+						    """
+							return True
 
 
 

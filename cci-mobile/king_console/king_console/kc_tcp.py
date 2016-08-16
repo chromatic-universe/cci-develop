@@ -15,6 +15,7 @@ except:
 import logging
 import argparse
 import socket
+import struct
 import fcntl
 import struct
 import subprocess as proc
@@ -26,6 +27,21 @@ import requests
 '''disable ipv6 console annoyance'''
 logging.getLogger( "scapy.runtime" ).setLevel(logging.ERROR)
 from scapy.all import *
+
+# ---------------------------------------------------------------------------------------------
+def get_default_gateway_linux() :
+			"""
+			read the default gateway directly from /proc.
+			"""
+
+			with open( "/proc/net/route" ) as fh :
+				for line in fh:
+					fields = line.strip().split()
+					if fields[1] != '00000000' or not int( fields[3] , 16) & 2 :
+						continue
+					return socket.inet_ntoa ( struct.pack ( "<L" , int( fields[2], 16 ) ) )
+
+
 
 
 # ---------------------------------------------------------------------------------------------
@@ -108,6 +124,8 @@ if __name__ == '__main__' :
 						help='syn ack port scan')
 
 			args = parser.parse_args()
+
+
 
 			if args.syn_ip and args.syn_port :
 
