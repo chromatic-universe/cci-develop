@@ -8,6 +8,7 @@ from kivy.uix.actionbar import ActionBar , ActionButton
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
 from kivy.lang import Builder
+from kivy.uix.accordion import Accordion ,AccordionItem
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
@@ -415,4 +416,131 @@ class AppDiscoveryScreen( Screen ) :
 													color = [ 1, 0 , 0 , 1] ) )
 
 							return layout
+
+
+
+
+# -------------------------------------------------------------------------------------------------
+class TransportScreen( Screen ) :
+					"""
+
+
+					"""
+					action_bar = ObjectProperty()
+					accordion_id = ObjectProperty()
+					_console_text = ObjectProperty()
+					console_timestamp = ObjectProperty()
+					_is_full_screen = ObjectProperty()
+					cci_action_prev = ObjectProperty()
+
+					@staticmethod
+					def _retr_resource( resource_id ) :
+						"""
+
+						:param resource_id:
+						:return ui resource:
+						"""
+
+						return resources.const_resource_ids[resource_id]
+
+
+
+
+
+					def _post_function_call( self , func , params ) :
+						"""
+
+						:param func:
+						:param params:
+						:return:
+						"""
+
+						package = ( func , params )
+						App.get_running_app().dbq.put( package )
+
+
+
+
+					def _post_payload( self , func , params ) :
+						"""
+
+						:param func:
+						:param params:
+						:return:
+						"""
+
+						if not App.get_running_app()._call_stack_debug :
+							package = ( func , params )
+							App.get_running_app().dbq.put( package )
+
+
+
+
+
+					def _on_full_screen(self):
+						"""
+
+						:return:
+						"""
+
+						acc = self.ids.tcp_accordion
+						cci = None
+						if not self._is_full_screen:
+							self._full_screen_lst = list()
+							for item in acc.children:
+								self._full_screen_lst.append(item)
+								if item.title == 'cci-maelstrom':
+									cci = item
+							self._full_screen_lst.remove(cci)
+							for item in self._full_screen_lst:
+								acc.remove_widget(item)
+							self._is_full_screen = True
+						else:
+							cci = acc.children[0]
+							acc.remove_widget(cci)
+							self._full_screen_lst.reverse()
+							for item in self._full_screen_lst:
+								acc.add_widget(item)
+							acc.add_widget(cci)
+							self._is_full_screen = False
+
+
+
+					def add_console(  self ,
+								   content ,
+								   tag  ) :
+							"""
+							:param parent:
+							:param content:
+							:param: console_count:
+							:param tag:
+
+							:return:
+							"""
+
+							layout = GridLayout( cols = 1 ,
+												 orientation = 'horizontal'
+												  )
+							bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_3' ) )
+							bar.ids.view_btn_a.text = 'back'
+							bar.ids.view_btn_a.bind( on_press =
+								lambda a:App.get_running_app()._manip_extended_window() )
+							layout.add_widget( bar )
+							layout.add_widget( Label( text = tag  ,
+													  color = [ 1, 0 , 0 , 1] ,
+													  font_size = 16 ,
+													  size_hint_y = 0.1 ) )
+
+							scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
+							tx = scrolly.children[0]
+							tx.text = ''
+
+							layout.add_widget( scrolly )
+							layout.add_widget( Label( text =  datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S" )  ,
+													font_size = 16  ,
+													size_hint_y = 0.2 ,
+													color = [ 1, 0 , 0 , 1] ) )
+
+							return layout
+
 

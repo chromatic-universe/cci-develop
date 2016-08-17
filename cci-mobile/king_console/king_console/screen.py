@@ -247,6 +247,23 @@ class CciScreen( Screen ) :
 					App.get_running_app()._open_extended_window()
 
 
+
+				def _on_show_tcp_extended( self ) :
+					"""
+
+					:return:
+					"""
+
+					b_ret , scr = App.get_running_app()._screen_exists( 'screen_transport' )
+					if not b_ret :
+						scr = Builder.load_string( self._retr_resource( 'transport_extended_screen' ) )
+						App.get_running_app().root.add_widget( scr )
+
+					App.get_running_app()._open_extended_window()
+
+
+
+
 				def _on_show_appdiscovery_extended( self ) :
 					"""
 
@@ -1153,15 +1170,6 @@ class CciScreen( Screen ) :
 						pr = s + id
 						self._update_console_payload( boiler , container , pr )
 
-
-
-# -------------------------------------------------------------------------------------------------
-class TcpScreen( Screen ) :
-					"""
-
-
-					"""
-					pass
 
 
 

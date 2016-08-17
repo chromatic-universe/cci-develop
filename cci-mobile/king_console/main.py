@@ -324,12 +324,15 @@ class kingconsoleApp( App ) :
 
 			if self._check_connectivity() :
 				# document repository
-				mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
-										 log = self._logger ,
-										 device_id = local_mac_addr() ,
-										 last_ip = self._console_local ,
-										 last_real_ip = self._console_real )
-				mongo._update_device_session( True )
+				try :
+					mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
+											 log = self._logger ,
+											 device_id = local_mac_addr() ,
+											 last_ip = self._console_local ,
+											 last_real_ip = self._console_real )
+					mongo._update_device_session( True )
+				except Exception as e :
+					self._logger.error( e.message )
 			else :
 				self._logger.error( '...could not update session remote info...no connectivity...' )
 
