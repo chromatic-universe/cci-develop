@@ -28,6 +28,7 @@ from kivy.core.window import Window
 import screen
 from king_console import resource_factory \
 	                     as resources
+from resource import transport_extended as transport_resources
 from king_console import kc_ping , \
 						 kc_arp , \
 						 kc_tcp , \
@@ -433,6 +434,8 @@ class TransportScreen( Screen ) :
 					_is_full_screen = ObjectProperty()
 					cci_action_prev = ObjectProperty()
 
+
+
 					@staticmethod
 					def _retr_resource( resource_id ) :
 						"""
@@ -441,7 +444,7 @@ class TransportScreen( Screen ) :
 						:return ui resource:
 						"""
 
-						return resources.const_resource_ids[resource_id]
+						return transport_resources.const_transport_resource_ids[resource_id]
 
 
 

@@ -256,7 +256,9 @@ class CciScreen( Screen ) :
 
 					b_ret , scr = App.get_running_app()._screen_exists( 'screen_transport' )
 					if not b_ret :
-						scr = Builder.load_string( self._retr_resource( 'transport_extended_screen' ) )
+						scr = Builder.load_string( screen_extended.TransportScreen._retr_resource( 'transport_extended_screen' ) )
+						scr.ids.item_firewall.add_widget( Builder.load_string( screen_extended. \
+																				   TransportScreen._retr_resource('nmap_firewalk_view'  ) ) )
 						App.get_running_app().root.add_widget( scr )
 
 					App.get_running_app()._open_extended_window()
