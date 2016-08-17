@@ -169,6 +169,58 @@ class CciScreen( Screen ) :
 				_console_count = 1
 
 
+				def __init__( self , **kwargs ) :
+					"""
+
+					:param kwargs:
+					:return:
+					"""
+
+					"""
+					self.register_event_type('on_back_pressed')
+					self.register_event_type('on_menu_pressed')
+					self.register_event_type('on_escape_pressed')
+					"""
+					super( CciScreen , self ).__init__( **kwargs )
+
+
+
+				def on_escape_pressed( self , *args ) :
+					"""
+
+					:return:
+					"""
+
+
+					App.get_running_app().logger.info( 'on_escape' )
+
+
+
+
+
+				def on_menu_pressed( self , *args ) :
+					"""
+
+					:return:
+					"""
+
+					App.get_running_app().logger.info( 'on_menu' , *args )
+
+
+
+
+
+				def on_back_pressed( self , *args ) :
+					"""
+
+					:return:
+					"""
+
+					App.get_running_app().logger.info( 'on_back' )
+
+
+
+
 				@staticmethod
 				def _retr_resource( resource_id ) :
 					"""
@@ -178,7 +230,6 @@ class CciScreen( Screen ) :
 					"""
 
 					return resources.const_resource_ids[resource_id]
-
 
 
 

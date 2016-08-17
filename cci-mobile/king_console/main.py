@@ -4,6 +4,7 @@ import sqlite3
 
 # kivy
 import kivy
+from kivy.utils import platform
 from kivy.uix.accordion import Accordion, AccordionItem
 from kivy.uix.carousel import Carousel
 from kivy.uix.label import Label
@@ -26,6 +27,7 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock , mainthread
 from kivy.core.window import Window
 from kivy.lang import Builder
+from kivy.base import EventLoop
 from kivy.properties import StringProperty, ObjectProperty
 from kivy.uix.settings import SettingsWithSidebar , SettingsWithSpinner
 from kivy.uix.screenmanager import ScreenManager, \
@@ -52,6 +54,7 @@ from jnius import autoclass
 import sqlite3
 import Queue
 import uuid
+
 
 #cci
 from king_console import resource_factory \
@@ -246,6 +249,18 @@ class kingconsoleApp( App ) :
 
 
 			Window.on_rotate = self._on_rotate
+
+
+		def build( self ) :
+			"""
+
+			:return:
+			"""
+
+			return self.root
+
+
+
 
 		# helpers
 		@staticmethod
@@ -590,6 +605,7 @@ class kingconsoleApp( App ) :
 
 
 
+
 		def on_start( self ) :
 			"""
 
@@ -639,6 +655,28 @@ class kingconsoleApp( App ) :
 			self.root.current_screen.ids.console_real_id.text = self._console_real
 			self.root.current_screen.ids.console_interfaces.text = self._console_ifconfig + '\n\n' + self._console_iwlist
 			self._cur_console_buffer = self.root.current_screen.ids.console_interfaces.text
+
+			EventLoop.window.bind( on_keyboard = self._hook_keyboard )
+
+
+
+		def _hook_keyboard( self , window, key , *largs ) :
+				"""
+
+				:param window:
+				:param key:
+				:param largs:
+				:return:
+				"""
+
+				if key ==   27  :
+					if self.root.current == 'screen_cci' :
+						self.stop()
+					else :
+						self.root.current = 'screen_cci'
+						return True
+
+				return False
 
 
 

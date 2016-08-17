@@ -4,18 +4,18 @@
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/settings/buildozer.spec" line="179" />
     <bookmark url="file:///usr/lib/python2.7/dist-packages/kivy/app.py" line="850" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/bimini/server/server.py" line="43" />
-    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" line="838" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" line="889" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/bimini/main.py" line="279" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/bimini/main.py" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_tcp.py" line="99" />
-    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" line="347" />
-    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" line="630" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" line="398" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" line="681" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/main.py" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/buildozer.spec" line="28" />
-    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/main.py" line="826" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/main.py" line="864" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/cci-trinity.py" line="289" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/main.py" line="242" />
-    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/main.py" line="728" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/main.py" line="766" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/cci-trinity.py" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/urnack/main.py" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/trinity.py" line="103" />
@@ -23,15 +23,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-mobile/king_console/resource/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-mobile/king_console/resource/transport_extended.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/king_console/king_console/foo" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/king_console/kv/application.kv" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/main.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/king_console/resource_factory.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/king_console/resource_factory.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen_extended.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen_extended.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cci_git_1.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -63,20 +56,49 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="9872" max-vertical-offset="11401">
-              <caret line="764" column="0" selection-start-line="764" selection-start-column="0" selection-end-line="764" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.834471" vertical-offset="8416" max-vertical-offset="11895">
+              <caret line="685" column="49" selection-start-line="685" selection-start-column="49" selection-end-line="685" selection-end-column="49" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="transport_extended.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cci-mobile/bimini/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="4329" max-vertical-offset="5980">
+              <caret line="365" column="62" selection-start-line="365" selection-start-column="20" selection-end-line="365" selection-end-column="76" />
+              <folding>
+                <element signature="e#7#18#0" expanded="true" />
+                <marker date="1471296803303" expanded="true" signature="2874:2947" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="5135:6247" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="5806:6189" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="6276:6344" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="6374:6442" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="6566:6672" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="6702:6867" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="6996:7226" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="7028:7099" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="7233:7333" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="7450:7608" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="7660:7990" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="7679:7770" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="8022:8163" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="8212:8514" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="8243:8291" placeholder="..." />
+                <marker date="1471296803303" expanded="true" signature="8544:8629" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="transport_extended.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/resource/transport_extended.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.31228667" vertical-offset="1078" max-vertical-offset="1924">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1078" max-vertical-offset="1924">
               <caret line="97" column="22" selection-start-line="97" selection-start-column="22" selection-end-line="97" selection-end-column="22" />
               <folding />
             </state>
@@ -96,8 +118,8 @@
       <file leaf-file-name="screen_extended.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen_extended.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="5193" max-vertical-offset="6916">
-              <caret line="467" column="27" selection-start-line="467" selection-start-column="27" selection-end-line="467" selection-end-column="27" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="572" max-vertical-offset="6916">
+              <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -116,8 +138,8 @@
       <file leaf-file-name="screen.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2922" max-vertical-offset="15587">
-              <caret line="259" column="0" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="3015" max-vertical-offset="16250">
+              <caret line="181" column="65" selection-start-line="181" selection-start-column="65" selection-end-line="181" selection-end-column="65" />
               <folding />
             </state>
           </provider>
@@ -169,7 +191,6 @@
         <option value="$PROJECT_DIR$/cci-mobile/trinity/trinity.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/main.py" />
         <option value="$PROJECT_DIR$/cci-mobile/bimini/main.py" />
-        <option value="$PROJECT_DIR$/cci-mobile/king_console/king-console.log-debug.log" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_tcp.py" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/foo" />
@@ -179,9 +200,10 @@
         <option value="$PROJECT_DIR$/cci-mobile/king_console/kv/transport_extended.py" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/buildozer.spec" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen_extended.py" />
-        <option value="$PROJECT_DIR$/cci-mobile/king_console/main.py" />
-        <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/resource/transport_extended.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/king_console/king-console.log-debug.log" />
+        <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/king_console/main.py" />
       </list>
     </option>
   </component>
@@ -873,13 +895,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/cci-mobile/king_console/main.py</url>
-          <line>728</line>
+          <line>766</line>
           <option name="timeStamp" value="486" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py</url>
-          <line>258</line>
+          <line>309</line>
           <option name="timeStamp" value="487" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/cci-mobile/king_console/main.py</url>
+          <line>671</line>
+          <option name="timeStamp" value="489" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -892,7 +919,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="488" />
+      <option name="time" value="490" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1121,72 +1148,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/bimini/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
-          <caret line="454" column="0" selection-start-line="454" selection-start-column="0" selection-end-line="454" selection-end-column="0" />
-          <folding>
-            <marker date="1471296803303" expanded="false" signature="7:1268" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="2038:3255" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="2283:2654" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="2707:2947" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="2711:2769" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="2874:2947" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="2995:3255" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="2999:3045" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="3398:3475" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="3403:3415" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="3454:3475" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="3515:3568" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="3692:9727" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="3697:3719" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="3748:4591" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="3754:3781" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="4660:5040" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="4666:4693" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="5089:6442" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="5095:5122" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="5135:6247" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="5806:6189" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="6276:6344" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="6374:6442" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="6503:6867" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="6509:6554" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="6566:6672" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="6702:6867" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="6929:7608" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="6935:6983" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="6996:7226" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="7028:7099" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="7233:7333" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="7450:7608" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="7646:8163" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="7660:7990" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="7679:7770" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="8022:8163" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="8198:8629" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="8212:8514" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="8243:8291" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="8544:8629" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="8656:8690" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="8719:8746" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="8777:8883" placeholder="..." />
-            <marker date="1471296803303" expanded="true" signature="8783:8810" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king-console.log-debug.log">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
           <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king-console.log-debug.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
-          <caret line="200" column="75" selection-start-line="200" selection-start-column="75" selection-end-line="200" selection-end-column="75" />
         </state>
       </provider>
     </entry>
@@ -1325,22 +1290,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen_extended.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5778" max-vertical-offset="6916">
-          <caret line="467" column="27" selection-start-line="467" selection-start-column="27" selection-end-line="467" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2922" max-vertical-offset="15587">
-          <caret line="259" column="0" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="10152" max-vertical-offset="10933">
@@ -1349,18 +1298,69 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/main.py">
+    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/resource/transport_extended.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="9872" max-vertical-offset="11401">
-          <caret line="764" column="0" selection-start-line="764" selection-start-column="0" selection-end-line="764" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1078" max-vertical-offset="1924">
+          <caret line="97" column="22" selection-start-line="97" selection-start-column="22" selection-end-line="97" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/resource/transport_extended.py">
+    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king-console.log-debug.log">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31228667" vertical-offset="1078" max-vertical-offset="1924">
-          <caret line="97" column="22" selection-start-line="97" selection-start-column="22" selection-end-line="97" selection-end-column="22" />
+        <state vertical-scroll-proportion="-18.080278" vertical-offset="13103" max-vertical-offset="13676">
+          <caret line="211" column="75" selection-start-line="211" selection-start-column="75" selection-end-line="211" selection-end-column="75" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen_extended.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="572" max-vertical-offset="6916">
+          <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3015" max-vertical-offset="16250">
+          <caret line="181" column="65" selection-start-line="181" selection-start-column="65" selection-end-line="181" selection-end-column="65" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/bimini/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="4329" max-vertical-offset="5980">
+          <caret line="365" column="62" selection-start-line="365" selection-start-column="20" selection-end-line="365" selection-end-column="76" />
+          <folding>
+            <element signature="e#7#18#0" expanded="true" />
+            <marker date="1471296803303" expanded="true" signature="2874:2947" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="5135:6247" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="5806:6189" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="6276:6344" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="6374:6442" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="6566:6672" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="6702:6867" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="6996:7226" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="7028:7099" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="7233:7333" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="7450:7608" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="7660:7990" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="7679:7770" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="8022:8163" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="8212:8514" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="8243:8291" placeholder="..." />
+            <marker date="1471296803303" expanded="true" signature="8544:8629" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.834471" vertical-offset="8416" max-vertical-offset="11895">
+          <caret line="685" column="49" selection-start-line="685" selection-start-column="49" selection-end-line="685" selection-end-column="49" />
           <folding />
         </state>
       </provider>
