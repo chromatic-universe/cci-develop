@@ -38,6 +38,10 @@ from kivy.lang import Builder
 from kivy.properties import StringProperty, ObjectProperty
 from kivy.uix.settings import SettingsWithSidebar , SettingsWithSpinner
 
+# cci
+from streams import tr_mongo_rest
+
+
 kivy.require( '1.9.1' )
 
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
@@ -249,17 +253,13 @@ class ccitrinityApp( App ) :
 								andr = False
 							else :
 								andr = True
-							if andr :
-								cmd = ['su' ,
-									   '-c' ,
-									   'kill' ,
-									   '-9' ,
-									   pid]
-							else :
-									 cmd = [
-									   'kill' ,
-									   '-9' ,
-									   pid ]
+
+							cmd = ['su' ,
+								   '-c' ,
+								   'kill' ,
+								   '-9' ,
+								   pid]
+
 
 							proc.check_output( cmd )
 
@@ -317,22 +317,14 @@ class ccitrinityApp( App ) :
 								else :
 									andr = True
 								cmd = list()
-								if andr :
-									cmd = [
-									  "su" ,
-									  "-c" ,
-									  "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-									  "./cci-trinity.pyo" ,
-									  "&"
-									  ]
-								else :
 
-									cmd = [
-									  "python" ,
-									  "./cci-trinity.py" ,
-									  "&"
-									  ]
-
+								cmd = [
+								  "su" ,
+								  "-c" ,
+								  "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
+								  "./cci-trinity.pyo" ,
+								  "&"
+								  ]
 
 
 								proc.Popen( cmd )

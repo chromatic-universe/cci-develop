@@ -176,11 +176,7 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 
-					"""
-					self.register_event_type('on_back_pressed')
-					self.register_event_type('on_menu_pressed')
-					self.register_event_type('on_escape_pressed')
-					"""
+
 					super( CciScreen , self ).__init__( **kwargs )
 
 
@@ -308,8 +304,11 @@ class CciScreen( Screen ) :
 					b_ret , scr = App.get_running_app()._screen_exists( 'screen_transport' )
 					if not b_ret :
 						scr = Builder.load_string( screen_extended.TransportScreen._retr_resource( 'transport_extended_screen' ) )
-						scr.ids.item_firewall.add_widget( Builder.load_string( screen_extended. \
-																				   TransportScreen._retr_resource('nmap_firewalk_view'  ) ) )
+
+						view = Builder.load_string( screen_extended. \
+										TransportScreen._retr_resource('nmap_firewalk_view'  ) )
+						view.ids.do_firewalk_btn.bind( on_press = lambda a: scr._on_firewalk_start() )
+						scr.ids.item_firewall.add_widget( view  )
 						App.get_running_app().root.add_widget( scr )
 
 					App.get_running_app()._open_extended_window()

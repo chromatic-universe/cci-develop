@@ -614,6 +614,14 @@ class kingconsoleApp( App ) :
 
 			self._logger.info( '...on_start...' )
 
+			try :
+				from eve import Eve
+				app = Eve()
+				self._logger.info( '...imported..eve' )
+			except Exception as e :
+				self._logger.error( e.message )
+
+
 
 
 			layout = GridLayout( cols = 1 , orientation = 'horizontal' )

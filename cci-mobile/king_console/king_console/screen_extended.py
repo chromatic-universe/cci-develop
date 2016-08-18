@@ -241,6 +241,7 @@ class NetworkScreen( Screen ) :
 					action_view = ObjectProperty()
 
 
+
 					@staticmethod
 					def _retr_resource( resource_id ) :
 						"""
@@ -338,6 +339,8 @@ class AppDiscoveryScreen( Screen ) :
 					console_timestamp = ObjectProperty()
 
 
+
+
 					@staticmethod
 					def _retr_resource( resource_id ) :
 						"""
@@ -433,6 +436,26 @@ class TransportScreen( Screen ) :
 					console_timestamp = ObjectProperty()
 					_is_full_screen = ObjectProperty()
 					cci_action_prev = ObjectProperty()
+					probe_recv_slider = ObjectProperty()
+					retry_slider = ObjectProperty()
+					max_probe_slider = ObjectProperty()
+					probe_slider = ObjectProperty()
+					console_count = ObjectProperty()
+					transport_carousel_id = ObjectProperty()
+					do_firewalk_btn = ObjectProperty()
+
+
+					def __init__( self , **kwargs ) :
+						"""
+
+						:param kwargs:
+						:return:
+						"""
+
+
+						super( TransportScreen , self ).__init__( **kwargs )
+
+						self.console_count = 0
 
 
 
@@ -524,11 +547,6 @@ class TransportScreen( Screen ) :
 							layout = GridLayout( cols = 1 ,
 												 orientation = 'horizontal'
 												  )
-							bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_3' ) )
-							bar.ids.view_btn_a.text = 'back'
-							bar.ids.view_btn_a.bind( on_press =
-								lambda a:App.get_running_app()._manip_extended_window() )
-							layout.add_widget( bar )
 							layout.add_widget( Label( text = tag  ,
 													  color = [ 1, 0 , 0 , 1] ,
 													  font_size = 16 ,
@@ -536,7 +554,7 @@ class TransportScreen( Screen ) :
 
 							scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
 							tx = scrolly.children[0]
-							tx.text = ''
+							tx.text = content
 
 							layout.add_widget( scrolly )
 							layout.add_widget( Label( text =  datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S" )  ,
@@ -545,5 +563,56 @@ class TransportScreen( Screen ) :
 													color = [ 1, 0 , 0 , 1] ) )
 
 							return layout
+
+
+					def _move_to_accordion_item( self , acc , tag = None ) :
+							"""
+
+							:param acc:
+							:return:
+							"""
+
+							for child in acc.children :
+								if child.title == tag :
+									child.collapse = False
+									child.canvas.ask_update()
+
+
+
+					def  _on_firewalk_start( self ) :
+						"""
+
+						:return:
+						"""
+
+						self.console_count += 1
+						carousel = self.ids.transport_carousel_id
+						carousel.add_widget( self.add_console(  content = 'cci-maelstrom~transport-> :' ,
+																tag = 'firewalk console #%d' % self.console_count ) )
+						carousel.index += 1
+						self._move_to_accordion_item( self.ids.tcp_accordion , 'cci-maelstrom' )
+
+
+
+						"""
+						thred = threading.Thread( target = self._on_arp_monitor ,
+												  kwargs=dict( console=self.console_arp_monitor_txt ,
+															   items = 15 ) )
+						if thred :
+							moniker = 'firewalk_monitor console #' + str( self._console_count )
+							thread_atom = { 'thread_id' : str( thred.ident ) ,
+											'stop_alert'  : threading.Event() ,
+											'instance' : thred
+										  }
+							App.get_running_app()._thrd.thrds[moniker] = thread_atom
+
+
+						thred.start()
+
+						self.ids.console_arp_monitor_txt.text += '...working.....'
+						self.ids.start_monitor_btn.text = 'stop'
+						self.ids.start_monitor_btn.color = [1,0,0.1]
+						"""
+
 
 

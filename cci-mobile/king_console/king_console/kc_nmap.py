@@ -22,6 +22,11 @@ import urllib2
 import requests
 
 
+firewalk_params = { 'max_retries' : 'firewalk.max-retries=%d' ,
+					'probe_timeout' : 'firewalk.probe-timeout=%d' ,
+					'recv_timeout' : 'firewalk.recv-timeout=%d' ,
+					'max_ports' : 'firewalk.max-probed-ports=%d' }
+
 
 
 # ---------------------------------------------------------------------------------------------
@@ -150,6 +155,11 @@ def mongo_extended_metadata( ip = None ) :
 			:return exntended info:
 			"""
 
+
+			if ip is None :
+				raise ValueError( 'no ip supplied' )
+
+
 			cmd = [
 				    "su" ,
 					"-c" ,
@@ -162,6 +172,44 @@ def mongo_extended_metadata( ip = None ) :
 				 ]
 			return spawn_nmap_output(  cmd , 'mongo_extended_metadata' )
 
+
+
+
+# ---------------------------------------------------------------------------------------------
+def firewalk( ip = None ,
+			  max_retries = 1 ,
+			  probe_timeout = 400 ,
+			  recv_timeout = 400 ,
+			  max_ports = 7 )  :
+			"""
+			:param ip:
+			:param max_retries:
+			:param probe_timeout:
+			:param nax_ports:
+			:return:
+			"""
+
+
+			if ip is None :
+				raise ValueError( 'no ip supplied' )
+
+			out = str()
+			boiler = str()
+			b_ret = True
+
+			s = '--script-args=' + firewalk_params['max_retries'] % max_retries  + ','\
+			                     + firewalk_params['probe_timeout'] % probe_timeout  + ','  \
+								 + firewalk_params['recv_timeout'] % recv_timeout  + ','  \
+			                     + firewalk_params['max_ports'] % max_ports
+			cmd = ['nmap' ,
+				   '--script=firewalk' ,
+				   '--traceroute' ,
+				   s ,
+				   ip
+				   ]
+
+
+			return spawn_nmap_output(  cmd , 'firewalk' )
 
 
 
@@ -200,6 +248,8 @@ def spawn_nmap_output( cmdline = None , moniker = 'nmap' ) :
 # ------------------------------------------------------------------------------------
 if __name__ == '__main__' :
 
-			b_ret , out = mongo_extended_metadata( 'cci-aws-3'  )
+			#b_ret , out = mongo_extended_metadata( 'cci-aws-3'  )
+
+			b_ret , out = firewalk( ip = 'cci-aws-1' , max_ports = 7 )
 
 			print out

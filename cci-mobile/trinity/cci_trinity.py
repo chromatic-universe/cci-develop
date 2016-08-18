@@ -9,6 +9,7 @@ import logging
 from math import ceil
 from flask import Flask , request , send_file , render_template , url_for
 from flask import redirect , Response
+
 from flask_restful import Resource, Api
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import subprocess as proc
@@ -26,12 +27,19 @@ import kafka
 
 #cci
 import trinity
+from application import app
+from streams import tr_mongo_rest
 
 max_wait_seconds_before_shutdown  = 3
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
-app = Flask( __name__ )
+
+
+app.config['MONGO_DBNAME'] = 'cci_maelstrom'
+app.config['MONGO_URI'] = 'mongodb://cci-aws-3:27017/cci_maelstrom'
+
 api = Api( app )
+
 
 http_server = None
 

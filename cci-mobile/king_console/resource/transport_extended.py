@@ -49,8 +49,12 @@ TransportScreen:
 						title: 'custom'
 						orientation: 'vertical'
 			AccordionItem:
-				title: 'firewalk'
+				title: 'nmap firewalk'
 				id: item_firewall
+				orientation: 'vertical'
+			AccordionItem:
+				title: 'atomic firewalk'
+				id: item_atomic_firewalk
 				orientation: 'vertical'
 			AccordionItem:
 				title: 'cci-maelstrom'
@@ -73,8 +77,17 @@ TransportScreen:
 							ActionButton:
 								text: 'back'
 								on_press: app._manip_extended_window( root )
-					BoxLayout:
-						orientation: 'vertical'
+					Carousel:
+                        id: transport_carousel_id
+                        direction: 'right'
+                        GridLayout:
+                            orientation: 'horizontal'
+                            id: console_grid
+                            cols: 1
+                            Label:
+                            	text: 'caveat emptor => Post hoc ergo propter hoc'
+                            	color: [ 1, 0 , 0 , 1]
+								font_size: 16
 """
 ,
 					   'nmap_firewalk_view' :
@@ -86,15 +99,10 @@ BoxLayout:
 			cols: 1
 			orientation: 'horizontal'
 			size_hint_y: None
-			size: ( 400 ,600 )
+			size: ( 400 ,800 )
 			GridLayout
 				orientation: 'horizontal'
 				cols: 1
-			    Button:
-					id: do_firewalk_btn
-					text: 'execute firewalk'
-					background_color: [0,0,0,0]
-					color: [1,0,0,1]
 				Label:
 					text: 'max retries: ' + '{0:}'.format( retry_slider.value )
 				Slider:
@@ -107,10 +115,21 @@ BoxLayout:
 				Switch:
 					active: False
 				Label:
-					text: 'probe timout(ms): ' + '{0:}'.format( probe_slider.value )
+					text: 'probe timeout(ms): ' + '{0:}'.format( probe_slider.value )
 				Slider:
 					orientation: 'horizontal'
 					id: probe_slider
+					step: 20
+					min: 20
+					max: 800
+					value: 400
+				Switch:
+					active: False
+				Label:
+					text: 'recv timeout(ms): ' + '{0:}'.format( probe_recv_slider.value )
+				Slider:
+					orientation: 'horizontal'
+					id: probe_recv_slider
 					step: 20
 					min: 20
 					max: 800
@@ -131,12 +150,36 @@ BoxLayout:
 				Label:
 					text: 'resource metric ip:'
 				TextInput:
-					text: '192.168.0.1'
+					text: 'cci-aws-1'
 					id: ip_input_metric
 					cursor_blink: True
 					readonly: False
 					multiline: True
+				Button:
+					id: do_firewalk_btn
+					text: 'execute firewalk'
+					background_color: [0,0,0,0]
+					color: [1,0,0,1]
+
 
 """
+,
+ 				'text_scroller' :
+"""
+ScrollView:
+	id: scrlv
+	TextInput:
+		text: 'foo'
+		size_hint: 1, None
+		cursor_blink: True
+		background_color: [1,0,0,0]
+		foreground_color: [1,1,1,1]
+		multiline: True
+		id: tx_in
+		font_size: 16
+		readonly: True
+		height: max( (len(self._lines)+1) * self.line_height, scrlv.height)
+"""
+,
 }
 
