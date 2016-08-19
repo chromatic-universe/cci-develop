@@ -6,7 +6,7 @@ import os
 import sys
 from StringIO import StringIO
 import logging
-from math import ceil
+
 from flask import Flask , request , send_file , render_template , url_for
 from flask import redirect , Response
 
@@ -27,7 +27,7 @@ import kafka
 
 #cci
 import trinity
-from application import app , mongo_no_resource_ecxception
+from application import app , mongo_no_resource_exception
 from streams import tr_mongo_rest
 
 max_wait_seconds_before_shutdown  = 3
@@ -77,7 +77,7 @@ def local_mac_addr() :
 
 
 # --------------------------------------------------------------------------------------------------------
-@app.errorhandler( mongo_no_resource_ecxception )
+@app.errorhandler( mongo_no_resource_exception )
 def handle_mongo_exception( e ) :
     return render_template( "mongo_404.html", e=e.message )  , 404
 

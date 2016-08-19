@@ -6,48 +6,57 @@ import sys
 from StringIO import StringIO
 import logging
 from math import ceil
-from flask import Flask , request , send_file , render_template , url_for
-from flask import redirect , Response , jsonify , Blueprint
-from flask_restful import Resource, Api
+
 import subprocess as proc
 import sqlite3
 import time
 import signal
 import Queue
-import doctest
 
 
+import flask
 from flask import Flask , request , send_file , render_template , url_for
-from flask import redirect , Response , current_app
+from flask import redirect , Response , current_app , jsonify , Blueprint
 from flask_pymongo import PyMongo
 from flask_restful import Resource, Api
-
 from flask_pymongo import PyMongo
+try:  # python 2
+    from urllib import urlencode
+except ImportError:  # python 3
+    from urllib.parse import urlencode
 
 
-from application import app , mongo_no_resource_ecxception
+from application import app , mongo_no_resource_exception
 
 app.config['MONGO_DBNAME'] = 'cci_maelstrom'
 app.config['MONGO_URI'] = 'mongodb://cci-aws-3:27017/cci_maelstrom'
 mongo = PyMongo( app )
 
-dev = Blueprint( 'dev', __name__, template_folder='templates' )
 
 
 
 # --------------------------------------------------------------------------------------------------------
-def api():
-    """
-    GET to generate a list of endpoints and their docstrings
-    :return this document
-    """
-    urls = dict([(r.rule, current_app.view_functions.get(r.endpoint).func_doc)
-                 for r in current_app.url_map.iter_rules()
-                 if not r.rule.startswith('/static') and r.rule.startswith( '/mongo' )])
-    return render_template( 'api.html' , urls=urls )
-app.add_url_rule( '/mongo/api' ,
-				  'api' ,
-				  view_func=api ,
+def cci_api():
+			"""
+			GET to generate a list of endpoints and their docstrings
+			:return this document
+			"""
+
+			try :
+				urls = dict([(r.rule, current_app.view_functions.get(r.endpoint).func_doc)
+							 for r in current_app.url_map.iter_rules()
+							 if not r.rule.startswith('/static') and r.rule.startswith( '/mongo' )])
+			except Exception as e :
+				raise mongo_no_resource_exception( e.message )
+
+			return render_template( 'api.html' , urls=urls )
+
+
+
+
+app.add_url_rule( '/mongo/cci_api' ,
+				  'cci_api' ,
+				  view_func=cci_api ,
 				  methods=['GET'] )
 
 
@@ -55,13 +64,11 @@ app.add_url_rule( '/mongo/api' ,
 
 # --------------------------------------------------------------------------------------------------------
 def enum_devices() :
-			"""
-			GET enumerate all devices
-			:return : jsonified payload of devices
-			"""
+			"""	GET enumerate all devices:return : jsonified payload of devices"""
 			output = []
 			try :
 				db =  mongo.db.auth_devices
+
 				for device in db.find() :
 					output.append({'moniker' : device['moniker'] ,
 								   'description' : device['description'] ,
@@ -75,7 +82,7 @@ def enum_devices() :
 								   'segment' : device['segment']
 					})
 			except Exception as e :
-				 pass
+				 print e.message
 			return jsonify({'result' : output})
 app.add_url_rule( '/mongo/enum_devices' ,
 				  'enum_devices' ,
@@ -99,7 +106,7 @@ def retr_device( device_id ) :
 			db =  mongo.db.auth_devices
 			device = db.find( { 'device_id' : device_id } )
 			if device.count() == 0 :
-				raise mongo_no_resource_ecxception( 'no tokenized device found')
+				raise mongo_no_resource_exception( 'no tokenized device found')
 			output =  {'moniker' : device['moniker'] ,
 					   'description' : device['description'] ,
 					   'active' : device['active'] ,
@@ -231,7 +238,7 @@ def retr_auth_apps() :
 
 			cur = db.find()
 			if cur.count() == 0 :
-				raise mongo_no_resource_ecxception( 'no authorized apps found' )
+				raise mongo_no_resource_exception( 'no authorized apps found' )
 			for app in db.find() :
 				output.append( { 'moniker' : app['moniker'] ,
 							     'description' : app['description'] ,
@@ -243,3 +250,46 @@ app.add_url_rule( '/mongo/retr_auth_apps' ,
 				  'retr_auth_apps' ,
 				  view_func=retr_auth_apps ,
 				  methods=['GET'] )
+
+
+
+
+# --------------------------------------------------------------------------------------------------------
+def update_device_status( device_id , status ) :
+			"""
+			PUT update device status
+			:param device_id : string
+			:param status : csv <active,last_ip,last_remote_ip>  true,192.168.0.1,64.0.1.19
+			:return : jsonified payload of devices
+			"""
+			output = []
+			active , last , last_remote = status.split( ',' )
+
+			db =  mongo.db.auth_devices
+
+			print device_id
+
+
+			result = mongo.db.auth_devices.update_one (
+									{"device_id": device_id } ,
+										{
+											"$set":
+											{
+												"active" : active ,
+												"last_known_ip" : last ,
+												"last_known_remote_ip" : last_remote
+											},
+											"$currentDate": { "last_active" : True }
+
+										} )
+
+			print result
+			if result.matched_count == 0 :
+				raise mongo_no_resource_exception( 'could not update device document' )
+
+			return jsonify({'result' : 'ok'})
+
+app.add_url_rule( '/mongo/update_device_status/<device_id>/<status>',
+				  'update_device_status' ,
+				  view_func=update_device_status 
+				   )

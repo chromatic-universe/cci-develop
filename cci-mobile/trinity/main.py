@@ -39,7 +39,7 @@ from kivy.properties import StringProperty, ObjectProperty
 from kivy.uix.settings import SettingsWithSidebar , SettingsWithSpinner
 
 # cci
-from streams import tr_mongo_rest
+
 
 
 kivy.require( '1.9.1' )
@@ -318,11 +318,12 @@ class ccitrinityApp( App ) :
 									andr = True
 								cmd = list()
 
+
 								cmd = [
 								  "su" ,
 								  "-c" ,
 								  "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-								  "./cci-trinity.pyo" ,
+								  "./cci_trinity.pyo" ,
 								  "&"
 								  ]
 

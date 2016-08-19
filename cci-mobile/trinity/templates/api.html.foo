@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -9,26 +9,26 @@
 
     <title>cci maelstrom mongo rest api</title>
 </head>
-<body>
-    <font color="black"  face="courier" size="2">
+
+     <font color="black"  face="courier" size="2">
 
       <center>
           <img src="{{ url_for('static', filename = 'image/king-console64.png') }}"><br><br>
           <b><i><u>chromatic universe - king console</u></i></b><br><br>
           <i>mongo rest api ~ cci_maelstrom</i>
           <br>
-      </center>
-        {% block body %}
-            {% for path, docstr in urls|dictsort(false, 'key') %}
-            <dt><a href="{{ path }}">{{ path }}</a><br></dt>
-              <dd><pre>{{ docstr}}</pre></dd>
-            {% endfor %}
+     </center>
+{% block body %}
+<dl>
+  {% for path, docstr in urls|dictsort(false, 'key') %}
+  <dt><a href="{{ path }}">{{ path }}</a><br></dt>
+  <dd><pre>{{ docstr.strip() }}</pre></dd>
+    <br>
+  {% endfor %}
+</dl>
          <center>
           <br>chromatic universe 2016<br>
              </center>
 {% endblock %}
 </font>
-</html>
-
-</body>
 </html>
