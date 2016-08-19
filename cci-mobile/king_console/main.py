@@ -47,6 +47,7 @@ from time import gmtime, strftime , sleep
 import subprocess as proc
 import threading
 import requests
+import base64
 import urllib2
 from functools import partial
 from kivy.utils import platform
@@ -101,7 +102,8 @@ def local_mac_addr() :
 		"""
 
 		try :
-			return proc.check_output( ['cat' , '/sys/class/net/wlan0/address'] ).strip().lower()
+			return base64.b64encode( proc.check_output( ['cat' ,
+														 '/sys/class/net/wlan0/address'] ).strip().lower() )
 		except :
 			pass
 
@@ -613,15 +615,6 @@ class kingconsoleApp( App ) :
 			"""
 
 			self._logger.info( '...on_start...' )
-
-			try :
-				from eve import Eve
-				app = Eve()
-				self._logger.info( '...imported..eve' )
-			except Exception as e :
-				self._logger.error( e.message )
-
-
 
 
 			layout = GridLayout( cols = 1 , orientation = 'horizontal' )

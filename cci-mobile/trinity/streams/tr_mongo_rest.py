@@ -12,7 +12,10 @@ import sqlite3
 import time
 import signal
 import Queue
-
+import requests
+import datetime
+import json
+from bson import json_util
 
 import flask
 from flask import Flask , request , send_file , render_template , url_for
@@ -291,5 +294,114 @@ def update_device_status( device_id , status ) :
 
 app.add_url_rule( '/mongo/update_device_status/<device_id>/<status>',
 				  'update_device_status' ,
-				  view_func=update_device_status 
+				  view_func=update_device_status
 				   )
+
+
+
+
+# --------------------------------------------------------------------------------------------------------
+def insert_atomic_payload() :
+			"""
+			POST insert json payload
+			:param payload:
+			:return:
+			"""
+
+			output = []
+			db = mongo.db.runtime_payload_atoms
+			insert_data = json.loads( request.data )
+
+			ack = db.insert( insert_data )
+			if not ack :
+				raise mongo_no_resource_exception( 'db payload insert failed' )
+
+			return jsonify({'result' : 'ok'})
+
+
+
+app.add_url_rule( '/mongo/insert_atomic_payload',
+				  'insert_atomic_payload' ,
+				  view_func=insert_atomic_payload ,
+				  methods = ['POST']
+
+				   )
+
+
+
+# --------------------------------------------------------------------------------------------------------
+def insert_beaucoup_payload() :
+			"""
+			POST insert many json payload , serialization hijinks involved , could affect performance
+			:param payload:
+			:return:
+			"""
+
+			db = mongo.db.runtime_payload_atoms
+			if request.method == 'POST' :
+				# split the string to a list , each entry is a dictionary
+				dictionary_string_list = request.data.split( ',' )
+				#make a list of actual dictionaries using json loads
+				dictionary_list = list()
+				for item  in dictionary_string_list :
+					dictionary_list.append( json.loads( item ) )
+
+				# bulk insert . mogndb will stage atoms internally
+				ack = db.insert_many( dictionary_list )
+				if not ack :
+					raise mongo_no_resource_exception( 'db payload beaucoup insert failed' )
+				return jsonify({'result' : 'ok'})
+
+			return jsonify({'result' : 'bad post'})
+
+app.add_url_rule( '/mongo/insert_beaucoup_payload',
+				  ' insert_beaucoup_payload' ,
+				  view_func= insert_beaucoup_payload ,
+				  methods = ['POST']
+
+				   )
+
+
+
+
+
+# --------------------------------------------------------------------------------------------------------
+def dry_atomic_payload_insert() :
+			"""
+
+			:return:
+			"""
+			t =  datetime.datetime.utcnow()
+			data ={
+					"timestamp" : "2016-08-19 18:11:41.111229" ,
+					"app_moniker" : "cci_maelstrom",
+					"app_segment" : "network",
+					"segment_atom" : "ping_ip_input",
+					"segment_atom_params" : "(ip=192.168.0.133)",
+					"app_context" : "level1",
+					"app_session" : "c62035ff-bcde-4ed2-bd6b-ab3072784dc",
+					"segment_tag" : "0",
+					"segment_atom_tag" : "1",
+					"segment_atom_payload" : "the original corny snaps",
+					"payload_id" : "c62035ff-bcde-4ed2-bd6b-ab3072784dcb",
+					"description" : "atomic runtime device payload",
+					"url" : "http://www.chromaticuniverse.xyz",
+					"app_tags" : [
+						"payload",
+						"streams",
+						"network",
+						"icmp"
+					],
+					"canonical_owner" : "supreme_panjandrum",
+					"scope" : "diaspora",
+					"enlisted" : "2016-07-26 23:14:23"
+				}
+			r = requests.post( 'http://localhost:7080/mongo/insert_atomic_payload', data = json.dumps(data) )
+			print r
+
+
+
+
+if __name__ == '__main__' :
+
+			dry_atomic_payload_insert()

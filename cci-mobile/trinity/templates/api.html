@@ -20,7 +20,7 @@
       </center>
         {% block body %}
             {% for path, docstr in urls|dictsort(false, 'key') %}
-            <dt><a href="{{ path }}">{{ path }}</a><br></dt>
+            <dt><a href="{{ path }}">{{ path }}</a></dt>
               <dd><pre>{{ docstr}}</pre></dd>
             {% endfor %}
          <center>

@@ -113,7 +113,7 @@ BoxLayout:
 					max: 5
 					value: 1
 				Switch:
-					active: False
+					active: True
 				Label:
 					text: 'probe timeout(ms): ' + '{0:}'.format( probe_slider.value )
 				Slider:
@@ -136,7 +136,7 @@ BoxLayout:
 					value: 400
 				Switch:
 					active: False
-				Label:
+				Label:-
 					text: 'max ports(-1=all): ' + '{0:}'.format( max_probe_slider.value )
 				Slider:
 					orientation: 'horizontal'
@@ -146,7 +146,7 @@ BoxLayout:
 					max: 500
 					value: -1
 				Switch:
-					active: False
+					active: True
 				Label:
 					text: 'resource metric ip:'
 				TextInput:

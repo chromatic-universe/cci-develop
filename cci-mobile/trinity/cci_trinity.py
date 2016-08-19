@@ -17,7 +17,7 @@ import sqlite3
 import time
 import signal
 import Queue
-
+import base64
 
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
@@ -69,7 +69,8 @@ def local_mac_addr() :
 		"""
 
 		try :
-			return proc.check_output( ['cat' , '/sys/class/net/wlan0/address'] ).strip()
+			return base64.b64encode( proc.check_output( ['cat' ,
+														 '/sys/class/net/wlan0/address'] ).strip() )
 		except :
 			pass
 

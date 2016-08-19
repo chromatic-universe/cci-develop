@@ -178,9 +178,9 @@ def mongo_extended_metadata( ip = None ) :
 # ---------------------------------------------------------------------------------------------
 def firewalk( ip = None ,
 			  max_retries = 1 ,
-			  probe_timeout = 400 ,
-			  recv_timeout = 400 ,
-			  max_ports = 7 )  :
+			  probe_timeout = None ,
+			  recv_timeout = None ,
+			  max_ports = None )  :
 			"""
 			:param ip:
 			:param max_retries:
@@ -193,14 +193,23 @@ def firewalk( ip = None ,
 			if ip is None :
 				raise ValueError( 'no ip supplied' )
 
-			out = str()
-			boiler = str()
-			b_ret = True
+			s = '--script-args='
+			if max_retries is not None :
+				s += firewalk_params['max_retries'] % max_retries
+				s += ','
+			if probe_timeout is not None :
+				s += ' '
+				s += firewalk_params['probe_timeout'] % probe_timeout
+				s += ','
+			if recv_timeout is not None :
+				 s += ' '
+				 s += firewalk_params['recv_timeout'] % recv_timeout
+				 s += ','
+			if max_ports is not None :
+				 s += ' '
+				 s +=  firewalk_params['max_ports'] % max_ports
+			s.strip( ',' )
 
-			s = '--script-args=' + firewalk_params['max_retries'] % max_retries  + ','\
-			                     + firewalk_params['probe_timeout'] % probe_timeout  + ','  \
-								 + firewalk_params['recv_timeout'] % recv_timeout  + ','  \
-			                     + firewalk_params['max_ports'] % max_ports
 			cmd = ['nmap' ,
 				   '--script=firewalk' ,
 				   '--traceroute' ,

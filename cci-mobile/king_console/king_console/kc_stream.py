@@ -37,7 +37,7 @@ from functools import partial
 import sqlite3
 import Queue
 import uuid
-
+import base64
 
 from king_console import screen
 from king_console import resource_factory \
@@ -55,7 +55,8 @@ def local_mac_addr() :
 		"""
 
 		try :
-			return proc.check_output( ['cat' , '/sys/class/net/wlan0/address'] ).strip().lower()
+			return base64.b64encode( ( proc.check_output( ['cat' ,
+														   '/sys/class/net/wlan0/address'] ).strip().lower() ) )
 		except :
 			pass
 
