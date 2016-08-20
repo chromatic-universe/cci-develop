@@ -28,18 +28,13 @@ import kafka
 #cci
 import trinity
 from application import app , mongo_no_resource_exception
-from streams import tr_mongo_rest
+from streams import tr_mongo_rest , \
+				    tr_sqlite
 
 max_wait_seconds_before_shutdown  = 3
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
-
-
-app.config['MONGO_DBNAME'] = 'cci_maelstrom'
-app.config['MONGO_URI'] = 'mongodb://cci-aws-3:27017/cci_maelstrom'
-
 api = Api( app )
-
 
 http_server = None
 
@@ -93,6 +88,8 @@ def index() :
 										device = '"' + local_mac_addr() + '"' )
 
 
+
+
 # -----------------------------------------------------------------------------
 @app.route('/query_session/', methods=('GET', 'POST') )
 def query_session() :
@@ -103,6 +100,15 @@ def query_session() :
 									  device = '"' + local_mac_addr() + '"' ,
 									  session_id = '"' + id + '"' ) )
 
+
+
+
+# -----------------------------------------------------------------------------
+@app.route('/show_mongo_api', methods=('GET', 'POST') )
+def mongo_api() :
+
+
+			return redirect( url_for( 'cci_api' ) )
 
 
 
@@ -157,110 +163,6 @@ def key() :
 			return trinity.capture_keys( log = _logger ,
 										 request = request )
 
-
-
-
-
-@app.route( "/session_call_reprise/<session_id>/batch/<max_id>:<total_count>:<record_ptr>" )
-def session_call_reprise(  session_id , max_id , total_count , record_ptr )  :
-			"""
-
-			:param session_id:
-			:param record_ptr:
-			:return:
-			"""
-
-			con = sqlite3.connect( "/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite" )
-			con.row_factory = sqlite3.Row
-
-			cur = con.cursor()
-			cur.execute( "select * from session_call_history where session_name = %s" \
-				         " and idx < %d " \
-						 "order by timestamp DESC " \
-						 "LIMIT %d" % ( session_id , int(max_id) - 15 , 15 ) )
-			rows = cur.fetchall()
-
-			return render_template( "list.html",
-									rows = rows ,
-									session_id = session_id ,
-									total_count = total_count ,
-									record_ptr = int( record_ptr ) + 15 ,
-									max_id = int(max_id) - 15 )
-
-
-
-
-@app.route( "/session_call_history/<device>" , defaults={'session_id': None})
-@app.route( "/session_call_history/<device>/<session_id>" )
-def session_call_history(  device , session_id )  :
-			   """
-
-			  :return:
-
-			   """
-
-
-			   con = sqlite3.connect( "/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite" )
-			   con.row_factory = sqlite3.Row
-
-			   cur = con.cursor()
-			   if session_id is not None :
-					cur.execute( 'select count(*) as count , max( session_call_history.idx ) as ' \
-								 'max_idx  from sessions  session_call_history '
-								 'inner join  sessions on session_call_history.session_name = sessions.session_name '
-								 'where sessions.session_name = %s and sessions.device_id = %s'	 % ( session_id , device ) )
-					rows = cur.fetchone()
-					if rows is not None :
-						count = rows[0]
-						max_idx = rows[1]
-						cur.execute( 'select * from session_call_history  ' \
-									 'inner join  sessions on session_call_history.session_name = sessions.session_name '
-									 'where sessions.session_name = %s and sessions.device_id = %s ' \
-									 'order by session_call_history.timestamp DESC ' \
-									 'LIMIT %d' % ( session_id , device , 15 ) )
-
-
-						rows = cur.fetchall()
-						return render_template( "list.html" ,
-											rows = rows ,
-											session_id = session_id ,
-											total_count = count ,
-											record_ptr = len( rows ) ,
-											max_id = max_idx )
-
-			   else :
-					# grab newest session marked as active
-					cur.execute( 	'select  max(session_call_history.idx)  as max_id  , session_call_history.session_name ' \
-									'from session_call_history ' \
-									'inner join  sessions on session_call_history.session_name = sessions.session_name ' \
-									'where sessions.status = 1 and sessions.device_id = %s ' \
-									'group by session_call_history.session_name ' \
-									'order by session_call_history.timestamp desc ' \
-									'limit 1'  % device )
-
-					rows = cur.fetchone()
-					if rows is not None :
-						max_idx = rows[0]
-						session_id = rows[1]
-
-						cur.execute(   'select session_call_history.idx  , session_call_history.session_name ,' \
-									   'session_call_history.call_segment , ' \
-									   'session_call_history.call_moniker , session_call_history.call_params , ' \
-									   'session_call_history.timestamp , sessions.device_id from session_call_history '\
-									   'inner join  sessions on session_call_history.session_name = sessions.session_name ' \
-									   'where session_call_history.session_name = "%s" '  \
-									   'order by session_call_history.timestamp desc '  % session_id )
-
-						rows = cur.fetchall()
-						return render_template( "list.html" ,
-												rows = rows ,
-												session_id = '"' + session_id + '"' ,
-												total_count = len( rows ) ,
-												record_ptr = len( rows ) ,
-												max_id = max_idx )
-
-					return render_template( "index.html" ,
-										message = 'no current sessions' )
 
 
 

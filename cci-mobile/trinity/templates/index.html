@@ -25,7 +25,7 @@
           <img src="{{ url_for('static', filename = 'image/king-console64.png') }}"><br><br>
           <b><i><u>chromatic universe - king console</u></i></b><br><br>
       <br>
-      <hr>
+
               device: {{ device }}
 
               {{ message }}<br>
@@ -40,6 +40,32 @@
                   <input type="text" name="session_id" /><br />
                     <br>
                   <input type="submit" value="query session"/>
+                </form>
+            </div>
+           <hr>
+            <br>
+             <div id="mongo">
+                <form method="post" action="{{ url_for('mongo_api') }}">
+                  <input type="submit" value="mongodb rest api"/>
+                </form>
+            </div>
+            <br>
+            <div id="kafka">
+                <form method="post" action="{{ url_for('cci_api') }}">
+                  <input type="submit" value="kafka rest api"/>
+                </form>
+            </div>
+            <br>
+            <hr>
+           <div id="stream config">
+                <form method="post" action="{{ url_for('cci_api') }}">
+                  <input type="submit" value="stream and metadata config"/>
+                </form>
+            </div>
+            <br>
+             <div id="transport policy config">
+                <form method="post" action="{{ url_for('cci_api') }}">
+                  <input type="submit" value="transport policy config"/>
                 </form>
             </div>
             <br>

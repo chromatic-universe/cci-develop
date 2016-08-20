@@ -360,7 +360,6 @@ class kingconsoleApp( App ) :
 
 
 
-
 		def _close_session( self ) :
 			"""
 
@@ -374,10 +373,11 @@ class kingconsoleApp( App ) :
 			self.dbq.put( package )
 			# document repository
 
+
 			if self._check_connectivity() :
 				mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
 										 log = self._logger ,
-										 device_id = local_mac_addr() ,
+										 device_id = mac ,
 										 last_ip = self._console_local ,
 										 last_real_ip = self._console_real)
 				mongo._update_device_session( False )

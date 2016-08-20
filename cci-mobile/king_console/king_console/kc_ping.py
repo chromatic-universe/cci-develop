@@ -45,7 +45,7 @@ def retr_local_ip_info() :
 			local_ip = s.getsockname()[0]
 
 			# if using nat will differ
-			ret = urllib2.urlopen( 'https://enabledns.com/ip' )
+			ret = urllib2.urlopen( 'https://enabledns.com/ip' , timeout=4 )
 
 			remote_ip = ret.read()
 
