@@ -339,19 +339,23 @@ class kingconsoleApp( App ) :
 			self.dbq.put( package )
 			self._session_id = uid
 
+
 			if self._check_connectivity() :
 				# document repository
+				mac =  local_mac_addr()
 				try :
 					mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
 											 log = self._logger ,
-											 device_id = local_mac_addr() ,
+											 device_id = mac ,
 											 last_ip = self._console_local ,
 											 last_real_ip = self._console_real )
 					mongo._update_device_session( True )
+					self._logger.info( '..updated session info remote...opened %s' % mac )
 				except Exception as e :
 					self._logger.error( e.message )
 			else :
 				self._logger.error( '...could not update session remote info...no connectivity...' )
+
 
 
 
@@ -363,12 +367,13 @@ class kingconsoleApp( App ) :
 			:return:
 			"""
 
-
+			mac =  local_mac_addr()
 			# we don't use db queue in main thread
 			package = ( ( 'update_session_status'  ,
 						[0 , self._session_id] ) )
 			self.dbq.put( package )
 			# document repository
+
 			if self._check_connectivity() :
 				mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
 										 log = self._logger ,
@@ -376,12 +381,11 @@ class kingconsoleApp( App ) :
 										 last_ip = self._console_local ,
 										 last_real_ip = self._console_real)
 				mongo._update_device_session( False )
+				self._logger.info( '..updated session info remote...closed %s' % mac )
 			else :
 				self._logger.error( '...could not update session remote info...no connectivity...' )
 
 
-
-			pass
 
 
 		def _retr_proc_atom( self , proc_str = None ) :

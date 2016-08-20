@@ -33,6 +33,8 @@ from application import app , mongo_no_resource_exception
 
 app.config['MONGO_DBNAME'] = 'cci_maelstrom'
 app.config['MONGO_URI'] = 'mongodb://cci-aws-3:27017/cci_maelstrom'
+app.config['MONGO_CONNECT_TIMEOUT_MS'] = 5000
+app.config['MONGO_SOCKET_TIMEOUT_MS'] = 5000
 mongo = PyMongo( app )
 
 
@@ -258,7 +260,7 @@ app.add_url_rule( '/mongo/retr_auth_apps' ,
 
 
 # --------------------------------------------------------------------------------------------------------
-def update_device_status( device_id , status ) :
+def update_device_status() :
 			"""
 			PUT update device status
 			:param device_id : string
@@ -266,35 +268,36 @@ def update_device_status( device_id , status ) :
 			:return : jsonified payload of devices
 			"""
 			output = []
-			active , last , last_remote = status.split( ',' )
+
 
 			db =  mongo.db.auth_devices
+			data = json.loads( request.data )
 
-			print device_id
-
-
-			result = mongo.db.auth_devices.update_one (
-									{"device_id": device_id } ,
-										{
-											"$set":
+			if request.method == 'POST' :
+				result = mongo.db.auth_devices.update_one (
+										{"device_id": data['device_id'] } ,
 											{
-												"active" : active ,
-												"last_known_ip" : last ,
-												"last_known_remote_ip" : last_remote
-											},
-											"$currentDate": { "last_active" : True }
+												"$set":
+												{
+													"active" : data['active']  ,
+													"last_known_ip" : data['last_known_ip'] ,
+													"last_known_remote_ip" : data['last_known_remote_ip']
+												},
+												"$currentDate": { "last_active" : True }
 
-										} )
+											} )
 
-			print result
-			if result.matched_count == 0 :
-				raise mongo_no_resource_exception( 'could not update device document' )
+				if result.matched_count == 0 :
+					raise mongo_no_resource_exception( 'could not update device document' )
 
-			return jsonify({'result' : 'ok'})
+				return jsonify({'result' : 'ok'})
+			return jsonify({'result' : 'update failed'})
 
-app.add_url_rule( '/mongo/update_device_status/<device_id>/<status>',
+
+app.add_url_rule( '/mongo/update_device_status',
 				  'update_device_status' ,
-				  view_func=update_device_status
+				  view_func=update_device_status ,
+				  methods=['POST']
 				   )
 
 

@@ -136,7 +136,7 @@ BoxLayout:
 					value: 400
 				Switch:
 					active: False
-				Label:-
+				Label:
 					text: 'max ports(-1=all): ' + '{0:}'.format( max_probe_slider.value )
 				Slider:
 					orientation: 'horizontal'

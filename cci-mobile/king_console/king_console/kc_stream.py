@@ -38,6 +38,8 @@ import sqlite3
 import Queue
 import uuid
 import base64
+import requests
+import json
 
 from king_console import screen
 from king_console import resource_factory \
@@ -358,7 +360,7 @@ class kc_mongo_config( kc_config ) :
 											open = True
 											 ) :
 							"""
-
+							:open : boolean
 							:return:
 							"""
 
@@ -368,34 +370,12 @@ class kc_mongo_config( kc_config ) :
 							else :
 								s = 'false'
 
-							mongo = mongo_client.cci_mini_mongo( bootstrap = self._bootstrap ,
-																 device_id = self._id )
 
-							try :
-								if mongo.connected :
-									db = mongo.mongo['cci_maelstrom']
-									result = db['auth_devices'].update_one (
-										{"device_id": self._id } ,
-											{
-												"$set":
-												{
-													"active" : s ,
-													"last_known_ip" : self._last_ip ,
-													"last_known_remote_ip" : self._last_real_ip
-												},
-												"$currentDate": { "last_active" : True }
-
-											}
-
-									)
-
-									if result.matched_count == 0 :
-										self._logger.error( '..could not update mongo db device info...' )
-									else :
-										self._logger.info( '..updated mongo db device info...' )
-							finally :
-								if mongo.connected :
-									mongo.mongo.close()
+							r = requests.post('http://localhost:7080/mongo/update_device_status',
+										  data = json.dumps( {"device_id" : self._id ,
+															  "active" : s ,
+															  "last_known_ip" : self._last_ip ,
+															  "last_known_remote_ip" : self._last_real_ip }) )
 
 
 
@@ -488,7 +468,7 @@ class kc_kafka_config( kc_config ) :
 							layout.add_widget( Image( source = './image/kafka-logo.png' , pos_hint_y = 0 ,
 													  size_hint_y = .2 ) )
 							scroll = ScrollView()
-							grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 500 ) )
+							grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 700 ) )
 							grid.add_widget( Label(  text = 'active:' ) )
 							grid.add_widget( Switch( active = True ) )
 							grid.add_widget( Label(  text = 'bootstrap broker:' ) )
@@ -505,6 +485,12 @@ class kc_kafka_config( kc_config ) :
 														readonly = False ,
 														multiline =  True ,
 														size_hint_y = .5 ) )
+							grid.add_widget( Label( text = 'stream stack' )  )
+							grid.add_widget( Switch( active = True , id = 'stream_stack_switch' ) )
+							grid.add_widget( Label( text = 'stream errors' )  )
+							grid.add_widget( Switch( active = True , id = 'stream_errors_switch' ) )
+							grid.add_widget( Label( text = 'honor blacklist stream' )  )
+							grid.add_widget( Switch( active = True , id = 'honor_blacklist_switch' ) )
 
 							scroll.add_widget( grid )
 							layout.add_widget( scroll )
