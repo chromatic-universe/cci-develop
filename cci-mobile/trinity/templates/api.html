@@ -19,16 +19,13 @@
           <br>
       </center>
         {% block body %}
-            {% for path, docstr in urls|dictsort(false, 'key') %}
-            <dt><a href="{{ path }}">{{ path }}</a></dt>
-              <dd><pre>{{ docstr}}</pre></dd>
-            {% endfor %}
+         {% include 'mongo.html' %}
          <center>
           <br>chromatic universe 2016<br>
              </center>
 {% endblock %}
 </font>
-</html>
 
-</body>
+
+
 </html>

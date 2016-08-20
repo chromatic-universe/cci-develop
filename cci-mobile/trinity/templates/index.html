@@ -36,28 +36,30 @@
              <br>
             <div id="content">
                 <form method="post" action="{{ url_for('query_session') }}">
-                  <label for="session_id">session_id:</label><br>
+                  <label for="session_id">session_id:</label><br><br>
                   <input type="text" name="session_id" /><br />
                     <br>
                   <input type="submit" value="query session"/>
                 </form>
             </div>
-           <hr>
+
             <br>
              <div id="mongo">
+                 <img src="{{ url_for('static', filename = 'image/mongo.png') }}"><br><br>
                 <form method="post" action="{{ url_for('mongo_api') }}">
                   <input type="submit" value="mongodb rest api"/>
                 </form>
             </div>
             <br>
             <div id="kafka">
+                <img src="{{ url_for('static', filename = 'image/kafka-logo.png') }}"><br><br>
                 <form method="post" action="{{ url_for('cci_api') }}">
                   <input type="submit" value="kafka rest api"/>
                 </form>
             </div>
             <br>
-            <hr>
            <div id="stream config">
+                <img src="{{ url_for('static', filename = 'image/king-console32.png') }}"><br><br>
                 <form method="post" action="{{ url_for('cci_api') }}">
                   <input type="submit" value="stream and metadata config"/>
                 </form>
@@ -70,7 +72,7 @@
             </div>
             <br>
                     <hr>
-             <br><small>william k. johnson 2016</small><br>
+             <br><small>chromatic universe 2016</small><br>
              </center>
               {% endblock %}
 

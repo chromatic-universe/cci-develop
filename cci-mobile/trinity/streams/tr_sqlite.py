@@ -30,7 +30,28 @@ except ImportError:  # python 3
     from urllib.parse import urlencode
 
 
-from application import app
+from application import app , _logger
+
+
+# cci
+import tr_utils
+
+
+# -----------------------------------------------------------------------------
+@app.route('/query_session/', methods=('GET', 'POST') )
+def query_session() :
+			_logger.info( '...query_session...' )
+			id=request.form['session_id']
+
+			return redirect( url_for( 'session_call_history' ,
+									  device = '"' + tr_utils.local_mac_addr() + '"' ,
+									  session_id = '"' + id + '"' ) )
+
+app.add_url_rule( '/query_session/' ,
+				  'query_session' ,
+				  view_func=query_session ,
+				  methods=['GET' , 'POST'] )
+
 
 
 
@@ -42,7 +63,7 @@ def session_call_reprise(  session_id , max_id , total_count , record_ptr )  :
 			:param record_ptr:
 			:return:
 			"""
-
+			_logger.info( '...session_call_reprise...' )
 			con = sqlite3.connect( "/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite" )
 			con.row_factory = sqlite3.Row
 
@@ -77,7 +98,7 @@ def session_call_history(  device , session_id )  :
 
 			   """
 
-
+			   _logger.info( '...aession_call_history...' )
 			   con = sqlite3.connect( "/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite" )
 			   con.row_factory = sqlite3.Row
 

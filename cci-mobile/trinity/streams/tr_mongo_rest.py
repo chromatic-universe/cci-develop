@@ -29,13 +29,42 @@ except ImportError:  # python 3
     from urllib.parse import urlencode
 
 
-from application import app , mongo_no_resource_exception
+from application import app , mongo_no_resource_exception , _logger
 
 app.config['MONGO_DBNAME'] = 'cci_maelstrom'
 app.config['MONGO_URI'] = 'mongodb://cci-aws-3:27017/cci_maelstrom'
 app.config['MONGO_CONNECT_TIMEOUT_MS'] = 5000
 app.config['MONGO_SOCKET_TIMEOUT_MS'] = 5000
 mongo = PyMongo( app )
+
+
+
+def debug_write_api() :
+		# for api docs , build strios docstrings
+		with open( 'mongo.api' , 'w' ) as f :
+			for r in current_app.url_map.iter_rules() :
+			 	doc = current_app.view_functions.get(r.endpoint).func_doc
+				if not r.rule.startswith('/static') and r.rule.startswith( '/mongo' ) :
+					doc = doc.replace( '\t' , '' )
+					f.write( '<a href="%s">%s</a>' %  ( r.rule , r.rule ) )
+					f.write( '<pre>%s</pre><br>' % doc )
+
+
+
+# -----------------------------------------------------------------------------
+def mongo_api() :
+
+		_logger.info( '...mongo_api...' )
+		try :
+			return redirect( url_for( 'cci_api' ) )
+		except Exception as e :
+				_logger.error( '...mongo_api %s' % e.message )
+				raise mongo_no_resource_exception( e.message )
+
+app.add_url_rule( '/show_mongo_api' ,
+				  'mongo_api' ,
+				  view_func=mongo_api ,
+				  methods=['GET' , 'POST'] )
 
 
 
@@ -46,12 +75,13 @@ def cci_api():
 			GET to generate a list of endpoints and their docstrings
 			:return this document
 			"""
-
+			_logger.info( '...cci_api...' )
 			try :
 				urls = dict([(r.rule, current_app.view_functions.get(r.endpoint).func_doc)
 							 for r in current_app.url_map.iter_rules()
 							 if not r.rule.startswith('/static') and r.rule.startswith( '/mongo' )])
 			except Exception as e :
+				logger.error( '...cci_api %s' % e.message )
 				raise mongo_no_resource_exception( e.message )
 
 			return render_template( 'api.html' , urls=urls )
@@ -69,7 +99,11 @@ app.add_url_rule( '/mongo/cci_api' ,
 
 # --------------------------------------------------------------------------------------------------------
 def enum_devices() :
-			"""	GET enumerate all devices:return : jsonified payload of devices"""
+			"""
+			GET enumerate all devices:return : jsonified payload of devices
+			:return:
+			"""
+			_logger.info( '...enum_devices...' )
 			output = []
 			try :
 				db =  mongo.db.auth_devices
@@ -87,7 +121,7 @@ def enum_devices() :
 								   'segment' : device['segment']
 					})
 			except Exception as e :
-				 print e.message
+				 _logger.error( '...enum_devices %s' % e.message )
 			return jsonify({'result' : output})
 app.add_url_rule( '/mongo/enum_devices' ,
 				  'enum_devices' ,
@@ -105,12 +139,13 @@ def retr_device( device_id ) :
 			:rtype: json
 			"""
 
-
+			_logger.info( '...retr_device...' )
 			output = []
 
 			db =  mongo.db.auth_devices
 			device = db.find( { 'device_id' : device_id } )
 			if device.count() == 0 :
+				_logger.error( '...retr_device %s' % e.message )
 				raise mongo_no_resource_exception( 'no tokenized device found')
 			output =  {'moniker' : device['moniker'] ,
 					   'description' : device['description'] ,
@@ -140,6 +175,7 @@ def device_active( device_id ) :
 			:return: : jsonified device payload
 			:rtype: json
 			"""
+			_logger.info( '...device_active...' )
 			output = []
 
 			db =  mongo.db.auth_devices
@@ -164,7 +200,7 @@ def retr_segment_devices( segment ) :
 			:rtype: json
 			"""
 
-
+			_logger.info( '...retr_segment_devices...' )
 			output = []
 			try :
 				db =  mongo.db.auth_devices
@@ -181,7 +217,7 @@ def retr_segment_devices( segment ) :
 								   'segment' : device['segment']
 					})
 			except Exception as e :
-				 print e.message
+				 _logger.error( '...retr_segment_devices %s' % e.message )
 			return jsonify({'result' : output})
 
 app.add_url_rule( '/mongo/retr_segment_devices/<segment>' ,
@@ -201,7 +237,7 @@ def retr_devices_by_app( app ) :
 			:rtype: json
 			"""
 
-
+			_logger.info( '...retr_devices_by_app...' )
 			output = []
 			try :
 				db =  mongo.db.auth_devices
@@ -218,7 +254,7 @@ def retr_devices_by_app( app ) :
 								   'segment' : device['segment']
 					})
 			except Exception as e :
-				 print e.message
+				 _logger.error( '...retr_devices_by_app %s' % e.message )
 			return jsonify({'result' : output})
 
 app.add_url_rule( '/mongo/retr_devices_by_app/<app>' ,
@@ -238,6 +274,7 @@ def retr_auth_apps() :
 			:rtype: json
 			"""
 
+			_logger.info( '...retr_auth_apps...' )
 			output = []
 			db = mongo.db.auth_apps
 
@@ -267,6 +304,8 @@ def update_device_status() :
 			:param status : csv <active,last_ip,last_remote_ip>  true,192.168.0.1,64.0.1.19
 			:return : jsonified payload of devices
 			"""
+
+			_logger.info( '...update_device_status...' )
 			output = []
 
 
@@ -288,6 +327,7 @@ def update_device_status() :
 											} )
 
 				if result.matched_count == 0 :
+					_logger.error( '...update_device_status %s' % e.message )
 					raise mongo_no_resource_exception( 'could not update device document' )
 
 				return jsonify({'result' : 'ok'})
@@ -311,12 +351,14 @@ def insert_atomic_payload() :
 			:return:
 			"""
 
+			_logger.info( '...insert_atomic_payload...' )
 			output = []
 			db = mongo.db.runtime_payload_atoms
 			insert_data = json.loads( request.data )
 
 			ack = db.insert( insert_data )
 			if not ack :
+				_logger.error( '...insert_atomic_payload %s' % e.message )
 				raise mongo_no_resource_exception( 'db payload insert failed' )
 
 			return jsonify({'result' : 'ok'})
@@ -339,7 +381,7 @@ def insert_beaucoup_payload() :
 			:param payload:
 			:return:
 			"""
-
+			_logger.info( '...insert_beaucoup_payload...' )
 			db = mongo.db.runtime_payload_atoms
 			if request.method == 'POST' :
 				# split the string to a list , each entry is a dictionary
@@ -352,6 +394,7 @@ def insert_beaucoup_payload() :
 				# bulk insert . mogndb will stage atoms internally
 				ack = db.insert_many( dictionary_list )
 				if not ack :
+					_logger.error( '...insert_beaucoup_payload %s' % e.message )
 					raise mongo_no_resource_exception( 'db payload beaucoup insert failed' )
 				return jsonify({'result' : 'ok'})
 
@@ -408,3 +451,4 @@ def dry_atomic_payload_insert() :
 if __name__ == '__main__' :
 
 			dry_atomic_payload_insert()
+

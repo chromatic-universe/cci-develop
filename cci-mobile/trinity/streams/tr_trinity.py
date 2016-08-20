@@ -1,4 +1,4 @@
-# cci-trinity.py    william k. johnson  2016
+# tr_trinity.py    william k. johnson  2016
 
 import os
 import subprocess as proc

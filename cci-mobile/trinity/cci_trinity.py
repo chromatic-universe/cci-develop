@@ -26,26 +26,19 @@ from tornado.ioloop import IOLoop
 import kafka
 
 #cci
-import trinity
-from application import app , mongo_no_resource_exception
+from application import app , mongo_no_resource_exception , _logger
 from streams import tr_mongo_rest , \
-				    tr_sqlite
+				    tr_sqlite , \
+					tr_bimini , \
+					tr_trinity , \
+					tr_utils
 
 max_wait_seconds_before_shutdown  = 3
-log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
+
 
 api = Api( app )
 
 http_server = None
-
-# logger
-_logger = logging.getLogger( "cci-trinity-server" )
-_logger.setLevel( logging.DEBUG )
-fh = logging.FileHandler(  'cci-trinity-server.log' + '-debug.log', mode = 'a' )
-fh.setLevel( logging.DEBUG )
-formatter = logging.Formatter( log_format )
-fh.setFormatter( formatter )
-_logger.addHandler( fh )
 
 
 const_per_page = 20
@@ -56,19 +49,11 @@ class query_session_form( Form ) :
     submit = SubmitField('Submit')
 
 
-# -----------------------------------------------------------------------------------
-def local_mac_addr() :
-		"""
+# --------------------------------------------------------------------------------------------------------
+@app.errorhandler( 404 )
+def page_not_found( e ) :
 
-		:return mac string:
-		"""
-
-		try :
-			return base64.b64encode( proc.check_output( ['cat' ,
-														 '/sys/class/net/wlan0/address'] ).strip() )
-		except :
-			pass
-
+    return render_template( 'kc_error.html' , e=e.message ) , 404
 
 
 
@@ -83,86 +68,9 @@ def handle_mongo_exception( e ) :
 @app.route('/index')
 @app.route( "/" )
 def index() :
-
+				_logger.info( '...index...' )
 				return render_template( "index.html" ,
-										device = '"' + local_mac_addr() + '"' )
-
-
-
-
-# -----------------------------------------------------------------------------
-@app.route('/query_session/', methods=('GET', 'POST') )
-def query_session() :
-
-			id=request.form['session_id']
-
-			return redirect( url_for( 'session_call_history' ,
-									  device = '"' + local_mac_addr() + '"' ,
-									  session_id = '"' + id + '"' ) )
-
-
-
-
-# -----------------------------------------------------------------------------
-@app.route('/show_mongo_api', methods=('GET', 'POST') )
-def mongo_api() :
-
-
-			return redirect( url_for( 'cci_api' ) )
-
-
-
-
-# ------------------------------------------------------------------------------
-@app.route( "/trinity" )
-def cci_trinity():
-
-			out = 'cci_trinity capture screen...'
-			io = StringIO()
-			try :
-
-				b_ret , out = trinity.capture_screen( _logger )
-				if not b_ret :
-					_logger.error( out )
-				else :
-					io.write( out )
-					io.seek( 0 )
-
-
-			except Exception as e :
-				out =  'error in cci_trinity.....'  + e.message
-				_logger.error( out )
-				return
-
-			return send_file( io , mimetype='image/png' )
-
-
-
-
-
-# ------------------------------------------------------------------------
-@app.route('/click')
-def click() :
-			"""
-
-			:return:
-			"""
-
-			return trinity.capture_clicks( log = _logger ,
-										   request = request )
-
-
-# ------------------------------------------------------------------------
-@app.route('/key')
-def key() :
-			"""
-
-			:return:
-			"""
-
-			return trinity.capture_keys( log = _logger ,
-										 request = request )
-
+										device = '"' + tr_utils.local_mac_addr() + '"' )
 
 
 
