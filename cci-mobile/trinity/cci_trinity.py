@@ -18,10 +18,18 @@ import time
 import signal
 import Queue
 import base64
+import time
+
+
+from tornado.concurrent import run_on_executor
+from concurrent.futures import ThreadPoolExecutor
 
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
+from tornado import gen
+from tornado.queues import Queue
+
 
 import kafka
 
@@ -39,7 +47,8 @@ max_wait_seconds_before_shutdown  = 3
 api = Api( app )
 
 http_server = None
-
+io_loop_async = None
+io_loop_async_thread = None
 
 const_per_page = 20
 
@@ -112,6 +121,8 @@ def shutdown() :
 
 
 
+
+
 # ------------------------------------------------------------------------------
 if __name__ == "__main__"  :
 
@@ -159,6 +170,7 @@ if __name__ == "__main__"  :
 					 pidfile.write( str( os.getpid() ) + '\n'  )
 				 # start server
 				 IOLoop.instance().start()
+
 
 			 else :
 				 _logger.info( '...server already running... pid %s....'  % pid )

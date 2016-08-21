@@ -226,17 +226,35 @@ class ccitrinityApp( App ) :
 
 						if not b_ret :
 							self._update_status( self.root.ids.status_text , ' ....trinity bootstrap failed....' )
+							return
 						else :
-
 							self._update_status( self.root.ids.status_text , ' ....trinity bootstrapped..running....' )
 							self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
 							self.root.ids.bootstrap_btn.text = 'stop trinity'
 							self._update_status( self.root.ids.status_text , ' ...trinity started...' )
 							self._clock_event = Clock.schedule_interval( self._pid_callback, 2 )
-							#self.root.ids.process_info.text = 'pid: %s port: 7080' % pid
 					except Exception as e :
 						self._logger.error( '..._on_start_trinity...' + e.message )
 						self._update_status( self.root.ids.status_text , e.message )
+					"""
+					try :
+						self._update_status( self.root.ids.status_text , ' ....starting trinity async....' )
+
+						b_ret = self._bootstrap_trinity_async()
+
+						if not b_ret :
+							self._update_status( self.root.ids.status_text , ' ....trinity async bootstrap failed....' )
+						else :
+
+							self._update_status( self.root.ids.status_text , ' ....trinity async bootstrapped..running....' )
+							self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
+							self.root.ids.bootstrap_btn.text = 'stop trinity'
+							self._update_status( self.root.ids.status_text , ' ...trinity async started...' )
+							#self._clock_event = Clock.schedule_interval( self._pid_callback, 2 )
+					except Exception as e :
+						self._logger.error( '..._on_start_trinity...async' + e.message )
+						self._update_status( self.root.ids.status_text , e.message )
+					"""
 				else :
 					try :
 						try :
@@ -279,6 +297,8 @@ class ccitrinityApp( App ) :
 
 
 
+
+
 			def _pid_callback( self , dt ) :
 					pid = str()
 
@@ -286,6 +306,8 @@ class ccitrinityApp( App ) :
 					with open( 'pid' , 'r' ) as pidfile :
 						pid = pidfile.read().strip()
 					self.root.ids.process_info.text = 'pid: %s   ~  port: 7080' % pid
+
+
 
 
 
@@ -356,6 +378,63 @@ class ccitrinityApp( App ) :
 
 						return b_ret
 
+
+
+
+			def _bootstrap_trinity_async( self ) :
+						"""
+
+						:return:
+						"""
+						b_ret = False
+
+						try :
+
+								self._logger.info( "...bootstrapping cci_trinity_async....." )
+								pos = sys.platform.find( 'linux4' )
+								if pos == -1 :
+									andr = False
+								else :
+									andr = True
+								cmd = list()
+
+
+								cmd = [
+								  "su" ,
+								  "-c" ,
+								  "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
+								  "./cci_trinity_async.pyo" ,
+								  "&"
+								  ]
+
+
+								proc.Popen( cmd )
+
+								try:
+									s = socket.socket()
+									s.setsockopt( socket.SOL_SOCKET , socket.SO_REUSEADDR , 1 )
+									s.bind( ( socket.gethostname()  , 7081 ) )
+									b_ret = True
+									self._logger.info( "bootstrapped cci_trinity_async....." )
+								except socket.error as e:
+									self._logger.info( "failed tp bootstrap cci_trinity_async....." + e.message  )
+									b_ret = False
+
+
+
+						except proc.CalledProcessError as e:
+							self._logger.error( 'bootstrap failed.async..' + e.message )
+						except OSError as e :
+							self._logger.error( 'async file does not exist?...' + e.message )
+							#sys.exit( 1 )
+						except ValueError as e :
+							self._logger.error( 'arguments foobar in async ...' + e.message )
+							#sys.exit( 1 )
+						except Exception as e :
+							self._logger.error(  e.message )
+							#sys.exit( 1 )
+
+						return b_ret
 
 
 
