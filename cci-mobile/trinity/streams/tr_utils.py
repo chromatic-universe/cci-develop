@@ -53,3 +53,44 @@ def local_mac_addr() :
 		except :
 			pass
 
+
+log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
+
+
+
+# ------------------------------------------------------------------------
+def init_logging( moniker = 'current_app' , fmt = log_format ) :
+
+		"""
+		initialize application logging
+		:param logger:
+		:param moniker:
+		:param fmt:
+		:return logger :
+		"""
+
+		logger = logging.getLogger( moniker )
+
+		# setup logging
+
+		# create logger
+		logger.setLevel( logging.DEBUG )
+		# create file handler strange file extension
+		# tells python logging module to overwrite file
+		fh = logging.FileHandler( moniker + '.log' + '-debug.log', mode = 'w')
+		fh.setLevel( logging.DEBUG )
+
+		# create console handler
+		ch = logging.StreamHandler()
+		ch.setLevel( logging.DEBUG )
+
+		# create formatter and add it to the handlersuntitled
+		formatter = logging.Formatter( fmt )
+		fh.setFormatter( formatter )
+		ch.setFormatter( formatter )
+
+		# add the handlers to the self._logger
+		logger.addHandler( fh )
+		logger.addHandler( ch )
+
+		return logger

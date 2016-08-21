@@ -47,8 +47,7 @@ max_wait_seconds_before_shutdown  = 3
 api = Api( app )
 
 http_server = None
-io_loop_async = None
-io_loop_async_thread = None
+
 
 const_per_page = 20
 

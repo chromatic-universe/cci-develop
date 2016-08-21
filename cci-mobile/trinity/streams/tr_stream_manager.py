@@ -22,6 +22,7 @@ import json
 import sqlite3
 import uuid
 import threading
+import abc
 
 
 # dbs
@@ -53,7 +54,7 @@ class tr_stalker( object )  :
 			def __init__( self  ) :
 
 				# logging
-				self._logger = init_logging( self.__class__.__name__  )
+				self._logger = tr_utils.init_logging( self.__class__.__name__  )
 				self._logger.info( self.__class__.__name__ + '...'  )
 
 				# command line
@@ -95,17 +96,18 @@ class tr_stalker( object )  :
 
 
 # ------------------------------------------------------------------------
-class tr_stream_stalker( tr_stalker)  :
+class tr_stream_stalker( tr_stalker )  :
 			"""
 			stream stalker
 			"""
 
 
-			def  __init__( self , db_connect_str = None) :
+			def  __init__( self , db_connect_str = None)  :
 
 				super( tr_stream_stalker , self ).__init__()
 
 				self._db_connect_str = db_connect_str
+				self._current_db = None
 
 				# default db
 				try :
@@ -117,16 +119,22 @@ class tr_stream_stalker( tr_stalker)  :
 
 
 
-			@classmethod
-			def execute_naked_sql_result_set(  cls ,
+			@staticmethod
+			def execute_naked_sql_result_set(  current_db ,
+											   row_factory ,
 											   sql_statement ,
-											   params ) :
+											   params ,
+											   log) :
 				"""
 
+				:param current_db:
+				:param row_factory:
 				:param sql_statement:
 				:param params:
+				:param log:
 				:return:
 				"""
+
 
 				payload = list()
 				try :
@@ -136,8 +144,8 @@ class tr_stream_stalker( tr_stalker)  :
 
 					rs = ( None , None )
 
-					cls._current_db.row_factory = tr_utils.dict_factory
-					cursor = cls._current_db.cursor()
+					current_db.row_factory = row_factory
+					cursor = current_db.cursor()
 					cursor.execute( s )
 					while True :
 						rs = cursor.fetchone()
@@ -145,15 +153,36 @@ class tr_stream_stalker( tr_stalker)  :
 							break
 						payload.append( rs )
 
-					self.logger.info( '...' +  sql_statement  + ' executed...'  + str( params ) )
+
+					log.info( '...' +  sql_statement  + ' executed...'  + str( params ) )
 
 				except sqlite3.OperationalError as e :
-					self.logger.error( 'statement failed: '
+					log.error( 'statement failed: '
 						+ e.message )
 				except TypeError as e :
-					self.logger.error( '...not enough aruments for db query...' )
+					log.error( '...not enough aruments for db query...' )
 
 				return payload
+
+
+
+			'''services'''
+			def prepare( self ) :
+				"""
+				connect queue
+				"""
+
+				pass
+
+
+
+			def stalk( self ) :
+				"""
+				stalk
+				"""
+
+				pass
+
 
 
 
@@ -180,7 +209,7 @@ class tr_payload_stalker( tr_stream_stalker ) :
 					:return:
 					"""
 
-					super( tr_payload_stalker , self ).__init__()
+					super( tr_payload_stalker , self ).__init__( db_connect_str=db_connect_str )
 
 					document_monikers = {
 										   'mongodb' : self._on_mongo_document ,
@@ -211,8 +240,7 @@ class tr_payload_stalker( tr_stream_stalker ) :
 					self._doc_moniker = document_moniker
 					self._stream_bootstrap = stream_bootstrap
 					self._stream_moniker = stream_moniker
-					self._db_manager = kc_db_manager( default_db = db_connect_str ,
-													  logger = self._logger )
+
 
 					if self._policies is None :
 						self._policies = self._retrieve_default_policies()
@@ -261,26 +289,34 @@ class tr_payload_stalker( tr_stream_stalker ) :
 					"""
 
 
-					return self._db_manager. \
-						               execute_naked_sql_result_set( sql_cursor_dictionary['sql_retrieve_default_policy'] ,
-									   ['default'] )
+					return self.execute_naked_sql_result_set( self._current_db ,
+ 													  		  tr_utils.dict_factory ,
+													          sql_cursor_dictionary['sql_retrieve_default_policy'] ,
+									   						  ['default'] ,
+															  self._logger )
 
 
 
 
-				def connect( self ) :
+
+				'''services'''
+				def prepare( self ) :
+					"""
+					connect queue
 					"""
 
-					:return:
+					pass
+
+
+
+				def stalk( self ) :
+					"""
+					stalk
 					"""
 
-					try :
+					pass
 
-						pass
-					except Exception as e :
-						pass
-					finally :
-						pass
+
 
 
 
@@ -392,10 +428,10 @@ def stalker_main() :
 
 
 				try :
-					stalker = kc_payload_stalker( db_connect_str='/data/media/com.chromaticuniverse.' \
+					stalker = tr_payload_stalker( db_connect_str='/data/media/com.chromaticuniverse.' \
 																  'cci_trinity/king_console.sqlite' )
 				except ValueError as e :
-					print  'parameter snafu: ' %  e.message
+					print  'parameter snafu: %s' %  e.message
 				except Exception as e :
 					print e.message
 
