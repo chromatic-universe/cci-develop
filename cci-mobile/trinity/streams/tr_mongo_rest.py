@@ -75,16 +75,9 @@ def cci_api():
 			GET to generate a list of endpoints and their docstrings
 			:return this document
 			"""
-			_logger.info( '...cci_api...' )
-			try :
-				urls = dict([(r.rule, current_app.view_functions.get(r.endpoint).func_doc)
-							 for r in current_app.url_map.iter_rules()
-							 if not r.rule.startswith('/static') and r.rule.startswith( '/mongo' )])
-			except Exception as e :
-				logger.error( '...cci_api %s' % e.message )
-				raise mongo_no_resource_exception( e.message )
 
-			return render_template( 'api.html' , urls=urls )
+
+			return render_template( 'api.html' )
 
 
 

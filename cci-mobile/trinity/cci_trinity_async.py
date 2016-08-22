@@ -1,7 +1,12 @@
+# cci_trinity_async.py    william k. johnson  2016
+
+
+
 import time
 import json
 import logging
 import signal
+import os
 
 from tornado.ioloop import IOLoop
 import tornado.gen
@@ -13,13 +18,16 @@ from tornado.ioloop import PeriodicCallback
 max_wait_seconds_before_shutdown  = 3
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
+from application_vulture  import app ,\
+	                             mongo_no_resource_exception , \
+								 _logger
+from streams import tr_mongo_rest
 
 
-_logger = None
 g_periodic_calbacks = dict()
 
 # --------------------------------------------------------------------------------------
-class mongo_queue_client() :
+class queue_client() :
 
 			def __init__(self):
 				self.queued_items = Queue()
@@ -32,7 +40,7 @@ class mongo_queue_client() :
 					if items['moniker'] in g_periodic_calbacks :
 						_logger.info( '..policy %s already in effect' % items['moniker'] )
 						continue
-					pc = PeriodicCallback( pc_callback , 5000 , )
+					pc = PeriodicCallback( lambda: pc_callback( items['moniker'] ) , 5000  )
 					_logger.info( '..started periodic callback with params%s' % json.dumps( items ) )
 					pc.start()
 					g_periodic_calbacks[items['moniker']] = pc
@@ -41,7 +49,7 @@ class mongo_queue_client() :
 
 
 # --------------------------------------------------------------------------------------
-class queue_handler( tornado.web.RequestHandler ) :
+class queue_handler_start_policy( tornado.web.RequestHandler ) :
 
 
 			@tornado.gen.coroutine
@@ -54,7 +62,34 @@ class queue_handler( tornado.web.RequestHandler ) :
 
 				json_data = json.loads( self.request.body )
 				yield client.queued_items.put( json_data )
-				self.write("queued a new item" )
+				_logger.info( 'queued a new item: %s' % self.request.body )
+
+
+
+
+
+# --------------------------------------------------------------------------------------
+class queue_handler_stop_policy( tornado.web.RequestHandler ) :
+
+
+			@tornado.gen.coroutine
+			def post( self ) :
+				"""
+
+				:return:
+				"""
+
+
+				json_data = json.loads( self.request.body )
+				moniker = json_data['moniker']
+
+				if moniker in g_periodic_calbacks :
+					g_periodic_calbacks[moniker].stop()
+					_logger.info( '...stopped...: %s' % moniker )
+				else :
+					_logger.info( '...could not stop...not started: %s' % moniker )
+
+
 
 
 
@@ -101,8 +136,8 @@ def shutdown() :
 
 		stop_loop()
 
-def pc_callback() :
-	print 'the original corny snaps!'
+def pc_callback( moniker ) :
+	print 'the original corny snaps for %s!' % moniker
 
 
 
@@ -110,16 +145,10 @@ def pc_callback() :
 if __name__ == "__main__":
 
 			# mongo
-			client = mongo_queue_client()
+			client = queue_client()
 
 			# logger
-			_logger = logging.getLogger( "cci-trinity-server-queue-vulture" )
-			_logger.setLevel( logging.DEBUG )
-			fh = logging.FileHandler(  'cci-trinity-vulture.log' + '-debug.log', mode = 'a' )
-			fh.setLevel( logging.DEBUG )
-			formatter = logging.Formatter( log_format )
-			fh.setFormatter( formatter )
-			_logger.addHandler( fh )
+
 
 
 			# Watch the queue for when new items show up
@@ -129,9 +158,8 @@ if __name__ == "__main__":
 
 			# Create the web server with async coroutines
 			_logger.info( '...initializing htto services....' )
-			application = tornado.web.Application([
-				(r'/', queue_handler),
-			], debug=True)
+			application = tornado.web.Application([	(r'/trinity-vulture/start', queue_handler_start_policy ) ,
+													( r'/trinity-vulture/stop' ,  queue_handler_stop_policy ) , ], debug=True)
 
 			_logger.info( '...starting listner on port 7081....' )
 			application.listen( 7081 )
@@ -140,6 +168,10 @@ if __name__ == "__main__":
 			_logger.info( '...setting system signal handlers....' )
 			signal.signal( signal.SIGTERM , sig_handler )
 			signal.signal( signal.SIGINT , sig_handler )
+
+			 # write pid
+			with open( 'pid_vulture' , 'w' ) as pidfile :
+				 pidfile.write( str( os.getpid() ) + '\n'  )
 
 			_logger.info( '...starting main io loop ....' )
 			tornado.ioloop.IOLoop.instance().start()

@@ -98,6 +98,7 @@ class ccitrinityApp( App ) :
 				self._logger.addHandler( fh )
 				self._logger.info( self.__class__.__name__ + '...'  )
 				self._pid = None
+				self._pid_vulture = None
 				self._clock_event = None
 
 
@@ -119,7 +120,7 @@ class ccitrinityApp( App ) :
 							 except :
 								 pass
 
-							 # check if process is running
+							 # check if process are running
 							 if pid :
 								 try :
 									# throws exception if process doesn't exist
@@ -209,7 +210,6 @@ class ccitrinityApp( App ) :
 
 
 
-
 			def _on_start_trinity( self ) :
 				"""
 
@@ -217,6 +217,7 @@ class ccitrinityApp( App ) :
 				"""
 
 				pid = str()
+				pid_vulture = str()
 
 				if self.root.ids.bootstrap_btn.text == 'start trinity' :
 					try :
@@ -236,31 +237,33 @@ class ccitrinityApp( App ) :
 					except Exception as e :
 						self._logger.error( '..._on_start_trinity...' + e.message )
 						self._update_status( self.root.ids.status_text , e.message )
-					"""
-					try :
-						self._update_status( self.root.ids.status_text , ' ....starting trinity async....' )
 
-						b_ret = self._bootstrap_trinity_async()
+					try :
+						self._update_status( self.root.ids.status_text , ' ....starting trinity vulture....' )
+
+						b_ret = self._bootstrap_trinity_vulture()
 
 						if not b_ret :
-							self._update_status( self.root.ids.status_text , ' ....trinity async bootstrap failed....' )
+							self._update_status( self.root.ids.status_text , ' ....trinity vulture bootstrap failed....' )
 						else :
 
-							self._update_status( self.root.ids.status_text , ' ....trinity async bootstrapped..running....' )
+							self._update_status( self.root.ids.status_text , ' ....trinity vulture bootstrapped..running....' )
 							self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
 							self.root.ids.bootstrap_btn.text = 'stop trinity'
-							self._update_status( self.root.ids.status_text , ' ...trinity async started...' )
+							self._update_status( self.root.ids.status_text , ' ...trinity vulture started...' )
 							#self._clock_event = Clock.schedule_interval( self._pid_callback, 2 )
 					except Exception as e :
-						self._logger.error( '..._on_start_trinity...async' + e.message )
+						self._logger.error( '..._on_start_trinity...vulture' + e.message )
 						self._update_status( self.root.ids.status_text , e.message )
-					"""
+
 				else :
 					try :
 						try :
 							 with open( 'pid' , 'r' ) as pidfile :
 								pid = pidfile.read().strip()
 							 self._pid = pid
+							 with open( 'pid_vulture' , 'r' ) as pidfile :
+								pid_vulture = pidfile.read().strip()
 						except :
 							 pass
 
@@ -272,16 +275,23 @@ class ccitrinityApp( App ) :
 							else :
 								andr = True
 
+							# kill trinity
 							cmd = ['su' ,
 								   '-c' ,
 								   'kill' ,
 								   '-9' ,
 								   pid]
 
-
 							proc.check_output( cmd )
-
 							self._update_status( self.root.ids.status_text , ' ....trinity server stopped ....' )
+							# kill trinity-vulture
+							cmd = ['su' ,
+								   '-c' ,
+								   'kill' ,
+								   '-9' ,
+								   pid_vulture]
+							proc.check_output( cmd )
+							self._update_status( self.root.ids.status_text , ' ....trinity vulture stopped ....' )
 							self.root.ids.bootstrap_btn.background_color = [0,1,0,1]
 							self.root.ids.bootstrap_btn.text = 'start trinity'
 							if self._clock_event :
@@ -381,7 +391,7 @@ class ccitrinityApp( App ) :
 
 
 
-			def _bootstrap_trinity_async( self ) :
+			def _bootstrap_trinity_vulture( self ) :
 						"""
 
 						:return:
@@ -390,7 +400,7 @@ class ccitrinityApp( App ) :
 
 						try :
 
-								self._logger.info( "...bootstrapping cci_trinity_async....." )
+								self._logger.info( "...bootstrapping cci_trinity_vulturec....." )
 								pos = sys.platform.find( 'linux4' )
 								if pos == -1 :
 									andr = False
@@ -415,9 +425,9 @@ class ccitrinityApp( App ) :
 									s.setsockopt( socket.SOL_SOCKET , socket.SO_REUSEADDR , 1 )
 									s.bind( ( socket.gethostname()  , 7081 ) )
 									b_ret = True
-									self._logger.info( "bootstrapped cci_trinity_async....." )
+									self._logger.info( "bootstrapped cci_trinity_vulture....." )
 								except socket.error as e:
-									self._logger.info( "failed tp bootstrap cci_trinity_async....." + e.message  )
+									self._logger.info( "failed tp bootstrap cci_vulture_async....." + e.message  )
 									b_ret = False
 
 

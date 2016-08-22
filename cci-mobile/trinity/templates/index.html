@@ -21,58 +21,72 @@
 
 
               {% block body %}
-                <center>
-          <img src="{{ url_for('static', filename = 'image/king-console64.png') }}"><br><br>
-          <b><i><u>chromatic universe - king console</u></i></b><br><br>
-      <br>
+<center>
 
-              device: {{ device }}
+       <tr><td align="center"> <img src="{{ url_for('static', filename = 'image/king-console64.png') }}"></td>
+         <td align="center"><b><i><u>king console</u></i></b></td>
+                  </tr>
+
 
               {{ message }}<br>
+            <table cellspacing="10" cellpadding="10">
+              <tr><td align="center">
              <form action="/session_call_history/{{ device }}">
+
                 <input type="submit" value="currrent session">
             </form>
-            <br>
-             <br>
-            <div id="content">
+            </td>
+
+                <td>
+                    <center>
                 <form method="post" action="{{ url_for('query_session') }}">
-                  <label for="session_id">session_id:</label><br><br>
+                  <label for="session_id">session_id:</label><br><br><br>
                   <input type="text" name="session_id" /><br />
                     <br>
                   <input type="submit" value="query session"/>
                 </form>
-            </div>
+                </center>
+                </td>
+            </tr>
 
-            <br>
-             <div id="mongo">
-                 <img src="{{ url_for('static', filename = 'image/mongo.png') }}"><br><br>
+
+            <tr>
+                <td align="center">
                 <form method="post" action="{{ url_for('mongo_api') }}">
-                  <input type="submit" value="mongodb rest api"/>
+                  <input type="image" src="{{ url_for('static', filename = 'image/mongo.png') }}"
+                       alt="Submit Form"   value="mongodb rest api"/>
                 </form>
-            </div>
-            <br>
-            <div id="kafka">
-                <img src="{{ url_for('static', filename = 'image/kafka-logo.png') }}"><br><br>
+
+               </td>
+
+
+            <td align="center">
+
                 <form method="post" action="{{ url_for('cci_api') }}">
-                  <input type="submit" value="kafka rest api"/>
+                  <input type="image" src="{{ url_for('static', filename = 'image/kafka-logo.png') }}"
+                        alt="Submit Form"  value="kafka rest api"/>
                 </form>
-            </div>
-            <br>
-           <div id="stream config">
-                <img src="{{ url_for('static', filename = 'image/king-console32.png') }}"><br><br>
+            <td></tr>
+
+
+             <tr><td align="center">
+
                 <form method="post" action="{{ url_for('cci_api') }}">
                   <input type="submit" value="stream and metadata config"/>
                 </form>
-            </div>
-            <br>
-             <div id="transport policy config">
+            </td>
+           <td align="center">
+
                 <form method="post" action="{{ url_for('cci_api') }}">
                   <input type="submit" value="transport policy config"/>
                 </form>
-            </div>
-            <br>
+           </td></tr>
+             </table><br>
                     <hr>
-             <br><small>chromatic universe 2016</small><br>
+                 device: {{ device }}
+             <br>
+                     cci-maelstrom<br>
+                     <small>chromatic universe 2016</small><br>
              </center>
               {% endblock %}
 

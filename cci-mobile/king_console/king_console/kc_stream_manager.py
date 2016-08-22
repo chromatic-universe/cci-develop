@@ -90,7 +90,7 @@ class kc_payload_stalker( cci_mobile ) :
 
 
 				def __init__( self ,
-							  policies = None ,
+							  policy = None ,
 							  db_connect_str = None ,
 							  document_bootstrap = 'localhost' ,
 							  stream_bootstrap =  'localhost' ,
@@ -130,7 +130,7 @@ class kc_payload_stalker( cci_mobile ) :
 
 
 					self._signal_event = threading.Event()
-					self._policies = policies
+					self._policies = policy
 					self._db_connect_str = db_connect_str
 					self._doc_bootstrap = document_bootstrap
 					self._doc_moniker = document_moniker

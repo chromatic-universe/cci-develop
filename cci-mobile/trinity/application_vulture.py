@@ -7,9 +7,9 @@ log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)
 
 
 # logger
-_logger = logging.getLogger( "cci-trinity-server" )
+_logger = logging.getLogger( "cci-trinity-server-vulture" )
 _logger.setLevel( logging.DEBUG )
-fh = logging.FileHandler(  'cci-trinity-server.log' + '-debug.log', mode = 'a' )
+fh = logging.FileHandler(  'cci-trinity-vulture.log' + '-debug.log', mode = 'a' )
 fh.setLevel( logging.DEBUG )
 formatter = logging.Formatter( log_format )
 fh.setFormatter( formatter )

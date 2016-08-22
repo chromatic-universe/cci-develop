@@ -14,7 +14,7 @@
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/buildozer.spec" line="28" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/main.py" line="869" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/cci_trinity.py" line="124" />
-    <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/main.py" line="264" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/main.py" line="267" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/main.py" line="771" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/cci_trinity.py" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/urnack/main.py" />
@@ -22,14 +22,21 @@
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_nmap.py" line="26" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/resource/transport_extended.py" line="38" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/main.py" line="389" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/cci_trinity_async.py" line="24" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/cci_trinity.py" afterPath="$PROJECT_DIR$/cci-mobile/trinity/cci_trinity.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-mobile/trinity/application_vulture.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/cci-mobile/trinity/pid_async" afterPath="$PROJECT_DIR$/cci-mobile/trinity/pid_vulture" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/king_console.sqlite" afterPath="$PROJECT_DIR$/cci-mobile/trinity/king_console.sqlite" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/application.py" afterPath="$PROJECT_DIR$/cci-mobile/trinity/application.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/cci_trinity_async.py" afterPath="$PROJECT_DIR$/cci-mobile/trinity/cci_trinity_async.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/templates/index.html" afterPath="$PROJECT_DIR$/cci-mobile/trinity/templates/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream_manager.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream_manager.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/main.py" afterPath="$PROJECT_DIR$/cci-mobile/trinity/main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_mongo_rest.py" afterPath="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_mongo_rest.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_stream_manager.py" afterPath="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_stream_manager.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_utils.py" afterPath="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_utils.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cci_git_1.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -64,19 +71,11 @@
       <file leaf-file-name="tr_mongo_rest.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/streams/tr_mongo_rest.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5980">
-              <caret line="24" column="24" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="cci_mini_mongo.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/cci_mini_mongo.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1379" max-vertical-offset="1937">
-              <caret line="113" column="8" selection-start-line="113" selection-start-column="8" selection-end-line="113" selection-end-column="8" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="3203" max-vertical-offset="5889">
+              <caret line="79" column="47" selection-start-line="79" selection-start-column="47" selection-end-line="79" selection-end-column="47" />
+              <folding>
+                <element signature="e#48#57#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -84,19 +83,11 @@
       <file leaf-file-name="cci_trinity.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/cci_trinity.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1122" max-vertical-offset="2483">
-              <caret line="28" column="33" selection-start-line="28" selection-start-column="1" selection-end-line="28" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="buildozer.spec" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/buildozer.spec">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="390" max-vertical-offset="3055">
-              <caret line="59" column="57" selection-start-line="59" selection-start-column="57" selection-end-line="59" selection-end-column="57" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1721" max-vertical-offset="2483">
+              <caret line="144" column="21" selection-start-line="144" selection-start-column="21" selection-end-line="144" selection-end-column="21" />
+              <folding>
+                <element signature="e#48#57#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -104,11 +95,31 @@
       <file leaf-file-name="cci_trinity_async.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/cci_trinity_async.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.65232974" vertical-offset="156" max-vertical-offset="1963">
-              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.97773975" vertical-offset="469" max-vertical-offset="2379">
+              <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
               <folding>
-                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#54#65#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/templates/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-17.727272" vertical-offset="741" max-vertical-offset="1352">
+              <caret line="87" column="38" selection-start-line="87" selection-start-column="38" selection-end-line="87" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2486" max-vertical-offset="5733">
+              <caret line="264" column="52" selection-start-line="264" selection-start-column="52" selection-end-line="264" selection-end-column="52" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -116,8 +127,8 @@
       <file leaf-file-name="kc_stream.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6123">
-              <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6734">
+              <caret line="0" column="38" selection-start-line="0" selection-start-column="38" selection-end-line="0" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -126,8 +137,18 @@
       <file leaf-file-name="kc_stream_manager.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream_manager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1350" max-vertical-offset="4524">
-              <caret line="166" column="25" selection-start-line="166" selection-start-column="25" selection-end-line="166" selection-end-column="25" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2041" max-vertical-offset="4524">
+              <caret line="178" column="0" selection-start-line="178" selection-start-column="0" selection-end-line="178" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="api.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/templates/api.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-17.136364" vertical-offset="0" max-vertical-offset="468">
+              <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -136,22 +157,10 @@
       <file leaf-file-name="tr_stream_manager.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/streams/tr_stream_manager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2353" max-vertical-offset="5980">
-              <caret line="182" column="0" selection-start-line="182" selection-start-column="0" selection-end-line="183" selection-end-column="20" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2838" max-vertical-offset="5980">
+              <caret line="232" column="69" selection-start-line="232" selection-start-column="69" selection-end-line="232" selection-end-column="69" />
               <folding>
                 <element signature="e#53#62#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="kc_db_manager.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_db_manager.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2465" max-vertical-offset="5473">
-              <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
-              <folding>
-                <element signature="e#44#53#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -177,7 +186,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_arp.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/ccitrinity.kv" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_kafka.py" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/cci_mini_kafka_rest.py" />
@@ -210,23 +218,24 @@
         <option value="$PROJECT_DIR$/cci-mobile/bimini/main.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_trinity.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_bimini.py" />
-        <option value="$PROJECT_DIR$/cci-mobile/trinity/templates/index.html" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/templates/kc_error.html" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/mongo.api" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/templates/api.html" />
-        <option value="$PROJECT_DIR$/cci-mobile/trinity/application.py" />
-        <option value="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_mongo_rest.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_sqlite.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/cci-trinity-server.log-debug.log" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/main.py" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/buildozer.spec" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/cci-trinity-async.py" />
-        <option value="$PROJECT_DIR$/cci-mobile/trinity/main.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/buildozer.spec" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/cci_trinity.py" />
-        <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream_manager.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_utils.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/trinity/application.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_mongo_rest.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/trinity/application_vulture.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream_manager.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_stream_manager.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/trinity/main.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/trinity/templates/index.html" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/cci_trinity_async.py" />
       </list>
     </option>
@@ -553,8 +562,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/cci-mobile/trinity/streams" />
       <recent name="$PROJECT_DIR$/cci-mobile/trinity" />
+      <recent name="$PROJECT_DIR$/cci-mobile/trinity/streams" />
       <recent name="$PROJECT_DIR$/cci-mobile/trinity/static/image" />
       <recent name="$PROJECT_DIR$/cci-mobile/urnack" />
       <recent name="$PROJECT_DIR$/cci-mobile/bimini/img" />
@@ -567,7 +576,7 @@
       <recent name="$PROJECT_DIR$/cci-mobile/king_console/cci" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.cci_trinity_async">
+  <component name="RunManager" selected="Python.cci-trinity">
     <configuration default="false" name="cci-trinity" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -972,9 +981,9 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.cci_trinity_async" />
-        <item index="1" class="java.lang.String" itemvalue="Python.tr_stream_manager" />
-        <item index="2" class="java.lang.String" itemvalue="Python.cci-trinity" />
+        <item index="0" class="java.lang.String" itemvalue="Python.cci-trinity" />
+        <item index="1" class="java.lang.String" itemvalue="Python.cci_trinity_async" />
+        <item index="2" class="java.lang.String" itemvalue="Python.tr_stream_manager" />
         <item index="3" class="java.lang.String" itemvalue="Python.tr_mongo_rest" />
         <item index="4" class="java.lang.String" itemvalue="Python.kc_nmap" />
       </list>
@@ -1015,19 +1024,19 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1600" height="875" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23778072" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23491655" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23684211" sideWeight="0.4991453" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19815059" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32760897" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22721268" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17569353" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15596919" sideWeight="0.4935484" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25363275" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23684211" sideWeight="0.50085473" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31439894" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1135,13 +1144,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_wireless.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
-          <caret line="36" column="35" selection-start-line="36" selection-start-column="35" selection-end-line="36" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_tcp.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
@@ -1269,6 +1271,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="728">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1299,6 +1302,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="19825" max-vertical-offset="23699">
           <caret line="1572" column="24" selection-start-line="1572" selection-start-column="24" selection-end-line="1572" selection-end-column="24" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1331,22 +1335,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="416" max-vertical-offset="572">
           <caret line="32" column="13" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/templates/api.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="377" max-vertical-offset="468">
-          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2535461" vertical-offset="351" max-vertical-offset="1170">
-          <caret line="38" column="69" selection-start-line="38" selection-start-column="69" selection-end-line="38" selection-end-column="69" />
           <folding />
         </state>
       </provider>
@@ -1393,26 +1381,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="753" max-vertical-offset="5603">
-          <caret line="235" column="43" selection-start-line="235" selection-start-column="43" selection-end-line="235" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/bimini/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5324232" vertical-offset="1742" max-vertical-offset="5616">
           <caret line="189" column="0" selection-start-line="189" selection-start-column="0" selection-end-line="189" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/cci-trinity-server.log-debug.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="455" max-vertical-offset="1131">
-          <caret line="47" column="41" selection-start-line="47" selection-start-column="41" selection-end-line="47" selection-end-column="41" />
           <folding />
         </state>
       </provider>
@@ -1425,58 +1397,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/streams/tr_mongo_rest.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5980">
-          <caret line="24" column="24" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/cci_mini_mongo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1351" max-vertical-offset="1937">
-          <caret line="113" column="8" selection-start-line="113" selection-start-column="8" selection-end-line="113" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/application.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23297492" vertical-offset="0" max-vertical-offset="558">
-          <caret line="11" column="20" selection-start-line="4" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/buildozer.spec">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="390" max-vertical-offset="3055">
           <caret line="59" column="57" selection-start-line="59" selection-start-column="57" selection-end-line="59" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/cci_trinity.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2483">
-          <caret line="28" column="33" selection-start-line="28" selection-start-column="1" selection-end-line="28" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/cci-trinity-vulture.log-debug.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="558">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="676" max-vertical-offset="6123">
-          <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1509,30 +1433,126 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/cci_mini_mongo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="2.6326165" vertical-offset="0" max-vertical-offset="2054">
+          <caret line="113" column="8" selection-start-line="113" selection-start-column="8" selection-end-line="113" selection-end-column="8" />
+          <folding>
+            <element signature="e#77#87#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/templates/api.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-17.136364" vertical-offset="0" max-vertical-offset="468">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/streams/tr_mongo_rest.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3203" max-vertical-offset="5889">
+          <caret line="79" column="47" selection-start-line="79" selection-start-column="47" selection-end-line="79" selection-end-column="47" />
+          <folding>
+            <element signature="e#48#57#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/application.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.16308244" vertical-offset="0" max-vertical-offset="558">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/application_vulture.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34946236" vertical-offset="0" max-vertical-offset="558">
+          <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/cci-trinity-vulture.log-debug.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="545">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6734">
+          <caret line="0" column="38" selection-start-line="0" selection-start-column="38" selection-end-line="0" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream_manager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1350" max-vertical-offset="4524">
-          <caret line="166" column="25" selection-start-line="166" selection-start-column="25" selection-end-line="166" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2041" max-vertical-offset="4524">
+          <caret line="178" column="0" selection-start-line="178" selection-start-column="0" selection-end-line="178" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/streams/tr_stream_manager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2353" max-vertical-offset="5980">
-          <caret line="182" column="0" selection-start-line="182" selection-start-column="0" selection-end-line="183" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2838" max-vertical-offset="5980">
+          <caret line="232" column="69" selection-start-line="232" selection-start-column="69" selection-end-line="232" selection-end-column="69" />
           <folding>
             <element signature="e#53#62#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/pid_vulture">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="558">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/cci_trinity.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1721" max-vertical-offset="2483">
+          <caret line="144" column="21" selection-start-line="144" selection-start-column="21" selection-end-line="144" selection-end-column="21" />
+          <folding>
+            <element signature="e#48#57#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2486" max-vertical-offset="5733">
+          <caret line="264" column="52" selection-start-line="264" selection-start-column="52" selection-end-line="264" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-17.727272" vertical-offset="741" max-vertical-offset="1352">
+          <caret line="87" column="38" selection-start-line="87" selection-start-column="38" selection-end-line="87" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/cci_trinity_async.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.65232974" vertical-offset="156" max-vertical-offset="1963">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.97773975" vertical-offset="469" max-vertical-offset="2379">
+          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#54#65#0" expanded="true" />
           </folding>
         </state>
       </provider>

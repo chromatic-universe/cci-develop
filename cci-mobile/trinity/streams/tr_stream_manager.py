@@ -195,7 +195,7 @@ class tr_payload_stalker( tr_stream_stalker ) :
 
 
 				def __init__( self ,
-							  policies = None ,
+							  policy = None ,
 							  db_connect_str = None ,
 							  document_bootstrap = 'localhost' ,
 							  stream_bootstrap =  'localhost' ,
@@ -235,7 +235,7 @@ class tr_payload_stalker( tr_stream_stalker ) :
 
 
 					self._signal_event = threading.Event()
-					self._policies = policies
+					self._policy = policy
 					self._doc_bootstrap = document_bootstrap
 					self._doc_moniker = document_moniker
 					self._stream_bootstrap = stream_bootstrap
@@ -243,7 +243,7 @@ class tr_payload_stalker( tr_stream_stalker ) :
 
 
 					if self._policies is None :
-						self._policies = self._retrieve_default_policies()
+						self._policies = self._retrieve_default_doc_policy()
 					print self._policies
 
 
@@ -282,7 +282,7 @@ class tr_payload_stalker( tr_stream_stalker ) :
 
 
 
-				def _retrieve_default_policies( self ) :
+				def _retrieve_default_doc_policy( self ) :
 					"""
 
 					:return default policy dictioary:
