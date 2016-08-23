@@ -763,7 +763,7 @@ class kingconsoleApp( App ) :
 
 
 
-		def _manip_extended_window( self , widg = None ) :
+		def _manip_extended_window( self , widg = None  , no_keep_alive = True ) :
 			"""
 
 			:return:
@@ -772,6 +772,7 @@ class kingconsoleApp( App ) :
 			self.root.current = 'screen_cci'
 			if widg is not None :
 				self.root.remove_widget( widg )
+
 
 
 

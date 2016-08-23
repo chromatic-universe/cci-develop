@@ -50,7 +50,7 @@ TransportScreen:
 						orientation: 'vertical'
 			AccordionItem:
 				title: 'nmap firewalk'
-				id: item_firewall
+				id: nmap_firewalk
 				orientation: 'vertical'
 			AccordionItem:
 				title: 'atomic firewalk'
@@ -94,13 +94,16 @@ TransportScreen:
 """
 BoxLayout:
 	orientation: 'vertical'
+	id: firewalk_nmap
 	ScrollView:
 		GridLayout:
+		    id: main_grid
 			cols: 1
 			orientation: 'horizontal'
 			size_hint_y: None
-			size: ( 400 ,800 )
-			GridLayout
+			size: ( 480 ,700 )
+			GridLayout:
+				id: firewalk_grid
 				orientation: 'horizontal'
 				cols: 1
 				Label:
@@ -112,30 +115,26 @@ BoxLayout:
 					min: 1
 					max: 5
 					value: 1
-				Switch:
-					active: True
 				Label:
 					text: 'probe timeout(ms): ' + '{0:}'.format( probe_slider.value )
 				Slider:
 					orientation: 'horizontal'
 					id: probe_slider
 					step: 20
-					min: 20
+					min: 0
 					max: 800
-					value: 400
-				Switch:
-					active: False
+					value: 0
+
 				Label:
 					text: 'recv timeout(ms): ' + '{0:}'.format( probe_recv_slider.value )
 				Slider:
 					orientation: 'horizontal'
 					id: probe_recv_slider
 					step: 20
-					min: 20
+					min: 0
 					max: 800
-					value: 400
-				Switch:
-					active: False
+					value: 0
+
 				Label:
 					text: 'max ports(-1=all): ' + '{0:}'.format( max_probe_slider.value )
 				Slider:
@@ -144,9 +143,8 @@ BoxLayout:
 					step: 1
 					min: -1
 					max: 500
-					value: -1
-				Switch:
-					active: True
+					value: 7
+
 				Label:
 					text: 'resource metric ip:'
 				TextInput:

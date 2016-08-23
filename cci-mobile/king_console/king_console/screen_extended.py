@@ -39,6 +39,15 @@ from time import gmtime, strftime , sleep
 import subprocess as proc
 import Queue
 from requests import put, get
+from kivy.core.window import Window
+from kivy.clock import Clock , mainthread
+
+
+screen_map = {  'nmap firewalk' : False }
+
+class console_grid( GridLayout ) :
+
+		ip_input_metric = ObjectProperty()
 
 
 
@@ -433,6 +442,7 @@ class TransportScreen( Screen ) :
 					action_bar = ObjectProperty()
 					accordion_id = ObjectProperty()
 					_console_text = ObjectProperty()
+					nmap_fire_box = ObjectProperty()
 					console_timestamp = ObjectProperty()
 					_is_full_screen = ObjectProperty()
 					cci_action_prev = ObjectProperty()
@@ -440,9 +450,11 @@ class TransportScreen( Screen ) :
 					retry_slider = ObjectProperty()
 					max_probe_slider = ObjectProperty()
 					probe_slider = ObjectProperty()
+					ip_input_metric = ObjectProperty()
 					console_count = ObjectProperty()
 					transport_carousel_id = ObjectProperty()
 					do_firewalk_btn = ObjectProperty()
+					firewalk_grid = ObjectProperty()
 
 
 					def __init__( self , **kwargs ) :
@@ -455,7 +467,7 @@ class TransportScreen( Screen ) :
 
 						super( TransportScreen , self ).__init__( **kwargs )
 
-						self.console_count = 0
+						self._console_count = 0
 
 
 
@@ -544,12 +556,14 @@ class TransportScreen( Screen ) :
 							:return:
 							"""
 
-							layout = GridLayout( cols = 1 ,
-												 orientation = 'horizontal'
+							layout = GridLayout( cols = 1  ,
+												 orientation = 'horizontal' ,
+												 id = tag
 												  )
 							layout.add_widget( Label( text = tag  ,
 													  color = [ 1, 0 , 0 , 1] ,
 													  font_size = 16 ,
+													  id = 'tag_label' ,
 													  size_hint_y = 0.1 ) )
 
 							scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
@@ -579,27 +593,51 @@ class TransportScreen( Screen ) :
 
 
 
+					@mainthread
+					def _update_console_payload( self , content , console , params = None ) :
+						"""
+
+						:param console slide:
+
+						:return:
+						"""
+
+
+						console.children[1].children[0].text = content
+						console.children[0].text = params + '\n' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+						console.children[0].halign = 'center'
+						self.canvas.ask_update()
+
+
+
 					def  _on_firewalk_start( self ) :
 						"""
 
 						:return:
 						"""
 
-						self.console_count += 1
+
+
+						self._console_count += 1
 						carousel = self.ids.transport_carousel_id
-						carousel.add_widget( self.add_console(  content = 'cci-maelstrom~transport-> :' ,
-																tag = 'firewalk console #%d' % self.console_count ) )
+						console = self.add_console(  content = 'cci-maelstrom~transport-> :...working...this could be lenghty...no time updates' ,
+																tag = 'firewalk console #%d' % self._console_count )
+
+						carousel.add_widget( console  )
 						carousel.index += 1
 						self._move_to_accordion_item( self.ids.tcp_accordion , 'cci-maelstrom' )
 
 
-
-						"""
-						thred = threading.Thread( target = self._on_arp_monitor ,
-												  kwargs=dict( console=self.console_arp_monitor_txt ,
-															   items = 15 ) )
+						thred = threading.Thread( target = self._on_nmap_firewalk ,
+												  kwargs=dict( ip = self.ip_input_metric.text ,
+															   console=console ,
+															   max_ports = self.max_probe_slider.value ,
+													           max_retries = self.retry_slider.value ,
+															   probe_timeout = self.probe_slider.value ,
+															   recv_timeout = self.probe_recv_slider.value
+															    ) )
 						if thred :
-							moniker = 'firewalk_monitor console #' + str( self._console_count )
+							moniker = 'firewalk console #' + str( self._console_count )
 							thread_atom = { 'thread_id' : str( thred.ident ) ,
 											'stop_alert'  : threading.Event() ,
 											'instance' : thred
@@ -609,10 +647,104 @@ class TransportScreen( Screen ) :
 
 						thred.start()
 
-						self.ids.console_arp_monitor_txt.text += '...working.....'
-						self.ids.start_monitor_btn.text = 'stop'
-						self.ids.start_monitor_btn.color = [1,0,0.1]
-						"""
+
+					def on_touch_up( self , touch ) :
+							self._selected_accordion_item()
+
+
+					def _selected_accordion_item( self  ) :
+							"""
+
+							:return accordion item selected:
+							"""
+							acc = self.ids.tcp_accordion
+							for item in acc.children :
+								try:
+									if not item.collapse :
+										if item.title == 'nmap firewalk' :
+											App.get_running_app()._logger.info( item.title )
+											if not screen_map['nmap firewalk'] :
+												view = Builder.load_string( self._retr_resource('nmap_firewalk_view'  ) )
+												self.max_probe_slider = view.ids.max_probe_slider
+												self.probe_recv_slider = view.ids.probe_recv_slider
+												self.retry_slider = view.ids.retry_slider
+												self.probe_slider = view.ids.probe_slider
+												self.ip_input_metric = view.ids.ip_input_metric
+												view.ids.do_firewalk_btn.bind( on_press = lambda a: self._on_firewalk_start()  )
+												self.ids.nmap_firewalk.add_widget( view )
+												screen_map['nmap firewalk'] = True
+											return item
+
+								except Exception as e :
+									App.get_running_app()._logger.error( e.message )
+
+
+
+
+
+					def _on_nmap_firewalk( self ,
+										   ip = None ,
+										   console = None ,
+										   max_ports = 0 ,
+										   max_retries = 0 ,
+										   probe_timeout = 0,
+										   recv_timeout = 0 ) :
+							"""
+							:param: ip:
+							:param : console :
+							:return:
+							"""
+
+							out = str()
+							call = str()
+
+							App.get_running_app()._logger.info( self.__class__.__name__ + '...on_nmap_firewalk'  )
+
+
+
+							b_ret = False
+							out = str()
+
+							try :
+
+								try :
+									b_ret , out = kc_nmap.firewalk(    ip = ip ,
+																	   max_ports = max_ports ,
+																	   max_retries = max_retries ,
+																	   probe_timeout = probe_timeout,
+																	   recv_timeout = recv_timeout )
+									App.get_running_app()._logger.info( out )
+								except proc.CalledProcessError as e :
+									b_ret = False
+							except Exception as e :
+								b_ret = False
+								App.get_running_app()._logger.error( e.message )
+
+							try :
+								thr = App.get_running_app()._thrd.thrds['firewalk console #'  + str( App.get_running_app()._console_count )]
+								if thr :
+									if thr['stop_alert'].isSet() :
+										return
+							except :
+								pass
+
+							boiler = 'maelstrom[transport]->firewalk: ' + \
+									  ' ' + ip
+							boiler += '\n'
+							boiler += out
+							if not b_ret :
+								boiler += '...firewalk failed....no access to transport layer?..'
+							App.get_running_app()._logger.info( self.__class__.__name__ + '...boiler='  + boiler )
+
+							id = '(ip=%s)' % ip
+							self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
+																				'transport' ,
+																				'nmap_firewalk' ,
+																				id ,
+																				boiler] )
+							id = call + ' ' + id
+							self._update_console_payload( boiler ,console , id )
+							App.get_running_app()._logger.info( '..update_console_payload...' )
 
 
 

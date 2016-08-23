@@ -178,46 +178,49 @@ def mongo_extended_metadata( ip = None ) :
 # ---------------------------------------------------------------------------------------------
 def firewalk( ip = None ,
 			  max_retries = 1 ,
-			  probe_timeout = None ,
-			  recv_timeout = None ,
-			  max_ports = None )  :
+			  probe_timeout = 0  ,
+			  recv_timeout = 0  ,
+			  max_ports = 7 )  :
 			"""
 			:param ip:
 			:param max_retries:
 			:param probe_timeout:
-			:param nax_ports:
+			:param max_ports:
 			:return:
 			"""
 
 
-			if ip is None :
+			if ip is None or len( ip ) == 0 :
 				raise ValueError( 'no ip supplied' )
 
 			s = '--script-args='
-			if max_retries is not None :
+			if max_retries != 0 :
 				s += firewalk_params['max_retries'] % max_retries
 				s += ','
-			if probe_timeout is not None :
+			if probe_timeout != 0 :
 				s += ' '
 				s += firewalk_params['probe_timeout'] % probe_timeout
 				s += ','
-			if recv_timeout is not None :
+			if recv_timeout != 0 :
 				 s += ' '
 				 s += firewalk_params['recv_timeout'] % recv_timeout
 				 s += ','
-			if max_ports is not None :
+			if max_ports != 0 :
 				 s += ' '
 				 s +=  firewalk_params['max_ports'] % max_ports
 			s.strip( ',' )
 
-			cmd = ['nmap' ,
-				   '--script=firewalk' ,
-				   '--traceroute' ,
+			cmd = [
+				   "su" ,
+				   "-c" ,
+				   "/system/bin/nmap" ,
+				   "--script=firewalk" ,
+				   "--traceroute" ,
 				   s ,
 				   ip
 				   ]
 
-
+			print cmd
 			return spawn_nmap_output(  cmd , 'firewalk' )
 
 
