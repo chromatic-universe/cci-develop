@@ -13,7 +13,7 @@ from flask import redirect , Response
 from flask_restful import Resource, Api
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import subprocess as proc
-import sqlite3
+#import sqlite3
 import time
 import signal
 import Queue
@@ -36,7 +36,6 @@ import kafka
 #cci
 from application import app , mongo_no_resource_exception , _logger
 from streams import tr_mongo_rest , \
-				    tr_sqlite , \
 					tr_bimini , \
 					tr_trinity , \
 					tr_utils
@@ -125,6 +124,7 @@ def shutdown() :
 # ------------------------------------------------------------------------------
 if __name__ == "__main__"  :
 
+
 		try :
 
 				k = kafka.SimpleClient( 'cci-aws-1' )
@@ -135,7 +135,9 @@ if __name__ == "__main__"  :
 		except Exception as e :
 			_logger.error( e.message )
 
+
 		_logger.info( '....cci_trinity...'  )
+
 		is_running = False
 		try :
 			 pid = None
@@ -173,12 +175,15 @@ if __name__ == "__main__"  :
 
 			 else :
 				 _logger.info( '...server already running... pid %s....'  % pid )
-				 sys,exit( 1 )
+				 sys.exit( 1 )
 
 
 		except Exception as e:
 			_logger.error( '...error in  trinity server...' + e.message )
 			sys.exit( 1 )
+
+
+
 
 
 

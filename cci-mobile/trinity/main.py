@@ -219,6 +219,8 @@ class ccitrinityApp( App ) :
 				pid = str()
 				pid_vulture = str()
 
+				self._logger.info( '..._on_start_trinity...' )
+
 				if self.root.ids.bootstrap_btn.text == 'start trinity' :
 					try :
 						self._update_status( self.root.ids.status_text , ' ....starting trinity....' )
@@ -237,7 +239,7 @@ class ccitrinityApp( App ) :
 					except Exception as e :
 						self._logger.error( '..._on_start_trinity...' + e.message )
 						self._update_status( self.root.ids.status_text , e.message )
-
+					"""
 					try :
 						self._update_status( self.root.ids.status_text , ' ....starting trinity vulture....' )
 
@@ -255,7 +257,7 @@ class ccitrinityApp( App ) :
 					except Exception as e :
 						self._logger.error( '..._on_start_trinity...vulture' + e.message )
 						self._update_status( self.root.ids.status_text , e.message )
-
+					"""
 				else :
 					try :
 						try :
@@ -312,7 +314,6 @@ class ccitrinityApp( App ) :
 			def _pid_callback( self , dt ) :
 					pid = str()
 
-
 					with open( 'pid' , 'r' ) as pidfile :
 						pid = pidfile.read().strip()
 					self.root.ids.process_info.text = 'pid: %s   ~  port: 7080' % pid
@@ -331,6 +332,7 @@ class ccitrinityApp( App ) :
 						#
 
 						b_ret = False
+
 						try:
 							s = socket.socket()
 							s.setsockopt( socket.SOL_SOCKET , socket.SO_REUSEADDR , 1 )
@@ -339,15 +341,11 @@ class ccitrinityApp( App ) :
 							self._logger.error(  '..bootstrap failed...errno:%d...%s' % ( e[0] , e[1] ) )
 							return
 
+
 						pid = str()
 						try :
 
 								self._logger.info( "...bootstrapping cci_trinity....." )
-								pos = sys.platform.find( 'linux4' )
-								if pos == -1 :
-									andr = False
-								else :
-									andr = True
 								cmd = list()
 
 
@@ -361,6 +359,8 @@ class ccitrinityApp( App ) :
 
 
 								proc.Popen( cmd )
+								self._logger.info( "...made proc call....." )
+
 
 								try:
 									s = socket.socket()
@@ -371,6 +371,7 @@ class ccitrinityApp( App ) :
 								except socket.error as e:
 									self._logger.info( "failed tp bootstrap cci_trinity....." )
 									b_ret = False
+
 
 
 
@@ -400,7 +401,7 @@ class ccitrinityApp( App ) :
 
 						try :
 
-								self._logger.info( "...bootstrapping cci_trinity_vulturec....." )
+								self._logger.info( "...bootstrapping cci_trinity_vulture....." )
 								pos = sys.platform.find( 'linux4' )
 								if pos == -1 :
 									andr = False
