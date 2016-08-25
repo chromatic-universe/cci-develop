@@ -38,7 +38,8 @@ from application import app , mongo_no_resource_exception , _logger
 from streams import tr_mongo_rest , \
 					tr_bimini , \
 					tr_trinity , \
-					tr_utils
+					tr_utils , \
+					tr_sqlite
 
 max_wait_seconds_before_shutdown  = 3
 
@@ -75,9 +76,15 @@ def handle_mongo_exception( e ) :
 @app.route('/index')
 @app.route( "/" )
 def index() :
+
+			try :
 				_logger.info( '...index...' )
 				return render_template( "index.html" ,
 										device = '"' + tr_utils.local_mac_addr() + '"' )
+			except Exception as e :
+				_logger.error( e.message )
+
+			return render_template( "index.html" )
 
 
 

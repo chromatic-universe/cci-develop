@@ -38,7 +38,6 @@ import tr_utils
 
 
 # -----------------------------------------------------------------------------
-@app.route('/query_session/', methods=('GET', 'POST') )
 def query_session() :
 			_logger.info( '...query_session...' )
 			id=request.form['session_id']

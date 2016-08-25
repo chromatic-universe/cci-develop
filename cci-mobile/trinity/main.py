@@ -239,7 +239,7 @@ class ccitrinityApp( App ) :
 					except Exception as e :
 						self._logger.error( '..._on_start_trinity...' + e.message )
 						self._update_status( self.root.ids.status_text , e.message )
-					"""
+
 					try :
 						self._update_status( self.root.ids.status_text , ' ....starting trinity vulture....' )
 
@@ -257,7 +257,7 @@ class ccitrinityApp( App ) :
 					except Exception as e :
 						self._logger.error( '..._on_start_trinity...vulture' + e.message )
 						self._update_status( self.root.ids.status_text , e.message )
-					"""
+
 				else :
 					try :
 						try :
