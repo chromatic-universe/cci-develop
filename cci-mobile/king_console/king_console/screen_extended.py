@@ -28,7 +28,8 @@ from kivy.core.window import Window
 import screen
 from king_console import resource_factory \
 	                     as resources
-from resource import transport_extended as transport_resources
+from resource import transport_extended as transport_resources ,\
+					 app_discovery_extended as app_discovery_resources
 from king_console import kc_ping , \
 						 kc_arp , \
 						 kc_tcp , \
@@ -346,6 +347,23 @@ class AppDiscoveryScreen( Screen ) :
 					accordion_id = ObjectProperty()
 					_console_text = ObjectProperty()
 					console_timestamp = ObjectProperty()
+					_is_full_screen = ObjectProperty()
+
+
+
+					def __init__( self , **kwargs ) :
+						"""
+
+						:param kwargs:
+						:return:
+						"""
+
+
+						super( AppDiscoveryScreen , self ).__init__( **kwargs )
+
+						self._console_count = 0
+						self._full_screen_lst = None
+
 
 
 
@@ -358,7 +376,8 @@ class AppDiscoveryScreen( Screen ) :
 						:return ui resource:
 						"""
 
-						return resources.const_resource_ids[resource_id]
+						return app_discovery_resources.const_app_discovery_ids[resource_id]
+
 
 
 
@@ -389,6 +408,37 @@ class AppDiscoveryScreen( Screen ) :
 						if not App.get_running_app()._call_stack_debug :
 							package = ( func , params )
 							App.get_running_app().dbq.put( package )
+
+
+
+
+					def _on_full_screen(self):
+						"""
+
+						:return:
+						"""
+
+						acc = self.ids.appdiscovery_accordion
+						cci = None
+						if not self._is_full_screen:
+							self._full_screen_lst = list()
+							for item in acc.children:
+								self._full_screen_lst.append(item)
+								if item.title == 'cci-maelstrom':
+									cci = item
+							self._full_screen_lst.remove(cci)
+							for item in self._full_screen_lst:
+								acc.remove_widget(item)
+							self._is_full_screen = True
+						else:
+							cci = acc.children[0]
+							acc.remove_widget(cci)
+							self._full_screen_lst.reverse()
+							for item in self._full_screen_lst:
+								acc.add_widget(item)
+							acc.add_widget(cci)
+							self._is_full_screen = False
+
 
 
 

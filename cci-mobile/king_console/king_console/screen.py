@@ -305,11 +305,10 @@ class CciScreen( Screen ) :
 					if not b_ret :
 						scr = Builder.load_string( screen_extended.TransportScreen._retr_resource( 'transport_extended_screen' ) )
 
-
-
 						App.get_running_app().root.add_widget( scr )
 
 					App.get_running_app()._open_extended_window()
+
 
 
 
@@ -320,10 +319,12 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 
-					b_ret , scr = App.get_running_app()._screen_exists( 'screen_app_dicovery' )
+					b_ret , scr = App.get_running_app()._screen_exists( 'screen_application_and_discovery' )
 					if not b_ret :
-						scr = screen_extended.AppDiscoveryScreen()
-						scr.ids.console_timestamp.text = datetime.datetime.now().strftime( "%Y-%m-%d %H:%M:%S"  )
+						scr = Builder.load_string( screen_extended. \
+									AppDiscoveryScreen._retr_resource( 'app_discovery_extended_screen' ) )
+
+
 						App.get_running_app().root.add_widget( scr )
 
 					App.get_running_app()._open_extended_window()
