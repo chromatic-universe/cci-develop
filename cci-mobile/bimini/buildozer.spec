@@ -50,7 +50,7 @@ presplash.filename = ./ramask.png
 
 
 # (str) Icon of the application
-icon.filename = ./Male-Face-O4-icon.png
+icon.filename = ./img/atomic.png
 
 # (str) Supported orientation (one of landscape, portrait or all)
 orientation = all

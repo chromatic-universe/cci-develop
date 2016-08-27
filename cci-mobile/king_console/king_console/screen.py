@@ -305,20 +305,7 @@ class CciScreen( Screen ) :
 					if not b_ret :
 						scr = Builder.load_string( screen_extended.TransportScreen._retr_resource( 'transport_extended_screen' ) )
 
-						"""
-						view = Builder.load_string( screen_extended. \
-										TransportScreen._retr_resource('nmap_firewalk_view'  ) )
 
-						view.ids.do_firewalk_btn.bind( on_press = lambda a: scr._on_firewalk_start() )
-
-						scr.max_probe_slider = view.ids.max_probe_slider
-						scr.probe_recv_slider = view.ids.probe_recv_slider
-						scr.retry_slider =view.ids.retry_slider
-						scr.probe_slider = view.ids.probe_slider
-						scr.ip_input_metric = view.ids.ip_input_metric
-
-						scr.ids.nmap_firewalk.add_widget( view  )
-						"""
 
 						App.get_running_app().root.add_widget( scr )
 
