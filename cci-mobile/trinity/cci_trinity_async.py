@@ -14,6 +14,8 @@ import tornado.web
 import urllib
 from tornado.queues import Queue
 from tornado.ioloop import PeriodicCallback
+from tornado.locks import Semaphore
+
 
 max_wait_seconds_before_shutdown  = 3
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
@@ -23,7 +25,8 @@ from application_vulture  import app ,\
 								 _logger
 from streams import tr_mongo_rest
 
-
+# exclusive
+policy_semaphore = Semaphore( 1 )
 g_periodic_calbacks = dict()
 
 # --------------------------------------------------------------------------------------
@@ -35,15 +38,25 @@ class queue_client() :
 
 			@tornado.gen.coroutine
 			def watch_queue(self):
-				while True:
-					items = yield self.queued_items.get()
-					if items['moniker'] in g_periodic_calbacks :
-						_logger.info( '..policy %s already in effect' % items['moniker'] )
-						continue
-					pc = PeriodicCallback( lambda: pc_callback( items['moniker'] ) , 5000  )
-					_logger.info( '..started periodic callback with params%s' % json.dumps( items ) )
-					pc.start()
-					g_periodic_calbacks[items['moniker']] = pc
+
+				try :
+
+					while True:
+						items = yield self.queued_items.get()
+						if items['moniker'] in g_periodic_calbacks :
+							_logger.info( '..%s policy %s already in effect' % ( items['provider_type'] , items['moniker'] ) )
+							continue
+						pc = PeriodicCallback( lambda: policy_callback( items['provider_type'] , items['moniker'] ) , 5000  )
+						_logger.info( '..started periodic callback with params%s' % json.dumps( items ) )
+						pc.start()
+						with ( yield policy_sem.acquire() ) :
+							g_periodic_calbacks[items['moniker']] = pc
+
+				except Exception as e :
+					_logger.error( 'watch_queue: %s' % e.message )
+				finally :
+					policy_semaphore.release()
+
 
 
 
@@ -60,9 +73,14 @@ class queue_handler_start_policy( tornado.web.RequestHandler ) :
 				"""
 				#json_data = json.loads( self.request.data )
 
-				json_data = json.loads( self.request.body )
-				yield client.queued_items.put( json_data )
-				_logger.info( 'queued a new item: %s' % self.request.body )
+				try :
+
+					json_data = json.loads( self.request.body )
+					yield client.queued_items.put( json_data )
+					_logger.info( 'queued a new item: %s' % self.request.body )
+
+				except Exception as e :
+					_logger.error( 'queue_handler_start_policy: %s' % e.message )
 
 
 
@@ -136,8 +154,10 @@ def shutdown() :
 
 		stop_loop()
 
-def pc_callback( moniker ) :
-	print 'the original corny snaps for %s!' % moniker
+
+
+def policy_callback( document_type  , moniker ) :
+	print 'instantiating %s policy->%s' % ( document_type , moniker )
 
 
 
@@ -157,7 +177,7 @@ if __name__ == "__main__":
 
 
 			# Create the web server with async coroutines
-			_logger.info( '...initializing htto services....' )
+			_logger.info( '...initializing http services....' )
 			application = tornado.web.Application([	(r'/trinity-vulture/start', queue_handler_start_policy ) ,
 													( r'/trinity-vulture/stop' ,  queue_handler_stop_policy ) , ], debug=True)
 

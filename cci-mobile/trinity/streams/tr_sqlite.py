@@ -1,4 +1,4 @@
-# tr_sqlitet.py    william k. johnson 2016
+# tr_sqlite.py    william k. johnson 2016
 
 
 import os

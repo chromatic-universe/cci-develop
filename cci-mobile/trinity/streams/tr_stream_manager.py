@@ -34,12 +34,13 @@ import tr_utils
 
 
 
+
 sql_cursor_dictionary = {  'sql_retrieve_default_policy' :  'select * from payload_policy '
 														    'where moniker = %s '
+															'and provider_type = %s '
 															'and active = 1'
 
 						}
-
 
 
 # ------------------------------------------------------------------------
@@ -53,9 +54,7 @@ class tr_stalker( object )  :
 			'''object model'''
 			def __init__( self  ) :
 
-				# logging
-				self._logger = tr_utils.init_logging( self.__class__.__name__  )
-				self._logger.info( self.__class__.__name__ + '...'  )
+
 
 				# command line
 				self._args_parser = argparse.ArgumentParser( description= self.__class__.__name__   + ' william k. johnson 2015 ' ,
@@ -71,7 +70,9 @@ class tr_stalker( object )  :
 			@args_parser.setter
 			def args_parser( self , args ) :
 				self._args_parser = args
-
+			@abc.abstractproperty
+			def supported_monikers( self ) :
+				pass
 
 
 			'''services'''
@@ -85,97 +86,6 @@ class tr_stalker( object )  :
 
 
 			@abc.abstractmethod
-			def stalk( self ) :
-				"""
-				stalk
-				"""
-
-				pass
-
-
-
-
-# ------------------------------------------------------------------------
-class tr_stream_stalker( tr_stalker )  :
-			"""
-			stream stalker
-			"""
-
-
-			def  __init__( self , db_connect_str = None)  :
-
-				super( tr_stream_stalker , self ).__init__()
-
-				self._db_connect_str = db_connect_str
-				self._current_db = None
-
-				# default db
-				try :
-					self._current_db = sqlite3.connect( db_connect_str  )
-				except sqlite3.DatabaseError as e :
-					self.logger.error( e.message )
-					raise
-
-
-
-
-			@staticmethod
-			def execute_naked_sql_result_set(  current_db ,
-											   row_factory ,
-											   sql_statement ,
-											   params ,
-											   log) :
-				"""
-
-				:param current_db:
-				:param row_factory:
-				:param sql_statement:
-				:param params:
-				:param log:
-				:return:
-				"""
-
-
-				payload = list()
-				try :
-
-					s = sql_statement
-					s = s % tr_utils.quoted_list_to_tuple( params )
-
-					rs = ( None , None )
-
-					current_db.row_factory = row_factory
-					cursor = current_db.cursor()
-					cursor.execute( s )
-					while True :
-						rs = cursor.fetchone()
-						if rs is None :
-							break
-						payload.append( rs )
-
-
-					log.info( '...' +  sql_statement  + ' executed...'  + str( params ) )
-
-				except sqlite3.OperationalError as e :
-					log.error( 'statement failed: '
-						+ e.message )
-				except TypeError as e :
-					log.error( '...not enough aruments for db query...' )
-
-				return payload
-
-
-
-			'''services'''
-			def prepare( self ) :
-				"""
-				connect queue
-				"""
-
-				pass
-
-
-
 			def stalk( self ) :
 				"""
 				stalk
@@ -188,19 +98,16 @@ class tr_stream_stalker( tr_stalker )  :
 
 
 # -------------------------------------------------------------------------------------------
-class tr_payload_stalker( tr_stream_stalker ) :
+class tr_payload_stalker( tr_stalker ) :
 				"""
 				payload stalker
 				"""
 
 
+
 				def __init__( self ,
-							  policy = None ,
-							  db_connect_str = None ,
-							  document_bootstrap = 'localhost' ,
-							  stream_bootstrap =  'localhost' ,
-							  document_moniker = 'mongodb' ,
-							  stream_moniker = 'kafka' ) :
+							  policy = None  ,
+							  db_connect_str = None ) :
 
 					"""
 
@@ -209,42 +116,46 @@ class tr_payload_stalker( tr_stream_stalker ) :
 					:return:
 					"""
 
-					super( tr_payload_stalker , self ).__init__( db_connect_str=db_connect_str )
+					# logging
+					id = self.__class__.__name__ + ':' +  policy
+					self._logger = tr_utils.init_logging( id  )
+					self._logger.info( self.__class__.__name__ + '...'  )
+
+					super( tr_payload_stalker , self ).__init__()
 
 					document_monikers = {
 										   'mongodb' : self._on_mongo_document ,
 										   'elasticsearch' : self._on_elasticsearch_document
 										}
-					stream_monikers =   {
-											'kafka' : self._on_kafka_stream  ,
-											'redis' : self._on_redis_stream ,
-											'rabbitmq' : self._on_rabbitmq_stream
-										}
 
+					self._db_connect_str = db_connect_str
+					self._current_db = None
 
 					if db_connect_str is None :
 						raise ValueError( '%s cannot proceed , no database specified' % \
 										          self.__class__.__name__  )
-					if not document_moniker in document_monikers :
-						raise ValueError( '%s cannot proceed , document context not supported' % \
-										          self.__class__.__name__  )
-					if not stream_moniker in stream_monikers :
-						raise ValueError( '%s cannot proceed , stream context not supported' % \
-										          self.__class__.__name__  )
+
+
+
+					# default db
+					try :
+						self._current_db = sqlite3.connect( db_connect_str  )
+					except sqlite3.DatabaseError as e :
+						self._logger.error( e.message )
+						raise
 
 
 
 					self._signal_event = threading.Event()
 					self._policy = policy
-					self._doc_bootstrap = document_bootstrap
-					self._doc_moniker = document_moniker
-					self._stream_bootstrap = stream_bootstrap
-					self._stream_moniker = stream_moniker
+					self._policy_dictionary = None
+					self._policy_call = None
+					self._supported_monikers = document_monikers
 
 
-					if self._policies is None :
-						self._policies = self._retrieve_default_doc_policy()
-					print self._policies
+					if self._policy is None :
+						self._policy_dictionary = self._retrieve_default_doc_policy()
+					print self._policy
 
 
 
@@ -262,6 +173,7 @@ class tr_payload_stalker( tr_stream_stalker ) :
 
 
 
+
 				def __str__( self ) :
 					  """
 					  returns pretty string
@@ -273,12 +185,52 @@ class tr_payload_stalker( tr_stream_stalker ) :
 
 
 
-				def _interpret_policy( self ) :
-					  """
+				@staticmethod
+				def execute_naked_sql_result_set(  current_db ,
+												   row_factory ,
+												   sql_statement ,
+												   params ,
+												   log) :
+					"""
 
-					  :return:
-					  """
-					  pass
+					:param current_db:
+					:param row_factory:
+					:param sql_statement:
+					:param params:
+					:param log:
+					:return:
+					"""
+
+
+					payload = list()
+					try :
+
+						s = sql_statement
+						s = s % tr_utils.quoted_list_to_tuple( params )
+
+						rs = ( None , None )
+
+						current_db.row_factory = row_factory
+						cursor = current_db.cursor()
+						cursor.execute( s )
+						while True :
+							rs = cursor.fetchone()
+							if rs is None :
+								break
+							payload.append( rs )
+
+
+						log.info( '...' +  sql_statement  + ' executed...'  + str( params ) )
+
+					except sqlite3.OperationalError as e :
+						log.error( 'statement failed: '
+							+ e.message )
+					except TypeError as e :
+						log.error( '...not enough aruments for db query...' )
+
+					return payload
+
+
 
 
 
@@ -292,20 +244,31 @@ class tr_payload_stalker( tr_stream_stalker ) :
 					return self.execute_naked_sql_result_set( self._current_db ,
  													  		  tr_utils.dict_factory ,
 													          sql_cursor_dictionary['sql_retrieve_default_policy'] ,
-									   						  ['default'] ,
+									   						  ['default' , 'document'] ,
 															  self._logger )
 
 
 
 
 
-				'''services'''
+
+				# services
 				def prepare( self ) :
 					"""
-					connect queue
+					prepare
 					"""
 
-					pass
+
+					# assert
+					if self._policy_dictionary is None :
+						raise
+
+					try :
+						self._policy_call = self._supported_monikers[self._policy_dictionary['provider'] ]
+					except :
+						raise ValueError( '%s cannot proceed , invalid provider' % \
+										          self.__class__.__name__  )
+
 
 
 
@@ -314,8 +277,8 @@ class tr_payload_stalker( tr_stream_stalker ) :
 					stalk
 					"""
 
-					pass
-
+					perform = self._policy_call
+					perform()
 
 
 
@@ -326,7 +289,7 @@ class tr_payload_stalker( tr_stream_stalker ) :
 					:return
 					"""
 
-					pass
+					print 'mongodb'
 
 
 
@@ -336,82 +299,26 @@ class tr_payload_stalker( tr_stream_stalker ) :
 					:return
 					"""
 
-					pass
+					print 'elasticsearch'
 
-
-
-				def _on_kafka_stream( self ) :
-					"""
-
-					:return
-					"""
-
-					pass
-
-
-
-				def _on_redis_stream( self ) :
-					"""
-
-					:return
-					"""
-
-					pass
-
-
-
-				def _on_rabbitmq_stream( self ) :
-					"""
-
-					:return
-					"""
-
-					pass
 
 
 
 				@property
-				def db_mgr( self ) :
-					return self._db_manager
-				@db_mgr.setter
-				def db_mgr( self , mgr ) :
-					self._db_manager = mgr
-				@property
-				def policies( self ) :
-					return self._policies
-				@policies.setter
-				def policies( self , poly ) :
-					self._policies = poly
-				@property
-				def doc_bootstrap( self ) :
-					return self._doc_bootstrap
-				@doc_bootstrap.setter
-				def doc_bootstrap( self , strap ) :
-					self._doc_bootstrap = strap
-				@property
-				def str_bootstrap( self ) :
-					return self._stream_bootstrap
-				@str_bootstrap.setter
-				def str_bootstrap( self , strap ) :
-					self._stream_bootstrap = strap
-				@property
-				def doc_moniker( self ) :
-					return self._doc_moniker
-				@doc_moniker.setter
-				def doc_moniker( self , doc) :
-					self._doc_moniker = doc
-				@property
-				def str_moniker( self ) :
-					return self._stream_moniker
-				@str_moniker.setter
-				def str_moniker( self , mon ):
-					self._stream_moniker = mon
+				def policy( self ) :
+					return self._policy_dictionary
+				@policy.setter
+				def policy( self , poly ) :
+					self._policy = poly
 				@property
 				def logger( self ) :
 					return self._logger
 				@logger.setter
 				def logger( self , log ) :
 					self._logger = log
+				@property
+				def supported_monikers( self ) :
+					return self._supported_monikers
 
 
 
