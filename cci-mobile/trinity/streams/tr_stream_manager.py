@@ -38,9 +38,9 @@ import tr_utils
 sql_cursor_dictionary = {  'sql_retrieve_document_policy' : 'select * from payload_policy '
 														    'where moniker = %s '
 															'and provider_type = %s '
-															'and active = 1' ,
-						   'sql_retrieve_default_db_str'  : 'select map from metadata_config ' \
-															'where moniker = %s'
+															'and active = 1'
+						   ,
+						   'sql_retrieve_payload_view'	  : 'select * from session_payload_impl'
 
 						}
 
@@ -109,7 +109,8 @@ class tr_payload_stalker( tr_stalker ) :
 
 				def __init__( self ,
 							  policy = 'default'  ,
-							  db_connect_str = None ) :
+							  db_connect_str = None ,
+							  bites = 25 ) :
 
 					"""
 
@@ -132,6 +133,7 @@ class tr_payload_stalker( tr_stalker ) :
 
 					self._db_connect_str = db_connect_str
 					self._current_db = None
+					self._bites = bites
 
 					if db_connect_str is None :
 						raise ValueError( '%s cannot proceed , no database specified' % \
@@ -154,6 +156,18 @@ class tr_payload_stalker( tr_stalker ) :
 					self._supported_monikers = document_monikers
 					self._policy_dictionary = self._retrieve_document_policy( self._policy )[0]
 					self._logger.info(  '%s policy = %s' % ( self._policy , self._policy_dictionary ) )
+
+
+
+
+				def __del__( self ) :
+					"""
+
+					:return:
+					"""
+
+					self._logger.info( '%s deleted....'  % self.__class__.__name__ )
+
 
 
 
@@ -183,12 +197,12 @@ class tr_payload_stalker( tr_stalker ) :
 
 
 
-				@staticmethod
-				def execute_naked_sql_result_set(  current_db ,
+
+				def execute_naked_sql_result_set(  self ,
+												   current_db ,
 												   row_factory ,
 												   sql_statement ,
-												   params ,
-												   log) :
+												   params = None ) :
 					"""
 
 					:param current_db:
@@ -199,13 +213,14 @@ class tr_payload_stalker( tr_stalker ) :
 					:return:
 					"""
 
-					log.info(  '.....execute_naked_sql_result_set' )
+					self._logger.info(  '.....execute_naked_sql_result_set' )
 
 					payload = list()
 					try :
 
 						s = sql_statement
-						s = s % tr_utils.quoted_list_to_tuple( params )
+						if params is not None :
+							s = s % tr_utils.quoted_list_to_tuple( params )
 
 						rs = ( None , None )
 
@@ -219,13 +234,13 @@ class tr_payload_stalker( tr_stalker ) :
 							payload.append( rs )
 
 
-						log.info( '...' +  sql_statement  + ' executed...'  + str( params ) )
+						self._logger.info( '...' +  sql_statement  + ' executed...'  + str( params ) )
 
 					except sqlite3.OperationalError as e :
-						log.error( 'statement failed: '
+						self._logger.error( 'statement failed: '
 							+ e.message )
 					except TypeError as e :
-						log.error( '...not enough aruments for db query...' )
+						self._logger.error( '...not enough aruments for db query...' )
 
 					return payload
 
@@ -243,12 +258,19 @@ class tr_payload_stalker( tr_stalker ) :
 					return self.execute_naked_sql_result_set( self._current_db ,
  													  		  tr_utils.dict_factory ,
 													          sql_cursor_dictionary['sql_retrieve_document_policy'] ,
-									   						  [policy , 'document'] ,
-															  self._logger )
+									   						  [policy , 'document']  )
 
 
 
+				def  _stage_payloads( self ) :
+					"""
 
+					:return:
+					"""
+
+					return self.execute_naked_sql_result_set( self._current_db ,
+ 													  		  tr_utils.dict_factory ,
+													          sql_cursor_dictionary['sql_retrieve_payload_view']  )
 
 
 				# services
@@ -292,6 +314,15 @@ class tr_payload_stalker( tr_stalker ) :
 					"""
 
 					self._logger.info( '....stalking sqlite3 db for mongodb.....' )
+					self._logger.info( '....drawing gross results.....' )
+
+					batch = self._stage_payloads()
+					self._logger.info( '....%d total atoms..' % len( batch )  )
+
+					self._logger.info( '....enumerating batches.....batch_size = %s' % \
+									   self._policy_dictionary['batch_size'] )
+
+					self._logger.info( '....consuming enumeration.....' )
 
 
 
@@ -319,7 +350,8 @@ class tr_payload_stalker( tr_stalker ) :
 				def logger( self , log ) :
 					self._logger = log
 				@property
-				def supported_monikers( self ) :
+				def supported_monikers( self ) :				# do not go out of scope
+
 					return self._supported_monikers
 
 
