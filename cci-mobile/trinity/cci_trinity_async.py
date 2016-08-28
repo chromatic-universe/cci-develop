@@ -27,11 +27,13 @@ from application_vulture  import app ,\
 callback_class_dispatch = { 'document' : 'tr_payload_stalker' ,
 							'stream'   :  'tr_stream-stalker' }
 stream_mod = importlib.import_module( 'streams.tr_stream_manager'  )
-
+stream_mongo_mod = importlib.import_module( 'streams.tr_mongo_rest'  )
 
 # exclusive
 policy_semaphore = Semaphore( 1 )
 g_periodic_callbacks = dict()
+
+
 
 # --------------------------------------------------------------------------------------
 class queue_client() :

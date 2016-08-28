@@ -40,7 +40,7 @@ mongo = PyMongo( app )
 
 
 def debug_write_api() :
-		# for api docs , build strios docstrings
+		# for api docs , build strings docstrings
 		with open( 'mongo.api' , 'w' ) as f :
 			for r in current_app.url_map.iter_rules() :
 			 	doc = current_app.view_functions.get(r.endpoint).func_doc
@@ -93,8 +93,8 @@ app.add_url_rule( '/mongo/cci_api' ,
 # --------------------------------------------------------------------------------------------------------
 def enum_devices() :
 			"""
-			GET enumerate all devices:return : jsonified payload of devices
-			:return:
+			GET enumerate all devices:
+			return : jsonified payload of devices
 			"""
 			_logger.info( '...enum_devices...' )
 			output = []
@@ -405,11 +405,15 @@ app.add_url_rule( '/mongo/insert_beaucoup_payload',
 
 
 # --------------------------------------------------------------------------------------------------------
-def dry_atomic_payload_insert() :
+def dry_atomic_payload_insert( packet = None ) :
 			"""
 
 			:return:
 			"""
+
+			if not packet :
+				raise
+
 			t =  datetime.datetime.utcnow()
 			data ={
 					"timestamp" : "2016-08-19 18:11:41.111229" ,
