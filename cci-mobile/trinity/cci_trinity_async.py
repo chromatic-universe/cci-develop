@@ -7,6 +7,7 @@ import json
 import logging
 import signal
 import os
+import importlib
 
 from tornado.ioloop import IOLoop
 import tornado.gen
@@ -20,10 +21,14 @@ from tornado.locks import Semaphore
 max_wait_seconds_before_shutdown  = 3
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
+#callback_dispatch = { 'document' : }
+
+#cci
 from application_vulture  import app ,\
 	                             mongo_no_resource_exception , \
 								 _logger
-from streams import tr_mongo_rest
+stream_mod = importlib.import_module( 'streams.tr_stream_manager'  )
+
 
 # exclusive
 policy_semaphore = Semaphore( 1 )
@@ -46,10 +51,12 @@ class queue_client() :
 						if items['moniker'] in g_periodic_calbacks :
 							_logger.info( '..%s policy %s already in effect' % ( items['provider_type'] , items['moniker'] ) )
 							continue
-						pc = PeriodicCallback( lambda: policy_callback( items['provider_type'] , items['moniker'] ) , 5000  )
+						pc = PeriodicCallback( lambda: policy_callback( items['provider_type'] ,
+																		items['moniker'] ,
+																		items['db_bootstrap'] ) , 5000  )
 						_logger.info( '..started periodic callback with params%s' % json.dumps( items ) )
 						pc.start()
-						with ( yield policy_sem.acquire() ) :
+						with ( yield policy_semaphore.acquire() ) :
 							g_periodic_calbacks[items['moniker']] = pc
 
 				except Exception as e :
@@ -71,11 +78,11 @@ class queue_handler_start_policy( tornado.web.RequestHandler ) :
 
 				:return:
 				"""
-				#json_data = json.loads( self.request.data )
 
 				try :
 
 					json_data = json.loads( self.request.body )
+					print json_data
 					yield client.queued_items.put( json_data )
 					_logger.info( 'queued a new item: %s' % self.request.body )
 
@@ -114,57 +121,74 @@ class queue_handler_stop_policy( tornado.web.RequestHandler ) :
 
 # --------------------------------------------------------------------------------------
 def sig_handler( sig , frame ) :
-		"""
+			"""
 
-		:param sig:
-		:param frame:
-		:return:
-		"""
-		_logger.warning('...caught signal: %s', sig )
-		tornado.ioloop.IOLoop.instance().add_callback( shutdown )
+			:param sig:
+			:param frame:
+			:return:
+			"""
+			_logger.warning('...caught signal: %s', sig )
+			tornado.ioloop.IOLoop.instance().add_callback( shutdown )
 
 
 
 # --------------------------------------------------------------------------------------
 def shutdown() :
-		"""
+			"""
 
-		:return:
-		"""
+			:return:
+			"""
 
-		_logger.info( '....will shutdown in %s seconds ...' , max_wait_seconds_before_shutdown )
-		io_loop = IOLoop.instance()
+			_logger.info( '....will shutdown in %s seconds ...' , max_wait_seconds_before_shutdown )
+			io_loop = IOLoop.instance()
 
-		deadline = time.time() + max_wait_seconds_before_shutdown
+			deadline = time.time() + max_wait_seconds_before_shutdown
 
-		for key , value in g_periodic_calbacks.iteritems() :
-			if value.is_running() :
-				_logger.info( '...shutting down policy %s ' %  key )
-				value.stop()
-
-
-		def stop_loop():
-			now = time.time()
-			if now < deadline and ( io_loop._callbacks or io_loop._timeouts ) :
-				io_loop.add_timeout( now + 1 , stop_loop )
-				io_loop.add_timeout( now + 1 , stop_loop )
-			else:
-				io_loop.stop()
-				_logger.info( '...shutdown....' )
-
-		stop_loop()
+			for key , value in g_periodic_calbacks.iteritems() :
+				if value.is_running() :
+					_logger.info( '...shutting down policy %s ' %  key )
+					value.stop()
 
 
+			def stop_loop():
+				now = time.time()
+				if now < deadline and ( io_loop._callbacks or io_loop._timeouts ) :
+					io_loop.add_timeout( now + 0.5 , stop_loop )
+					io_loop.add_timeout( now + 0.5 , stop_loop )
+				else:
+					io_loop.stop()
 
-def policy_callback( document_type  , moniker ) :
-	print 'instantiating %s policy->%s' % ( document_type , moniker )
+
+			stop_loop()
+			_logger.info( '...shutdown....' )
+
+
+
+
+# -----------------------------------------------------------------------------------------
+def policy_callback( document_type  , moniker , long , db = None ) :
+			"""
+
+			:param document_type:
+			:param moniker:
+			:param db:
+			:return:
+			"""
+
+			print 'instantiating %s policy->%s  db=%s' % ( document_type , moniker , db )
+			if provider_type == 'document' :
+				stalker = getattr( stream_mod , 'kc_payload_stalker' )
+				live_stalker = stalker ( db_connect_str = db )
+				live_stalker.prepare()
+
+
 
 
 
 # --------------------------------------------------------------------------------------
 if __name__ == "__main__":
 
-			# mongo
+			# queue vulture
 			client = queue_client()
 
 			# logger

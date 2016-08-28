@@ -35,10 +35,12 @@ import tr_utils
 
 
 
-sql_cursor_dictionary = {  'sql_retrieve_default_policy' :  'select * from payload_policy '
+sql_cursor_dictionary = {  'sql_retrieve_document_policy' : 'select * from payload_policy '
 														    'where moniker = %s '
 															'and provider_type = %s '
-															'and active = 1'
+															'and active = 1' ,
+						   'sql_retrieve_default_db_str'  : 'select map from metadata_config ' \
+															'where moniker = %s'
 
 						}
 
@@ -106,7 +108,7 @@ class tr_payload_stalker( tr_stalker ) :
 
 
 				def __init__( self ,
-							  policy = None  ,
+							  policy = 'default'  ,
 							  db_connect_str = None ) :
 
 					"""
@@ -139,7 +141,7 @@ class tr_payload_stalker( tr_stalker ) :
 
 					# default db
 					try :
-						self._current_db = sqlite3.connect( db_connect_str  )
+						self._current_db = sqlite3.connect( self._db_connect_str  )
 					except sqlite3.DatabaseError as e :
 						self._logger.error( e.message )
 						raise
@@ -148,14 +150,10 @@ class tr_payload_stalker( tr_stalker ) :
 
 					self._signal_event = threading.Event()
 					self._policy = policy
-					self._policy_dictionary = None
 					self._policy_call = None
 					self._supported_monikers = document_monikers
-
-
-					if self._policy is None :
-						self._policy_dictionary = self._retrieve_default_doc_policy()
-					print self._policy
+					self._policy_dictionary = self._retrieve_document_policy( self._policy )[0]
+					self._logger.info(  '%s policy = %s' % ( self._policy , self._policy_dictionary ) )
 
 
 
@@ -201,6 +199,7 @@ class tr_payload_stalker( tr_stalker ) :
 					:return:
 					"""
 
+					log.info(  '.....execute_naked_sql_result_set' )
 
 					payload = list()
 					try :
@@ -234,17 +233,17 @@ class tr_payload_stalker( tr_stalker ) :
 
 
 
-				def _retrieve_default_doc_policy( self ) :
+				def _retrieve_document_policy( self , policy ) :
 					"""
 
-					:return default policy dictioary:
+					:return policy dictioary:
 					"""
 
-
+					self._logger.info(  ' ...._retrieve_document_policy' )
 					return self.execute_naked_sql_result_set( self._current_db ,
  													  		  tr_utils.dict_factory ,
-													          sql_cursor_dictionary['sql_retrieve_default_policy'] ,
-									   						  ['default' , 'document'] ,
+													          sql_cursor_dictionary['sql_retrieve_document_policy'] ,
+									   						  [policy , 'document'] ,
 															  self._logger )
 
 
@@ -264,10 +263,12 @@ class tr_payload_stalker( tr_stalker ) :
 						raise
 
 					try :
+						provider = self._policy_dictionary['provider']
 						self._policy_call = self._supported_monikers[self._policy_dictionary['provider'] ]
-					except :
-						raise ValueError( '%s cannot proceed , invalid provider' % \
-										          self.__class__.__name__  )
+						self._logger.info( '...policy prepared' )
+					except Exception as e :
+						raise ValueError( '%s cannot proceed , invalid provider...%s' % \
+										  ( self.__class__.__name__   , e.message ) )
 
 
 
@@ -277,6 +278,7 @@ class tr_payload_stalker( tr_stalker ) :
 					stalk
 					"""
 
+					self._logger.info(  ' ....stalking....' )
 					perform = self._policy_call
 					perform()
 
@@ -289,7 +291,7 @@ class tr_payload_stalker( tr_stalker ) :
 					:return
 					"""
 
-					print 'mongodb'
+					self._logger.info( '....stalking sqlite3 db for mongodb.....' )
 
 
 
@@ -337,6 +339,9 @@ def stalker_main() :
 				try :
 					stalker = tr_payload_stalker( db_connect_str='/data/media/com.chromaticuniverse.' \
 																  'cci_trinity/king_console.sqlite' )
+
+					stalker.prepare()
+					stalker.stalk()
 				except ValueError as e :
 					print  'parameter snafu: %s' %  e.message
 				except Exception as e :
