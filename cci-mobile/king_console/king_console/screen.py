@@ -259,6 +259,7 @@ class CciScreen( Screen ) :
 
 
 
+
 				def _on_show_datalink_extended( self ) :
 					"""
 
@@ -360,6 +361,37 @@ class CciScreen( Screen ) :
 
 
 
+
+				def _retrieve_policy( self , policy_moniker , provider_type ) :
+					"""
+
+					:param policy_moniker:
+					:param provicer_type:
+					:return:
+					"""
+					event = threading.Event()
+
+					self._post_function_call( 'query_document_policy' , [  event ,
+																		   '0' ,
+																			policy_moniker ,
+																			provider_type ] )
+					# wait for payload
+					try:
+						event.wait( timeout=5 )
+						#get payload
+						App.get_running_app().dbpq_lk.acquire()
+						lst = list()
+						while not App.get_running_app().dbpq.empty() :
+							lst = App.get_running_app().dbpq.get()
+						App.get_running_app()._default_document_policy = lst
+					finally :
+						App.get_running_app().dbpq_lk.release()
+
+
+
+
+
+
 				def _on_show_history( self ) :
 					"""
 
@@ -375,9 +407,11 @@ class CciScreen( Screen ) :
 					grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 800 ) )
 					event = threading.Event()
 
+
 					self._post_function_call( 'query_call_history' , [  event ,
 																		 '0' ,
 																	     App.get_running_app()._session_id ] )
+
 					# wait for payload
 					try:
 						event.wait( timeout=5 )
@@ -404,6 +438,7 @@ class CciScreen( Screen ) :
 						btn.bind( on_press = lambda a:self._on_show_session_note() )
 					finally :
 						App.get_running_app().dbpq_lk.release()
+						event.clear()
 
 					popup.open()
 
@@ -665,6 +700,8 @@ class CciScreen( Screen ) :
 
 					container.text += content + '\n'
 					self.canvas.ask_update()
+
+
 
 
 				@mainthread

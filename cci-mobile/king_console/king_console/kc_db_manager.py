@@ -56,7 +56,11 @@ sql_cursor_dictionary = {  'sd_insert_session' : 'insert into sessions  (session
 							'sql_retrieve_call_history' : 	'select * from session_call_history '
 															'where session_name = %s '
 															'order by timestamp DESC '
-													        'LIMIT 15'
+													        'LIMIT 15' ,
+							'sql_retrieve_document_policy' : 'select * from payload_policy '
+														    'where moniker = %s '
+															'and provider_type = %s '
+															'and active = 1',
 						}
 
 
@@ -124,7 +128,8 @@ class kc_db_manager( object ) :
 									   'update_session_status' : self.update_session_status
 									 }
 					self._query_call_map =  {
-											   'query_call_history' :  self.query_call_history
+											   'query_call_history' :  self.query_call_history ,
+											   'query_document_policy' : self.query_document_policy
 									 		}
 
 
@@ -294,13 +299,15 @@ class kc_db_manager( object ) :
 
 
 
+
+
 				def insert_payload( self , call_params ) :
 					"""
 
 					:param payload:
 					:param size:
 					:param cache_pending:
-					:return:
+					:return:None
 					"""
 
 					params = ( '"' + call_params[0] + '"'  ,
@@ -354,7 +361,6 @@ class kc_db_manager( object ) :
 						"""
 
 						# wait trigger
-
 						event = call_params[0]
 						id = call_params[1]
 						call_params.remove( event )
@@ -365,6 +371,30 @@ class kc_db_manager( object ) :
 													  call_params ,
 													  event ,
 													  id )
+
+
+
+
+				def query_document_policy( self , call_params ) :
+						"""
+
+						:param call_params:
+						:return:
+						"""
+
+						# wait trigger
+						event = call_params[0]
+						id = call_params[1]
+						call_params.remove( event )
+						call_params.remove( id )
+
+
+						self._execute_sql_result_set( 'sql_retrieve_document_policy' ,
+													  call_params ,
+													  event ,
+													  id )
+
+
 
 
 				@property

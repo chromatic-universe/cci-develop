@@ -55,7 +55,7 @@ from jnius import autoclass
 import sqlite3
 import Queue
 import uuid
-
+import json
 
 #cci
 from king_console import resource_factory \
@@ -248,6 +248,8 @@ class kingconsoleApp( App ) :
 			self._is_dirty_payload = False
 			self._dlg_param = None
 			self._diaspora = True
+			self._default_document_policy = None
+
 
 
 			Window.on_rotate = self._on_rotate
@@ -528,6 +530,8 @@ class kingconsoleApp( App ) :
 
 
 
+
+
 		def _db_queue_thred( self ) :
 			"""
 
@@ -641,6 +645,7 @@ class kingconsoleApp( App ) :
 			#yes_btn.bind(on_press=self._handle_payload_update( pop=popup ) )
 			no_btn.bind(on_press=self._dlg_param.dismiss )
 
+
 			self._dlg_param.open()
 			self._create_session()
 
@@ -655,6 +660,12 @@ class kingconsoleApp( App ) :
 					App.get_running_app()._thrd.thrds[moniker] = thread_atom
 			thred.start()
 
+			self.root.current_screen._retrieve_policy( 'default' , 'document' )
+			self._toggle_policy( 'default' ,
+								'document' ,
+								self._default_document_policy[0][2] ,
+								'/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite' ,
+								True )
 
 			self.root.current_screen.ids.console_local_id.text = self._console_local
 			self.root.current_screen.ids.console_real_id.text = self._console_real
@@ -662,6 +673,7 @@ class kingconsoleApp( App ) :
 			self._cur_console_buffer = self.root.current_screen.ids.console_interfaces.text
 
 			EventLoop.window.bind( on_keyboard = self._hook_keyboard )
+
 
 
 
@@ -683,6 +695,39 @@ class kingconsoleApp( App ) :
 
 				return False
 
+
+
+
+		def _toggle_policy( self , moniker , provider_type , interval , db  , toggle ) :
+				"""
+
+				:param moniker:
+				:param provider_type:
+				:param interval:
+				:param db:
+				:return:
+				"""
+
+				try :
+
+					data = { 'moniker' : moniker ,
+							 'provider_type' : provider_type ,
+							 'interval' : str( interval ) ,
+							 'db_bootstrap' : db
+						   }
+
+					if toggle :
+						ps = 'start'
+					else :
+						ps = 'stop'
+					s = 'http://localhost:7081/trinity-vulture/%s' % ps
+					r = requests.post( s ,
+									   data = json.dumps( data ) )
+					if r.status_code != 200 :
+						raise( '...post policy %s %s start failed...' % ( moniker , provider_type ) )
+					self._logger.info( '...post policy succeeded for %s %s...' % ( moniker , provider_type ) )
+				except Exception as e :
+					self._logger.error( e.message )
 
 
 
