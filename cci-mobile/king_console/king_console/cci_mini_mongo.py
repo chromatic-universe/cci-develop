@@ -136,8 +136,8 @@ class cci_mini_mongo( cci_mini_mobile.cci_mobile ) :
 
 						self._mongo = MongoClient( connect_str ,
 												   tz_aware = True ,
-												   socketTimeoutMS = 10000 ,
-												   connectTimeoutMS = 10000 )
+												   socketTimeoutMS = 50000 ,
+												   connectTimeoutMS = 5000 )
 						self._mongo_dbs = self._mongo.database_names()
 						db = self._mongo['cci_maelstrom']
 						cursor = db['auth_devices'].find({'device_id' : self._device_id})

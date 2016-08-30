@@ -44,7 +44,9 @@ from kivy.core.window import Window
 from kivy.clock import Clock , mainthread
 
 
-screen_map = {  'nmap firewalk' : False }
+screen_map = {  'nmap firewalk' : False ,
+				'ip_geography_view'  : False
+	         }
 
 class console_grid( GridLayout ) :
 
@@ -348,6 +350,8 @@ class AppDiscoveryScreen( Screen ) :
 					_console_text = ObjectProperty()
 					console_timestamp = ObjectProperty()
 					_is_full_screen = ObjectProperty()
+					ip_geo_key = ObjectProperty()
+					ip_geo_metric = ObjectProperty()
 
 
 
@@ -412,6 +416,24 @@ class AppDiscoveryScreen( Screen ) :
 
 
 
+
+
+					def _move_to_accordion_item( self , acc , tag = None ) :
+							"""
+
+							:param acc:
+							:return:
+							"""
+
+							for child in acc.children :
+								if child.title == tag :
+									child.collapse = False
+									child.canvas.ask_update()
+
+
+
+
+
 					def _on_full_screen(self):
 						"""
 
@@ -439,6 +461,51 @@ class AppDiscoveryScreen( Screen ) :
 							acc.add_widget(cci)
 							self._is_full_screen = False
 
+
+
+
+					def on_touch_up( self , touch ) :
+							self._selected_accordion_item()
+
+
+
+
+
+					def _selected_accordion_item( self  ) :
+						"""
+
+						:return accordion item selected:
+						"""
+						acc = self.ids.appdiscovery_accordion
+						for item in acc.children :
+							try:
+								if not item.collapse :
+									if item.title == 'ip geography' :
+										App.get_running_app()._logger.info( item.title )
+										if not screen_map['ip_geography_view'] :
+											view = Builder.load_string( self._retr_resource('ip_geography_view'  ) )
+											self.ip_geo_metric = view.ids.ip_geo_metric
+											self.ip_geo_key = view.ids.ip_geo_key
+											view.ids.do_geo_btn.bind( on_press = lambda a: self._on_geography_start()  )
+											self.ids.view_ip_geo.add_widget( view )
+											screen_map['ip_geography_view'] = True
+										return item
+
+							except Exception as e :
+								App.get_running_app()._logger.error( e.message )
+
+
+
+
+
+
+					def _on_geography_start( self ) :
+							"""
+
+							:return:
+							"""
+
+							pass
 
 
 
