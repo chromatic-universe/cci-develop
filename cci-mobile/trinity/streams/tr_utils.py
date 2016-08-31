@@ -16,8 +16,10 @@ import requests
 import datetime
 import base64
 import json
+import itertools
 from bson import json_util
 
+log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
 
 # -----------------------------------------------------------------------------------
@@ -40,6 +42,7 @@ def quoted_list_to_tuple( lst ) :
 	return tuple( [quoted( x ) for x in lst] )
 
 
+
 # -----------------------------------------------------------------------------------
 def local_mac_addr() :
 		"""
@@ -54,7 +57,131 @@ def local_mac_addr() :
 			pass
 
 
-log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
+# -----------------------------------------------------------------------
+def split_seq( iterable , size ) :
+		"""
+
+		:param iterable:
+		:param size:
+		:return:
+		"""
+		it = iter(iterable)
+		item = list(itertools.islice(it, size))
+		while item:
+			yield item
+			item = list(itertools.islice(it, size))
+
+
+
+
+# -----------------------------------------------------------------------
+def iw_device_mode( dev = 'wlan0') :
+		"""
+
+		:param dev:
+		:return exists , mode :
+		"""
+
+		b_ret = False
+
+		cmd = ['iw' ,'dev']
+		out = proc.check_output( cmd ).strip()
+		lst = out.split( '\n' )
+		for x in split_seq( lst , 4 ) :
+			if x[1].find( 'wlan0' ) != -1 :
+				b_ret = True
+				s = x[3]
+				s = s.replace( '\t' , '' )
+				s = s.split()
+				s = s[1]
+
+				return b_ret , s , x[0]
+
+
+
+
+# ----------------------------------------------------------------------
+def port_vulture( port ) :
+		"""
+
+		:param port:
+		:return pid:
+		"""
+
+		pid = -1
+		try :
+
+			if not os.geteuid() == 0 :
+				print  'need to be root to call port vulture...\n'
+				sys.exit( 1 )
+			cmd = ['netstat' , '-tulpn']
+			nstat = proc.Popen( cmd , stdout=proc.PIPE )
+			cmd = ['grep' , port]
+			grep = proc.Popen( cmd , stdin=nstat.stdout , stdout=proc.PIPE )
+			nstat.stdout.close()
+			output = grep.communicate()[0]
+			nstat.wait()
+
+			segments = output.strip().split()
+			if len( segments ) :
+				if segments[0] == 'tcp' or segments[0] == 'tcp6' :
+					# pid will be last segment
+					raw_pid = segments[len( segments ) - 1]
+					s = raw_pid.split( '/')
+					pos =  s[0].find( ' ' )
+					if pos != -1 :
+						x = s[0][pos:]
+						x = s.strip().split()
+						pid = str( x )
+					else :
+						pid = int( s[0] )
+
+			return 	pid
+
+		except ValueError as e :
+			print 'error in parameter list %s' % e.message
+			return False , -1
+		except OSError as e :
+			print 'binary does not exist?  %s' % e.message
+			return False , -1
+
+
+
+# -----------------------------------------------------------------------
+def iw_monitor_supported_interface_modes( dev = 'phy#0' ) :
+		"""
+
+		:param dev:
+		:return bool , list of interfaces :
+		"""
+
+		segment_lst = list()
+		try :
+
+			p = dev.replace( '#' , '' )
+			cmd = ['iw' , 'phy' , p , 'info']
+			out = proc.check_output( cmd ).strip()
+
+			start_boilerplate = 'Supported interface modes:'
+			end_boilerplate =  'software interface modes (can always be added):'
+
+			start_pos = out.find( start_boilerplate )
+			if start_pos :
+				# walk past start boilerplate
+				start_pos += len( start_boilerplate )
+				end_pos = out.find( end_boilerplate )
+
+				# get segment
+				segment = out[start_pos:end_pos].strip()
+				segment = segment.replace( '*' , '' )
+				segment_lst = segment.split()
+
+		except proc.CalledProcessError as e :
+			print e.message
+
+
+		return segment_lst
+
 
 
 
@@ -94,3 +221,41 @@ def init_logging( moniker = 'current_app' , fmt = log_format ) :
 		logger.addHandler( ch )
 
 		return logger
+
+
+
+if __name__ == '__main__' :
+
+		print '* ' * 39
+		print '\t\tchromatic universe cci-trinity packet streamer , 2016'
+		print '* ' * 39
+		print
+		b_ret , mode , phys = iw_device_mode()
+		if b_ret :
+			print 'wlan0 in %s mode physical device id = %s' % ( mode , phys )
+
+		else :
+			print 'interface not found'
+
+		supported = iw_monitor_supported_interface_modes( dev = phys )
+		if len( supported ) :
+			print '->supported modes: %s' % supported
+
+		if( 'monitor' ) in supported :
+			print '->device is capable of monitoring raw packets on network segment\n'
+		else :
+			print '->device is not capable of monitoring raw packets in network segment\n'
+
+
+		print
+
+		pid = port_vulture( '7080' )
+		if pid :
+			print 'cci-trinity application server is running with pid %d' % pid
+		else :
+			print 'cci-trinity application server is not running...'
+		pid = port_vulture( '7081' )
+		if pid :
+			print 'cci-trinity application server is running with pid %d' % pid
+		else :
+			print 'cci-trinity application server is not running...'

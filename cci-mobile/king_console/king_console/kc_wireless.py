@@ -88,8 +88,12 @@ def ip_geography( ip = None ,
 
 				req = 'http://api.ipinfodb.com//v3/ip-city/?key=%s&format=json&ip=%s' % \
 					  ( key , ip )
+
 				r = requests.get( req )
-				out  = json.dumps( r.json() )
+				x = r.json()
+				for item in  x  :
+					out += '%s : %s\n' % ( item , x[item] )
+
 
 				obj = IPWhois( ip )
 				results = obj.lookup_rdap(depth=1)
@@ -98,6 +102,7 @@ def ip_geography( ip = None ,
 				out += '\n\n\n'
 				out += s.getvalue()
 
+
 				b_ret = True
 
 			except Exception as e :
@@ -105,7 +110,7 @@ def ip_geography( ip = None ,
 
 
 
-			return b_ret , out
+			return b_ret , str( out )
 
 
 
