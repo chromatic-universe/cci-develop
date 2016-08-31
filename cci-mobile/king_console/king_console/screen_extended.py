@@ -33,12 +33,14 @@ from resource import transport_extended as transport_resources ,\
 from king_console import kc_ping , \
 						 kc_arp , \
 						 kc_tcp , \
-						 kc_nmap
+						 kc_nmap , \
+						 kc_wireless
 import random
 import datetime
 from time import gmtime, strftime , sleep
 import subprocess as proc
 import Queue
+import json
 from requests import put, get
 from kivy.core.window import Window
 from kivy.clock import Clock , mainthread
@@ -352,7 +354,7 @@ class AppDiscoveryScreen( Screen ) :
 					_is_full_screen = ObjectProperty()
 					ip_geo_key = ObjectProperty()
 					ip_geo_metric = ObjectProperty()
-
+					console_count = ObjectProperty()
 
 
 					def __init__( self , **kwargs ) :
@@ -499,13 +501,131 @@ class AppDiscoveryScreen( Screen ) :
 
 
 
+					@mainthread
+					def _update_console_payload( self , content , console , params = None ) :
+						"""
+
+						:param console slide:
+
+						:return:
+						"""
+
+
+						console.children[1].children[0].text = content
+						console.children[0].text = params + '\n' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+						console.children[0].halign = 'center'
+						self.canvas.ask_update()
+
+
+
+
+
 					def _on_geography_start( self ) :
 							"""
 
 							:return:
 							"""
 
+
+
+
+							self._console_count += 1
+							carousel = self.ids.appdiscovery_carousel_id
+							console = self.add_console(  content = 'cci-maelstrom~app_discovery-> :...working...this could be lenghty...no time updates' ,
+																	tag = 'ip geo console #%d' % self._console_count )
+
+							carousel.add_widget( console  )
+							carousel.index += 1
+							self._move_to_accordion_item( self.ids.appdiscovery_accordion , 'cci-maelstrom' )
+
+
+							thred = threading.Thread( target = self._on_ip_geography ,
+													  kwargs=dict( ip = self.ip_geo_metric.text ,
+																   console=console ,
+																   key_file = self.ip_geo_key.text
+																	) )
+							if thred :
+								moniker = 'ip geo console #' + str( self._console_count )
+								thread_atom = { 'thread_id' : str( thred.ident ) ,
+												'stop_alert'  : threading.Event() ,
+												'instance' : thred
+											  }
+								App.get_running_app()._thrd.thrds[moniker] = thread_atom
+
+
+							thred.start()
+
+
+
+
+
+
+					def _on_ip_geography( self ,
+										  ip = None ,
+										  key_file = None ,
+										  console = None  ) :
+						"""
+
+						:param ip:
+						:param key_file:
+						:param console:
+						:return:
+						"""
+
+						out = str()
+						call = str()
+
+						App.get_running_app()._logger.info( self.__class__.__name__ + '...on_ip_geography'  )
+
+
+
+						b_ret = False
+						out = str()
+
+						try :
+
+							try :
+								b_ret , out = kc_wireless.ip_geography( ip = ip ,
+																        key_file = key_file )
+								App.get_running_app()._logger.info( out )
+							except proc.CalledProcessError as e :
+								b_ret = False
+						except Exception as e :
+							b_ret = False
+							App.get_running_app()._logger.error( e.message )
+
+						try :
+							thr = App.get_running_app()._thrd.thrds['ip geo console #'  + str( App.get_running_app()._console_count )]
+							if thr :
+								if thr['stop_alert'].isSet() :
+									return
+						except :
 							pass
+
+						boiler = str()
+						if b_ret is False:
+							boiler += '...ip geography....access key snafu?..'
+						else :
+							boiler = 'cci-maelstrom[app_discovery]->: ' + \
+									 ' ' + ip
+							boiler += '\n'
+							boiler += out
+
+
+
+						App.get_running_app()._logger.info( self.__class__.__name__ + '...boiler='  + boiler )
+
+						id = '(ip=%s)' % ip
+						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
+																			'app_discovery' ,
+																			'ip_geography' ,
+																			id ,
+																			boiler] )
+						id = call + ' ' + id
+						self._update_console_payload( boiler ,console , id )
+						App.get_running_app()._logger.info( '..update_console_payload...' )
+
+
 
 
 
@@ -514,30 +634,27 @@ class AppDiscoveryScreen( Screen ) :
 								   content ,
 								   tag  ) :
 							"""
-							:param parent:
+
 							:param content:
-							:param: console_count:
 							:param tag:
 
 							:return:
 							"""
 
-							layout = GridLayout( cols = 1 ,
-												 orientation = 'horizontal'
+
+							layout = GridLayout( cols = 1  ,
+												 orientation = 'horizontal' ,
+												 id = tag
 												  )
-							bar = Builder.load_string( self._retr_resource( 'dlg_action_bar_3' ) )
-							bar.ids.view_btn_a.text = 'back'
-							bar.ids.view_btn_a.bind( on_press =
-								lambda a:App.get_running_app()._manip_extended_window() )
-							layout.add_widget( bar )
 							layout.add_widget( Label( text = tag  ,
 													  color = [ 1, 0 , 0 , 1] ,
 													  font_size = 16 ,
+													  id = 'tag_label' ,
 													  size_hint_y = 0.1 ) )
 
 							scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
 							tx = scrolly.children[0]
-							tx.text = ''
+							tx.text = content
 
 							layout.add_widget( scrolly )
 							layout.add_widget( Label( text =  datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S" )  ,
@@ -546,7 +663,6 @@ class AppDiscoveryScreen( Screen ) :
 													color = [ 1, 0 , 0 , 1] ) )
 
 							return layout
-
 
 
 
@@ -765,8 +881,14 @@ class TransportScreen( Screen ) :
 						thred.start()
 
 
+
+
+
 					def on_touch_up( self , touch ) :
 							self._selected_accordion_item()
+
+
+
 
 
 					def _selected_accordion_item( self  ) :
@@ -838,10 +960,10 @@ class TransportScreen( Screen ) :
 								App.get_running_app()._logger.error( e.message )
 
 							try :
-								thr = App.get_running_app()._thrd.thrds['firewalk console #'  + str( App.get_running_app()._console_count )]
-								if thr :
-									if thr['stop_alert'].isSet() :
-										return
+											thr = App.get_running_app()._thrd.thrds['firewalk console #'  + str( App.get_running_app()._console_count )]
+											if thr :
+												if thr['stop_alert'].isSet() :
+													return
 							except :
 								pass
 

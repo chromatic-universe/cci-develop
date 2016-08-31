@@ -220,8 +220,10 @@ def firewalk( ip = None ,
 				   ip
 				   ]
 
-			print cmd
+
 			return spawn_nmap_output(  cmd , 'firewalk' )
+
+
 
 
 
@@ -236,7 +238,7 @@ def spawn_nmap_output( cmdline = None , moniker = 'nmap' ) :
 
 			if cmdline is None :
 				raise Exception( '..spawn_nmap_output...no cmdline supplied' )
-
+			print cmdline
 			out = str()
 			boiler = str()
 			b_ret = True
@@ -246,10 +248,10 @@ def spawn_nmap_output( cmdline = None , moniker = 'nmap' ) :
 					out = proc.check_output( cmdline  )
 				except proc.CalledProcessError as e :
 					b_ret = False
-					out = e.message
 			except Exception as e :
 				b_ret = False
-				raise Exception(  moniker + ' '  + e.message )
+				out = moniker + ' '  + e.message
+
 
 
 			return b_ret , out
@@ -261,7 +263,6 @@ def spawn_nmap_output( cmdline = None , moniker = 'nmap' ) :
 if __name__ == '__main__' :
 
 			#b_ret , out = mongo_extended_metadata( 'cci-aws-3'  )
-
-			b_ret , out = firewalk( ip = 'cci-aws-1' , max_ports = 7 )
-
-			print out
+			#b_ret , out = firewalk( ip = 'cci-aws-1' , max_ports = 7 )
+			#b_ret , out = ip_geography( '52.84.127.83' , '../ip_geo_key' )
+			pass

@@ -16,7 +16,10 @@ import fcntl
 import struct
 import subprocess as proc
 import urllib2
+import json
 import requests
+import pprint
+from ipwhois import IPWhois
 
 ##############
 '''disable ipv6 console annoyance'''
@@ -59,12 +62,58 @@ def essid_scan() :
 
 
 
+# ---------------------------------------------------------------------------------------------
+def ip_geography( ip = None ,
+			      key_file = None ) :
+			"""
+
+			:param ip:
+			:param key_file:
+			:return:
+			"""
+
+
+			key = str()
+			b_ret = False
+			out = str()
+
+			if ip is None or key_file is None :
+				raise ValueError( 'bad parameter list' )
+
+
+			with open( key_file  )as f  :
+				key = f.readline().strip()
+
+			try :
+
+				req = 'http://api.ipinfodb.com//v3/ip-city/?key=%s&format=json&ip=%s' % \
+					  ( key , ip )
+				r = requests.get( req )
+				out  = json.dumps( r.json() )
+
+				obj = IPWhois( ip )
+				results = obj.lookup_rdap(depth=1)
+				s = StringIO()
+				pprint.pprint( results , s )
+				out += '\n\n\n'
+				out += s.getvalue()
+
+				b_ret = True
+
+			except Exception as e :
+				out = e.message
+
+
+
+			return b_ret , out
+
+
+
+
 # ------------------------------------------------------------------------------------
 if __name__ == '__main__' :
 
 			#quick_wireless_sniff()
-			print essid_scan()
-
-
+			print ip_geography( '173.167.195.34' , '../ip_geo_key' )
 
 
