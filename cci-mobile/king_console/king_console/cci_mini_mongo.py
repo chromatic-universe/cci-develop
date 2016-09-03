@@ -134,6 +134,7 @@ class cci_mini_mongo( cci_mini_mobile.cci_mobile ) :
 									  ':'  + \
 									 str( self._mongo_port )
 
+
 						self._mongo = MongoClient( connect_str ,
 												   tz_aware = True ,
 												   socketTimeoutMS = 50000 ,

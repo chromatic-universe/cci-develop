@@ -32,7 +32,7 @@ except ImportError:  # python 3
 from application import app , mongo_no_resource_exception , _logger
 
 app.config['MONGO_DBNAME'] = 'cci_maelstrom'
-app.config['MONGO_URI'] = 'mongodb://cci-aws-3:27017/cci_maelstrom'
+app.config['MONGO_URI'] = 'mongodb://192.168.43.98:27017/cci_maelstrom'
 app.config['MONGO_CONNECT_TIMEOUT_MS'] = 5000
 app.config['MONGO_SOCKET_TIMEOUT_MS'] = 5000
 mongo = PyMongo( app )
@@ -285,6 +285,36 @@ app.add_url_rule( '/mongo/retr_auth_apps' ,
 				  'retr_auth_apps' ,
 				  view_func=retr_auth_apps ,
 				  methods=['GET'] )
+
+
+
+
+# --------------------------------------------------------------------------------------------------------
+def insert_device() :
+			"""
+			POST insert device
+			:param payload
+			:return:
+			"""
+
+			_logger.info( '...insert device...' )
+			output = []
+
+			db =  mongo.db.auth_devices
+			if request.method == 'POST' :
+
+				data = json.loads( request.data )
+				ack = db.insert( data )
+				if not ack :
+					_logger.error( '...insert_edevice%s' % e.message )
+					raise mongo_no_resource_exception( 'db device insert failed' )
+
+				return jsonify( {'result' : 'ok'} )
+
+app.add_url_rule( '/mongo/insert_device' ,
+				  'insert_device' ,
+				  view_func=insert_device ,
+				  methods=['POST'] )
 
 
 

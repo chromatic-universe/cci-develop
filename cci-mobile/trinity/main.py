@@ -13,6 +13,7 @@ import datetime
 from functools import partial
 
 import kivy
+from kivy.config import Config
 from kivy.uix.accordion import Accordion, AccordionItem
 from kivy.uix.carousel import Carousel
 from kivy.uix.label import Label
@@ -35,11 +36,12 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock , mainthread
 from kivy.core.window import Window
 from kivy.lang import Builder
+from kivy.utils import platform
 from kivy.properties import StringProperty, ObjectProperty
 from kivy.uix.settings import SettingsWithSidebar , SettingsWithSpinner
-
+from kivy.utils import platform
 # cci
-
+from streams import tr_utils
 
 
 kivy.require( '1.9.1' )
@@ -111,21 +113,27 @@ class ccitrinityApp( App ) :
 
 
 						self._update_status( self.root.ids.status_text , '...initializing...' )
+						self._update_status( self.root.ids.vulture_status_text , '...initializing...' )
 						is_running = False
 						try :
 							 pid = None
+							 pid_vulture = None
 							 try :
 								 with open( 'pid' , 'r' ) as pidfile :
 									pid = pidfile.read().strip()
+								 with open( 'pid_vulture' , 'r' ) as v_pidfile :
+									pid_vulture = v_pidfile.read().strip()
 							 except :
 								 pass
 
-							 # check if process are running
-							 if pid :
+							 # check if processes are running
+							 if pid and pid_vulture:
 								 try :
 									# throws exception if process doesn't exist
 									is_running = os.path.exists( '/proc/%s' % pid )
 									self._pid = pid
+									is_running = os.path.exists( '/proc/%s' % pid_vulture )
+									self._pid_vulture = pid_vulture
 								 except :
 									# pid not running
 									pass
@@ -136,6 +144,7 @@ class ccitrinityApp( App ) :
 								self.root.ids.bootstrap_btn.background_color = [0,1,0,1]
 								self.root.ids.bootstrap_btn.text = 'start trinity'
 								self._update_status( self.root.ids.status_text , ' ....trinity....' )
+								self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/stream daemon....' )
 
 								"""
 								 # wrqputite pid
@@ -151,6 +160,8 @@ class ccitrinityApp( App ) :
 								self.root.ids.bootstrap_btn.text = 'stop trinity'
 								self.root.ids.process_info.text = 'pid: %s  port 7080' % self._pid
 								self._logger.info( '...server already running... pid %s....'  % self._pid )
+
+
 
 
 
@@ -233,7 +244,9 @@ class ccitrinityApp( App ) :
 						else :
 							self._update_status( self.root.ids.status_text , ' ....trinity bootstrapped..running....' )
 							self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
+							self.root.ids.manipulate_btn.background_color = [0,1,0,1]
 							self.root.ids.bootstrap_btn.text = 'stop trinity'
+							self.root.ids.manipulate_btn.text = 'manipulate streams'
 							self._update_status( self.root.ids.status_text , ' ...trinity started...' )
 							self._clock_event = Clock.schedule_interval( self._pid_callback, 2 )
 					except Exception as e :
@@ -242,7 +255,7 @@ class ccitrinityApp( App ) :
 
 					try :
 						self._update_status( self.root.ids.status_text , ' ....starting trinity vulture....' )
-
+						self._update_status( self.root.ids.vulture_status_text , ' ....starting trinity vulture....' )
 						b_ret = self._bootstrap_trinity_vulture()
 
 						if not b_ret :
@@ -251,13 +264,26 @@ class ccitrinityApp( App ) :
 
 							self._update_status( self.root.ids.status_text , ' ....trinity vulture bootstrapped..running....' )
 							self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
+							self.root.ids.manipulate_btn.background_color = [0,1,0,1]
 							self.root.ids.bootstrap_btn.text = 'stop trinity'
+							self.root.ids.manipulate_btn.text = 'manipulate streams'
 							self._update_status( self.root.ids.status_text , ' ...trinity vulture started...' )
+							self._update_status( self.root.ids.vulture_status_text , ' ...trinity vulture started...' )
 							#self._clock_event = Clock.schedule_interval( self._pid_callback, 2 )
 					except Exception as e :
 						self._logger.error( '..._on_start_trinity...vulture' + e.message )
 						self._update_status( self.root.ids.status_text , e.message )
 
+					"""
+					b_ret , mode , phys = tr_utils.iw_device_mode()
+					if b_ret :
+						self._update_status( self.root.ids.vulture_status_text ,
+											 '...wlan0 in %s mode physical device id = %s' % ( mode , phys ) )
+					else :
+						self._update_status( self.root.ids.vulture_status_text ,
+											 '...wlan0 interface not found' )
+
+					"""
 				else :
 					try :
 						try :
@@ -278,27 +304,41 @@ class ccitrinityApp( App ) :
 								andr = True
 
 							# kill trinity
-							cmd = ['su' ,
-								   '-c' ,
-								   'kill' ,
-								   '-9' ,
-								   pid]
+							if platform == 'android':
+								cmd = ['su' ,
+									   '-c' ,
+									   'kill' ,
+									   '-9' ,
+									   pid]
+							else :
+								cmd = ['kill' ,
+									   '-9' ,
+									   pid]
 
 							proc.check_output( cmd )
 							self._update_status( self.root.ids.status_text , ' ....trinity server stopped ....' )
 							# kill trinity-vulture
-							cmd = ['su' ,
-								   '-c' ,
-								   'kill' ,
-								   '-9' ,
-								   pid_vulture]
+							if platform == 'android':
+								cmd = ['su' ,
+									   '-c' ,
+									   'kill' ,
+									   '-9' ,
+									   pid_vulture]
+							else :
+								cmd = ['kill' ,
+									   '-9' ,
+									   pid_vulture]
 							proc.check_output( cmd )
 							self._update_status( self.root.ids.status_text , ' ....trinity vulture stopped ....' )
+							self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture stopped ....' )
 							self.root.ids.bootstrap_btn.background_color = [0,1,0,1]
+							self.root.ids.manipulate_btn.background_color = [1,0,0,1]
 							self.root.ids.bootstrap_btn.text = 'start trinity'
+							self.root.ids.manipulate_btn.text = '~'
 							if self._clock_event :
 								self._clock_event.cancel()
 							self.root.ids.process_info.text = 'port: 7080'
+							self.root.ids.vulture_process_info.text = 'port: 7081'
 						except proc.CalledProcessError as e:
 							self._logger.error( 'kill server failed...' + e.message )
 							self._update_status( self.root.ids.status_text , ' ...kill server failed...' + e.message )
@@ -316,7 +356,11 @@ class ccitrinityApp( App ) :
 
 					with open( 'pid' , 'r' ) as pidfile :
 						pid = pidfile.read().strip()
+					with open( 'pid_vulture' , 'r' ) as vpidfile :
+						pid_vulture = vpidfile.read().strip()
 					self.root.ids.process_info.text = 'pid: %s   ~  port: 7080' % pid
+					self.root.ids.vulture_process_info.text = 'pid: %s   ~  port: 7081' % pid_vulture
+
 
 
 
@@ -348,14 +392,20 @@ class ccitrinityApp( App ) :
 								self._logger.info( "...bootstrapping cci_trinity....." )
 								cmd = list()
 
-
-								cmd = [
-								  "su" ,
-								  "-c" ,
-								  "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-								  "./cci_trinity.pyo" ,
-								  "&"
-								  ]
+								if platform == 'android':
+									cmd = [
+									  "su" ,
+									  "-c" ,
+									  "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
+									  "./cci_trinity.pyo" ,
+									  "&"
+									  ]
+								else :
+									cmd = [
+									  "python" ,
+									  "./cci_trinity.py" ,
+									  "&"
+									  ]
 
 
 								proc.Popen( cmd )
@@ -410,13 +460,21 @@ class ccitrinityApp( App ) :
 								cmd = list()
 
 
-								cmd = [
-								  "su" ,
-								  "-c" ,
-								  "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-								  "./cci_trinity_async.pyo" ,
-								  "&"
-								  ]
+								if platform == 'android':
+									cmd = [
+									  "su" ,
+									  "-c" ,
+									  "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
+									  "./cci_trinity_async.pyo" ,
+									  "&"
+									  ]
+								else :
+									cmd = [
+									  "python" ,
+									  "./cci_trinity_async.py" ,
+									  "&"
+									  ]
+
 
 
 								proc.Popen( cmd )
@@ -449,6 +507,37 @@ class ccitrinityApp( App ) :
 
 
 
+			def _move_carousel( self  ) :
+						"""
+
+						:return:
+						"""
+
+						if self.root.ids.packet_stream_btn.text ==  'packet stream' :
+							self.root.ids.trinity_carousel_id.load_next()
+							self.root.ids.packet_stream_btn.text = 'app server'
+						else :
+							self.root.ids.trinity_carousel_id.load_previous()
+							self.root.ids.packet_stream_btn.text = 'packet stream'
+
+
+
+			def _on_sync_carousel( self  , args ) :
+						"""
+
+						:return:
+						"""
+
+						if args == 1 :
+							self.root.ids.packet_stream_btn.text =  'app server'
+						else :
+							self.root.ids.packet_stream_btn.text =  'packet stream'
+
+
+
+
+
+
 
 			# attributes
 			@property
@@ -463,7 +552,17 @@ class ccitrinityApp( App ) :
 
 if __name__ == '__main__':
 
+			Config.set('graphics','resizable',0 )
 
+
+			Config.set( 'graphics', 'width', '480' )
+			Config.set( 'graphics', 'height', '800' )
+			Config.set( 'input', 'mouse', 'mouse,disable_multitouch' )
+
+
+			#from kivy.core.window import Window
+
+			Window.size = ( 480 , 800 )
 			ct = ccitrinityApp()
 			ct.run()
 

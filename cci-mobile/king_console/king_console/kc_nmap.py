@@ -20,12 +20,34 @@ import struct
 import subprocess as proc
 import urllib2
 import requests
-
+from kivy.utils import platform
 
 firewalk_params = { 'max_retries' : 'firewalk.max-retries=%d' ,
 					'probe_timeout' : 'firewalk.probe-timeout=%d' ,
 					'recv_timeout' : 'firewalk.recv-timeout=%d' ,
 					'max_ports' : 'firewalk.max-probed-ports=%d' }
+
+
+# ---------------------------------------------------------------------------------------------
+def nmap_platform_dispatch( cmdline ) :
+			"""
+
+			:param cmdline:
+			:return:
+			"""
+
+			cmd = list()
+			if platform == 'android' :
+				cmd = [ "su" ,
+					   "-c" ,
+					   "/system/bin/nmap"]
+				cmd.extend( cmdline )
+			else :
+				cmd = ['nmap']
+				cmd.extend( cmdline )
+
+
+			return cmd
 
 
 
@@ -123,6 +145,7 @@ def ping_ip_subnet( ip = None ) :
 			b_ret = True
 			try :
 
+				nmap_platform_dispatch( )
 
 				cmd = ["su" ,
 					   "-c" ,
@@ -159,17 +182,13 @@ def mongo_extended_metadata( ip = None ) :
 			if ip is None :
 				raise ValueError( 'no ip supplied' )
 
-
-			cmd = [
-				    "su" ,
-					"-c" ,
-					"/system/bin/nmap" ,
-					"-p" ,
-					"27017" ,
-			        "--script",
-					"mongodb-info" ,
-					ip
-				 ]
+			cmd = nmap_platform_dispatch( [
+											"-p" ,
+											"27017" ,
+											"--script",
+											"mongodb-info" ,
+										    ip
+									     ] )
 			return spawn_nmap_output(  cmd , 'mongo_extended_metadata' )
 
 

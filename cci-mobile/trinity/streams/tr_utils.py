@@ -17,7 +17,7 @@ import datetime
 import base64
 import json
 import itertools
-from bson import json_util
+
 
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
@@ -114,7 +114,11 @@ def port_vulture( port ) :
 			if not os.geteuid() == 0 :
 				print  'need to be root to call port vulture...\n'
 				sys.exit( 1 )
-			cmd = ['netstat' , '-tulpn']
+			cmd = list()
+			if os.path.exists( '/system/bin/busybox' ) :
+				cmd = [ 'busybox' , 'netstat' , '-tulpn']
+			else :
+				cmd = ['netstat' , '-tulpn']
 			nstat = proc.Popen( cmd , stdout=proc.PIPE )
 			cmd = ['grep' , port]
 			grep = proc.Popen( cmd , stdin=nstat.stdout , stdout=proc.PIPE )
@@ -148,7 +152,7 @@ def port_vulture( port ) :
 
 
 # -----------------------------------------------------------------------
-def iw_monitor_supported_interface_modes( dev = 'phy#0' ) :
+def iw_supported_interface_modes( dev = 'phy#0' ) :
 		"""
 
 		:param dev:
@@ -237,7 +241,7 @@ if __name__ == '__main__' :
 		else :
 			print 'interface not found'
 
-		supported = iw_monitor_supported_interface_modes( dev = phys )
+		supported = iw_supported_interface_modes( dev = phys )
 		if len( supported ) :
 			print '->supported modes: %s' % supported
 

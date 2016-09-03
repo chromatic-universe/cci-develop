@@ -132,18 +132,6 @@ def shutdown() :
 if __name__ == "__main__"  :
 
 
-		try :
-
-				k = kafka.SimpleClient( 'cci-aws-1' )
-				_logger.info( ''.join( k.topics ) )
-				_logger.info( 'opened kafka client...' )
-
-
-		except Exception as e :
-			_logger.error( e.message )
-
-
-		_logger.info( '....cci_trinity...'  )
 
 		is_running = False
 		try :

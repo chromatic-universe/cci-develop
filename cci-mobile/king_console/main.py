@@ -7,6 +7,7 @@ import kivy
 from kivy.utils import platform
 from kivy.uix.accordion import Accordion, AccordionItem
 from kivy.uix.carousel import Carousel
+from kivy.config import Config
 from kivy.uix.label import Label
 from kivy.app import App
 from kivy.uix import image
@@ -26,6 +27,7 @@ from kivy.config import ConfigParser
 from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock , mainthread
 from kivy.core.window import Window
+from kivy.utils import platform
 from kivy.lang import Builder
 from kivy.base import EventLoop
 from kivy.properties import StringProperty, ObjectProperty
@@ -346,7 +348,7 @@ class kingconsoleApp( App ) :
 				# document repository
 				mac =  local_mac_addr()
 				try :
-					mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
+					mongo = kc_mongo_config( bootstrap ='192.168.43.98' ,
 											 log = self._logger ,
 											 device_id = mac ,
 											 last_ip = self._console_local ,
@@ -374,10 +376,8 @@ class kingconsoleApp( App ) :
 						[0 , self._session_id] ) )
 			self.dbq.put( package )
 			# document repository
-
-
 			if self._check_connectivity() :
-				mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
+				mongo = kc_mongo_config( bootstrap ='192.168.43.98' ,
 										 log = self._logger ,
 										 device_id = mac ,
 										 last_ip = self._console_local ,
@@ -412,33 +412,62 @@ class kingconsoleApp( App ) :
 
 			try :
 
-					cmd = ["su" ,
-						   "-c" ,
-						   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh"  ,
-						   "./king_console/kc_ping.pyo" ,
-						   "-x"
-						  ]
-					try :
-						out = proc.check_output( cmd  )
-						if out :
-							pos = out.find( '<ip_info>' )
-							if pos :
-								out = out[:pos]
-							out , out2 = out.split( ':' )
-							cmd = ['busybox' , 'ifconfig']
-							ifconfig = proc.check_output( cmd  )
-							self.logger.info( ifconfig )
-							iw =  essid_scan()
+				   if platform == 'android' :
+						cmd = ["su" ,
+							   "-c" ,
+							   "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh"  ,
+							   "./king_console/kc_ping.pyo" ,
+							   "-x"
+							  ]
+						try :
+							out = proc.check_output( cmd  )
+							if out :
+								pos = out.find( '<ip_info>' )
+								if pos :
+									out = out[:pos]
+								out , out2 = out.split( ':' )
+								cmd = ['busybox' , 'ifconfig']
+								ifconfig = proc.check_output( cmd  )
+								self.logger.info( ifconfig )
+								iw =  essid_scan()
 
+						except proc.CalledProcessError as e :
+							self._logger.error( e.message )
+							b_ret = False
+				   else :
+						return self._local_net_linux_info()
 
-					except proc.CalledProcessError as e :
-						self._logger.error( e.message )
-						b_ret = False
 			except Exception as e :
 				b_ret = False
 				self._logger.error( e.message )
 
 			return out , out2 , ifconfig , iw
+
+
+
+
+
+		def  _local_net_linux_info( self ) :
+			"""
+
+			:return:
+			"""
+			try :
+
+
+				out  = '~ '
+				out2 = '~'
+				cmd = ['ifconfig']
+				ifconfig = proc.check_output( cmd  )
+				self.logger.info( ifconfig )
+				iw =  '~'
+
+				return out , out2 , ifconfig , iw
+
+			except proc.CalledProcessError as e :
+				self._logger.error( e.message )
+				b_ret = False
+
 
 
 
@@ -861,13 +890,13 @@ class kingconsoleApp( App ) :
 				"""
 
 				if context == 'mongo' :
-					mongo = kc_mongo_config( bootstrap ='cci-aws-3' ,
+					mongo = kc_mongo_config( bootstrap ='cci-server' ,
 											 log = self._logger ,
 											 device_id = local_mac_addr() )
 					mongo.show_config()
 				elif context == 'kafka-publisher' :
 
-					kafka = kc_kafka_config( bootstrap = 'cci_aws_1' ,
+					kafka = kc_kafka_config( bootstrap = 'cci_server' ,
 											 log = self._logger )
 					kafka.show_config()
 
@@ -953,8 +982,16 @@ class kingconsoleApp( App ) :
 
 if __name__ == '__main__':
 
+		Config.set( 'graphics', 'width', '480' )
+		Config.set( 'graphics', 'height', '800' )
+		Config.set( 'input', 'mouse', 'mouse,disable_multitouch' )
 
-        kc = kingconsoleApp()
-        kc.run()
-        kc.logger.info( "main...app running....." )
+
+		#from kivy.core.window import Window
+
+		Window.size = ( 480 , 800 )
+
+		kc = kingconsoleApp()
+		kc.run()
+		kc.logger.info( "main...app running....." )
             

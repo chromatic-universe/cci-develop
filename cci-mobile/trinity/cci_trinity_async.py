@@ -203,32 +203,52 @@ if __name__ == "__main__":
 
 			# queue vulture
 			client = queue_client()
+			is_running = False
 
-			# logger
+			pid = None
+			try :
+				 with open( 'pid_vulture' , 'r' ) as pidfile :
+					pid = pidfile.read().strip()
+			except :
+				 pass
+
+			# check if process is running
+			if pid :
+				try :
+					# throws exception if process doesn't exist
+					os.kill( int( pid ) , 0 )
+					is_running = True
+				except :
+					# pid not running
+					pass
 
 
 
-			# Watch the queue for when new items show up
-			_logger.info( '...initializing queue vulture....' )
-			tornado.ioloop.IOLoop.instance().add_callback(client.watch_queue)
+			if not is_running :
+				# Watch the queue for when new items show up
+				_logger.info( '...initializing queue vulture....' )
+				tornado.ioloop.IOLoop.instance().add_callback(client.watch_queue)
 
 
-			# Create the web server with async coroutines
-			_logger.info( '...initializing http services....' )
-			application = tornado.web.Application([	(r'/trinity-vulture/start', queue_handler_start_policy ) ,
-													( r'/trinity-vulture/stop' ,  queue_handler_stop_policy ) , ], debug=True)
+				# Create the web server with async coroutines
+				_logger.info( '...initializing http services....' )
+				application = tornado.web.Application([	(r'/trinity-vulture/start', queue_handler_start_policy ) ,
+														( r'/trinity-vulture/stop' ,  queue_handler_stop_policy ) , ], debug=True)
 
-			_logger.info( '...starting listener on port 7081....' )
-			application.listen( 7081 )
-			
-			# signal handlers
-			_logger.info( '...setting system signal handlers....' )
-			signal.signal( signal.SIGTERM , sig_handler )
-			signal.signal( signal.SIGINT , sig_handler )
+				_logger.info( '...starting listener on port 7081....' )
+				application.listen( 7081 )
 
-			 # write pid
-			with open( 'pid_vulture' , 'w' ) as pidfile :
-				 pidfile.write( str( os.getpid() ) + '\n'  )
+				# signal handlers
+				_logger.info( '...setting system signal handlers....' )
+				signal.signal( signal.SIGTERM , sig_handler )
+				signal.signal( signal.SIGINT , sig_handler )
 
-			_logger.info( '...starting main io loop ....' )
-			tornado.ioloop.IOLoop.instance().start()
+				 # write pid
+				with open( 'pid_vulture' , 'w' ) as pidfile :
+					 pidfile.write( str( os.getpid() ) + '\n'  )
+
+				_logger.info( '...starting main io loop ....' )
+				tornado.ioloop.IOLoop.instance().start()
+			else :
+				_logger.info( '...server already running... pid %s....'  % pid )
+				sys.exit( 1 )
