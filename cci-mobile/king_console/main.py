@@ -62,7 +62,8 @@ import json
 #cci
 from king_console import resource_factory \
 	                     as resources , \
-						 screen
+						 screen , \
+						 kc_ping
 from king_console.kc_thread_manager \
 				  				import kc_thread_manager
 from king_console.kc_db_manager import kc_db_manager
@@ -452,11 +453,18 @@ class kingconsoleApp( App ) :
 
 			:return:
 			"""
+			out = str()
+			out2 = str()
 			try :
 
+				try :
+					out , out2 = kc_ping.retr_local_ip_info()
+				except :
+					out  = '~ '
+					out2 = '~'
+					pass
 
-				out  = '~ '
-				out2 = '~'
+
 				cmd = ['ifconfig']
 				ifconfig = proc.check_output( cmd  )
 				self.logger.info( ifconfig )
@@ -914,7 +922,7 @@ class kingconsoleApp( App ) :
 				self._view_manager.name = 'screen_view_manager'
 				self._view_manager.id = 'view_manager_screen'
 
-				layout = GridLayout( orientation='horizontal' , cols=1 )
+				layout = GridLayout( orientation='horizontal' , cols=1 , size = (480 , 500 ))
 				# action bar
 				ab = Builder.load_string( self._retr_resource( 'action_bar' ) )
 
@@ -925,19 +933,39 @@ class kingconsoleApp( App ) :
 
 				# tree view
 				tv = TreeView( root_options=dict( text = 'king console' , font_size = 18 ) )
-				n1 = tv.add_node(screen.TreeManagerLabel(text='king console main'))
-				n2 = tv.add_node(screen.TreeManagerLabel(text='level 1'), n1)
-				tv.add_node(screen.TreeManagerLabel(text='tcp'), n2)
-				tv.add_node(screen.TreeManagerLabel(text='network'), n2)
-				tv.add_node(screen.TreeManagerLabel(text='application'), n2)
-				tv.add_node(screen.TreeManagerLabel(text='datalink'), n2)
-				tv.add_node(screen.TreeManagerLabel(text='streams'), n2)
-				tv.add_node(screen.TreeManagerLabel(text='level 2'), n1)
-				tv.add_node(screen.TreeManagerLabel(text='level 3'), n1)
-				sv.add_widget( tv )
+				n1 = tv.add_node(screen.TreeManagerLabel(text='main context') )
+				n2 = tv.add_node(screen.TreeManagerLabel(text='transport'), n1)
+				tv.add_node(screen.TreeManagerLabel(text='syn ack'), n2)
+				n3 = tv.add_node(screen.TreeManagerLabel(text='mini mport scan'), n2)
+				tv.add_node(screen.TreeManagerLabel(text='discovery & port manip'), n3)
+				tv.add_node(screen.TreeManagerLabel(text='nmap firewalk'), n3)
+				tv.add_node(screen.TreeManagerLabel(text='atomic firewalk'), n3)
 
-				layout.add_widget( sv )
-				self._view_manager.add_widget( layout )
+
+				n4 = tv.add_node(screen.TreeManagerLabel(text='network'), n1)
+				tv.add_node(screen.TreeManagerLabel(text='ping'), n4)
+				n5 = tv.add_node(screen.TreeManagerLabel(text='ping subnet'), n4)
+				tv.add_node(screen.TreeManagerLabel(text='beaucoup ping' ) , n5),
+				n6 = tv.add_node(screen.TreeManagerLabel(text='application & discovery'), n1)
+				n7 = tv.add_node(screen.TreeManagerLabel(text='quick fingerprint'), n6)
+				tv.add_node(screen.TreeManagerLabel(text='fat ingerprint'), n6)
+				tv.add_node(screen.TreeManagerLabel(text='baby snmp'), n7)
+				tv.add_node(screen.TreeManagerLabel(text='upnp'), n7)
+				tv.add_node(screen.TreeManagerLabel(text='ip geography'), n7)
+				n8 = tv.add_node(screen.TreeManagerLabel(text='datalink'), n1)
+				tv.add_node(screen.TreeManagerLabel(text='arp'), n8)
+				n9 = tv.add_node(screen.TreeManagerLabel(text='arp scan'), n8)
+				tv.add_node(screen.TreeManagerLabel(text='arp monitor'), n9)
+				n10 = tv.add_node(screen.TreeManagerLabel(text='streams'), n1)
+				tv.add_node(screen.TreeManagerLabel(text='payload policy'), n10)
+				tv.add_node(screen.TreeManagerLabel(text='traceroute'), n10)
+				tv.add_node(screen.TreeManagerLabel(text='packet stream'), n10)
+
+				layout.add_widget( tv )
+				sv.add_widget( layout )
+
+
+				self._view_manager.add_widget( sv )
 				self.root.add_widget( self._view_manager )
 
 			self.root.current = self._view_manager.name
