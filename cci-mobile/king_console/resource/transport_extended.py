@@ -53,8 +53,8 @@ TransportScreen:
 				id: nmap_firewalk
 				orientation: 'vertical'
 			AccordionItem:
-				title: 'atomic firewalk'
-				id: item_atomic_firewalk
+				title: 'zombie'
+				id: item_zombie_scan
 				orientation: 'vertical'
 			AccordionItem:
 				title: 'cci-maelstrom'

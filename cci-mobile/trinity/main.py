@@ -11,6 +11,9 @@ import threading
 import socket
 import datetime
 from functools import partial
+import requests
+import json
+import sqlite3
 
 import kivy
 from kivy.config import Config
@@ -102,6 +105,40 @@ class ccitrinityApp( App ) :
 				self._pid = None
 				self._pid_vulture = None
 				self._clock_event = None
+				self._db_path = self._retrieve_default_db_path()
+
+
+
+			@mainthread
+			def _start_policy_callback( self , dt ) :
+						"""
+
+						give vulture server time to initialize
+						1
+						:return:
+						"""
+
+						# start default document policy
+						try :
+							j = self._default_document_policy( True )
+							self._update_status( self.root.ids.status_text ,
+												 '..policies initialized..check streams for details.' )
+							s = '\n\n' + 24 * '*'
+							s += '\ndefault document policy\n'
+							s += 24 * '*'
+							s += '\n'
+							for key , value in j.iteritems() :
+								s += '%s = %s\n' % ( key , value )
+							self._update_status( self.root.ids.vulture_status_text ,
+												 '...default policies initialized....%s' % s )
+
+						except Exception as e :
+							self._update_status( self.root.ids.status_text ,
+												 '...policy initialization failed..' )
+							self._update_status( self.root.ids.vulture_status_text ,
+												 '....policy initialization failed.....' )
+
+
 
 
 
@@ -155,11 +192,14 @@ class ccitrinityApp( App ) :
 								"""
 
 							 else :
-								self._update_status( self.root.ids.status_text , ' ....trinity running....' )
-								self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
-								self.root.ids.bootstrap_btn.text = 'stop trinity'
-								self.root.ids.process_info.text = 'pid: %s  port 7080' % self._pid
-								self._logger.info( '...server already running... pid %s....'  % self._pid )
+									self._update_status( self.root.ids.status_text , ' ....trinity running....' )
+									self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/daemon running....' )
+									self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
+									self.root.ids.manipulate_btn.background_color = [0,1,0,1]
+									self.root.ids.bootstrap_btn.text = 'stop trinity'
+									self.root.ids.manipulate_btn.text = 'manipulate streams'
+									self.root.ids.process_info.text = 'pid: %s  port 7080' % self._pid
+									self._logger.info( '...server already running... pid %s....'  % self._pid )
 
 
 
@@ -215,7 +255,124 @@ class ccitrinityApp( App ) :
 				:param status:
 				:return:
 				"""
-				container.text = container.text + timestamp + status + '\n'
+
+				container.text = timestamp + status + '\n' + container.text
+
+
+
+
+
+
+			def _retrieve_default_db_path( self ) :
+					"""
+
+					:return string db_path:
+					"""
+					db_path = None
+					try :
+
+						with open( 'bootstrap_db' , 'r' ) as f :
+							db_path = f.read().strip().split( '=' )[1]
+							db_path.lstrip()
+
+					except Exception as e :
+						self._logger.error( '...retrieve_default_db_path failed...%s' , e.message )
+
+
+					return db_path
+
+
+
+
+			def _retrieve_policy(  self , policy_moniker , provider_type ) :
+					"""
+
+					:param policy_moniker:
+					:param provider_type:
+					:return:
+					"""
+
+					json_row = None
+					try :
+
+						self._logger.info( '...retrieve payload_policy ...' )
+						s =  '/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite'
+						con = sqlite3.connect( self._db_path )
+						con.row_factory = tr_utils.dict_factory
+						cur = con.cursor()
+
+						s =  'select * from payload_policy ' \
+							 'where moniker = "%s" '  \
+							 'and provider_type = "%s" ' \
+							 'and active = 1'  % ( policy_moniker , provider_type )
+						cur.execute( s )
+
+						json_row = cur.fetchone()
+						if json_row is not None :
+							self._logger.info( '...retrieved default policy...%s' % json.dumps( json_row ) )
+						else :
+							self._logger.error( '...could not retrieve default policy...' )
+					except sqlite3.OperationalError as e :
+						self._logger.error( '...retrieve_policy statement failed...%s' , e.message )
+
+
+					return json_row
+
+
+
+
+			def _default_document_policy( self  , toggle ) :
+				"""
+
+				:return:
+				"""
+
+				jsn = None
+				try :
+					jsn = self._retrieve_policy(  'default' , 'document' )
+					if int( jsn['active'] ) :
+						# start default document policy
+						self._toggle_policy( jsn , toggle )
+				except Exception as e :
+					self._logger.info( '..exception..'  % e.message )
+					return None
+
+
+				return jsn
+
+
+
+
+
+			def _toggle_policy( self , jsn , toggle ) :
+				"""
+
+				:param json dictionary:
+				:return:
+				"""
+
+				try :
+
+					data = { 'moniker' : jsn['moniker'] ,
+							 'provider_type' : jsn['provider_type'] ,
+							 'interval' : str( jsn['run_interval'] ) ,
+							 'db_bootstrap' : '/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite'
+						   }
+
+					if toggle :
+						ps = 'start'
+					else :
+						ps = 'stop'
+					s = 'http://localhost:7081/trinity-vulture/%s' % ps
+					r = requests.post( s ,
+									   data = json.dumps( data ) )
+					if r.status_code != 200 :
+						raise( '...post policy %s %s start failed...' % ( jsn['moniker'] , jsn['provider_type'] ) )
+					self._logger.info( '...post policy succeeded for %s %s...' % ( jsn['provider_type'] , jsn['provider_type'] ) )
+
+				except Exception as e :
+					self._logger.error( e.message )
+
 
 
 
@@ -232,6 +389,7 @@ class ccitrinityApp( App ) :
 
 				self._logger.info( '..._on_start_trinity...' )
 
+				# start trinity
 				if self.root.ids.bootstrap_btn.text == 'start trinity' :
 					try :
 						self._update_status( self.root.ids.status_text , ' ....starting trinity....' )
@@ -253,6 +411,7 @@ class ccitrinityApp( App ) :
 						self._logger.error( '..._on_start_trinity...' + e.message )
 						self._update_status( self.root.ids.status_text , e.message )
 
+					# start trinity vulture
 					try :
 						self._update_status( self.root.ids.status_text , ' ....starting trinity vulture....' )
 						self._update_status( self.root.ids.vulture_status_text , ' ....starting trinity vulture....' )
@@ -269,21 +428,17 @@ class ccitrinityApp( App ) :
 							self.root.ids.manipulate_btn.text = 'manipulate streams'
 							self._update_status( self.root.ids.status_text , ' ...trinity vulture started...' )
 							self._update_status( self.root.ids.vulture_status_text , ' ...trinity vulture started...' )
-							#self._clock_event = Clock.schedule_interval( self._pid_callback, 2 )
+
+							# schedule default policies to start in 8 seconds
+							self._update_status( self.root.ids.status_text ,
+												 '..waiting for doppleganger to initialize..standby..' )
+							Clock.schedule_once( self._start_policy_callback , 8 )
+
 					except Exception as e :
 						self._logger.error( '..._on_start_trinity...vulture' + e.message )
 						self._update_status( self.root.ids.status_text , e.message )
 
-					"""
-					b_ret , mode , phys = tr_utils.iw_device_mode()
-					if b_ret :
-						self._update_status( self.root.ids.vulture_status_text ,
-											 '...wlan0 in %s mode physical device id = %s' % ( mode , phys ) )
-					else :
-						self._update_status( self.root.ids.vulture_status_text ,
-											 '...wlan0 interface not found' )
 
-					"""
 				else :
 					try :
 						try :

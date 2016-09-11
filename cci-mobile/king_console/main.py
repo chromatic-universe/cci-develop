@@ -53,11 +53,13 @@ import base64
 import urllib2
 from functools import partial
 from kivy.utils import platform
-from jnius import autoclass
 import sqlite3
 import Queue
 import uuid
 import json
+
+if platform == 'android' :
+	from jnius import autoclass
 
 #cci
 from king_console import resource_factory \
@@ -71,7 +73,7 @@ from king_console.kc_stream 	import kc_mongo_config , \
 								       kc_kafka_config
 from king_console.kc_wireless import *
 
-import paramiko
+
 
 
 kivy.require(  '1.9.1'  )
@@ -347,17 +349,21 @@ class kingconsoleApp( App ) :
 
 			if self._check_connectivity() :
 				# document repository
-				mac =  local_mac_addr()
 				try :
-					mongo = kc_mongo_config( bootstrap ='192.168.43.98' ,
-											 log = self._logger ,
-											 device_id = mac ,
-											 last_ip = self._console_local ,
-											 last_real_ip = self._console_real )
-					mongo._update_device_session( True )
-					self._logger.info( '..updated session info remote...opened %s' % mac )
+					mac =  local_mac_addr()
+					data = {
+							 "active" : "true" ,
+							 "device_id" : mac ,
+							 "last_known_ip" : self._console_local ,
+							 "last_known_remote_ip" : self._console_real
+							}
+					s = 'http://localhost:7081/trinity-vulture/session_update'
+					r = requests.post( s ,
+									   data = json.dumps( data ) )
 				except Exception as e :
 					self._logger.error( e.message )
+
+
 			else :
 				self._logger.error( '...could not update session remote info...no connectivity...' )
 
@@ -378,12 +384,21 @@ class kingconsoleApp( App ) :
 			self.dbq.put( package )
 			# document repository
 			if self._check_connectivity() :
-				mongo = kc_mongo_config( bootstrap ='192.168.43.98' ,
-										 log = self._logger ,
-										 device_id = mac ,
-										 last_ip = self._console_local ,
-										 last_real_ip = self._console_real)
-				mongo._update_device_session( False )
+				try :
+					mac =  local_mac_addr()
+					data = {
+							 "active" : "false" ,
+							 "device_id" : mac ,
+							 "last_known_ip" : self._console_local ,
+							 "last_known_remote_ip" : self._console_real
+							}
+					s = 'http://localhost:7081/trinity-vulture/session_update'
+					r = requests.post( s ,
+									   data = json.dumps( data ) )
+				except Exception as e :
+					self._logger.error( e.message )
+
+
 				self._logger.info( '..updated session info remote...closed %s' % mac )
 			else :
 				self._logger.error( '...could not update session remote info...no connectivity...' )
@@ -568,7 +583,6 @@ class kingconsoleApp( App ) :
 
 
 
-
 		def _db_queue_thred( self ) :
 			"""
 
@@ -576,7 +590,9 @@ class kingconsoleApp( App ) :
 			"""
 
 			db = kc_db_manager( '/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite' , self._logger )
+
 			while not self._thrd.thrds['db_queue_thred']['stop_alert'].isSet() :
+
 				while not self.dbq.empty() :
 					db.db_lk.acquire()
 					package  = self.dbq.get()
@@ -592,8 +608,8 @@ class kingconsoleApp( App ) :
 					finally :
 						db.db_lk.release()
 
-					sleep( 0.25 )
 
+				sleep( 0.25 )
 
 
 
@@ -627,15 +643,7 @@ class kingconsoleApp( App ) :
 							self._logger.error( 'check connectivity failed....' +  e.message )
 							return False
 					else :
-							"""
-							try:
-								# google , use ip so no dns lookup
-								response=urllib2.urlopen( 'http://209.85.232.106' ,timeout=3 )
-								return True
-							except urllib2.URLError as err :
-								pass
-							return False
-						    """
+
 							return True
 
 
@@ -650,6 +658,21 @@ class kingconsoleApp( App ) :
 
 			self._dlg_param.dismiss()
 
+
+
+
+		def run_default_document_policy( self  , run ) :
+			"""
+
+			:param run:
+			:return:
+			"""
+
+			self._toggle_policy( 'default' ,
+								'document' ,
+								self._default_document_policy[0][2] ,
+								'/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite' ,
+								run )
 
 
 
@@ -698,18 +721,14 @@ class kingconsoleApp( App ) :
 			thred.start()
 
 			self.root.current_screen._retrieve_policy( 'default' , 'document' )
-			self._toggle_policy( 'default' ,
-								'document' ,
-								self._default_document_policy[0][2] ,
-								'/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite' ,
-								True )
+
 
 			self.root.current_screen.ids.console_local_id.text = self._console_local
 			self.root.current_screen.ids.console_real_id.text = self._console_real
 			self.root.current_screen.ids.console_interfaces.text = self._console_ifconfig + '\n\n' + self._console_iwlist
 			self._cur_console_buffer = self.root.current_screen.ids.console_interfaces.text
 
-			EventLoop.window.bind( on_keyboard = self._hook_keyboard )
+			#EventLoop.window.bind( on_keyboard = self._hook_keyboard )
 
 
 
@@ -904,7 +923,7 @@ class kingconsoleApp( App ) :
 					mongo.show_config()
 				elif context == 'kafka-publisher' :
 
-					kafka = kc_kafka_config( bootstrap = 'cci_server' ,
+					kafka = kc_kafka_config( bootstrap = 'cci-server' ,
 											 log = self._logger )
 					kafka.show_config()
 
@@ -922,7 +941,7 @@ class kingconsoleApp( App ) :
 				self._view_manager.name = 'screen_view_manager'
 				self._view_manager.id = 'view_manager_screen'
 
-				layout = GridLayout( orientation='horizontal' , cols=1 , size = (480 , 500 ))
+				layout = GridLayout( orientation='horizontal' , size_hint_y = None  , cols=1 , size = (480 , 900 ))
 				# action bar
 				ab = Builder.load_string( self._retr_resource( 'action_bar' ) )
 
@@ -958,8 +977,8 @@ class kingconsoleApp( App ) :
 				tv.add_node(screen.TreeManagerLabel(text='arp monitor'), n9)
 				n10 = tv.add_node(screen.TreeManagerLabel(text='streams'), n1)
 				tv.add_node(screen.TreeManagerLabel(text='payload policy'), n10)
-				tv.add_node(screen.TreeManagerLabel(text='traceroute'), n10)
-				tv.add_node(screen.TreeManagerLabel(text='packet stream'), n10)
+				tv.add_node(screen.TreeManagerLabel(text='traceroute context' ) )
+				tv.add_node(screen.TreeManagerLabel(text='packet stream context' ) )
 
 				layout.add_widget( tv )
 				sv.add_widget( layout )

@@ -32,7 +32,7 @@ except ImportError:  # python 3
 from application import app , mongo_no_resource_exception , _logger
 
 app.config['MONGO_DBNAME'] = 'cci_maelstrom'
-app.config['MONGO_URI'] = 'mongodb://192.168.43.98:27017/cci_maelstrom'
+app.config['MONGO_URI'] = 'mongodb://localhost:7083/cci_maelstrom'
 app.config['MONGO_CONNECT_TIMEOUT_MS'] = 5000
 app.config['MONGO_SOCKET_TIMEOUT_MS'] = 5000
 mongo = PyMongo( app )
@@ -126,7 +126,7 @@ app.add_url_rule( '/mongo/enum_devices' ,
 # --------------------------------------------------------------------------------------------------------
 def retr_device( device_id ) :
 			"""
-			GET 	retrieve one device or 404 by id( mac address )
+			GET  retrieve one device or 404 by id( mac address )
 			:param : device_id
 			:return : jsonified device payload
 			:rtype: json

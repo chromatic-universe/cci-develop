@@ -599,17 +599,23 @@
                             app_icon: 'king-console32.png'
                             #size_hint_x: .15
                         ActionButton:
-                            #icon: 'menu-icon.png'
                             text: 'views'
-                            on_press: app._on_view_manager()
-                        ActionButton:
-                            #icon: 'history.png'
-                            text: 'history'
-                            on_press: root._on_show_history()
-                        ActionButton:
-                            #icon: './image/note.png'
-                            text: 'notes'
-                            on_press: root._on_show_session_note()
+                        ActionGroup:
+                            ActionButton:
+                                text: 'nodes'
+                                on_press: app._on_view_manager()
+                            ActionButton:
+                                text: 'history'
+                                on_press: root._on_show_history()
+                            ActionButton:
+                                #icon: './image/note.png'
+                                text: 'notes'
+                                on_press: root._on_show_session_note()
+                            ActionButton:
+                                text: 'traceroute'
+                            ActionButton:
+                                text: 'packets'
+
 
                 BoxLayout:
                     orientation: 'vertical'

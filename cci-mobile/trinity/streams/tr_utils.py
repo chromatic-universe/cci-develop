@@ -21,6 +21,12 @@ import itertools
 
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
+##############
+'''disable ipv6 console annoyance'''
+logging.getLogger( "scapy.runtime" ).setLevel(logging.ERROR)
+from scapy.all import *
+
+
 
 # -----------------------------------------------------------------------------------
 def dict_factory( cursor, row)  :
@@ -140,7 +146,7 @@ def port_vulture( port ) :
 					else :
 						pid = int( s[0] )
 
-			return 	pid
+			return 	True , pid
 
 		except ValueError as e :
 			print 'error in parameter list %s' % e.message
@@ -188,6 +194,35 @@ def iw_supported_interface_modes( dev = 'phy#0' ) :
 
 
 
+# ---------------------------------------------------------------------------------------------
+def retr_local_ip_info() :
+		"""
+
+		:return tuple of ips:
+		"""
+
+		# local
+		local_ip = '0.0.0.0'
+		remote_ip = '0.0.0.0'
+		s = socket.socket( socket.AF_INET , socket.SOCK_DGRAM )
+
+		try :
+			local_ip = [l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1],
+							   [[(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET,
+							   socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
+		except :
+			# give it up for a lost cause
+			local_ip = '0.0.0.0'
+
+		finally:
+			s.close()
+
+
+		return local_ip
+
+
+
+
 
 # ------------------------------------------------------------------------
 def init_logging( moniker = 'current_app' , fmt = log_format ) :
@@ -230,6 +265,8 @@ def init_logging( moniker = 'current_app' , fmt = log_format ) :
 
 if __name__ == '__main__' :
 
+		print retr_local_ip_info()
+		"""
 		print '* ' * 39
 		print '\t\tchromatic universe cci-trinity packet streamer , 2016'
 		print '* ' * 39
@@ -263,3 +300,4 @@ if __name__ == '__main__' :
 			print 'cci-trinity application server is running with pid %d' % pid
 		else :
 			print 'cci-trinity application server is not running...'
+		"""

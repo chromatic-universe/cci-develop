@@ -17,6 +17,12 @@ _logger.addHandler( fh )
 
 
 
-
+# --------------------------------------------------------------------
 class mongo_no_resource_exception( Exception ):
     pass
+
+
+# ---------------------------------------------------------------------
+class kafka_no_resource_exception( Exception ):
+    pass
+

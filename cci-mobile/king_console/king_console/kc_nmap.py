@@ -140,32 +140,15 @@ def ping_ip_subnet( ip = None ) :
 			if ip is None :
 				raise Exception( 'no ip supplied' )
 
-			out = str()
-			boiler = str()
-			b_ret = True
-			try :
-
-				nmap_platform_dispatch( )
-
-				cmd = ["su" ,
-					   "-c" ,
-					   "/system/bin/nmap" ,
-					   "-n" ,
-					   '-sP',
-					   ip
-					  ]
-
-				try :
-					out = proc.check_output( cmd  )
-				except proc.CalledProcessError as e :
-					b_ret = False
-					out = e.message
-			except Exception as e :
-				b_ret = False
-				raise Exception(  'quick fingerprint...' + e.message )
 
 
-			return b_ret , out
+			cmd = nmap_platform_dispatch( ["-n" ,
+										   '-sP',
+										   ip
+										  ] )
+
+
+			return spawn_nmap_output(  cmd , 'ping_ip_subnet' )
 
 
 

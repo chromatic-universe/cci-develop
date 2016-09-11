@@ -16,7 +16,7 @@ import requests
 import datetime
 import base64
 import json
-from bson import json_util
+
 
 import flask
 from flask import Flask , request , send_file , render_template , url_for
@@ -32,6 +32,7 @@ except ImportError:  # python 3
 
 from application import app , _logger
 
+default_db = None
 
 # cci
 import tr_utils
@@ -171,4 +172,92 @@ app.add_url_rule( '/session_call_history/<device>/<session_id>' ,
 				  methods=['GET'] )
 
 
+
+# ----------------------------------------------------------------------------------------------------
+def retrieve_policy( policy_moniker , provider_type ) :
+					"""
+
+					:param policy_moniker:
+					:param provider_type:
+					:return:
+					"""
+
+					json_row = None
+					try :
+
+						_logger.info( '...retrieve payload_policy ...' )
+						con = sqlite3.connect( "/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite" )
+						con.row_factory = tr_utils.dict_factory
+						cur = con.cursor()
+
+						s =  'select * from payload_policy ' \
+							 'where moniker = "%s" '  \
+							 'and provider_type = "%s" ' \
+							 'and active = 1'  % ( policy_moniker , provider_type )
+						cur.execute( s )
+
+						json_row = cur.fetchone()
+						if json_row is not None :
+							_logger.info( '...retrieved default policy...%s' % json.dumps( json_row ) )
+						else :
+							_logger.error( '...could not retrieve default policy...' )
+					except sqlite3.OperationalError as e :
+						_logger.error( '...retrieve_policy statement failed...%s' , e.message )
+
+
+					return json_row
+
+
+
+
+# ----------------------------------------------------------------------------------------------------
+def retrieve_default_db_path() :
+					"""
+
+					:return string db_path:
+					"""
+					db_path = None
+					try :
+
+						with open( 'bootstrap_db' , 'r' ) as f :
+							db_path = f.read().strip().split( '=' )[1]
+
+					except Exception as e :
+						_logger.error( '...retrieve_default_db_path failed...%s' , e.message )
+
+
+					return db_path
+
+
+
+# ----------------------------------------------------------------------------------------------------
+def retrieve_config_atom( atom ) :
+					"""
+
+					:param atom:
+					:return:
+					"""
+
+					json_row = None
+					try :
+
+						_logger.info( '...retrieve_config_atom ...' )
+						con = sqlite3.connect( "/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite" )
+						con.row_factory = tr_utils.dict_factory
+						cur = con.cursor()
+
+						s =  'select map from metadata_config ' \
+							 'where moniker = "%s" '  %  atom
+						cur.execute( s )
+
+						json_row = cur.fetchone()
+						if json_row is not None :
+							_logger.info( '...retrieved config map for ...%s' % atom )
+						else :
+							_logger.error( '...could not retrieve atom for %s...' % atom )
+					except sqlite3.OperationalError as e :
+						_logger.error( '...retrieve_policy statement failed...%s' , e.message )
+
+
+					return json_row
 
