@@ -320,6 +320,21 @@ class kingconsoleApp( App ) :
 
 
 
+
+		def _real_ip_callback( self , ip = None ) :
+			"""
+
+			:param ip:
+			:return real ip:
+			"""
+
+			# if using nat will differ
+			rip = urllib2.urlopen( 'https://enabledns.com/ip' , timeout=4 )
+			self._console_real = rip.read()
+			self.root.current_screen.ids.console_real_id.text = self._console_real
+
+
+
 		def _create_session( self ) :
 			"""
 
@@ -358,8 +373,10 @@ class kingconsoleApp( App ) :
 							 "last_known_remote_ip" : self._console_real
 							}
 					s = 'http://localhost:7081/trinity-vulture/session_update'
-					r = requests.post( s ,
-									   data = json.dumps( data ) )
+					requests.post( s ,
+									   data = json.dumps( data ) , timeout = 2 )
+
+					Clock.schedule_once( self._real_ip_callback , 8  )
 				except Exception as e :
 					self._logger.error( e.message )
 
@@ -393,8 +410,8 @@ class kingconsoleApp( App ) :
 							 "last_known_remote_ip" : self._console_real
 							}
 					s = 'http://localhost:7081/trinity-vulture/session_update'
-					r = requests.post( s ,
-									   data = json.dumps( data ) )
+					requests.post( s ,
+									   data = json.dumps( data ) , timeout = 2 )
 				except Exception as e :
 					self._logger.error( e.message )
 
@@ -446,6 +463,7 @@ class kingconsoleApp( App ) :
 								ifconfig = proc.check_output( cmd  )
 								self.logger.info( ifconfig )
 								iw =  essid_scan()
+
 
 						except proc.CalledProcessError as e :
 							self._logger.error( e.message )
@@ -728,7 +746,7 @@ class kingconsoleApp( App ) :
 			self.root.current_screen.ids.console_interfaces.text = self._console_ifconfig + '\n\n' + self._console_iwlist
 			self._cur_console_buffer = self.root.current_screen.ids.console_interfaces.text
 
-			#EventLoop.window.bind( on_keyboard = self._hook_keyboard )
+			EventLoop.window.bind( on_keyboard = self._hook_keyboard )
 
 
 
@@ -918,6 +936,7 @@ class kingconsoleApp( App ) :
 
 				if context == 'mongo' :
 					mongo = kc_mongo_config( bootstrap ='cci-server' ,
+											 port = 8001 ,
 											 log = self._logger ,
 											 device_id = local_mac_addr() )
 					mongo.show_config()

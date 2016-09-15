@@ -23,6 +23,7 @@ import requests
 from tornado.queues import Queue
 from tornado.ioloop import PeriodicCallback
 from tornado.locks import Semaphore
+from tornado.process import Subprocess , CalledProcessError
 
 
 max_wait_seconds_before_shutdown  = 3
@@ -33,7 +34,7 @@ from application_vulture  import app ,\
 								 _logger
 from streams import tr_utils , \
 				    tr_sqlite
-from http_tunnel import tunneld , tunnel
+
 
 callback_class_dispatch = { 'document' : 'tr_payload_stalker' ,
 							'stream'   :  'tr_stream-stalker' }
@@ -44,12 +45,10 @@ stream_mongo_mod = importlib.import_module( 'streams.tr_mongo_rest'  )
 policy_semaphore = Semaphore( 1 )
 g_periodic_callbacks = dict()
 probe_thred = None
-http_tunnel_thred = None
-http_document_tunnel_thred = None
-http_stream_tunnel_thred = None
 http_tunnel_pid = None
 default_stream_proxy_port = 7082
 default_document_proxy_port = 7083
+const_tunnel_process = 'cci-trinity-tunnel'
 
 
 
@@ -197,141 +196,6 @@ class cci_sibling_probe( tornado.web.RequestHandler )  :
 
 
 # --------------------------------------------------------------------------------------
-class cci_http_tunnel( tornado.web.RequestHandler )  :
-			"""
-
-			:return http tunnel running
-			"""
-
-
-			@tornado.gen.coroutine
-			def get( self ) :
-
-				b_ret = 'true'
-				if http_tunnel_thred :
-					b_ret = 'false'
-
-				resp = { "http_tunnel_running" : b_ret }
-
-				self.write( json.dumps( resp )  )
-
-
-
-# --------------------------------------------------------------------------------------
-def start_document_http_tunnel( bootstrap ) :
-			"""
-
-			:return:
-			"""
-
-			_logger.info( '...starting document http tunnel on localhost...' )
-
-			boot = bootstrap.split( ':' )
-			jr = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-http-tunnel-proxy' )['map'] )
-			remote = jr["http_proxy"].split( ':' )
-
-			try :
-
-				remote_addr = { 'host' : remote[0] , 'port' : int( remote[1] ) }
-				target_addr = { 'host' : boot[0] , 'port' : boot[1] }
-
-				tunnel.start_tunnel( default_document_proxy_port , remote_addr , target_addr , {} )
-
-			except Exception as e :
-				_logger.error( e.message )
-
-				return False
-
-
-			return True
-
-
-# --------------------------------------------------------------------------------------
-def start_document_http_tunnel_thred( bootstrap )  :
-			"""
-
-			:return:
-			"""
-
-			start_document_http_tunnel( bootstrap )
-
-
-
-
-# --------------------------------------------------------------------------------------
-def start_stream_http_tunnel( bootstrap ) :
-			"""
-
-			:return:
-			"""
-
-			_logger.info( '...starting stream http tunnel on localhost...' )
-
-			boot = bootstrap.split( ':' )
-			jr = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-http-tunnel-proxy' )['map'] )
-			remote = jr['http_proxy'].split( ':' )
-
-			try :
-
-				remote_addr = { 'host' : remote[0] , 'port' : int( remote[1] ) }
-				target_addr = { 'host' : boot[0], 'port' : boot[1]  }
-
-				tunnel.start_tunnel( default_stream_proxy_port , remote_addr , target_addr , {} )
-
-			except Exception as e :
-				_logger.error( e.message )
-
-				return False
-
-
-			return True
-
-
-# --------------------------------------------------------------------------------------
-def start_stream_http_tunnel_thred( bootstrap )  :
-			"""
-
-			:return:
-			"""
-
-			start_stream_http_tunnel( bootstrap )
-
-
-
-# --------------------------------------------------------------------------------------
-def start_http_tunnel() :
-			"""
-
-			:return:
-			"""
-
-			_logger.info( '...starting http tunnel server...' )
-
-			try :
-				tunneld.run_server( 80 )
-
-			except Exception as e :
-				_logger.error( e.message )
-
-				return False
-
-			return True
-
-
-
-# --------------------------------------------------------------------------------------
-def start_http_tunnel_thred()  :
-			"""
-
-			:return:
-			"""
-
-			start_http_tunnel()
-
-
-
-
-# --------------------------------------------------------------------------------------
 def probe_siblings_thred() :
 			"""
 
@@ -385,10 +249,7 @@ def shutdown() :
 				else:
 					io_loop.stop()
 
-			if http_tunnel_thred :
-				http_tunnel_thred.join()
-			if http_stream_tunnel_thred :
-				http_stream_tunnel_thred.join()
+
 
 			stop_loop()
 			_logger.info( '...shutdown....' )
@@ -433,8 +294,6 @@ if __name__ == "__main__":
 			session_client = queue_session_client()
 			is_running = False
 
-
-
 			pid = None
 			try :
 				 with open( 'pid_vulture' , 'r' ) as pidfile :
@@ -461,25 +320,12 @@ if __name__ == "__main__":
 				tornado.ioloop.IOLoop.instance().add_callback( session_client.watch_session_queue )
 
 
-				# start stream tunnel
-				#jr = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-kafka-bootstrap' )['map'] )
-				#_logger.info( '...kafka bootstrap....%s' % jr )
-				#http_stream_tunnel_thred = threading.Thread( target = \
-				#				start_stream_http_tunnel_thred , kwargs=dict( bootstrap = jr['bootstrap_servers'] ) ).start()
-				# start document tunnel
-				#jr = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-mongo-debug-bootstrap' )['map'] )
-				#http_document_tunnel_thred = threading.Thread( target = \
-				#				start_document_http_tunnel_thred , kwargs=dict( bootstrap = jr['bootstrap_servers'] ) ).start()
-
-
-
 
 				# Create the web server with async coroutines
 				_logger.info( '...initializing http services....' )
 				application = tornado.web.Application([	(r'/trinity-vulture/start', queue_handler_start_policy ) ,
 														( r'/trinity-vulture/stop' ,  queue_handler_stop_policy ) ,
 														( r'/trinity-vulture/session_update' ,  session_queue_handler_session_update ) ,
-														(r'/trinity-vulture/http_tunnel' ,  cci_http_tunnel ) ,
 														( r'/trinity-vulture/sibling' ,  cci_sibling_probe ) , ], debug=True)
 
 				_logger.info( '...starting listener on port 7081....' )
@@ -488,7 +334,7 @@ if __name__ == "__main__":
 				# start siblings probe
 				probe_thred = threading.Thread( target = probe_siblings_thred ).start()
 				# start http tunnel for local passthrough(all traffic is tnneled , even local)
-				http_tunnel_thred = threading.Thread( target = start_http_tunnel_thred ).start()
+
 
 				# signal handlers
 				_logger.info( '...setting system signal handlers....' )
@@ -499,13 +345,11 @@ if __name__ == "__main__":
 				with open( 'pid_vulture' , 'w' ) as pidfile :
 					 pidfile.write( str( os.getpid() ) + '\n'  )
 
-				# start stream tunnel
-				jr = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-kafka-bootstrap' )['map'] )
-				_logger.info( '...kafka bootstrap..starting stream tunnel..%s' % jr )
-				"""
-				http_stream_tunnel_thred = threading.Thread( target = \
-						start_stream_http_tunnel_thred , kwargs=dict( bootstrap = jr['bootstrap_servers'] ) ).start()
-				"""
+				_logger.info( '...starting stream tunnelers ....' )
+				# start stream tunnels
+				jr_kafka = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-kafka-bootstrap' )['map'] )
+				jr_mongo = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-mongo-bootstrap' )['map']  )
+
 				_logger.info( '...starting main io loop ....' )
 
 				tornado.ioloop.IOLoop.instance().start()

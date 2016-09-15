@@ -151,6 +151,7 @@ class kc_mongo_config( kc_config ) :
 				"""
 
 				def __init__( self  , bootstrap = None ,
+							  		  port = 27017 ,
 							          log = None ,
 									  device_id = None ,
 									  last_ip = None ,
@@ -164,6 +165,7 @@ class kc_mongo_config( kc_config ) :
 							super( kc_mongo_config , self ).__init__( log )
 
 							self._bootstrap = bootstrap
+							self._port = port
 							self._logger = log
 							self._id = device_id
 							self._last_ip = last_ip
@@ -180,6 +182,7 @@ class kc_mongo_config( kc_config ) :
 							"""
 
 							mongo = mongo_client.cci_mini_mongo( bootstrap = self._bootstrap ,
+																 port = self._port ,
 																 device_id = self._id )
 							s = str()
 							if mongo.connected :
@@ -204,7 +207,7 @@ class kc_mongo_config( kc_config ) :
 
 							container.text = '...standby..working...'
 
-							b_ret , stream = kc_nmap.mongo_extended_metadata( self._bootstrap )
+							b_ret , stream = kc_nmap.mongo_extended_metadata( self._bootstrap , self._port )
 							if b_ret :
 								container.text = stream
 							else :
@@ -468,7 +471,7 @@ class kc_kafka_config( kc_config ) :
 							layout.add_widget( Image( source = './image/kafka-logo.png' , pos_hint_y = 0 ,
 													  size_hint_y = .2 ) )
 							scroll = ScrollView()
-							grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 700 ) )
+							grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(480 , 700 ) )
 							grid.add_widget( Label(  text = 'active:' ) )
 							grid.add_widget( Switch( active = True ) )
 							grid.add_widget( Label(  text = 'bootstrap broker:' ) )
@@ -477,14 +480,14 @@ class kc_kafka_config( kc_config ) :
 														cursor_blink =  True ,
 														readonly = False ,
 														multiline =  True ,
-														size_hint_y = .5 ) )
+														size_hint_y = .75 ) )
 							grid.add_widget( Label(  text = 'bootstrap broker port:' ) )
 							grid.add_widget( TextInput(  text = '9092' ,
 														id = 'kafka_bootstrap_port' ,
 														cursor_blink =  True ,
 														readonly = False ,
 														multiline =  True ,
-														size_hint_y = .5 ) )
+														size_hint_y = .75 ) )
 							grid.add_widget( Label( text = 'stream stack' )  )
 							grid.add_widget( Switch( active = True , id = 'stream_stack_switch' ) )
 							grid.add_widget( Label( text = 'stream errors' )  )

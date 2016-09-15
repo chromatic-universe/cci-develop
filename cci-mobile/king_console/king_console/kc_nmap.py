@@ -154,7 +154,7 @@ def ping_ip_subnet( ip = None ) :
 
 
 # ---------------------------------------------------------------------------------------------
-def mongo_extended_metadata( ip = None ) :
+def mongo_extended_metadata( ip = None  , port = None ) :
 			"""
 
 			:param ip:
@@ -167,7 +167,7 @@ def mongo_extended_metadata( ip = None ) :
 
 			cmd = nmap_platform_dispatch( [
 											"-p" ,
-											"27017" ,
+											str( port ) ,
 											"--script",
 											"mongodb-info" ,
 										    ip

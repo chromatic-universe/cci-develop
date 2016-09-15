@@ -106,6 +106,7 @@ class ccitrinityApp( App ) :
 				self._pid_vulture = None
 				self._clock_event = None
 				self._db_path = self._retrieve_default_db_path()
+				self._retry_on_fail_reps = 0
 
 
 
@@ -121,6 +122,8 @@ class ccitrinityApp( App ) :
 						# start default document policy
 						try :
 							j = self._default_document_policy( True )
+							if j is None :
+								raise
 							self._update_status( self.root.ids.status_text ,
 												 '..policies initialized..check streams for details.' )
 							s = '\n\n' + 24 * '*'
@@ -134,9 +137,7 @@ class ccitrinityApp( App ) :
 
 						except Exception as e :
 							self._update_status( self.root.ids.status_text ,
-												 '...policy initialization failed..' )
-							self._update_status( self.root.ids.vulture_status_text ,
-												 '....policy initialization failed.....' )
+												 '...policy initialization failed..check packet stream for details' )
 
 
 
@@ -343,11 +344,35 @@ class ccitrinityApp( App ) :
 
 
 
+			def _retry_toggle_policy_callback( self , jsn , toggle , * largs ) :
+				"""
+
+				:param json:
+				:param toggle:
+				:param largs:
+				:return:
+				"""
+
+				try :
+					self._toggle_policy( jsn , toggle )
+					s = '..toggle policy retry succeeded..default policy initialized'
+					self._update_status( self.root.ids.vulture_status_text , s )
+					self._update_status( self.root.ids.status_text , s )
+
+				except Exception as e :
+					s = '..toggle policy failed...no more retries  %s..' % e.message
+					self._logger.error( s )
+					self._update_status( self.root.ids.vulture_status_text , s )
+					self._update_status( self.root.ids._status_text , s )
+					raise Exception( '..failure...' )
+
+
 
 			def _toggle_policy( self , jsn , toggle ) :
 				"""
 
 				:param json dictionary:
+				:toggle boolean:
 				:return:
 				"""
 
@@ -371,10 +396,15 @@ class ccitrinityApp( App ) :
 					self._logger.info( '...post policy succeeded for %s %s...' % ( jsn['provider_type'] , jsn['provider_type'] ) )
 
 				except Exception as e :
-					self._logger.error( e.message )
+					if self._retry_on_fail_reps :
+						return
+					s = '..toggle policy failed....retrying in 8 seconds %s..' % e.message
+					self._logger.error( s )
+					self._update_status( self.root.ids.vulture_status_text , s )
+					self._retry_on_fail_reps += 1
 
-
-
+					Clock.schedule_once( partial( self._retry_toggle_policy_callback , jsn , toggle ) , 8 )
+					raise Exception( '..failure...' )
 
 
 
