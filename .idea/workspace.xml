@@ -4,12 +4,12 @@
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/settings/buildozer.spec" line="179" />
     <bookmark url="file:///usr/lib/python2.7/dist-packages/kivy/app.py" line="850" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/bimini/server/server.py" line="43" />
-    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" line="924" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" line="932" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/bimini/main.py" line="338" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/bimini/main.py" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_tcp.py" line="99" />
-    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" line="430" />
-    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" line="716" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" line="433" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" line="724" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/buildozer.spec" line="28" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/main.py" line="1010" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/cci_trinity.py" line="138" />
@@ -26,12 +26,16 @@
     <bookmark url="file://$PROJECT_DIR$" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/streams/tr_mongo_rest.py" line="305" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/main.py" />
-    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv" line="438" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv" line="439" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/main.py" line="416" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/streams/tr_mongo_rest.py" line="469" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="" />
+    <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv" afterPath="$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/main.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" />
+    </list>
     <ignored path="cci_git_1.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -65,8 +69,28 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="4145" max-vertical-offset="13897">
-              <caret line="322" column="0" selection-start-line="322" selection-start-column="0" selection-end-line="322" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="353" max-vertical-offset="13897">
+              <caret line="45" column="14" selection-start-line="45" selection-start-column="14" selection-end-line="45" selection-end-column="14" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="screen.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.2591171" vertical-offset="5741" max-vertical-offset="16809">
+              <caret line="474" column="0" selection-start-line="474" selection-start-column="0" selection-end-line="474" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="kingconsole.kv" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="3111" max-vertical-offset="10179">
+              <caret line="259" column="52" selection-start-line="259" selection-start-column="52" selection-end-line="259" selection-end-column="52" />
               <folding />
             </state>
           </provider>
@@ -86,20 +110,8 @@
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_db_manager.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="1220" max-vertical-offset="5850">
-              <caret line="107" column="0" selection-start-line="107" selection-start-column="0" selection-end-line="107" selection-end-column="0" />
+              <caret line="106" column="0" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="cci_trinity_async.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/cci_trinity_async.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3881" max-vertical-offset="4719">
-              <caret line="300" column="12" selection-start-line="300" selection-start-column="12" selection-end-line="300" selection-end-column="12" />
-              <folding>
-                <element signature="e#54#65#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -129,27 +141,17 @@
       <file leaf-file-name="kc_nmap.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_nmap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1801" max-vertical-offset="3575">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3575">
               <caret line="164" column="27" selection-start-line="164" selection-start-column="27" selection-end-line="164" selection-end-column="27" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="trinity-debug.log" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/trinity-debug.log">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="20695" max-vertical-offset="21216">
-              <caret line="552" column="89" selection-start-line="552" selection-start-column="89" selection-end-line="552" selection-end-column="89" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="kc_stream.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="kc_stream.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7565543" vertical-offset="5199" max-vertical-offset="6162">
+            <state vertical-scroll-proportion="0.0" vertical-offset="5199" max-vertical-offset="6162">
               <caret line="478" column="48" selection-start-line="478" selection-start-column="48" selection-end-line="478" selection-end-column="48" />
               <folding />
             </state>
@@ -198,8 +200,6 @@
         <option value="$PROJECT_DIR$/cci-mobile/bimini/main.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/ccitrinity.kv" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/king-console.log-debug.log" />
-        <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" />
-        <option value="$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/resource/transport_extended.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_kafka.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/application.py" />
@@ -222,9 +222,11 @@
         <option value="$PROJECT_DIR$/cci-mobile/trinity/cci_trinity_async.py" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_ping.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/main.py" />
-        <option value="$PROJECT_DIR$/cci-mobile/king_console/main.py" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_nmap.py" />
         <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/king_console/main.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv" />
+        <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py" />
       </list>
     </option>
   </component>
@@ -331,6 +333,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="streams" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cci_git_1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cci_git_1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cci-mobile" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trinity" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bin" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -875,8 +899,8 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25960264" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32760897" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25695366" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18041237" sideWeight="0.4935484" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25695366" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18105671" sideWeight="0.4935484" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25298014" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23684211" sideWeight="0.50085473" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33642384" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -946,19 +970,9 @@
           <option name="timeStamp" value="539" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_db_manager.py</url>
-          <line>107</line>
-          <option name="timeStamp" value="613" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/cci-mobile/trinity/main.py</url>
           <line>356</line>
           <option name="timeStamp" value="663" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/cci-mobile/king_console/main.py</url>
-          <line>331</line>
-          <option name="timeStamp" value="665" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -971,7 +985,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="666" />
+      <option name="time" value="670" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1008,14 +1022,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="732">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="8268" max-vertical-offset="10166">
-          <caret line="669" column="17" selection-start-line="669" selection-start-column="17" selection-end-line="669" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1133,14 +1139,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.8937382" vertical-offset="328" max-vertical-offset="1677">
           <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44971538" vertical-offset="5808" max-vertical-offset="16705">
-          <caret line="487" column="88" selection-start-line="487" selection-start-column="74" selection-end-line="487" selection-end-column="114" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1281,7 +1279,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="709" max-vertical-offset="4719">
           <caret line="300" column="12" selection-start-line="300" selection-start-column="12" selection-end-line="300" selection-end-column="12" />
           <folding>
-            <element signature="e#54#65#0" expanded="true" />
+            <element signature="e#54#65#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1312,26 +1310,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_db_manager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1220" max-vertical-offset="5850">
-          <caret line="107" column="0" selection-start-line="107" selection-start-column="0" selection-end-line="107" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/lib/python2.7/dist-packages/kivy/clock.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="9256">
           <caret line="705" column="0" selection-start-line="705" selection-start-column="0" selection-end-line="705" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4145" max-vertical-offset="13897">
-          <caret line="322" column="0" selection-start-line="322" selection-start-column="0" selection-end-line="322" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1344,6 +1326,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="5199" max-vertical-offset="6162">
+          <caret line="478" column="48" selection-start-line="478" selection-start-column="48" selection-end-line="478" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_nmap.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1801" max-vertical-offset="3575">
@@ -1352,10 +1342,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream.py">
+    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_db_manager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7565543" vertical-offset="5199" max-vertical-offset="6162">
-          <caret line="478" column="48" selection-start-line="478" selection-start-column="48" selection-end-line="478" selection-end-column="48" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1220" max-vertical-offset="5850">
+          <caret line="106" column="0" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/kingconsole.kv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3111" max-vertical-offset="10179">
+          <caret line="259" column="52" selection-start-line="259" selection-start-column="52" selection-end-line="259" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="353" max-vertical-offset="13897">
+          <caret line="45" column="14" selection-start-line="45" selection-start-column="14" selection-end-line="45" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/screen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2591171" vertical-offset="5741" max-vertical-offset="16809">
+          <caret line="474" column="0" selection-start-line="474" selection-start-column="0" selection-end-line="474" selection-end-column="0" />
           <folding />
         </state>
       </provider>

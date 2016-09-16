@@ -167,6 +167,7 @@ class CciScreen( Screen ) :
 				accordion_id = ObjectProperty()
 				_console_text = ObjectProperty()
 				_console_count = 1
+				_show_trace = ObjectProperty()
 
 
 				def __init__( self , **kwargs ) :
@@ -178,6 +179,8 @@ class CciScreen( Screen ) :
 
 
 					super( CciScreen , self ).__init__( **kwargs )
+
+					self._show_trace = True
 
 
 
@@ -444,16 +447,19 @@ class CciScreen( Screen ) :
 
 
 
-				def  _start_( self  , slug  , func ) :
+				def  _start_( self  , slug  , func , trace = True ) :
 					"""
 
 					:param moniker:
 					:param func:
 					:return:
 					"""
+
 					#add thread object to manager
-					console = self._update_main_console( count=App.get_running_app()._console_count ,
-											   moniker=slug + ' #' )
+					console = None
+					if self._show_trace :
+						console = self._update_main_console( count=App.get_running_app()._console_count ,
+											   	moniker=slug + ' #' )
 					thred = threading.Thread( target = self._thread_exec ,kwargs=dict( func=func, console=console ) )
 					if thred :
 						moniker = slug +  ' #'  + str( App.get_running_app()._console_count + 1 )
@@ -474,7 +480,9 @@ class CciScreen( Screen ) :
 					"""
 
 					#add thread object to manager
-					self._start_( 'icmp ping console' , self.on_ping_ip_input )
+					self._show_trace = self.ids.show_trace_ping.active
+
+					self._start_( 'icmp ping console' , self.on_ping_ip_input  )
 
 
 
@@ -713,12 +721,12 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 
-
-					App.get_running_app()._logger.info( '...update console payload...' )
-					container.children[1].children[0].text = content
-					container.children[0].text = params + '\n' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-					container.children[0].halign = 'center'
-					self.canvas.ask_update()
+					if container is not None :
+						App.get_running_app()._logger.info( '...update console payload...' )
+						container.children[1].children[0].text = content
+						container.children[0].text = params + '\n' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+						container.children[0].halign = 'center'
+						self.canvas.ask_update()
 
 					
 					

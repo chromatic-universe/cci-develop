@@ -376,7 +376,7 @@ class kingconsoleApp( App ) :
 					requests.post( s ,
 									   data = json.dumps( data ) , timeout = 2 )
 
-					Clock.schedule_once( self._real_ip_callback , 8  )
+					Clock.schedule_once( self._real_ip_callback , 15  )
 				except Exception as e :
 					self._logger.error( e.message )
 
