@@ -31,20 +31,7 @@
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/streams/tr_mongo_rest.py" line="469" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-mobile/trinity/http_tunnel/__init__.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/king_console.sqlite" afterPath="$PROJECT_DIR$/cci-mobile/trinity/king_console.sqlite" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/cci_trinity_async.py" afterPath="$PROJECT_DIR$/cci-mobile/trinity/cci_trinity_async.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_nmap.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_nmap.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_ping.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_ping.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/king_console/main.py" afterPath="$PROJECT_DIR$/cci-mobile/king_console/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/main.py" afterPath="$PROJECT_DIR$/cci-mobile/trinity/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/pid" afterPath="$PROJECT_DIR$/cci-mobile/trinity/pid" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/pid_vulture" afterPath="$PROJECT_DIR$/cci-mobile/trinity/pid_vulture" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_mongo_rest.py" afterPath="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_mongo_rest.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="" />
     <ignored path="cci_git_1.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -162,7 +149,7 @@
       <file leaf-file-name="kc_stream.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.97565544" vertical-offset="5082" max-vertical-offset="6162">
+            <state vertical-scroll-proportion="0.7565543" vertical-offset="5199" max-vertical-offset="6162">
               <caret line="478" column="48" selection-start-line="478" selection-start-column="48" selection-end-line="478" selection-end-column="48" />
               <folding />
             </state>
@@ -1367,7 +1354,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.97565544" vertical-offset="5082" max-vertical-offset="6162">
+        <state vertical-scroll-proportion="0.7565543" vertical-offset="5199" max-vertical-offset="6162">
           <caret line="478" column="48" selection-start-line="478" selection-start-column="48" selection-end-line="478" selection-end-column="48" />
           <folding />
         </state>
