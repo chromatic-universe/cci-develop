@@ -272,23 +272,7 @@ class kc_mongo_config( kc_config ) :
 
 
 
-							"""
-							img = Image( source = './image/mongodb-log.png' , size_hint_y = None )
-							scroll = ScrollView( id = 'scrlv' )
-							grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 800 ) )
-							grid.add_widget( img  )
-							vx =  TextInput(
-											text = '',
-											background_color = [0,0,0,0] ,
-											foreground_color =  [1,1,1,1] ,
-											multiline = True ,
-											font_size =  16 ,
-											readonly =  True  )
-							#vx.height = max( (len(vx._lines)+1) * vx.line_height, scroll.height )
-							grid.add_widget( vx )
-							scroll.add_widget( grid )
-							layout.add_widget( scroll )
-							"""
+
 
 							layout = self._add_console( '..mongo extended' , 'mongo extended info(from nmap)' )
 							popup = screen.ConsolePopup( title='mongo connect' , content = layout )

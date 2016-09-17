@@ -711,9 +711,42 @@ class CciScreen( Screen ) :
 
 
 
+				@mainthread
+				def _show_payload_dialog( self , title , content , params ) :
+					"""
+
+					:param content:
+					:param params:
+					:return:
+					"""
+
+					layout = GridLayout( cols = 1 ,
+											 padding = [0 , 5 , 0 ,5] , size = (480 , 600 )
+											  )
+					layout.add_widget( Label( text = params  ,
+											  color = [ 1, 0 , 0 , 1] ,
+											  #font_size = 14 ,
+											  size_hint_y = 0.1 ) )
+
+					scrolly = Builder.load_string( self._retr_resource( 'text_scroller' ) )
+					tx = scrolly.children[0]
+					tx.text = content
+					tx.readonly = False
+
+					layout.add_widget( scrolly )
+					layout.add_widget( Label( text =  datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S" )  ,
+											#font_size = 14  ,
+											size_hint_y = 0.2 ,
+											color = [ 1, 0 , 0 , 1] ) )
+					popup = ConsolePopup( title=title , content = layout , size_hint=(None, None), size=( 480 , 500 ) )
+
+					popup.open()
+
+
+
 
 				@mainthread
-				def _update_console_payload( self , content , container , params = None ) :
+				def _update_console_payload( self , content , container , params = None , title=None ) :
 					"""
 
 					:param console slide:
@@ -727,6 +760,8 @@ class CciScreen( Screen ) :
 						container.children[0].text = params + '\n' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 						container.children[0].halign = 'center'
 						self.canvas.ask_update()
+					else :
+						self._show_payload_dialog( title , content , params )
 
 					
 					
@@ -803,7 +838,8 @@ class CciScreen( Screen ) :
 						pr = 'ping_ip_input ip=(%s)' % ip
 						self._update_console_payload( boiler ,
 													  console ,
-													  pr )
+													  pr ,
+													  title='ping atomic ip')
 						App.get_running_app()._logger.info( '..update_console_payload...' )
 
 					id = '(ip=%s)' % ip
