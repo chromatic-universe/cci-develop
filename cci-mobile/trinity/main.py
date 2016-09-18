@@ -43,6 +43,8 @@ from kivy.utils import platform
 from kivy.properties import StringProperty, ObjectProperty
 from kivy.uix.settings import SettingsWithSidebar , SettingsWithSpinner
 from kivy.utils import platform
+
+
 # cci
 from streams import tr_utils
 
@@ -52,6 +54,7 @@ kivy.require( '1.9.1' )
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 timestamp = 'cci-trinity~ {:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())
 t = 3
+
 
 # -------------------------------------------------------------------------------------------------
 class ConsolePopup( Popup  ) :
@@ -93,7 +96,8 @@ class ccitrinityApp( App ) :
 
 				super( ccitrinityApp , self ).__init__()
 
-				# logger
+
+				# local logger
 				self._logger = logging.getLogger( "cci trinity" )
 				self._logger.setLevel( logging.DEBUG )
 				fh = logging.FileHandler(  'trinity' + '-debug.log', mode = 'a' )
@@ -102,11 +106,18 @@ class ccitrinityApp( App ) :
 				fh.setFormatter( formatter )
 				self._logger.addHandler( fh )
 				self._logger.info( self.__class__.__name__ + '...'  )
+				# params
+				self._db_path = self._retrieve_default_db_path()
+				self._stream_bootstrap = None
+				j = json.loads( self._retrieve_config_atom( 'trinity-stream-toggle' )['map'] )
+				logger = None
+				lname = 'cci_trinity-' + tr_utils.local_mac_addr()
+
 				self._pid = None
 				self._pid_vulture = None
 				self._clock_event = None
-				self._db_path = self._retrieve_default_db_path()
 				self._retry_on_fail_reps = 0
+
 
 
 
@@ -260,6 +271,37 @@ class ccitrinityApp( App ) :
 				container.text = timestamp + status + '\n' + container.text
 
 
+
+			# ----------------------------------------------------------------------------------------------------
+			def _retrieve_config_atom( self , atom ) :
+					"""
+
+					:param atom:
+					:return:
+					"""
+
+					json_row = None
+					try :
+
+						self._logger.info( '...retrieve_config_atom ...' )
+						con = sqlite3.connect( self._db_path )
+						con.row_factory = tr_utils.dict_factory
+						cur = con.cursor()
+
+						s =  'select map from metadata_config ' \
+							 'where moniker = "%s" '  %  atom
+						cur.execute( s )
+
+						json_row = cur.fetchone()
+						if json_row is not None :
+							self._logger.info( '...retrieved config map for ...%s' % atom )
+						else :
+							self._logger.error( '...could not retrieve atom for %s...' % atom )
+					except sqlite3.OperationalError as e :
+						self._logger.error( '...retrieve_policy statement failed...%s' , e.message )
+
+
+					return json_row
 
 
 

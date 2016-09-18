@@ -46,6 +46,7 @@ import copy
 import logging
 import importlib
 from time import gmtime, strftime , sleep
+import datetime
 import subprocess as proc
 import threading
 import requests
@@ -99,6 +100,8 @@ GridLayout:
 		value: 250
 """
 
+
+
 # -----------------------------------------------------------------------------------
 def local_mac_addr() :
 		"""
@@ -111,6 +114,47 @@ def local_mac_addr() :
 														 '/sys/class/net/wlan0/address'] ).strip().lower() )
 		except :
 			pass
+
+
+lname = 'king-console-intf' + local_mac_addr()
+
+
+
+# -------------------------------------------------------------------------------------------------
+class stream_requests_handler( logging.Handler ) :
+				"""
+
+				"""
+				def emit( self , record ) :
+
+					log_entry = self.format(record)
+					return requests.post('http://localhost:7081/trinity-vulture/post_stream_msg',
+										 log_entry, headers={"Content-type": "application/json"}).content
+
+
+
+# -------------------------------------------------------------------------------------------------
+class stream_formatter( logging.Formatter ) :
+				"""
+
+				"""
+
+				def __init__(self, task_name=None):
+
+
+
+					super(  stream_formatter , self).__init__()
+
+
+
+				def format( self , record ) :
+
+					data = {'@message': record.msg,
+							'@timestamp': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+							'@type':  lname }
+
+
+					return json.dumps(data)
 
 
 
@@ -260,6 +304,23 @@ class kingconsoleApp( App ) :
 			Window.on_rotate = self._on_rotate
 
 
+
+		def _init_stream_logging( self ) :
+				"""
+
+				:return:
+
+				"""
+
+				handler = stream_requests_handler()
+				formatter = stream_formatter( "king-console-intf" )
+				handler.setFormatter( formatter )
+				self._logger.addHandler( handler )
+
+
+
+
+
 		def build( self ) :
 			"""
 
@@ -332,7 +393,7 @@ class kingconsoleApp( App ) :
 			rip = urllib2.urlopen( 'https://enabledns.com/ip' , timeout=4 )
 			self._console_real = rip.read()
 			self.root.current_screen.ids.console_real_id.text = self._console_real
-
+			self._init_stream_logging()
 
 
 		def _create_session( self ) :

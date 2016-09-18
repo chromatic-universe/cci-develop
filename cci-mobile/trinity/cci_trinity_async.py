@@ -24,9 +24,10 @@ from tornado.queues import Queue
 from tornado.ioloop import PeriodicCallback
 from tornado.locks import Semaphore
 from tornado.process import Subprocess , CalledProcessError
-
+from kafka import KafkaProducer
 
 max_wait_seconds_before_shutdown  = 3
+
 
 # cci
 from application_vulture  import app ,\
@@ -35,7 +36,7 @@ from application_vulture  import app ,\
 from streams import tr_utils , \
 				    tr_sqlite
 
-
+lname = 'king-console-cci-maelstrom'
 callback_class_dispatch = { 'document' : 'tr_payload_stalker' ,
 							'stream'   :  'tr_stream-stalker' }
 stream_mod = importlib.import_module( 'streams.tr_stream_manager'  )
@@ -49,7 +50,9 @@ http_tunnel_pid = None
 default_stream_proxy_port = 7082
 default_document_proxy_port = 7083
 const_tunnel_process = 'cci-trinity-tunnel'
+stream_bootstrap = None
 
+kp = None
 
 
 
@@ -107,6 +110,51 @@ class queue_session_client() :
 
 
 
+
+# --------------------------------------------------------------------------------------
+class queue_stream_client() :
+
+			def __init__(self):
+				self.queued_items = Queue()
+
+
+			@tornado.gen.coroutine
+			def watch_stream_queue(self) :
+				try :
+
+					while True:
+						items = yield self.queued_items.get()
+						print items
+						kp.send( lname , json.dumps( items ) )
+				except Exception as e :
+					_logger.error( 'watch_stream_queue: %s' % e.message )
+
+
+
+
+# --------------------------------------------------------------------------------------
+class stream_queue_handler_post_msg( tornado.web.RequestHandler ) :
+
+
+			@tornado.gen.coroutine
+			def post( self ) :
+				"""
+
+				:return:
+				"""
+
+				try :
+
+					json_data = json.loads( self.request.body )
+					print json_data
+					yield stream_client.queued_items.put( json_data )
+
+				except Exception as e :
+					_logger.error( 'stream_queue_handler_post_msg: %s' % e.message )
+
+
+
+
 # --------------------------------------------------------------------------------------
 class session_queue_handler_session_update( tornado.web.RequestHandler ) :
 
@@ -121,12 +169,13 @@ class session_queue_handler_session_update( tornado.web.RequestHandler ) :
 				try :
 
 					json_data = json.loads( self.request.body )
+
 					print json_data
 					yield session_client.queued_items.put( json_data )
 					_logger.info( 'session queued a new item: %s' % self.request.body )
 					self.write( 'queued a new item: %s' % self.request.body )
 				except Exception as e :
-					_logger.error( 'session_queue_handler_init_session: %s' % e.message )
+					_logger.error( 'session_queue_handler_update_session: %s' % e.message )
 
 
 
@@ -289,9 +338,24 @@ def policy_callback( provider_type , moniker , db  ) :
 # --------------------------------------------------------------------------------------
 if __name__ == "__main__":
 
+
+			# params
+			j = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-stream-toggle' )['map'] )
+			if j['status'] == 'on' :
+				stream_bootstrap = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-kafka-bootstrap' )['map'] )
+				_logger.info( '...starting stream tunneler ....' )
+				try :
+					s = str( stream_bootstrap['bootstrap_servers'] )
+					kp = KafkaProducer( bootstrap_servers = ['52.38.98.223'] )
+					_logger.info( '...streaming bootstrap initialized...'  )
+				except Exception as e :
+					_logger.error( '...broken streaming..%s' % e.message )
+				#jr_mongo = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-mongo-bootstrap' )['map']  )
+
 			# queue vulture
 			client = queue_client()
 			session_client = queue_session_client()
+			stream_client = queue_stream_client()
 			is_running = False
 
 			pid = None
@@ -318,13 +382,13 @@ if __name__ == "__main__":
 				_logger.info( '...initializing queue vulture....' )
 				tornado.ioloop.IOLoop.instance().add_callback( client.watch_queue )
 				tornado.ioloop.IOLoop.instance().add_callback( session_client.watch_session_queue )
-
-
+				tornado.ioloop.IOLoop.instance().add_callback( stream_client.watch_stream_queue )
 
 				# Create the web server with async coroutines
 				_logger.info( '...initializing http services....' )
 				application = tornado.web.Application([	(r'/trinity-vulture/start', queue_handler_start_policy ) ,
 														( r'/trinity-vulture/stop' ,  queue_handler_stop_policy ) ,
+														( r'/trinity-vulture/post_stream_msg' ,  stream_queue_handler_post_msg ) ,
 														( r'/trinity-vulture/session_update' ,  session_queue_handler_session_update ) ,
 														( r'/trinity-vulture/sibling' ,  cci_sibling_probe ) , ], debug=True)
 
@@ -345,10 +409,6 @@ if __name__ == "__main__":
 				with open( 'pid_vulture' , 'w' ) as pidfile :
 					 pidfile.write( str( os.getpid() ) + '\n'  )
 
-				_logger.info( '...starting stream tunnelers ....' )
-				# start stream tunnels
-				jr_kafka = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-kafka-bootstrap' )['map'] )
-				jr_mongo = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-mongo-bootstrap' )['map']  )
 
 				_logger.info( '...starting main io loop ....' )
 
