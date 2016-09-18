@@ -153,6 +153,14 @@ namespace cpp_real_stream
                          << space;
                 }
 
+                void stamp( const std::string& st , std::ostream& ostr = std::cerr )
+                {
+                    //non-portable
+                    ostr << colors[m_color]
+                         << st
+                }
+
+
                 std::string ret_stamp()
                 {
                     std::ostringstream ostr;
