@@ -346,7 +346,7 @@ if __name__ == "__main__":
 				_logger.info( '...starting stream tunneler ....' )
 				try :
 					s = str( stream_bootstrap['bootstrap_servers'] )
-					kp = KafkaProducer( bootstrap_servers = ['52.38.98.223'] )
+					kp = KafkaProducer( bootstrap_servers = ['52.38.98.223:9092'] )
 					_logger.info( '...streaming bootstrap initialized...'  )
 				except Exception as e :
 					_logger.error( '...broken streaming..%s' % e.message )
