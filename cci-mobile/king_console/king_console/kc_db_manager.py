@@ -61,9 +61,9 @@ sql_cursor_dictionary = {  'sd_insert_session' : 'insert into sessions  (session
 														    'where moniker = %s '
 															'and provider_type = %s '
 															'and active = 1',
+							'sql_retrieve_one_config_atom' : 'select map from metadata_config '
+															 'where moniker = %s '
 						}
-
-
 # -----------------------------------------------------------------------------------
 def dict_factory( cursor, row)  :
     d = {}
@@ -129,7 +129,8 @@ class kc_db_manager( object ) :
 									 }
 					self._query_call_map =  {
 											   'query_call_history' :  self.query_call_history ,
-											   'query_document_policy' : self.query_document_policy
+											   'query_document_policy' : self.query_document_policy ,
+											   'retrieve_config_atom' : self.retrieve_config_atom
 									 		}
 
 
@@ -393,6 +394,30 @@ class kc_db_manager( object ) :
 													  call_params ,
 													  event ,
 													  id )
+
+
+
+
+				# ----------------------------------------------------------------------------------------------------
+				def retrieve_config_atom( self , call_params ) :
+						"""
+
+						:param params:
+						:return:
+						"""
+
+						# wait trigger
+						event = call_params[0]
+						id = call_params[1]
+						call_params.remove( event )
+						call_params.remove( id )
+
+
+						self._execute_sql_result_set( 'sql_retrieve_one_config_atom' ,
+													  call_params ,
+													  event ,
+													  id )
+
 
 
 

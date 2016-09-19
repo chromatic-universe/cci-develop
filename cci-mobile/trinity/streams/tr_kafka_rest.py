@@ -15,6 +15,7 @@ import time
 import signal
 import Queue
 import requests
+import json
 
 import kafka
 from kafka import KafkaConsumer , \
@@ -49,8 +50,9 @@ def init_kafka_consumer( param_dictionary = None ) :
 					consumer_moniker = tr_utils.local_mac_addr()
 
 
-				except KafkaError as e :
+				except Exception as e :
 					_logger.error( 'error in init consumer...%s' % e.message )
+
 
 
 
@@ -126,3 +128,59 @@ class cci_kafka_version( Resource ) :
 						return jsonify( supported_kafka_version )
 
 api.add_resource( cci_kafka_version , '/kafka/version' )
+
+
+
+
+# -----------------------------------------------------------------------------------
+class cci_kafka_bootstrap( Resource ) :
+				"""
+				metadata
+				"""
+
+				def get ( self ) :
+						"""
+						GET return kafka bootsrap server , only supporting single broker for now
+						:param supported_version:
+						:return:
+						"""
+
+						j = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-kafka-bootstrap' )['map'] )
+
+						return j
+
+api.add_resource( cci_kafka_bootstrap , '/kafka/bootstrap' )
+
+
+
+
+
+# -----------------------------------------------------------------------------------
+class cci_kafka_topics( Resource ) :
+				"""
+				metadata
+				"""
+
+				def get ( self ) :
+						"""
+						GET return kafka topicsr
+						:param supported_version:
+						:return:
+						"""
+						try :
+							boot = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-kafka-bootstrap' )['map'] )
+							strap = boot['bootstrap_servers']
+
+							kc = KafkaConsumer( bootstrap_servers = [ strap ] )
+							topics = list( kc.topics() )
+
+							j = { "topics" : topics }
+
+						except Exception as e :
+
+							j =  { "error" : e.message }
+
+						return j
+
+api.add_resource( cci_kafka_topics , '/kafka/topics' )
+

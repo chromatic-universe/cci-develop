@@ -41,6 +41,7 @@ import base64
 import requests
 import json
 
+
 from king_console import screen
 from king_console import resource_factory \
 	                     as resources
@@ -398,7 +399,24 @@ class kc_kafka_config( kc_config ) :
 							:return:
 							"""
 
-							pass
+							try:
+
+								r = requests.get( 'http://localhost:7080/kafka/topics' )
+								if r.status_code == 200 :
+									j = r.json()
+									topics =j['topics']
+									s = 'topics for %s' % self._bootstrap
+									s += '\n\n'
+									for x in topics :
+										s += x
+										s += '\n'
+									container.text = s
+
+							except Exception as e :
+								App.get_running_app()._logger.error( e.message )
+								container.text = '..failed to retrieve kafka metadata'
+
+
 
 
 
@@ -447,6 +465,22 @@ class kc_kafka_config( kc_config ) :
 							"""
 
 
+							event = threading.Event()
+
+							try:
+								r = requests.get( 'http://localhost:7080/kafka/bootstrap' )
+								if r.status_code == 200 :
+									j = r.json()
+									self._bootstrap = j['bootstrap_servers']
+								else :
+									raise Exception( '...retrieve config atom failed...' )
+
+							except Exception as e :
+								App.get_running_app()._logger.error( e.message )
+
+								return
+
+
 							layout = GridLayout( orientation = 'horizontal' ,
 											  cols = 1 ,
 											  background_color = [0,0,0,0])
@@ -459,19 +493,11 @@ class kc_kafka_config( kc_config ) :
 							grid.add_widget( Label(  text = 'active:' ) )
 							grid.add_widget( Switch( active = True ) )
 							grid.add_widget( Label(  text = 'bootstrap broker:' ) )
-							grid.add_widget( TextInput(  text = self._bootstrap ,
-														id = 'kafka_bootstrap' ,
-														cursor_blink =  True ,
-														readonly = False ,
-														multiline =  True ,
-														size_hint_y = .75 ) )
+							boot , port = self._bootstrap.split( ':' )
+							grid.add_widget( Label(  text = boot  ) )
 							grid.add_widget( Label(  text = 'bootstrap broker port:' ) )
-							grid.add_widget( TextInput(  text = '9092' ,
-														id = 'kafka_bootstrap_port' ,
-														cursor_blink =  True ,
-														readonly = False ,
-														multiline =  True ,
-														size_hint_y = .75 ) )
+							grid.add_widget( Label(  text = port ) )
+
 							grid.add_widget( Label( text = 'stream stack' )  )
 							grid.add_widget( Switch( active = True , id = 'stream_stack_switch' ) )
 							grid.add_widget( Label( text = 'stream errors' )  )

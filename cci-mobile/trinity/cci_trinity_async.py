@@ -346,8 +346,8 @@ if __name__ == "__main__":
 				_logger.info( '...starting stream tunneler ....' )
 				try :
 					s = str( stream_bootstrap['bootstrap_servers'] )
-					kp = KafkaProducer( bootstrap_servers = ['52.38.98.223:9092'] )
-					_logger.info( '...streaming bootstrap initialized...'  )
+					kp = KafkaProducer( bootstrap_servers = [s] )
+					_logger.info( '...streaming bootstrap initialized...%s' % s )
 				except Exception as e :
 					_logger.error( '...broken streaming..%s' % e.message )
 				#jr_mongo = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-mongo-bootstrap' )['map']  )
