@@ -60,7 +60,13 @@ def local_mac_addr() :
 			return base64.b64encode( proc.check_output( ['cat' ,
 														 '/sys/class/net/wlan0/address'] ).strip() )
 		except :
-			pass
+			try :
+				return base64.b64encode( proc.check_output( ['cat' ,
+														 '/sys/class/net/eth0/address'] ).strip() )
+			except :
+				pass
+
+		return ''
 
 
 # -----------------------------------------------------------------------
