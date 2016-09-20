@@ -20,6 +20,7 @@ import sys
 import json
 from time import sleep
 import requests
+import tornado.web
 from tornado.queues import Queue
 from tornado.ioloop import PeriodicCallback
 from tornado.locks import Semaphore
@@ -53,6 +54,30 @@ const_tunnel_process = 'cci-trinity-tunnel'
 stream_bootstrap = None
 
 kp = None
+
+
+# --------------------------------------------------------------------------------------
+class index(  tornado.web.RequestHandler ) :
+
+			def get( self ) :
+
+				try :
+					document_policy = tr_sqlite.retrieve_policy( "default" , "document" )
+					stream_policy = tr_sqlite.retrieve_policy( "default" , "stream" )
+
+					return self.render( "templates/index_vulture.html" ,
+										 device = '"' + tr_utils.local_mac_addr() + '"' ,
+										 document_policy=document_policy ,
+										 stream_policy=stream_policy
+									 )
+				except Exception as e :
+
+					return self.render( "templates/sqlite_404.html" , e=e.message )
+
+
+
+
+
 
 
 
@@ -384,13 +409,20 @@ if __name__ == "__main__":
 				tornado.ioloop.IOLoop.instance().add_callback( session_client.watch_session_queue )
 				tornado.ioloop.IOLoop.instance().add_callback( stream_client.watch_stream_queue )
 
-				# Create the web server with async coroutines
+
+				settings = {
+							"static_path": os.path.join(os.path.dirname(__file__), "static"),
+							"xsrf_cookies": True,
+					   	   }
+				# create the web server with async coroutines
 				_logger.info( '...initializing http services....' )
 				application = tornado.web.Application([	(r'/trinity-vulture/start', queue_handler_start_policy ) ,
 														( r'/trinity-vulture/stop' ,  queue_handler_stop_policy ) ,
+														( r'/' ,  index ) ,
 														( r'/trinity-vulture/post_stream_msg' ,  stream_queue_handler_post_msg ) ,
 														( r'/trinity-vulture/session_update' ,  session_queue_handler_session_update ) ,
-														( r'/trinity-vulture/sibling' ,  cci_sibling_probe ) , ], debug=True)
+														( r'/trinity-vulture/sibling' ,  cci_sibling_probe ) ,
+														] , Debug=True ,  **settings )
 
 				_logger.info( '...starting listener on port 7081....' )
 				application.listen( 7081 )
