@@ -60,6 +60,29 @@ ActionBar:
 			on_press: app._manip_extended_window()
 """
 ,
+	       'action_bar_plus' :
+"""
+ActionBar:
+	pos_hint: {'top':1}
+	ActionView:
+		use_separator: True
+		ActionPrevious:
+			title: 'king console'
+			with_previous: False
+			app_icon: 'king-console32.png'
+			on_press: app._manip_extended_window()
+		ActionButton:
+			text: 'back'
+			on_press: app._manip_extended_window()
+		ActionButton:
+			text: 'expand'
+			id: view_btn_b
+			on_press: app._toggle_tree_view_manager_nodes( view_btn_b )
+
+
+"""
+
+,
 				       'dlg_action_bar' :
 """
 ActionBar:

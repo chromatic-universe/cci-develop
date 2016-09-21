@@ -11,6 +11,7 @@ import os
 import subprocess as proc
 import threading
 import importlib
+import socket
 
 from tornado.ioloop import IOLoop
 import tornado.gen
@@ -54,29 +55,51 @@ const_tunnel_process = 'cci-trinity-tunnel'
 stream_bootstrap = None
 
 kp = None
+TEMPLATE_PATH = os.path.join(os.path.join(os.path.dirname(__file__) , 'templates') )
+
+
+# ---------------------------------------------------------------------------------------------
+def retr_local_ip_info() :
+		"""
+
+		:return lovsl ip:
+		"""
+
+		# local
+		local_ip = '0.0.0.0'
+
+		s = socket.socket( socket.AF_INET , socket.SOCK_DGRAM )
+		try:
+
+				local_ip = [l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1],
+								   [[(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET,
+								   socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
+				return local_ip
+
+		except :
+			# give it up for a lost cause
+			pass
+
+		finally:
+			s.close()
+
+
+		return local_ip
 
 
 # --------------------------------------------------------------------------------------
-class index(  tornado.web.RequestHandler ) :
+class vulture_index(  tornado.web.RequestHandler ) :
 
+
+			@tornado.gen.coroutine
 			def get( self ) :
 
 				try :
-					document_policy = tr_sqlite.retrieve_policy( "default" , "document" )
-					stream_policy = tr_sqlite.retrieve_policy( "default" , "stream" )
+					s = 'http://%s:7080/trinity-vulture' % retr_local_ip_info()
+					self.redirect( s )
+				except :
 
-					return self.render( "templates/index_vulture.html" ,
-										 device = '"' + tr_utils.local_mac_addr() + '"' ,
-										 document_policy=document_policy ,
-										 stream_policy=stream_policy
-									 )
-				except Exception as e :
-
-					return self.render( "templates/sqlite_404.html" , e=e.message )
-
-
-
-
+					self.write( '..redirect failed..' )
 
 
 
@@ -412,13 +435,12 @@ if __name__ == "__main__":
 
 				settings = {
 							"static_path": os.path.join(os.path.dirname(__file__), "static"),
-							"xsrf_cookies": True,
 					   	   }
 				# create the web server with async coroutines
 				_logger.info( '...initializing http services....' )
 				application = tornado.web.Application([	(r'/trinity-vulture/start', queue_handler_start_policy ) ,
 														( r'/trinity-vulture/stop' ,  queue_handler_stop_policy ) ,
-														( r'/' ,  index ) ,
+														( r'/trinity-vulture' ,  vulture_index ) ,
 														( r'/trinity-vulture/post_stream_msg' ,  stream_queue_handler_post_msg ) ,
 														( r'/trinity-vulture/session_update' ,  session_queue_handler_session_update ) ,
 														( r'/trinity-vulture/sibling' ,  cci_sibling_probe ) ,

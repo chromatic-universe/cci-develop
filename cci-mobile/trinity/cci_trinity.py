@@ -82,6 +82,34 @@ def handle_kafka_exception( e ) :
 
 
 # ------------------------------------------------------------------------------
+@app.route('/trinity-vulture')
+def trinity_vulture() :
+
+
+			try :
+
+
+				document_policy = tr_sqlite.retrieve_policy( "default" , "document" )
+				stream_policy = tr_sqlite.retrieve_policy( "default" , "stream" )
+
+
+
+
+				return render_template(		 "index_vulture.html" ,
+											 device = '"' + tr_utils.local_mac_addr() +  '"' ,
+											 document_policy=document_policy ,
+											 stream_policy=stream_policy
+								      )
+
+
+
+			except Exception as e :
+
+				return render_template( "sqlite_404.html" , e=e.message )
+
+
+
+# ------------------------------------------------------------------------------
 @app.route('/index')
 @app.route( "/" )
 def index() :

@@ -23,7 +23,7 @@
          <center>
         <table>
 
-         <tr><td align="center"> <img src="{{ static_url("image/king-console64_v.png") }}"></td>
+         <tr><td align="center"> <img src="{{ url_for('static', filename = 'image/king-console64_v.png') }}"></td>
          <td align="center"><b><i><u>king console~cci-trinity-II</u></i></b></td>
                   </tr>
               </table>
@@ -42,7 +42,7 @@
                <div id="doc-policy-table">
                 {% for doc in document_policy %}
                 {{doc}} : {{document_policy[doc]}}<br>
-                {% end %}
+                {% endfor %}
             </div>
              <hr>
             <b>default stream policy</b>
@@ -54,7 +54,7 @@
              <div id="stream-policy-table">
                 {% for stream in stream_policy %}
                 {{stream}} : {{stream_policy[stream]}}<br>
-                {% end %}
+                {% endfor %}
             </div>
             <br>
 
@@ -70,7 +70,7 @@
                      <small>chromatic universe 2016<br>
                            </small><br>
              </center>
-              {% end %}
+              {% endblock %}
 
 
 

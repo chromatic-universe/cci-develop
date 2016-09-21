@@ -12,7 +12,7 @@ from kivy.uix.label import Label
 from kivy.app import App
 from kivy.uix import image
 from kivy.core.window import Window
-from kivy.uix.switch import Switch
+from kivy.uix.actionbar import ActionButton , ActionBar
 from kivy.uix.slider import Slider
 from kivy.uix.textinput import TextInput
 from kivy.uix.scrollview import ScrollView
@@ -117,6 +117,7 @@ def local_mac_addr() :
 
 
 lname = 'king-console-intf' + local_mac_addr()
+
 
 
 
@@ -298,6 +299,7 @@ class kingconsoleApp( App ) :
 			self._dlg_param = None
 			self._diaspora = True
 			self._default_document_policy = None
+			self._rube_widget = None
 
 
 
@@ -390,9 +392,13 @@ class kingconsoleApp( App ) :
 			"""
 
 			# if using nat will differ
-			rip = urllib2.urlopen( 'https://enabledns.com/ip' , timeout=4 )
-			self._console_real = rip.read()
-			self.root.current_screen.ids.console_real_id.text = self._console_real
+			try :
+				rip = urllib2.urlopen( 'https://enabledns.com/ip' , timeout=4 )
+				self._console_real = rip.read()
+				self.root.current_screen.ids.console_real_id.text = self._console_real
+			except :
+				pass
+
 			self._init_stream_logging()
 
 
@@ -1010,6 +1016,29 @@ class kingconsoleApp( App ) :
 
 
 
+		def _toggle_tree_view_manager_nodes( self , btn ) :
+			"""
+
+			:param modes:
+			:return:
+			"""
+
+			tree = self._rube_widget
+
+			if btn.text == 'expand' :
+				for node in tree.iterate_open_nodes():
+					if not node.is_open:
+						tree.toggle_node( node )
+				btn.text = 'close'
+			else :
+				for node in tree.iterate_open_nodes():
+					if node.is_open:
+						tree.toggle_node( node )
+				btn.text = 'expand'
+
+
+
+
 		def _on_view_manager( self ) :
 			"""
 
@@ -1020,10 +1049,13 @@ class kingconsoleApp( App ) :
 				self._view_manager = screen.ViewManagerScreen()
 				self._view_manager.name = 'screen_view_manager'
 				self._view_manager.id = 'view_manager_screen'
+				tv = TreeView( root_options=dict( text = 'king console' , font_size = 18 ) )
+				self._rube_widget = tv
 
 				layout = GridLayout( orientation='horizontal' , size_hint_y = None  , cols=1 , size = (480 , 900 ))
 				# action bar
-				ab = Builder.load_string( self._retr_resource( 'action_bar' ) )
+				ab = Builder.load_string( self._retr_resource( 'action_bar_plus' ) )
+
 
 				layout.add_widget( ab )
 
@@ -1031,7 +1063,6 @@ class kingconsoleApp( App ) :
 				sv = ScrollView()
 
 				# tree view
-				tv = TreeView( root_options=dict( text = 'king console' , font_size = 18 ) )
 				n1 = tv.add_node(screen.TreeManagerLabel(text='main context') )
 				n2 = tv.add_node(screen.TreeManagerLabel(text='transport'), n1)
 				tv.add_node(screen.TreeManagerLabel(text='syn ack'), n2)

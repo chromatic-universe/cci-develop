@@ -18,7 +18,7 @@
 
       <center>
 
-          <img src="{{ static_url( "image/king-console64_v.png") }}"><br><br>
+          <tr><td align="center"> <img src="{{ url_for('static', filename = 'image/king-console64.png') }}"></td><br><br>
           <b><i><u>chromatic universe - king console</u></i></b><br><br>
           <i>sqlite rest api ~ cci_maelstrom</i>
           <br>
@@ -35,5 +35,5 @@
     </center>
 
          </font>
-{% end %}
+{% endblock %}
 </html>
