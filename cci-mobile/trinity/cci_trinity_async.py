@@ -355,6 +355,19 @@ def shutdown() :
 
 
 # -----------------------------------------------------------------------------------------
+def uodate_status_callback() :
+
+			"""
+
+			:return:
+			"""
+
+			pass
+
+
+
+
+# -----------------------------------------------------------------------------------------
 def policy_callback( provider_type , moniker , db  ) :
 			"""
 
@@ -428,8 +441,11 @@ if __name__ == "__main__":
 			if not is_running :
 				# Watch the queue for when new items show up
 				_logger.info( '...initializing queue vulture....' )
+				# policies
 				tornado.ioloop.IOLoop.instance().add_callback( client.watch_queue )
+				# session status
 				tornado.ioloop.IOLoop.instance().add_callback( session_client.watch_session_queue )
+				# stream data
 				tornado.ioloop.IOLoop.instance().add_callback( stream_client.watch_stream_queue )
 
 

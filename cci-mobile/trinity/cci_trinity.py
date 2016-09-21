@@ -116,6 +116,7 @@ def index() :
 
 			try :
 				_logger.info( '...index...' )
+				tr_mongo_rest.debug_write_api()
 				return render_template( "index.html" ,
 										device = '"' + tr_utils.local_mac_addr() + '"' )
 			except Exception as e :
@@ -146,6 +147,8 @@ def shutdown() :
 		"""
 		_logger.info(' ...stopping http server...')
 
+
+
 		http_server.stop()
 
 		_logger.info( '....will shutdown in %s seconds ...' , max_wait_seconds_before_shutdown )
@@ -169,6 +172,7 @@ def shutdown() :
 
 # ------------------------------------------------------------------------------
 if __name__ == "__main__"  :
+
 
 
 

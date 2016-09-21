@@ -15,7 +15,7 @@ import Queue
 import requests
 import datetime
 import json
-from bson import json_util
+from bson import json_util , ObjectId
 
 import flask
 from flask import Flask , request , send_file , render_template , url_for
@@ -44,7 +44,7 @@ def debug_write_api() :
 		with open( 'mongo.api' , 'w' ) as f :
 			for r in current_app.url_map.iter_rules() :
 			 	doc = current_app.view_functions.get(r.endpoint).func_doc
-				if not rcmake.rule.startswith('/static') and r.rule.startswith( '/mongo' ) :
+				if not r.rule.startswith('/static') and r.rule.startswith( '/mongo' ) :
 					doc = doc.replace( '\t' , '' )
 					f.write( '<a href="%s">%s</a>' %  ( r.rule , r.rule ) )
 					f.write( '<pre>%s</pre><br>' % doc )
@@ -149,7 +149,8 @@ def retr_device( device_id ) :
 					   'engaged' : device['engaged'] ,
 					   'canononical_user' : device['canonical_user'] ,
 					   'scope' : device['scope'] ,
-					   'segment' : device['segment']
+					   'segment' : device['segment'] ,
+					   'auth_http_id' : device['auth_http_id']
 					  }
 
 			return jsonify({'result' : output})
@@ -363,6 +364,51 @@ app.add_url_rule( '/mongo/update_device_status',
 				  methods=['POST']
 				   )
 
+
+
+# --------------------------------------------------------------------------------------------------------
+def update_http_server_status() :
+			"""
+			PUT update http server  status
+			:param http_id : string
+			:param status : csv <active,last_ip,last_remote_ip>  true,192.168.0.1,64.0.1.19
+			:return : ack
+			"""
+
+			_logger.info( '...update_http_server_status...' )
+			output = []
+
+
+			db =  mongo.db.auth_http_servers
+			data = json.loads( request.data )
+
+			if request.method == 'POST' :
+				result = mongo.db.auth_http_servers.update_one (
+										{"_id": ObjectId( data['_id'] ) } ,
+											{
+												"$set":
+												{
+													"active" : data['active']  ,
+													"last_known_ip" : data['last_known_ip'] ,
+													"last_known_real_ip" : data['last_known_real_ip']
+												},
+												"$currentDate": { "last_active" : True }
+
+											} )
+
+				if result.matched_count == 0 :
+					_logger.error( '...update_http_server_status %s' % e.message )
+					raise mongo_no_resource_exception( 'could not update http server status' )
+
+				return jsonify({'result' : 'ok'})
+			return jsonify({'result' : 'update failed'})
+
+
+app.add_url_rule( '/mongo/update_http_server_status',
+				  'update_http_server_status' ,
+				  view_func=update_http_server_status ,
+				  methods=['POST']
+				   )
 
 
 

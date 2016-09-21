@@ -1,4 +1,9 @@
-<a href="/mongo/insert_beaucoup_payload">/mongo/insert_beaucoup_payload</a><pre>
+<a href="/mongo/update_http_server_status">/mongo/update_http_server_status</a><pre>
+PUT update http server  status
+:param http_id : string
+:param status : string
+:return : ack
+</pre><br><a href="/mongo/insert_beaucoup_payload">/mongo/insert_beaucoup_payload</a><pre>
 POST insert many json payload , serialization hijinks involved , could affect performance
 :param payload:
 :return:
@@ -16,9 +21,13 @@ GET retrieve payload of authorized applications
 :param application moniker:
 :return: : jsonified device payload
 :rtype: json
-</pre><br><a href="/mongo/enum_devices">/mongo/enum_devices</a><pre>
-GET enumerate all devices:return : jsonified payload of devices
+</pre><br><a href="/mongo/insert_device">/mongo/insert_device</a><pre>
+POST insert device
+:param payload
 :return:
+</pre><br><a href="/mongo/enum_devices">/mongo/enum_devices</a><pre>
+GET enumerate all devices:
+return : jsonified payload of devices
 </pre><br><a href="/mongo/cci_api">/mongo/cci_api</a><pre>
 GET to generate a list of endpoints and their docstrings
 :return this document
@@ -38,7 +47,7 @@ GET is device tagged active?
 :return: : jsonified device payload
 :rtype: json
 </pre><br><a href="/mongo/retr_device/<device_id>">/mongo/retr_device/<device_id></a><pre>
-GET retrieve one device or 404 by id( mac address )
+GET  retrieve one device or 404 by id( mac address )
 :param : device_id
 :return : jsonified device payload
 :rtype: json
