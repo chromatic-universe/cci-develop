@@ -455,6 +455,46 @@ class kingconsoleApp( App ) :
 
 
 
+		def _save_session_notes( self ) :
+			"""
+
+			:return:
+			"""
+			try :
+				for slide in self.root.current_screen.ids.maelstrom_carousel_id.slides :
+					try :
+						if slide.children[2].text.find( 'notes #' ) != -1 :
+							tx = slide.children[1].children[0]
+							# non empty only
+							if len( tx.text ) == 0 :
+								return
+
+							# pst note
+							package = ( ( 'insert_session_note'  ,
+							[ self._session_id ,
+							  tx.text ,
+							  '(none)'] ) )
+							self.dbq.put( package )
+							# post stack call , no payload
+							#todo filter these out of payload processing
+							id = '(session_id=%s)' % self._session_id
+							package = ( ( 'insert_session_call'  ,
+										[ self._session_id ,
+										 'application' ,
+										 'notes' ,
+										 '(none)' ,
+										 id] ) )
+							self.dbq.put( package )
+
+					except :
+						continue
+
+			except :
+				# ignore everything , the app is exiting
+				pass
+
+
+
 		def _close_session( self ) :
 			"""
 
@@ -462,6 +502,8 @@ class kingconsoleApp( App ) :
 			"""
 
 			mac =  local_mac_addr()
+			self._save_session_notes()
+
 			# we don't use db queue in main thread
 			package = ( ( 'update_session_status'  ,
 						[0 , self._session_id] ) )
@@ -969,6 +1011,15 @@ class kingconsoleApp( App ) :
 
 			:return:
 			"""
+
+			# rube goldberg for no full screen for notes ; poorly implemented
+			# keyboard goofosity on android
+			try :
+				if self.root.current_screen.ids.maelstrom_carousel_id.current_slide. \
+													   children[2].text.find( 'notes #' ) != -1 :
+					return
+			except :
+				pass
 
 
 			acc = self.root.current_screen.ids.cci_accordion

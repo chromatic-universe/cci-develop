@@ -342,24 +342,8 @@ class CciScreen( Screen ) :
 					:return:
 					"""
 
-					count = App.get_running_app()._console_count
-					"""
-					self._update_main_console(  count ,
-											    threaded = False ,
-											    func = None ,
-											    moniker = 'session note #' ,
-											    edit = True
-										      )
-					"""
-					layout = GridLayout( orientation = 'horizontal' ,
-									  cols = 1 )
-					tx = Builder.load_string( self._retr_resource( 'note_scroller' ) )
-					layout.add_widget( tx )
-					popup = Popup( title='note for session ' + App.get_running_app().session ,
-										  content=layout )
 
-
-					popup.open()
+					self._update_main_console( count = App.get_running_app()._console_count , moniker = 'notes #'  , edit = True )
 
 
 
@@ -674,6 +658,11 @@ class CciScreen( Screen ) :
 					tx = scrolly.children[0]
 					if edit :
 						tx.text = ''
+						tx.readonly = False
+						tx.cursor_blink = True
+						tx.background_color =  [0,0,0,0]
+						tx.foreground_color =  [1,1,1,1]
+						tx.font_size  = 16
 					else :
  						tx.text = 'standby...working...'
 					self._console_text = tx

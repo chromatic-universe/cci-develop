@@ -329,10 +329,8 @@ class kc_db_manager( object ) :
 					:return:
 					"""
 
-					params = ( '"' + call_params[0] + '"'  ,
-							   int( call_params[1] ) ,
-							   int( call_params[2] ) )
-					self._execute_sql_update( 'sd_insert_session_note' , params   )
+
+					self._execute_sql_update( 'sd_insert_session_note' , call_params   )
 
 
 
