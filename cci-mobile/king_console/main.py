@@ -77,6 +77,7 @@ from king_console.kc_wireless import *
 
 
 
+
 kivy.require(  '1.9.1'  )
 
 #todo
@@ -409,6 +410,7 @@ class kingconsoleApp( App ) :
 			"""
 
 			# we don't use db queue in main thread
+
 
 			uid = str( uuid.uuid4() )
 			package = ( ( 'insert_session'  ,

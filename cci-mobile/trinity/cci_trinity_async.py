@@ -36,7 +36,8 @@ from application_vulture  import app ,\
 	                             mongo_no_resource_exception , \
 								 _logger
 from streams import tr_utils , \
-				    tr_sqlite
+				    tr_sqlite , \
+					tr_mongo_rest
 
 lname = 'king-console-cci-maelstrom'
 callback_class_dispatch = { 'document' : 'tr_payload_stalker' ,
@@ -279,6 +280,39 @@ class queue_handler_stop_policy( tornado.web.RequestHandler ) :
 
 
 
+# --------------------------------------------------------------------------------------
+def start_heartbeat_callback() :
+
+			"""
+
+			:return:
+			"""
+
+			# hearbeat
+			try :
+
+				j = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-update-interval' )['map'] )
+				heartbeat_interval = j['update_interval']
+				r = requests.get( 'http://localhost:7080/mongo/retr_device/%s' % tr_utils.local_mac_addr())
+				device_info = r.json()['result']
+				auth_http_id = device_info['auth_http_id']
+
+				# start hearbeat
+				pc = PeriodicCallback( lambda: update_status_callback( auth_http_id ) ,
+																	   int( heartbeat_interval )  * 1000 )
+				_logger.info( '..started periodic heartbeat callback with interval of %d...' % int( heartbeat_interval ) )
+				pc.start()
+
+			except :
+				# non-critical ; move on
+				pass
+
+
+
+
+
+
+
 
 # --------------------------------------------------------------------------------------
 class cci_sibling_probe( tornado.web.RequestHandler )  :
@@ -365,7 +399,7 @@ def update_status_callback( http_id  ) :
 				r = requests.post( 'http://localhost:7080/mongo/update_http_server_status' ,
 								   data = json.dumps( { "_id" : http_id ,
 													     "active" : "true" ,
-														 "last_known_ip" : "0.0.0.0" ,
+														 "last_known_ip" : retr_local_ip_info() ,
 													     "last_known_real_ip" : "0.0.0.0"
 								  					   }
 								   					)
@@ -425,23 +459,7 @@ if __name__ == "__main__":
 					_logger.error( '...broken streaming..%s' % e.message )
 				#jr_mongo = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-mongo-bootstrap' )['map']  )
 
-			# hearbeat
-			try :
-				j = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-update-interval' )['map'] )
-				heartbeat_interval = j['update_interval']
-				r = requests.get( 'http://localhost:7080/mongo/retr_device/%s' % tr_utils.local_mac_addr())
-				device_info = r.json()['result']
-				auth_http_id = device_info['auth_http_id']
 
-				# start hearbeat
-				pc = PeriodicCallback( lambda: update_status_callback( auth_http_id ) ,
-																	   int( heartbeat_interval )  * 1000 )
-				_logger.info( '..started periodic heartbeat callback with interval of %d...' % int( heartbeat_interval ) * 1000 )
-				pc.start()
-
-			except :
-				# non-critical ; move on
-				pass
 
 			# queue vulture
 			client = queue_client()
@@ -484,7 +502,7 @@ if __name__ == "__main__":
 					   	   }
 				# create the web server with async coroutines
 				_logger.info( '...initializing http services....' )
-				application = tornado.web.Application([	(r'/trinity-vulture/start', queue_handler_start_policy ) ,
+				application = tornado.web.Application([	( r'/trinity-vulture/start', queue_handler_start_policy ) ,
 														( r'/trinity-vulture/stop' ,  queue_handler_stop_policy ) ,
 														( r'/trinity-vulture' ,  vulture_index ) ,
 														( r'/trinity-vulture/post_stream_msg' ,  stream_queue_handler_post_msg ) ,
@@ -510,9 +528,13 @@ if __name__ == "__main__":
 					 pidfile.write( str( os.getpid() ) + '\n'  )
 
 
+				# start heartbeat in 30 seconds
+				_logger.info( '...scheduling hearbeat ....' )
+				tornado.ioloop.IOLoop.instance().call_later( 30 , start_heartbeat_callback )
+				# run main io
 				_logger.info( '...starting main io loop ....' )
-
 				tornado.ioloop.IOLoop.instance().start()
+
 			else :
 				_logger.info( '...server already running... pid %s....'  % pid )
 				sys.exit( 1 )
