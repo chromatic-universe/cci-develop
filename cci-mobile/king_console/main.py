@@ -483,7 +483,7 @@ class kingconsoleApp( App ) :
 										 'application' ,
 										 'notes' ,
 										 '(none)' ,
-										 id] ) )
+										 tx.text] ) )
 							self.dbq.put( package )
 
 					except :

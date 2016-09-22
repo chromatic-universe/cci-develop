@@ -346,23 +346,35 @@ def shutdown() :
 				else:
 					io_loop.stop()
 
-
-
 			stop_loop()
 			_logger.info( '...shutdown....' )
 
 
 
-
 # -----------------------------------------------------------------------------------------
-def uodate_status_callback() :
+def update_status_callback( http_id  ) :
 
 			"""
 
+			:param http record ibject id:
 			:return:
 			"""
 
-			pass
+			try :
+
+				r = requests.post( 'http://localhost:7080/mongo/update_http_server_status' ,
+								   data = json.dumps( { "_id" : http_id ,
+													     "active" : "true" ,
+														 "last_known_ip" : "0.0.0.0" ,
+													     "last_known_real_ip" : "0.0.0.0"
+								  					   }
+								   					)
+								 )
+				_logger.info( '....async heartbeat....' )
+
+			except Exception as e :
+				_logger.error( e.message )
+
 
 
 
@@ -400,7 +412,7 @@ def policy_callback( provider_type , moniker , db  ) :
 if __name__ == "__main__":
 
 
-			# params
+			# docs and streams
 			j = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-stream-toggle' )['map'] )
 			if j['status'] == 'on' :
 				stream_bootstrap = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-kafka-bootstrap' )['map'] )
@@ -412,6 +424,24 @@ if __name__ == "__main__":
 				except Exception as e :
 					_logger.error( '...broken streaming..%s' % e.message )
 				#jr_mongo = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-mongo-bootstrap' )['map']  )
+
+			# hearbeat
+			try :
+				j = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-update-interval' )['map'] )
+				heartbeat_interval = j['update_interval']
+				r = requests.get( 'http://localhost:7080/mongo/retr_device/%s' % tr_utils.local_mac_addr())
+				device_info = r.json()['result']
+				auth_http_id = device_info['auth_http_id']
+
+				# start hearbeat
+				pc = PeriodicCallback( lambda: update_status_callback( auth_http_id ) ,
+																	   int( heartbeat_interval )  * 1000 )
+				_logger.info( '..started periodic heartbeat callback with interval of %d...' % int( heartbeat_interval ) * 1000 )
+				pc.start()
+
+			except :
+				# non-critical ; move on
+				pass
 
 			# queue vulture
 			client = queue_client()

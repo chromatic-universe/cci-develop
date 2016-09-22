@@ -136,22 +136,24 @@ def retr_device( device_id ) :
 			output = []
 
 			db =  mongo.db.auth_devices
-			device = db.find( { 'device_id' : device_id } )
-			if device.count() == 0 :
+			dev = db.find( { 'device_id' : device_id } )
+			if dev.count() == 0 :
 				_logger.error( '...retr_device %s' % e.message )
 				raise mongo_no_resource_exception( 'no tokenized device found')
-			output =  {'moniker' : device['moniker'] ,
-					   'description' : device['description'] ,
-					   'active' : device['active'] ,
-					   'device_id' : device['device_id'] ,
-					   'enlisted' : device['enlisted'] ,
-					   'last_kown_remote_ip' : device['last_known_remote_ip'] ,
-					   'engaged' : device['engaged'] ,
-					   'canononical_user' : device['canonical_user'] ,
-					   'scope' : device['scope'] ,
-					   'segment' : device['segment'] ,
-					   'auth_http_id' : device['auth_http_id']
-					  }
+			for device in dev :
+				output =  {'moniker' : device['device_moniker'] ,
+						   'description' : device['description'] ,
+						   'active' : device['active'] ,
+						   'device_id' : device['device_id'] ,
+						   'spawned' : device['spawned'] ,
+						   'last_known_remote_ip' : device['last_known_remote_ip'] ,
+						   'canonical_user' : device['canonical_user'] ,
+						   'segment' : device['segment'] ,
+						   'auth_apps' : device['auth_apps'] ,
+						   'cloak_origin' : device['cloak_origin'] ,
+						   'cloak_monitor_stream' : device['cloak_monitor_stream'] ,
+						   'auth_http_id' : device['auth_http_id']
+						  }
 
 			return jsonify({'result' : output})
 app.add_url_rule( '/mongo/retr_device/<device_id>' ,
