@@ -27,7 +27,7 @@ Accordion:
                     orientation: 'horizontal'
                     cols: 1
                     Label:
-                        text: 'tornado http/https/wsgi server \n version 4.4.1'
+                        text: 'tornado http/https/wsgi server \n version 4.4.1 ~ app server'
                         halign: 'center'
                         size_hint_y: .15
                     Label:
@@ -62,12 +62,46 @@ Accordion:
                     orientation: 'horizontal'
                     cols: 1
                     Label:
-                        text: 'tornado http/https/wsgi server \n version 4.4.1'
+                        text: 'tornado http/https/wsgi server \n version 4.4.1 ~ async services'
                         halign: 'center'
                         size_hint_y: .15
                     Label:
                         text: 'port: 7081'
                         id: vulture_process_info
+                        size_hint_y: .15
+                    ScrollView:
+                        id: scrlv
+                        size_hint_y:.55
+                        TextInput:
+                            text: ''
+                            size_hint_y: None
+                            cursor_blink: True
+                            background_color: [0,0,0,0]
+                            foreground_color: [1,1,1,1]
+                            multiline: True
+                            id: vulture_status_text
+                            font_size: 16
+                            readonly: True
+                            height: max( (len(self._lines)+1) * self.line_height, scrlv.height)
+                    Label:
+                        text: 'servicing:\n cci-maelstrom'
+                        size_hint_y: .15
+                        halign: 'center'
+                    Button:
+                        text: '~'
+                        id: manipulate_btn
+                        background_color: [1,0,0,1]
+                        size_hint_y: .15
+                GridLayout:
+                    orientation: 'horizontal'
+                    cols: 1
+                    Label:
+                        text: 'tornado http/https/wsgi server \n version 4.4.1 ~ tunnel services'
+                        halign: 'center'
+                        size_hint_y: .15
+                    Label:
+                        text: 'port: 7081'
+                        id: vulture_tunnel_info
                         size_hint_y: .15
                     ScrollView:
                         id: scrlv

@@ -14,7 +14,7 @@ from functools import partial
 import requests
 import json
 import sqlite3
-from tailf import tailf
+
 
 import kivy
 from kivy.config import Config
@@ -48,6 +48,9 @@ from kivy.utils import platform
 
 # cci
 from streams import tr_utils
+
+
+
 
 
 kivy.require( '1.9.1' )
@@ -119,7 +122,6 @@ class ccitrinityApp( App ) :
 				self._clock_event = None
 				self._retry_on_fail_reps = 0
 
-				self._update_thred = None
 
 
 			@mainthread
@@ -154,40 +156,6 @@ class ccitrinityApp( App ) :
 
 
 
-			@mainthread
-			def _update_vulture( self , entry ) :
-						"""
-
-						:return:
-						"""
-
-						self._update_status( self.root.ids.vulture_status_text ,
-												 entry )
-
-
-
-
-			def _run_update_thred( self ) :
-						"""
-
-						:return:
-						"""
-
-						for line in tailf( "./cci-trinity-vulture.log-debug.log"  ) :
-							self._update_vulture( line )
-
-
-
-
-			def on_stop( self ) :
-						"""
-
-						:return:
-						"""
-
-						if self._update_thred :
-							self._update_thred.join( timeout = 3 )
-
 
 
 
@@ -197,12 +165,17 @@ class ccitrinityApp( App ) :
 						:return:
 						"""
 
+						try :
+							import paramiko
+							from streams import sshtunnel
+
+							self._logger.info( '..sshtunnel succeeded,,,' )
+						except Exception as e :
+							self._logger.error( '..sshtunnel failed %s' % e.message )
 
 						self._update_status( self.root.ids.status_text , '...initializing...' )
 						self._update_status( self.root.ids.vulture_status_text , '...initializing...' )
-						self._update_thred = threading.Thread( target = self._run_update_thred )
-						self._update_thred.daemon = True
-						self._update_thred.start()
+
 
 						is_running = False
 						try :
