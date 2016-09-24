@@ -12,6 +12,7 @@ package.domain = com.chromaticuniverse
 # (str) Source code where the main.py live
 source.dir = .
 
+
 # (list) Source files to include (let empty to include all the files)
 source.include_exts = py,png,jpg,kv,atlas
 
@@ -36,7 +37,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma seperated e.g. requirements = sqlite3,kivy
-requirements = kivy,setuptools,requests,evdev
+requirements = setuptools,kivy,requests,evdev
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
