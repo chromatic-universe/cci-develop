@@ -111,7 +111,10 @@ class ccitrinityApp( App ) :
 				# params
 				self._db_path = self._retrieve_default_db_path()
 				self._stream_bootstrap = None
-				j = json.loads( self._retrieve_config_atom( 'trinity-stream-toggle' )['map'] )
+				try :
+					j = json.loads( self._retrieve_config_atom( 'trinity-stream-toggle' )['map'] )
+				except :
+					self._logger.error( '..could not load trinity-stream-toggle' )
 				logger = None
 				lname = 'cci_trinity-' + tr_utils.local_mac_addr()
 
@@ -150,7 +153,7 @@ class ccitrinityApp( App ) :
 
 						except Exception as e :
 							self._update_status( self.root.ids.status_text ,
-												 '...policy initialization failed..check packet stream for details' )
+												 '...policy initialization failed..check aysnc services for details' )
 
 
 
@@ -748,12 +751,15 @@ class ccitrinityApp( App ) :
 						:return:
 						"""
 
-						if self.root.ids.packet_stream_btn.text ==  'packet stream' :
+						if self.root.ids.packet_stream_btn.text ==  'aysnc services' :
+							self.root.ids.trinity_carousel_id.load_next()
+							self.root.ids.packet_stream_btn.text = 'tunnel services'
+						elif self.root.ids.packet_stream_btn.text ==  'tunnel services'  :
 							self.root.ids.trinity_carousel_id.load_next()
 							self.root.ids.packet_stream_btn.text = 'app server'
 						else :
-							self.root.ids.trinity_carousel_id.load_previous()
-							self.root.ids.packet_stream_btn.text = 'packet stream'
+							self.root.ids.packet_stream_btn.text = 'aysnc services'
+							self.root.ids.trinity_carousel_id.index = 0
 
 
 
@@ -763,12 +769,15 @@ class ccitrinityApp( App ) :
 						:return:
 						"""
 
-						if args == 1 :
+
+						if args == 0 :
+							self.root.ids.packet_stream_btn.text =  'aysnc services'
+						elif args == 1	 :
+							self.root.ids.packet_stream_btn.text =  'tunnel services'
+						elif args == 2 :
 							self.root.ids.packet_stream_btn.text =  'app server'
-						else :
-							self.root.ids.packet_stream_btn.text =  'packet stream'
 
-
+						pass
 
 
 
