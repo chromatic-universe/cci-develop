@@ -394,13 +394,14 @@ class kingconsoleApp( App ) :
 
 			# if using nat will differ
 			try :
-				rip = urllib2.urlopen( 'https://enabledns.com/ip' , timeout=4 )
+				rip = urllib2.urlopen( 'https://enabledns.com/ip' , timeout=3 )
 				self._console_real = rip.read()
 				self.root.current_screen.ids.console_real_id.text = self._console_real
+
 			except :
 				pass
 
-			self._init_stream_logging()
+
 
 
 		def _create_session( self ) :
@@ -445,9 +446,14 @@ class kingconsoleApp( App ) :
 					requests.post( s ,
 									   data = json.dumps( data ) , timeout = 2 )
 
+					self._init_stream_logging()
+
 					Clock.schedule_once( self._real_ip_callback , 15  )
+					self._logger.info( '..updated session info remote...open %s' % local_mac_addr() )
 				except Exception as e :
 					self._logger.error( e.message )
+
+
 
 
 			else :

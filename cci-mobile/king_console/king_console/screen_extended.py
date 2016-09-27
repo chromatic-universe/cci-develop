@@ -219,6 +219,11 @@ class DatalinkScreen( Screen ) :
 										boiler = boiler[:pos]
 
 									self._update_console_payload( boiler  )
+									self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
+																			'datalink' ,
+																			'arp_monitor' ,
+							  												'(no_params)' ,
+																			boiler ] )
 									sleep( 1 )
 							except proc.CalledProcessError as e :
 								b_ret = False
@@ -227,11 +232,7 @@ class DatalinkScreen( Screen ) :
 							App.get_running_app()._logger.error( e.message )
 
 
-						self._post_function_call( 'insert_session_call' , [ App.get_running_app()._session_id ,
-																			'datalink' ,
-																			'arp_monitor' ,
-							  												'(no_params)' ,
-																			boiler ] )
+
 
 
 

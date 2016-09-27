@@ -475,6 +475,8 @@ if __name__ == "__main__":
 					_logger.info( '...streaming bootstrap initialized...%s' % s )
 				except Exception as e :
 					_logger.error( '...broken streaming..%s' % e.message )
+					# retry
+
 				#jr_mongo = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-mongo-bootstrap' )['map']  )
 
 
