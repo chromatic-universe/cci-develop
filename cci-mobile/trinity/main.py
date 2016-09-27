@@ -54,7 +54,7 @@ from streams import tr_utils , \
 kivy.require( '1.9.1' )
 
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
-timestamp = 'cci-trinity~ {:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())
+
 t = 3
 
 
@@ -123,39 +123,80 @@ class ccitrinityApp( App ) :
 				self._clock_event = None
 				self._retry_on_fail_reps = 0
 
+				self._policy_thred = None
+
+
 
 
 			@mainthread
+			def _enum_policy_record( self , jsn , moniker ) :
+				"""
+
+				:param jsn json:
+				:return:
+				"""
+				if jsn is None :
+					return
+
+				s = '\n\n' + 24 * '*'
+				header = 'default %s policy' % moniker
+				s += '\n' + header + '\n'
+				s += 24 * '*'
+				s += '\n'
+				for key , value in jsn.iteritems() :
+					s += '%s = %s\n' % ( key , value )
+				self._update_status( self.root.ids.vulture_status_text ,
+									 '...default %s policy initialized....%s' % ( moniker , s ) )
+
+
+
+
+			def _start_policy_thred( self ) :
+				"""
+
+				:param sself:
+				:return:
+				"""
+				# start default document policy
+				try :
+					j = self._default_policy( True , 'document')
+					self._enum_policy_record( j , 'document' )
+					j = self._default_policy( True , 'stream')
+					self._enum_policy_record( j , 'stream' )
+					self._update_status( self.root.ids.status_text ,
+									 '..policies initialized..check streams for details.' )
+
+				except Exception as e :
+					self._update_status( self.root.ids.status_text ,
+										 '...policy initialization failed..check aysnc services for details' )
+
+
+
+
 			def _start_policy_callback( self , dt ) :
 						"""
 
 						give vulture server time to initialize
-						1
+
 						:return:
 						"""
 
 						# start default document policy
-						try :
-							j = self._default_document_policy( True )
-							if j is None :
-								raise
-							self._update_status( self.root.ids.status_text ,
-												 '..policies initialized..check streams for details.' )
-							s = '\n\n' + 24 * '*'
-							s += '\ndefault document policy\n'
-							s += 24 * '*'
-							s += '\n'
-							for key , value in j.iteritems() :
-								s += '%s = %s\n' % ( key , value )
-							self._update_status( self.root.ids.vulture_status_text ,
-												 '...default policies initialized....%s' % s )
+						self._policy_thred = threading.Thread( target = self._start_policy_thred ).start()
 
 
-						except Exception as e :
-							self._update_status( self.root.ids.status_text ,
-												 '...policy initialization failed..check aysnc services for details' )
 
 
+
+			def on_stop( self ) :
+						"""
+
+						:return:
+						"""
+
+
+						if self._policy_thred :
+							self._policy_thred.join( timeout = 2 )
 
 
 
@@ -269,13 +310,14 @@ class ccitrinityApp( App ) :
 
 
 			@staticmethod
+			@mainthread
 			def _update_status( container , status ) :
 				"""
 
 				:param status:
 				:return:
 				"""
-
+				timestamp = 'cci-trinity~ {:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())
 				container.text = timestamp + status + '\n' + container.text
 
 
@@ -372,7 +414,7 @@ class ccitrinityApp( App ) :
 
 
 
-			def _default_document_policy( self  , toggle ) :
+			def _default_policy( self  , toggle , policy_type = None ) :
 				"""
 
 				:return:
@@ -380,9 +422,9 @@ class ccitrinityApp( App ) :
 
 				jsn = None
 				try :
-					jsn = self._retrieve_policy(  'default' , 'document' )
+					jsn = self._retrieve_policy(  'default' , policy_type )
 					if int( jsn['active'] ) :
-						# start default document policy
+						# start default policy
 						self._toggle_policy( jsn , toggle )
 				except Exception as e :
 					self._logger.info( '..exception..'  % e.message )
@@ -390,6 +432,9 @@ class ccitrinityApp( App ) :
 
 
 				return jsn
+			
+			
+			
 
 
 
@@ -409,6 +454,10 @@ class ccitrinityApp( App ) :
 					self._update_status( self.root.ids.vulture_status_text , s )
 					self._update_status( self.root.ids.status_text , s )
 
+					jsn = self._retrieve_policy(  'default' , 'document' )
+					self._enum_policy_record( jsn , 'document' )
+					jsn = self._retrieve_policy(  'default' , 'stream' )
+					self._enum_policy_record( jsn , 'stream' )
 
 
 
@@ -456,7 +505,7 @@ class ccitrinityApp( App ) :
 					self._update_status( self.root.ids.vulture_status_text , s )
 					self._retry_on_fail_reps += 1
 
-					Clock.schedule_once( partial( self._retry_toggle_policy_callback , jsn , toggle ) , 8 )
+					Clock.schedule_once( partial( self._retry_toggle_policy_callback , jsn , toggle ) , 5 )
 					raise Exception( '..failure...' )
 
 
@@ -486,8 +535,10 @@ class ccitrinityApp( App ) :
 							self._update_status( self.root.ids.status_text , ' ....trinity bootstrapped..running....' )
 							self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
 							self.root.ids.manipulate_btn.background_color = [0,1,0,1]
+							self.root.ids.manipulate_tunnel_btn.background_color = [0,1,0,1]
 							self.root.ids.bootstrap_btn.text = 'stop trinity'
 							self.root.ids.manipulate_btn.text = 'manipulate streams'
+							self.root.ids.manipulate_tunnel_btn.text = 'manipulate tunnels'
 							self._update_status( self.root.ids.status_text , ' ...trinity started...' )
 							self._clock_event = Clock.schedule_interval( self._pid_callback, 2 )
 					except Exception as e :
@@ -507,15 +558,18 @@ class ccitrinityApp( App ) :
 							self._update_status( self.root.ids.status_text , ' ....trinity vulture bootstrapped..running....' )
 							self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
 							self.root.ids.manipulate_btn.background_color = [0,1,0,1]
+							self.root.ids.manipulate_tunnel_btn.background_color = [0,1,0,1]
 							self.root.ids.bootstrap_btn.text = 'stop trinity'
 							self.root.ids.manipulate_btn.text = 'manipulate streams'
+							self.root.ids.manipulate_tunnel_btn.text = 'manipulate tunnels'
 							self._update_status( self.root.ids.status_text , ' ...trinity vulture started...' )
 							self._update_status( self.root.ids.vulture_status_text , ' ...trinity vulture started...' )
+							self._update_status( self.root.ids.vulture_tunnel_text , ' ...no user defined tunnels...' )
 
 							# schedule default policies to start in 8 seconds
 							self._update_status( self.root.ids.status_text ,
-												 '..waiting for doppleganger to initialize..standby..' )
-							Clock.schedule_once( self._start_policy_callback , 8 )
+												 '..waiting for async server to initialize polocies...standby..' )
+							Clock.schedule_once( self._start_policy_callback , 5 )
 
 					except Exception as e :
 						self._logger.error( '..._on_start_trinity...vulture' + e.message )
@@ -571,6 +625,7 @@ class ccitrinityApp( App ) :
 							self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture stopped ....' )
 							self.root.ids.bootstrap_btn.background_color = [0,1,0,1]
 							self.root.ids.manipulate_btn.background_color = [1,0,0,1]
+							self.root.ids.manipulate_tunnel_btn.background_color = [1,0,0,1]
 							self.root.ids.bootstrap_btn.text = 'start trinity'
 							self.root.ids.manipulate_btn.text = '~'
 							if self._clock_event :
