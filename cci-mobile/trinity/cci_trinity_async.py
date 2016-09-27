@@ -422,7 +422,7 @@ def update_status_callback( http_id  ) :
 								  					   }
 								   					)
 								 )
-				_logger.info( '....async heartbeat....' )
+
 
 			except Exception as e :
 				_logger.error( e.message )
