@@ -53,51 +53,48 @@ AppDiscoveryScreen:
 ,
 					 'ip_geography_view' :
 """
-BoxLayout:
+BoxLayout
 	orientation: 'vertical'
 	id: geography_ip
-	GridLayout:
-		id: main_grid
-		cols: 1
+	GridLayout
 		orientation: 'horizontal'
-		#size_hint_y: None
-		#size: ( 480 ,600 )
-		GridLayout:
-			id: geography_grid
-			orientation: 'horizontal'
-			cols: 1
-			GridLayout
-				orientation: 'horizontal'
-				cols: 2
-				size_hint_y: 0.20
-				Button:
-					id: more_app_btn
-					text: '...'
-					color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
-				Button:
-					id: do_geo_btn
-					text: 'execute ip geo'
-					color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
-			Label:
-				text: 'geo resource ip:'
-				size_hint_y: 0.15
-			TextInput:
-				text: '173.167.195.34'
-				id: ip_geo_metric
-				size_hint_y: 0.25
-				cursor_blink: True
-				readonly: False
-				multiline: True
-			Label:
-				text: 'geo authorization file:'
-				size_hint_y: 0.15
-			TextInput:
-				text: 'ip_geo_key'
-				size_hint_y: 0.25
-				id: ip_geo_key
-				cursor_blink: True
-				readonly: False
-				multiline: True
+		id: geography_grid
+		cols: 2
+		size_hint_y: 0.20
+		Button:
+			id: more_app_btn
+			text: '...'
+			color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+		Button:
+			id: do_geo_btn
+			text: 'execute ip geo'
+			color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+	BoxLayout
+		orientation: 'horizontal'
+		size_hint_y: 0.25
+		Label:
+			text: 'geo service key file:'
+		Label:
+			text: 'ip_geo_key'
+			id: ip_geo_key
+	GridLayout
+		orientation: 'horizontal'
+		cols: 1
+		size_hint_y: .15
+		Label:
+			text: 'geo resource ip:'
+			size_hint_y: 0.15
+		TextInput:
+			text: '173.167.195.34'
+			id: ip_geo_metric
+			size_hint_y: 0.25
+			cursor_blink: True
+			readonly: False
+			multiline: False
+	GridLayout
+		orientation: 'horizontal'
+		cols: 1
+		size_hint_y: .50
 
 """
 ,
