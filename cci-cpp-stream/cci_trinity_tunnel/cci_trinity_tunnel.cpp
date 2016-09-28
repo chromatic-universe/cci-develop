@@ -122,8 +122,12 @@ static trinity_meta_dictionary retr_mongo_metadata( bool stream_out = false , st
 // -----------------------)-------------------------------------------------------------------------------
 static void non_cli_boiler();
 //--------------------------------------------------------------------------------------------------------
-static void dispatch_directo_tcp( const std::string& host_tuple ,
-                                  const std::string& dest_tuple );
+static void dispatch_tunnel( const std::string& tunnel_type  ,
+                             const std::string& host_tuple ,
+                             const std::string& dest_tuple );
+//--------------------------------------------------------------------------------------------------------
+static void dispatch_direct_tcp( const std::string& host_tuple ,
+                                 const std::string& dest_tuple );
 
 
 
@@ -169,12 +173,16 @@ int main( int argc , char* argv[] )
 
           }
 
-
           if( ! quiet_switch->isSet() )
           {
               retr_mongo_metadata( true );
           }
-          /*
+
+          dispatch_tunnel( tunnel_val->getValue() ,
+                           proxy_tuple->getValue() ,
+                           destination_tuple->getValue() );
+
+                   /*
            const unsigned short local_port   = static_cast<unsigned short>(::atoi(argv[2]));
            const unsigned short forward_port = static_cast<unsigned short>(::atoi(argv[4]));
            const std::string local_host      = argv[1];
@@ -285,21 +293,35 @@ void non_cli_boiler()
 
 }
 
+//--------------------------------------------------------------------------------------------------------
+void dispatch_tunnel( const std::string& tunnel_type ,
+                      const std::string& host_tuple ,
+                      const std::string& dest_tuple  )
+{
+              if( tunnel_type.compare( "tcp") == 0 )
+              {
+                    dispatch_direct_tcp( host_tuple , dest_tuple );
+              }
+
+}
+
+
 // -------------------------------------------------------------------------------------------------------
-void dispatch_directo_tcp( const std::string& host_tuple ,
-                           const std::string& dest_tuple )
+void dispatch_direct_tcp( const std::string& host_tuple ,
+                          const std::string& dest_tuple )
 {
 
            boost::asio::io_service ios;
-           std::vector<std::string> v_str;
-           const char colon{ ':' };
+           std::vector<std::string> v_host;
+           std::vector<std::string> v_dest;
+
+           const std::string colon { ":" };
 
 
            try
            {
-                  v_str = split( host_tuple , colon );
-
-                  /*
+                  v_host = util::split( host_tuple , colon );
+                  v_dest = util::split( dest_tuple , colon );
 
                   cci_trinity::trinity_acceptor acceptor( ios ,
                                                           local_host ,
@@ -309,7 +331,17 @@ void dispatch_directo_tcp( const std::string& host_tuple ,
 
                   acceptor.accept_connections();
 
-                  ios.run();*/
+                  std::unique_ptr<time_utils> tu ( new time_utils( stamp_color::green ) );
+                  tu->null_stamp();
+                  std::cerr << "[trinity] ";
+
+
+                  std::cerr << "..starting tcp proxy for "
+                            << dest_tuple
+                            << "....\n"
+                  tu->clear_color();
+
+                  ios.run();
            }
            catch( std::exception& e )
            {
