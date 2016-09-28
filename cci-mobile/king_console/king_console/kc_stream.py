@@ -492,6 +492,8 @@ class kc_kafka_config( kc_config ) :
 							grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(480 , 700 ) )
 							grid.add_widget( Label(  text = 'active:' ) )
 							grid.add_widget( Switch( active = True ) )
+							grid.add_widget( Label(  text = 'default publishing topic:' ) )
+							grid.add_widget( Label(  text = 'king-console-cci-maelstrom' ) )
 							grid.add_widget( Label(  text = 'bootstrap broker:' ) )
 							boot , port = self._bootstrap.split( ':' )
 							grid.add_widget( Label(  text = boot  ) )
