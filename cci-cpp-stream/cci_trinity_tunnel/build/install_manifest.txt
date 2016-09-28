@@ -1,5 +1,0 @@
-/home/wiljoh/cci-trinity-tunnel/py/trinity_cpp.py
-/home/wiljoh/cci-trinity-tunnel/py/requirements.txt
-/home/wiljoh/cci-trinity-tunnel/bin/instance_id
-/home/wiljoh/cci-trinity-tunnel/lib/libsqlite3.a/libsqlite3.a
-/home/wiljoh/cci-trinity-tunnel/bin/cci-trinity-tunnel
