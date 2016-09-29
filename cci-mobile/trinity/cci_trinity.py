@@ -116,7 +116,6 @@ def index() :
 
 			try :
 				_logger.info( '...index...' )
-				tr_mongo_rest.debug_write_api()
 				return render_template( "index.html" ,
 										device = '"' + tr_utils.local_mac_addr() + '"' )
 			except Exception as e :

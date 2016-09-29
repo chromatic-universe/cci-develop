@@ -399,7 +399,7 @@ class kingconsoleApp( App ) :
 				self._console_real = rip.read()
 				self.root.current_screen.ids.console_real_id.text = self._console_real
 
-			except :
+			except Exception as e :
 				pass
 
 

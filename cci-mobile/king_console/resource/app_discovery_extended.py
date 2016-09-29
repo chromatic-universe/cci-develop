@@ -64,11 +64,13 @@ BoxLayout
 		Button:
 			id: more_app_btn
 			text: '...'
-			color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+			background_color:[0,0,0,0]
+			color: [1,0,0,1]
 		Button:
 			id: do_geo_btn
 			text: 'execute ip geo'
-			color: [224 / 255.0 , 224 / 255.0 , 224 / 255.0 ,224 / 255.0]
+			background_color:[0,0,0,0]
+			color: [1,0,0,1]
 	BoxLayout
 		orientation: 'horizontal'
 		size_hint_y: 0.25

@@ -904,7 +904,7 @@ class TransportScreen( Screen ) :
 							call_map = { 'christmas tree scan' : None ,
 										 'half-open firewalk' : None ,
 										 'broadcast-dhcp' : None ,
-										 'boradcast-dns' : None
+										 'broadcast-dns' : None
 										}
 
 
@@ -915,8 +915,13 @@ class TransportScreen( Screen ) :
 							grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 800 ) )
 
 							for key,value in call_map.iteritems() :
-								grid.add_widget( Button( text = key  , halign = 'center' , font_size = 14 ,
-									size_hint_y = None , size_hint_x = 280  ) )
+								grid.add_widget( Button( text = key  ,
+														        halign = 'center' ,
+																font_size = 14 ,
+																background_color =  [0,0,0,0] ,
+																color = [1,0,0,1] ,
+																size_hint_y = None ,
+																size_hint_x = 200  ) )
 							scroll.add_widget( grid )
 							layout.add_widget( scroll )
 							self.ids.discovery_and_manip.add_widget( layout )
