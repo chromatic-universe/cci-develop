@@ -183,7 +183,7 @@ class kc_db_manager( object ) :
 
 
 
-				def _execute_sql_result_set( self , sql_key , params , event , queue_id  ) :
+				def _execute_sql_result_set( self , sql_key , params , event , queue_id ) :
 					"""
 
 					:param sql_key:
@@ -193,7 +193,7 @@ class kc_db_manager( object ) :
 					"""
 
 					q = App.get_running_app().dbpq
-
+					rf = self._current_db.row_factory
 
 					if not event.isSet() :
 						try :
@@ -222,6 +222,7 @@ class kc_db_manager( object ) :
 							self.logger.error( '...not enough aruments for db query...' )
 						finally :
 							App.get_running_app().dbpq_lk.release()
+
 
 
 
@@ -391,7 +392,7 @@ class kc_db_manager( object ) :
 						self._execute_sql_result_set( 'sql_retrieve_document_policy' ,
 													  call_params ,
 													  event ,
-													  id )
+													  id  )
 
 
 

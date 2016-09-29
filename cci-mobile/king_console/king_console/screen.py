@@ -358,6 +358,7 @@ class CciScreen( Screen ) :
 					"""
 					event = threading.Event()
 
+
 					self._post_function_call( 'query_document_policy' , [  event ,
 																		   '0' ,
 																			policy_moniker ,
@@ -370,7 +371,10 @@ class CciScreen( Screen ) :
 						lst = list()
 						while not App.get_running_app().dbpq.empty() :
 							lst = App.get_running_app().dbpq.get()
-						App.get_running_app()._default_document_policy = lst
+						if provider_type == 'document' :
+							App.get_running_app()._default_document_policy = lst
+						elif provider_type == 'stream' :
+							App.get_running_app()._default_stream_policy = lst
 					finally :
 						App.get_running_app().dbpq_lk.release()
 

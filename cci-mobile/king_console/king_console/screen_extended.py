@@ -47,7 +47,9 @@ from kivy.clock import Clock , mainthread
 
 
 screen_map = {  'nmap firewalk' : False ,
-				'ip_geography_view'  : False
+				'ip_geography_view'  : False ,
+				'zombie' : False ,
+				'discovery and port manip' : False
 	         }
 
 class console_grid( GridLayout ) :
@@ -689,7 +691,8 @@ class TransportScreen( Screen ) :
 					transport_carousel_id = ObjectProperty()
 					do_firewalk_btn = ObjectProperty()
 					firewalk_grid = ObjectProperty()
-
+					ip_zombie_metric = ObjectProperty()
+					zombie_query_tx = ObjectProperty()
 
 					def __init__( self , **kwargs ) :
 						"""
@@ -854,6 +857,7 @@ class TransportScreen( Screen ) :
 
 						self._console_count += 1
 						carousel = self.ids.transport_carousel_id
+
 						console = self.add_console(  content = 'cci-maelstrom~transport-> :...working...this could be lenghty...no time updates' ,
 																tag = 'firewalk console #%d' % self._console_count )
 
@@ -891,6 +895,39 @@ class TransportScreen( Screen ) :
 
 
 
+					def _on_show_manip( self ) :
+							"""
+
+							:return:
+							"""
+
+							call_map = { 'christmas tree scan' : None ,
+										 'half-open firewalk' : None ,
+										 'broadcast-dhcp' : None ,
+										 'boradcast-dns' : None
+										}
+
+
+							layout = GridLayout( orientation = 'horizontal' ,
+											  cols = 1 )
+
+							scroll = ScrollView()
+							grid = GridLayout( cols=1 , orientation = 'horizontal' , size_hint_y = None , size=(400 , 800 ) )
+
+							for key,value in call_map.iteritems() :
+								grid.add_widget( Button( text = key  , halign = 'center' , font_size = 14 ,
+									size_hint_y = None , size_hint_x = 280  ) )
+							scroll.add_widget( grid )
+							layout.add_widget( scroll )
+							self.ids.discovery_and_manip.add_widget( layout )
+							"""
+							popup = ConsolePopup( title='console history' , content=layout )
+							btn = popup.content.children[1].children[0].children[0]
+							btn.bind( on_press = lambda a:self._on_show_session_note() )
+							"""
+
+
+
 
 					def _selected_accordion_item( self  ) :
 							"""
@@ -913,7 +950,20 @@ class TransportScreen( Screen ) :
 												view.ids.do_firewalk_btn.bind( on_press = lambda a: self._on_firewalk_start()  )
 												self.ids.nmap_firewalk.add_widget( view )
 												screen_map['nmap firewalk'] = True
-											return item
+										elif item.title == 'zombie' :
+												App.get_running_app()._logger.info( item.title )
+												if not screen_map['zombie'] :
+													screen_map['zombie'] = True
+													view = Builder.load_string( self._retr_resource('zombie_view'  ) )
+													self.ip_zombie_metric = view.ids.ip_zombie_metric
+													self.zombie_query_titem_zombie_scanx = view.ids.zombie_query_tx
+													self.ids.item_zombie_scan.add_widget( view)
+										elif item.title == 'discovery and port manip' :
+												App.get_running_app()._logger.info( item.title )
+												if not screen_map['discovery and port manip'] :
+													self._on_show_manip()
+													screen_map['discovery and port manip'] = True
+										return item
 
 								except Exception as e :
 									App.get_running_app()._logger.error( e.message )

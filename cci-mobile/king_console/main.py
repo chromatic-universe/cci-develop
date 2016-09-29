@@ -300,6 +300,7 @@ class kingconsoleApp( App ) :
 			self._dlg_param = None
 			self._diaspora = True
 			self._default_document_policy = None
+			self._default_stream_policy = None
 			self._rube_widget = None
 
 
@@ -856,6 +857,7 @@ class kingconsoleApp( App ) :
 			thred.start()
 
 			self.root.current_screen._retrieve_policy( 'default' , 'document' )
+			self.root.current_screen._retrieve_policy( 'default' , 'stream' )
 
 
 			self.root.current_screen.ids.console_local_id.text = self._console_local
