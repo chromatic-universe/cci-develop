@@ -33,8 +33,53 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/cci_trinity_tunnel.cpp" afterPath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/cci_trinity_tunnel.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/CMakeLists.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/cci_trinity_acceptor.cpp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/cci_trinity_bridge.cpp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/cci_trinity_options.cpp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/cci_trinity_tunnel.cpp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/SQLiteCpp/Assertion.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/SQLiteCpp/Backup.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/SQLiteCpp/Column.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/SQLiteCpp/Database.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/SQLiteCpp/Exception.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/SQLiteCpp/SQLiteCpp.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/SQLiteCpp/Statement.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/SQLiteCpp/Transaction.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/SQLiteCpp/VariadicBind.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/cci_time_utils.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/cci_trinity_db.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/cci_trinity_options.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/cci_trinity_tunnel.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/json.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/subprocess.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/Arg.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/ArgException.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/ArgTraits.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/CmdLine.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/CmdLineInterface.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/CmdLineOutput.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/Constraint.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/DocBookOutput.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/HelpVisitor.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/IgnoreRestVisitor.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/MultiArg.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/MultiSwitchArg.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/OptionalUnlabeledTracker.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/StandardTraits.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/StdOutput.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/SwitchArg.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/UnlabeledMultiArg.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/UnlabeledValueArg.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/ValueArg.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/ValuesConstraint.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/VersionVisitor.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/Visitor.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/XorHandler.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/include/tclap/ZshCompletionOutput.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/instance_id" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/py/requirements.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cci-cpp-stream/cci_trinity_tunnel/py/trinity_cpp.py" afterPath="" />
     </list>
     <ignored path="cci_git_1.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -119,8 +164,8 @@
       <file leaf-file-name="kc_stream.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.334471" vertical-offset="6304" max-vertical-offset="6929">
-              <caret line="500" column="40" selection-start-line="500" selection-start-column="40" selection-end-line="500" selection-end-column="40" />
+            <state vertical-scroll-proportion="0.8447099" vertical-offset="6265" max-vertical-offset="6929">
+              <caret line="520" column="16" selection-start-line="520" selection-start-column="16" selection-end-line="520" selection-end-column="16" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -1348,8 +1393,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_stream.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.334471" vertical-offset="6304" max-vertical-offset="6929">
-          <caret line="500" column="40" selection-start-line="500" selection-start-column="40" selection-end-line="500" selection-end-column="40" />
+        <state vertical-scroll-proportion="0.8447099" vertical-offset="6265" max-vertical-offset="6929">
+          <caret line="520" column="16" selection-start-line="520" selection-start-column="16" selection-end-line="520" selection-end-column="16" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>
