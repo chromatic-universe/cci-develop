@@ -1,6 +1,10 @@
 
 # cci-trinity.py    william k. johnson  2016
+
 import sys
+# we're being bootstrapped by qpython , so we have to explicitly
+# add our site packages here, since they may or may not exist
+# in qpython's runtime environment
 sys.path.append( '/data/data/com.chromaticuniverse.cci_trinity/files/lib/python2.7/site-packages' )
 
 import os
@@ -115,6 +119,22 @@ def trinity_vulture() :
 def index() :
 
 			try :
+
+				from sshtunnel import SSHTunnelForwarder
+
+				server = SSHTunnelForwarder(
+											('52.38.98.223', 22),
+											ssh_username="ubuntu",
+											ssh_pkey='/home/wiljoh/cci-develop.pem' ,
+											local_bind_address=('127.0.0.1' , 3128 ) ,
+											remote_bind_address=('127.0.0.1', 8888 )
+											)
+				_logger.info( '..good ssh tunnel....' )
+
+			except Exception as e :
+				_logger.error( '..bad ssh tunnel....%s' % e.message )
+
+			try :
 				_logger.info( '...index...' )
 				return render_template( "index.html" ,
 										device = '"' + tr_utils.local_mac_addr() + '"' )
@@ -145,18 +165,6 @@ def shutdown() :
 		:return:
 		"""
 		_logger.info(' ...stopping http server...')
-
-		try :
-
-			import paramiko
-
-			ssh = paramiko.SSHClient()
-			ssh.set_missing_host_key_policy(
-			paramiko.AutoAddPolicy())
-			_logger.error( '..good paramiko....' )
-
-		except Exception as e :
-			_logger.error( '..bad paramiko....%s' % e.message )
 
 
 

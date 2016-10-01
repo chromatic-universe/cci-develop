@@ -44,7 +44,7 @@ TransportScreen:
 								on_press: app._on_view_manager()
 							ActionButton:
 								text: 'back'
-								on_press: app._manip_extended_window( root )
+								on_press: app._manip_extended_window()
 					Carousel:
                         id: transport_carousel_id
                         direction: 'right'
