@@ -1,9 +1,9 @@
 
 # cci-trinity.py    william k. johnson  2016
-
+import sys
+sys.path.append( '/data/data/com.chromaticuniverse.cci_trinity/files/lib/python2.7/site-packages' )
 
 import os
-import sys
 from StringIO import StringIO
 import logging
 
@@ -145,6 +145,19 @@ def shutdown() :
 		:return:
 		"""
 		_logger.info(' ...stopping http server...')
+
+		try :
+
+			import paramiko
+
+			ssh = paramiko.SSHClient()
+			ssh.set_missing_host_key_policy(
+			paramiko.AutoAddPolicy())
+			_logger.error( '..good paramiko....' )
+
+		except Exception as e :
+			_logger.error( '..bad paramiko....%s' % e.message )
+
 
 
 
