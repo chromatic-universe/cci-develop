@@ -2,7 +2,7 @@
 
 cci-mobile-no-qp
 
-cci-mobile with new p4a toolchain and no qptyhon
+cci-mobile with new p4a toolchain and no qpyhon
 
 william k. johnson 
 consulting principal software engineer
