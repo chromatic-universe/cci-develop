@@ -40,15 +40,23 @@ char* default_python_path = "data/data/com.chromaticuniverse.cci_trinity/files/a
 
 // helpers
 static int  dir_exists(char *filename );
+//------------------------------------------------------------------------
 static int  file_exists( const char *filename );
+//------------------------------------------------------------------------
 static void trace( char* atom );
+//------------------------------------------------------------------------
 static void chk( int py_chk );
 // environment
 static void set_py_env();
+//------------------------------------------------------------------------
 static int build_py_env();
+//------------------------------------------------------------------------
 static int py_env_out();
+//------------------------------------------------------------------------
+static void stream_out_usage( const char* binary );
 // services
 static int validate_entry_point( char* entry );
+//------------------------------------------------------------------------
 static int open_entry_point( char* entry );
 
 
@@ -129,6 +137,31 @@ int do_main( int argc , char** argv )
       char entrypoint[ENTRYPOINT_MAXLEN];
       int ret = 0;
       FILE *fd;
+      int use_default_env = 0;
+      int opt = 0;
+
+
+      while ( ( opt = getopt( argc ,
+                              argv ,
+                              "evh" ) ) != -1 )
+      {
+                 switch( opt )
+                 {
+                    case 'e':
+                        use_default_env = 0;
+                        exit( 0  );
+                    case 'v':
+                        fprintf( stderr , "\033[22;32mcci-bootstrap version 0.5 william k. johnson 2016\n\033[0m" );
+                        exit( 0 );
+                    case 'h' :
+                    default :
+                    {
+                        //executable moniker as arg
+                        stream_out_usage( argv[0] );
+                        exit( 0 );
+                    }
+                 }
+      }
 
 
       trace( "....cci-bootstrap...chromatic universe 2016..." );
@@ -424,6 +457,27 @@ int open_entry_point( char* entry )
       }
 
 }
+
+//------------------------------------------------------------------------
+void stream_out_usage( const char* binary )
+{
+     //stream , small subset of options
+     fprintf(   stderr ,
+                "\033[22;32m%s\nusage:\n\t\t-evh\n" \
+                "binary: %s\n" \
+                "\n\033[0m" \
+                " options:\n" \
+                "  -e  use default settings , ignore environment\n" \
+                "  -v  version\n"\
+                "  -h  help\n\n" \
+                "\n" \
+                "\n" ,
+                "synopsis :\n"\
+                    "\n\t\t bootstrapper for python for android \n" ,
+                binary
+            );
+}
+
 
 
 #endif

@@ -203,7 +203,7 @@ class ccitrinityApp( App ) :
                 :return:
                 """
 
-                self._update_status( self.root.ids.status_text , '..platform is linxu...' )
+                self._update_status( self.root.ids.status_text , '..platform is linux...' )
 
 
 
@@ -217,18 +217,8 @@ class ccitrinityApp( App ) :
                 
                 b_ret = False
                 try :
-                    if platform == 'android' :
-                       
-                        self._logger.info( '...attempting bootstrap of cci trinity service...' )    
-
-                        service = autoclass( cci_trinity_service_moniker )
-                        mActivity = autoclass( 'org.kivy.android.PythonActivity' ).mActivity
-                        argument = ''
-                        service.start( mActivity, argument )
-
-                        self._logger.info( '...bootstrap of cci trinity service succeeded...' ) 
-                        b_ret = True
-
+                    if platform == 'android' :                       
+                        pass 
                     else :
                         self._logger.info( '...bootstrap of cci trinity service succeeded...' )
                         b_ret = True
@@ -242,9 +232,7 @@ class ccitrinityApp( App ) :
 
                 return b_ret
 
- 
-
-            
+           
 
 
 
