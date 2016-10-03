@@ -53,6 +53,9 @@ void sigterm( int sig )
 }
 
 //command line
+//we could move this elsewhere , but this
+//actually servers as a effective
+//inline doucmentatiion(aad its always the latest-this has to work)
 auto ccmd( make_unique<cmd_line> ( "cci-trinity-tunnel 2016" , ' ' , "0.92" ) );
 //quiet output
 auto quiet_switch( make_unique<cci_trinity::switch_arg> (  "q" ,
