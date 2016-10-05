@@ -24,7 +24,7 @@ link_directories($ENV{CCI_ARM}/lib
                  $ENV{CCI_LIB})
                 
 #binary
-add_executable(cci-bootstrap cci_bootstrap.c)
+add_executable(cci-bootstrap cci_bootstrap.c cci_daemon.c)
 
 #link libs
 target_link_libraries(cci-bootstrap -lpython2.7 -lcrystax -llog)

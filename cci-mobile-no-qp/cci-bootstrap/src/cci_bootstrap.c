@@ -18,6 +18,7 @@
 #include <sys/types.h>
 #include <errno.h>
 #include <time.h>
+#include <fcntl.h>
 #include <wchar.h>
 
 // android
@@ -29,12 +30,13 @@
 #define LOGP(x) LOG("python", (x))
 
 char* default_sys_path = "/data/data/com.chromaticuniverse.cci_trinity/files/app";
-char* default_andr_arg_path = "/data/data.com/chromaticuniverse.cci_trinity/lib";
-char* default_python_home = "/data/data.com/chromaticuniverse.cci_trinity/files";
-char* default_python_path = "data/data/com.chromaticuniverse.cci_trinity/files/app/lib/python27.zip:"
+char* default_andr_arg_path = "/data/data/com.chromaticuniverse.cci_trinity/files/app/cpp_bin";
+char* default_python_home = "/data/data/com.chromaticuniverse.cci_trinity/files";
+char* default_python_path = "/data/data/com.chromaticuniverse.cci_trinity/files/app/lib/python27.zip:"
                             "/data/data/com.chromaticuniverse.cci_trinity/files/app/python2.7/:"
-                            "/data/data/com.chromaticuniverse.cci_trinity/files/app//lib/python2.7/lib-dynload/:"
-                            "/data/data/com.chromaticuniverse.cci_trinity/files/app/lib/python2.7.site-packages/";
+                            "/data/data/com.chromaticuniverse.cci_trinity/lib/:"
+                            "/data/data/com.chromaticuniverse.cci_trinity/files/app/lib/python2.7/lib-dynload/:"
+                            "/data/data/com.chromaticuniverse.cci_trinity/files/app/lib/python2.7/site-packages/";
 
 
 
@@ -141,6 +143,8 @@ int do_main( int argc , char** argv )
       int opt = 0;
 
 
+      trace( "....cci-bootstrap...chromatic universe 2016..." );
+
       while ( ( opt = getopt( argc ,
                               argv ,
                               "evh" ) ) != -1 )
@@ -149,7 +153,6 @@ int do_main( int argc , char** argv )
                  {
                     case 'e':
                         use_default_env = 0;
-                        exit( 0  );
                     case 'v':
                         fprintf( stderr , "\033[22;32mcci-bootstrap version 0.5 william k. johnson 2016\n\033[0m" );
                         exit( 0 );
@@ -164,9 +167,9 @@ int do_main( int argc , char** argv )
       }
 
 
-      trace( "....cci-bootstrap...chromatic universe 2016..." );
 
       set_py_env();
+
 
       LOGP( "initialize python...cci..." ) ;
       trace( "initialize python...cci.." );
@@ -178,7 +181,7 @@ int do_main( int argc , char** argv )
       {
         env_logname = "python";
         setenv( "PYTHON_NAME" ,
-                "cci-python" ,
+                "python" ,
                 1 );
       }
 
@@ -186,11 +189,12 @@ int do_main( int argc , char** argv )
       LOGP(env_argument );
       chdir( env_argument ) ;
 
-      Py_SetProgramName( "cci-bootstrap.py" );
+
+      Py_SetProgramName( "android_python" );
       trace( "Py_SetProgramName...cci..." ) ;
 
       trace( " Py_GetPath...cci..." ) ;
-      fprintf( stderr ,  Py_GetPath() );
+      //fprintf( stderr ,  Py_GetPath() );
       fprintf( stderr , "\n" );
 
       // instance will abort on failure
@@ -279,6 +283,7 @@ int build_py_env()
                                    "    private + '/lib/python2.7/', \n"
                                    "    private + '/lib/python2.7/lib-dynload/', \n"
                                    "    private + '/lib/python2.7/site-packages/', \n"
+                                   "    '/data/data/com.chromaticuniverse.cci_trinity/lib/', \n"
                                    "    argument ]\n"
                                );
 
@@ -477,6 +482,8 @@ void stream_out_usage( const char* binary )
                 binary
             );
 }
+
+
 
 
 

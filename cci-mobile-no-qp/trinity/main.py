@@ -30,9 +30,8 @@ if platform == 'android' :
 kivy.require( '1.9.1' )
 
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
-cci_trinity_service_moniker = 'com.chromaticuniverse.cci_trinity.ServiceCcitrinityservice' 
-cci_vulture_service_moniker = 'com.chromaticuniverse.cci_trinity.ServiceCcivultureservice'
-
+default_lib_path_2 = '/data/data/com.chromaticuniverse.cci_trinity/lib'
+default_lib_2 = 'libpython2.7.so'
 
 
 class ccitrinityApp( App ) :
@@ -57,8 +56,10 @@ class ccitrinityApp( App ) :
                 fh.setLevel( logging.DEBUG )
                 formatter = logging.Formatter( log_format )
                 fh.setFormatter( formatter )
-                self._logger.addHandler( fh )
+                self._logger.addHandler( fh ) 
                 self._logger.info( self.__class__.__name__ + '...'  )
+
+                self._py_link()
 
 
                 self._pid = None
@@ -84,6 +85,15 @@ class ccitrinityApp( App ) :
 
 
                 pass
+
+
+            def _py_link( self ) :
+
+                try :
+                    os.symlink( '%s/%s' % ( default_lib_path_2 , default_lib_2 ) ,                    
+                                default_lib_2 ) 
+                except :
+                    pass
 
 
 
@@ -214,11 +224,30 @@ class ccitrinityApp( App ) :
 
                 :return:
                 """
-                
+
                 b_ret = False
                 try :
-                    if platform == 'android' :                       
-                        pass 
+                    if platform == 'android' :   
+                        try :
+
+                            boot = '%s/cpp_bin/cci-bootstrap' % os.getcwd()
+                            self._logger.info( '...bootstrap...' )
+                            cmd = [ boot  ,
+                                   '&'
+                                  ]
+                            proc.Popen( cmd )
+                            b_ret = True
+                        except proc.CalledProcessError as e:
+                            self._logger.error( 'bootstrap failed...' + e.message )
+                        except OSError as e :
+                            self._logger.error( 'file does not exist?...' + e.message )
+                            #sys.exit( 1 )
+                        except ValueError as e :
+                            self._logger.error( 'arguments foobar...' + e.message )
+                            #sys.exit( 1 )
+                        except Exception as e :
+                            self._logger.error(  e.message )
+
                     else :
                         self._logger.info( '...bootstrap of cci trinity service succeeded...' )
                         b_ret = True
