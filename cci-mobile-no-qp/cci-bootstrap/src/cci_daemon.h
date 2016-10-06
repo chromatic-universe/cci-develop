@@ -11,8 +11,8 @@
 
 // william k. johnson chromatiuc universe 2016
 
-#ifndef BECOME_DAEMON_H             /* Prevent double inclusion */
-#define BECOME_DAEMON_H
+#ifndef CCI_DAEMON_H             /* Prevent double inclusion */
+#define CCI_DAEMON_H
 
 /* Bit-mask values for 'flags' argument of becomeDaemon() */
 
@@ -25,6 +25,6 @@
 #define BD_MAX_CLOSE  8192          /* Maximum file descriptors to close if
                                        sysconf(_SC_OPEN_MAX) is indeterminate */
 
-extern int become_daemon( int flags );
+int become_daemon( int flags );
 
 #endif

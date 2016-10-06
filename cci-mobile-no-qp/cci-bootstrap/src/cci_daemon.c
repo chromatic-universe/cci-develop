@@ -10,6 +10,7 @@
 
 // william k. johnson chromatic universe 2016
 #include <stdlib.h>
+#include <stdio.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "cci_daemon.h"
@@ -20,6 +21,7 @@ int become_daemon( int flags )
             int maxfd , fd;
 
             // become background process
+
             switch ( fork() )
             {
                 //child falls through...
@@ -28,6 +30,8 @@ int become_daemon( int flags )
                 //while parent terminates
                 default:  exit( EXIT_SUCCESS );
             }
+
+
 
             // become leader of new session
             if ( setsid() == -1 ) { return -1; }
@@ -54,6 +58,7 @@ int become_daemon( int flags )
 
                 for ( fd = 0; fd < maxfd; fd++ ) { close( fd ); }
             }
+
 
             //reopen standard fd's to /dev/null
             if ( !( flags & BD_NO_REOPEN_STD_FDS ) )

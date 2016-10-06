@@ -24,13 +24,16 @@
 // android
 #include "android/log.h"
 
+//cci
+#include "cci_daemon.h"
+
 // inline
 #define ENTRYPOINT_MAXLEN 128
 #define LOG(n, x) __android_log_write(ANDROID_LOG_INFO, (n), (x))
 #define LOGP(x) LOG("python", (x))
 
 char* default_sys_path = "/data/data/com.chromaticuniverse.cci_trinity/files/app";
-char* default_andr_arg_path = "/data/data/com.chromaticuniverse.cci_trinity/files/app/cpp_bin";
+char* default_andr_arg_path = "/data/data/com.chromaticuniverse.cci_trinity/files/app";
 char* default_python_home = "/data/data/com.chromaticuniverse.cci_trinity/files";
 char* default_python_path = "/data/data/com.chromaticuniverse.cci_trinity/files/app/lib/python27.zip:"
                             "/data/data/com.chromaticuniverse.cci_trinity/files/app/python2.7/:"
@@ -133,6 +136,9 @@ static PyMethodDef AndroidEmbedMethods[] = {
 int do_main( int argc , char** argv )
 {
 
+
+
+
       char *env_argument = NULL;
       char *env_entrypoint = NULL;
       char *env_logname = NULL;
@@ -142,6 +148,7 @@ int do_main( int argc , char** argv )
       int use_default_env = 0;
       int opt = 0;
 
+      chk( become_daemon( 0 ) );
 
       trace( "....cci-bootstrap...chromatic universe 2016..." );
 
@@ -242,10 +249,12 @@ int do_main( int argc , char** argv )
       trace( "... validate_entry_point()..." );
       chk( validate_entry_point( env_entrypoint ) );
 
-      trace( "... open_entry_point()..." );
-      chk( open_entry_point( env_entrypoint ) );
 
       trace( "... open_entry_point()...ok..." );
+
+
+      trace( "... open_entry_point()..." );
+      chk( open_entry_point( env_entrypoint ) );
 
 
       trace( "...fini..." );

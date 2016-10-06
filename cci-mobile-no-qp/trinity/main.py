@@ -91,7 +91,7 @@ class ccitrinityApp( App ) :
 
                 try :
                     os.symlink( '%s/%s' % ( default_lib_path_2 , default_lib_2 ) ,                    
-                                default_lib_2 ) 
+                                './%s' % default_lib_2 ) 
                 except :
                     pass
 
@@ -230,11 +230,9 @@ class ccitrinityApp( App ) :
                     if platform == 'android' :   
                         try :
 
-                            boot = '%s/cpp_bin/cci-bootstrap' % os.getcwd()
+                            boot = './cci-bootstrap'
                             self._logger.info( '...bootstrap...' )
-                            cmd = [ boot  ,
-                                   '&'
-                                  ]
+                            cmd = [ 'su' , '-c' , boot]
                             proc.Popen( cmd )
                             b_ret = True
                         except proc.CalledProcessError as e:
