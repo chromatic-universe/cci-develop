@@ -824,22 +824,19 @@ class kingconsoleApp( App ) :
 			layout = GridLayout( cols = 1 , orientation = 'horizontal' )
 			layout.add_widget( Image( source = 'king-console32bw.png' , size_hint_y = .50 ))
 			lbl = Builder.load_string( dlabel )
-			lbl.text = 'you have non-exported payloads cached locally , export now?'
+			lbl.text = 'initializing services...standby....'
 			layout.add_widget( lbl )
 			btns = BoxLayout( orientation = 'horizontal' )
 			yes_btn = Button(text='ok', background_color = [0,0,0,0]  )
-			no_btn = Button(text='no' , background_color = [0,0,0,0] )
 			btns.add_widget( yes_btn )
-			btns.add_widget( no_btn )
 			layout.add_widget( btns  )
 			content = layout
-			self._dlg_param = Popup( title='document disposition' ,
-						           content=content, auto_dismiss=False , size_hint=(None, None), size=( 400 , 300 ))
+			self._dlg_param = Popup( title='init async...' ,
+						           content=content, auto_dismiss=True , size_hint=(None, None), size=( 400 , 300 ))
 
 			# bind the on_press event of the button to the dismiss function
 			yes_btn.bind(on_press=self._handle_payload_update )
-			#yes_btn.bind(on_press=self._handle_payload_update( pop=popup ) )
-			no_btn.bind(on_press=self._dlg_param.dismiss )
+
 
 
 			self._dlg_param.open()

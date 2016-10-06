@@ -917,7 +917,7 @@ class TransportScreen( Screen ) :
 							for key,value in call_map.iteritems() :
 								grid.add_widget( Button( text = key  ,
 														        halign = 'center' ,
-																font_size = 14 ,
+																font_size = 16 ,
 																background_color =  [0,0,0,0] ,
 																color = [1,0,0,1] ,
 																size_hint_y = None ,

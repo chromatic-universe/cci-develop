@@ -568,8 +568,8 @@ class ccitrinityApp( App ) :
 
 							# schedule default policies to start in 8 seconds
 							self._update_status( self.root.ids.status_text ,
-												 '..waiting for async server to initialize polocies...standby..' )
-							Clock.schedule_once( self._start_policy_callback , 5 )
+												 '..waiting for async server to initialize policies...standby..' )
+							Clock.schedule_once( self._start_policy_callback , 7 )
 
 					except Exception as e :
 						self._logger.error( '..._on_start_trinity...vulture' + e.message )
