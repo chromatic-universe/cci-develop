@@ -52,12 +52,10 @@ Accordion:
                         text: 'servicing:\n cci-maelstrom\n cci-bimini'
                         size_hint_y: .15
                         halign: 'center'
-                    Button:
-                        text: 'bootstrap'
-                        id: bootstrap_btn
-                        background_color: [0,1,0,1]
+                    Switch:
+                        id: bootstrap_switch
                         size_hint_y: .15
-                        on_press: app._on_start_trinity()
+                        on_active : app._on_start_trinity( *args )
                 GridLayout:
                     orientation: 'horizontal'
                     cols: 1

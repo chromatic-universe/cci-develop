@@ -8,16 +8,17 @@ if __name__ == '__main__':
 
 
 # logger
-        _logger = logging.getLogger( "cci-trinity-server" )
+        _logger = logging.getLogger( "cci-trinity-vulture" )
         _logger.setLevel( logging.DEBUG )
-        fh = logging.FileHandler(  'cci-trinity-server.log' + '-debug.log', mode = 'a' )
+        fh = logging.FileHandler(  'cci-trinity-vulture.log' + '-debug.log', mode = 'a' )
         fh.setLevel( logging.DEBUG )
         formatter = logging.Formatter( log_format )
         fh.setFormatter( formatter )
         _logger.addHandler( fh )
-
-        with open( 'cci-trinity-pid' , 'w' ) as f ;
+        
+        with open( 'cci-trinity-vulture-pid' , 'w' ) as f ;
             f.write( '%d' % os.getpid() )
+
 
         while True :
             _logger.info( 'the_original_corny_snaps!' )
