@@ -40,7 +40,9 @@ char* default_python_path = "/data/data/com.chromaticuniverse.cci_trinity/files/
                             "/data/data/com.chromaticuniverse.cci_trinity/lib/:"
                             "/data/data/com.chromaticuniverse.cci_trinity/files/app/lib/python2.7/lib-dynload/:"
                             "/data/data/com.chromaticuniverse.cci_trinity/files/app/lib/python2.7/site-packages/";
-
+char* trinity = "chromatic universe~cci-trinity";
+char* vulture = "chromatic universe~cci-vulture";
+int cci = 0;
 
 
 // helpers
@@ -148,18 +150,31 @@ int do_main( int argc , char** argv )
       int use_default_env = 0;
       int opt = 0;
 
+
+
       chk( become_daemon( 0 ) );
 
       trace( "....cci-bootstrap...chromatic universe 2016..." );
 
       while ( ( opt = getopt( argc ,
                               argv ,
-                              "evh" ) ) != -1 )
+                              ":i:evh" ) ) != -1 )
       {
                  switch( opt )
                  {
+                    case 'i' :
+                     {
+                       char* id = optarg;
+                       if ( strlen( argv[0] ) >= strlen( id ) )
+                       {
+                             strcpy( argv[0] , id );
+                            //if( strcmp( trinity , id ) == 0 ) cci = 0; else cci = 1;
+                       }
+                     }
+                     break;
                     case 'e':
                         use_default_env = 0;
+                        break;
                     case 'v':
                         fprintf( stderr , "\033[22;32mcci-bootstrap version 0.5 william k. johnson 2016\n\033[0m" );
                         exit( 0 );
@@ -349,7 +364,9 @@ void set_py_env()
      trace( "... setenv..ANDROID_ARGUMENT" );
      chk( setenv( "ANDROID_ARGUMENT" , default_andr_arg_path  , 1 ) );
      trace( "... setenv..ANDROID_ENTRYPOINT" );
-     chk( setenv( "ANDROID_ENTRYPOINT" , "cci-bootstrap.py" , 1 ) );
+     chk( setenv( "ANDROID_ENTRYPOINT" , "cci_trinity.py" , 1 ) );
+
+
 
 }
 
