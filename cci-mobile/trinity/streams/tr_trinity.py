@@ -7,7 +7,7 @@ import StringIO
 import sys
 
 import Queue
-
+from kivy.utils import platform
 
 
 click_queue = Queue.Queue()
@@ -160,12 +160,8 @@ def capture_screen( log=None ) :
 			out = str()
 
 			try :
-					pos = sys.platform.find( 'linux4' )
-					if pos == -1 :
-						andr = False
-					else :
-						andr = True
-					if andr is True :
+
+					if platform == 'android'  :
 						process_android_clicks( log=log )
 						process_android_keys( log=log )
 						out = proc.check_output( ['/system/bin/screencap' ,
