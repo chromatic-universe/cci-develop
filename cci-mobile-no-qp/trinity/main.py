@@ -13,8 +13,6 @@ import datetime
 from functools import partial
 import requests
 import signal
-
-
 import kivy
 from kivy.config import Config
 from kivy.app import App 
@@ -72,7 +70,7 @@ class ccitrinityApp( App ) :
                 self._policy_thred = None
 
 
-
+            """
 
             def on_pause(self):
                 # save data
@@ -81,13 +79,13 @@ class ccitrinityApp( App ) :
                 return True
 
 
-
+            
             def on_resume( self ):
                 # something
 
 
                 pass
-
+            """
 
             def _py_link( self ) :
 
@@ -96,20 +94,23 @@ class ccitrinityApp( App ) :
                                 './%s' % default_lib_2 ) 
                 except :
                     pass
-
+            
             
 
-           def _pid_callback( self , dt ) :
+            def _pid_callback( self , dt ) :
 
                 pid = str()
                 pid_vulture = str()
-
-                with open( 'cci-trinity-pid' , 'r' ) as pidfile :
-                    pid = pidfile.read().strip()
-                with open( 'cci-trinity-vulture-pid' , 'r' ) as vpidfile :
-                    pid_vulture = vpidfile.read().strip()
-                self.root.ids.process_info.text = 'pid: %s   ~  port: 7080' % pid
-                self.root.ids.vulture_process_info.text = 'pid: %s   ~  port: 7081' % pid_vulture
+                
+                try :
+                    with open( 'cci-trinity-pid' , 'r' ) as pidfile :
+                        pid = pidfile.read().strip()
+                    with open( 'cci-trinity-vulture-pid' , 'r' ) as vpidfile :
+                        pid_vulture = vpidfile.read().strip()
+                    self.root.ids.process_info.text = 'pid: %s   ~  port: 7080' % pid
+                    self.root.ids.vulture_process_info.text = 'pid: %s   ~  port: 7081' % pid_vulture
+                except :
+                    pass
 
 
 
@@ -150,58 +151,71 @@ class ccitrinityApp( App ) :
             
 
 
+
+            def _running( self ) :
+                """
+
+                :return boolean:
+                """
+                
+                running = False
+
+                pid = None
+                pid_vulture = None
+                try :
+                    with open( 'cci-trinity-pid' , 'r' ) as pidfile :
+                        pid = pidfile.read().strip()
+                    with open( 'cci-trinity-vulture-pid' , 'r' ) as v_pidfile :
+                        pid_vulture = v_pidfile.read().strip()
+                except :
+                     pass
+
+                # check if processes are running
+                if pid and pid_vulture:
+                     try :
+                        running = os.path.exists( '/proc/%s' % pid )
+                        self._pid = pid
+                        running = os.path.exists( '/proc/%s' % pid_vulture )
+                        self._pid_vulture = pid_vulture
+                     except :
+                        # pid not running
+                        pass
+
+                return running
+
+
+
+
             def on_start( self ) :
                 """
 
                 :return:
                 """
+                os.chmod( './cci-bootstrap' , 0o755 )
+                os.chmod( './cci-bootstrap-v' , 0o755 )
                 
-
 
                 self._update_status( self.root.ids.status_text , '...initializing...' )
                 self._update_status( self.root.ids.vulture_status_text , '...initializing...' )
 
-                is_running = False
                 try :
-                    if is_running is False :
+                   
+                    self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/stream daemon....' )
 
-                        self.root.ids.bootstrap_switch.active = False
-                        self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/stream daemon....' )
+                    if self._running() is False :
 
-                        pid = None
-                        pid_vulture = None
-                        try :
-                            with open( 'cci-trinity-pid' , 'r' ) as pidfile :
-                                pid = pidfile.read().strip()
-                            with open( 'cci-trinity-vulture-pid' , 'r' ) as v_pidfile :
-                                pid_vulture = v_pidfile.read().strip()
-                        except :
-                             pass
+                            self.root.ids.bootstrap_switch.active = False
+                            self._update_status( self.root.ids.status_text , ' ....trinity....' )
+                            self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/stream daemon....' )
 
-                        # check if processes are running
-                        if pid and pid_vulture:
-                             try :
-                                is_running = os.path.exists( '/proc/%s' % pid )
-                                self._pid = pid
-                                is_running = os.path.exists( '/proc/%s' % pid_vulture )
-                                self._pid_vulture = pid_vulture
-                             except :
-                                # pid not running
-                                pass
-                        if is_running is False :
-
-                                self.root.ids.bootstrap_switch.active = False
-                                self._update_status( self.root.ids.status_text , ' ....trinity....' )
-                                self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/stream daemon....' )
-
-                        else :
-                                self._update_status( self.root.ids.status_text , ' ....trinity running....' )
-                                self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/daemon running....' )
-                                self.root.ids.manipulate_btn.background_color = [0,1,0,1]
-                                self.root.ids.bootstrap_switch.active = True
-                                self.root.ids.manipulate_btn.text = 'manipulate streams'
-                                self.root.ids.process_info.text = 'pid: %s  port 7080' % self._pid
-                                self._logger.info( '...server already running... pid %s....'  % self._pid )
+                    else :
+                            self._update_status( self.root.ids.status_text , ' ....trinity running....' )
+                            self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/daemon running....' )
+                            self.root.ids.manipulate_btn.background_color = [0,1,0,1]
+                            self.root.ids.bootstrap_switch.active = True
+                            self.root.ids.manipulate_btn.text = 'manipulate streams'
+                            self.root.ids.process_info.text = 'pid: %s  port 7080' % self._pid
+                            self._logger.info( '...server already running... pid %s....'  % self._pid )
 
                                                  
                        
@@ -232,6 +246,9 @@ class ccitrinityApp( App ) :
 
                 # start trinity
                 if value == True :
+                    if self._running() :
+                        return
+
                     try :
                         self._update_status( self.root.ids.status_text , ' ....starting trinity....' )
                         b_ret = True
@@ -258,6 +275,7 @@ class ccitrinityApp( App ) :
                             self._logger.error( '..._on_start_trinity...' + e.message )
                             self._update_status( self.root.ids.status_text , e.message )
                 else :
+                   
                     pid = str()
                     pid_vulture = str()
 
@@ -273,13 +291,11 @@ class ccitrinityApp( App ) :
                         return b_ret
 
                     try :
-                        # kill trinity
-                        os.kill( int( pid ) , signal.SIGTERM )
-                        self._update_status( self.root.ids.status_text , ' ....trinity server stopped ....' )
-                        os.kill( int( pid_vulture ) , signal.SIGTERM )
-                        self._update_status( self.root.ids.status_text , ' ....trinity vulture server stopped ....' )
-
-
+                         # kill trinity                                                                                 
+                        os.kill( int( pid ) , signal.SIGTERM )                                                         
+                        self._update_status( self.root.ids.status_text , ' ....trinity server stopped ....' )          
+                        os.kill( int( pid_vulture ) , signal.SIGTERM )                   
+                        self._update_status( self.root.ids.status_text , ' ....trinity vulture server stopped ....' )  
                         self.root.ids.manipulate_btn.background_color = [1,0,0,1]
                         self.root.ids.manipulate_tunnel_btn.background_color = [1,0,0,1]
                         self.root.ids.bootstrap_switch.active = False

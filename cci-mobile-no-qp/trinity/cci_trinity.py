@@ -8,7 +8,11 @@ import sys
 sys.path.append( '/data/data/com.chromaticuniverse.cci_trinity/files/lib/python2.7/site-packages' )
 
 import os
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
+
 import logging
 
 from flask import Flask , request , send_file , render_template , url_for
@@ -36,7 +40,7 @@ from tornado import gen
 from tornado.queues import Queue
 
 
-import kafka
+#import pykafka
 
 #cci
 from application import app ,\
@@ -117,31 +121,31 @@ def trinity_vulture() :
 @app.route('/index')
 @app.route( "/" )
 def index() :
+        """
+        try :
 
-			try :
+            from sshtunnel import SSHTunnelForwarder
 
-				from sshtunnel import SSHTunnelForwarder
+            server = SSHTunnelForwarder(
+                                        ('52.38.98.223', 22),
+                                        ssh_username="ubuntu",
+                                        ssh_pkey='/home/wiljoh/cci-develop.pem' ,
+                                        local_bind_address=('127.0.0.1' , 3128 ) ,
+                                        remote_bind_address=('127.0.0.1', 8888 )
+                                        )
+            _logger.info( '..good ssh tunnel....' )
 
-				server = SSHTunnelForwarder(
-											('52.38.98.223', 22),
-											ssh_username="ubuntu",
-											ssh_pkey='/home/wiljoh/cci-develop.pem' ,
-											local_bind_address=('127.0.0.1' , 3128 ) ,
-											remote_bind_address=('127.0.0.1', 8888 )
-											)
-				_logger.info( '..good ssh tunnel....' )
+        except Exception as e :
+            _logger.error( '..bad ssh tunnel....%s' % e.message )
+        """
+        try :
+            _logger.info( '...index...' )
+            return render_template( "index.html" ,
+                                    device = '"' + tr_utils.local_mac_addr() + '"' )
+        except Exception as e :
+            _logger.error( e.message )
 
-			except Exception as e :
-				_logger.error( '..bad ssh tunnel....%s' % e.message )
-
-			try :
-				_logger.info( '...index...' )
-				return render_template( "index.html" ,
-										device = '"' + tr_utils.local_mac_addr() + '"' )
-			except Exception as e :
-				_logger.error( e.message )
-
-			return render_template( "index.html" )
+        return render_template( "index.html" )
 
 
 
@@ -196,53 +200,53 @@ if __name__ == "__main__"  :
 
 
 
-		is_running = False
-		try :
-			 pid = None
-			 try :
-				 with open( 'pid' , 'r' ) as pidfile :
-					pid = pidfile.read().strip()
-			 except :
-				 pass
+            is_running = False
+            try :
+                 pid = None
+                 try :
+                    with open( 'cci-trinity-pid' , 'r' ) as pidfile :
+                        pid = pidfile.read().strip()
+                 except :
+                     pass
 
-			 # check if process is running
-			 if pid :
-				 try :
-					# throws exception if process doesn't exist
-					os.kill( int( pid ) , 0 )
-					is_running = True
-				 except :
-					# pid not running
-					pass
+                 # check if process is running
+                 if pid :
+                     try :
+                        # throws exception if process doesn't exist
+                        os.kill( int( pid ) , 0 )
+                        is_running = True
+                     except :
+                        # pid not running
+                        pass
 
-			 if not is_running :
-				 # tornado wsgi server , flask application
-				 http_server = HTTPServer( WSGIContainer( app ) )
-				 http_server.listen( 7080 )
+                 if not is_running :
+                     # tornado wsgi server , flask application
+                     http_server = HTTPServer( WSGIContainer( app ) )
+                     http_server.listen( 7080 )
 
-				 # signal handlers
-				 signal.signal( signal.SIGTERM, sig_handler )
-				 signal.signal( signal.SIGINT, sig_handler )
+                     # signal handlers
+                     signal.signal( signal.SIGTERM, sig_handler )
+                     signal.signal( signal.SIGINT, sig_handler )
 
-				 # write pid
-				 with open( 'pid' , 'w' ) as pidfile :
-					 pidfile.write( str( os.getpid() ) + '\n'  )
+                     # write pid
+                     with open( 'cci-trinity-pid' , 'w' ) as pidfile :
+                         pidfile.write( str( os.getpid() ) + '\n'  )
 
-				 # init kafka consumer
-				 #tr_kafka_rest.init_kafka_consumer()
+                     # init kafka consumer
+                     #tr_kafka_rest.init_kafka_consumer()
 
-				 # start server response loop
-				 IOLoop.instance().start()
-
-
-			 else :
-				 _logger.info( '...server already running... pid %s....'  % pid )
-				 sys.exit( 1 )
+                     # start server response loop
+                     IOLoop.instance().start()
 
 
-		except Exception as e:
-			_logger.error( '...error in  trinity server...' + e.message )
-			sys.exit( 1 )
+                 else :
+                     _logger.info( '...server already running... pid %s....'  % pid )
+                     sys.exit( 1 )
+
+
+            except Exception as e:
+                _logger.error( '...error in  trinity server...' + e.message )
+                sys.exit( 1 )
 
 
 

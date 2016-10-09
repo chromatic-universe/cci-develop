@@ -26,7 +26,7 @@ from tornado.queues import Queue
 from tornado.ioloop import PeriodicCallback
 from tornado.locks import Semaphore
 from tornado.process import Subprocess , CalledProcessError
-from kafka import KafkaProducer
+#from kafka import KafkaProducer
 
 max_wait_seconds_before_shutdown  = 3
 
@@ -174,7 +174,7 @@ class queue_stream_client() :
 					while True:
 						items = yield self.queued_items.get()
 						print items
-						kp.send( lname , json.dumps( items ) )
+						#kp.send( lname , json.dumps( items ) )
 				except Exception as e :
 					_logger.error( 'watch_stream_queue: %s' % e.message )
 
@@ -471,7 +471,7 @@ if __name__ == "__main__":
 				_logger.info( '...starting stream tunneler ....' )
 				try :
 					s = str( stream_bootstrap['bootstrap_servers'] )
-					kp = KafkaProducer( bootstrap_servers = [s] )
+					#kp = KafkaProducer( bootstrap_servers = [s] )
 					_logger.info( '...streaming bootstrap initialized...%s' % s )
 				except Exception as e :
 					_logger.error( '...broken streaming..%s' % e.message )

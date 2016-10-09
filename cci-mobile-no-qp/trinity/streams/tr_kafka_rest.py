@@ -17,10 +17,7 @@ import Queue
 import requests
 import json
 
-import kafka
-from kafka import KafkaConsumer , \
-	              KafkaProducer
-from kafka.errors import KafkaError
+#from pykafka import KafkaClient
 
 #cci
 from application import app , \
@@ -171,16 +168,15 @@ class cci_kafka_topics( Resource ) :
 							boot = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-kafka-bootstrap' )['map'] )
 							strap = boot['bootstrap_servers']
 
-							kc = KafkaConsumer( bootstrap_servers = [ strap ] )
-							topics = list( kc.topics() )
+							#kc = KafkaClient( hosts = strap )
+							topics = kc.topics
 
-							j = { "topics" : topics }
-
+							
 						except Exception as e :
 
-							j =  { "error" : e.message }
+							topics =  { "error" : e.message }
 
-						return j
+						return topics
 
 api.add_resource( cci_kafka_topics , '/kafka/topics' )
 

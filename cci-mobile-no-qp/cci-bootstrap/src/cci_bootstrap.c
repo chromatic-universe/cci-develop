@@ -364,7 +364,7 @@ void set_py_env()
      trace( "... setenv..ANDROID_ARGUMENT" );
      chk( setenv( "ANDROID_ARGUMENT" , default_andr_arg_path  , 1 ) );
      trace( "... setenv..ANDROID_ENTRYPOINT" );
-     chk( setenv( "ANDROID_ENTRYPOINT" , "cci_trinity.py" , 1 ) );
+     chk( setenv( "ANDROID_ENTRYPOINT" , "cci_trinity_async.py" , 1 ) );
 
 
 

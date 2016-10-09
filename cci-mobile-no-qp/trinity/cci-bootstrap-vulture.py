@@ -16,7 +16,7 @@ if __name__ == '__main__':
         fh.setFormatter( formatter )
         _logger.addHandler( fh )
         
-        with open( 'cci-trinity-vulture-pid' , 'w' ) as f ;
+        with open( 'cci-trinity-vulture-pid' , 'w' ) as f :
             f.write( '%d' % os.getpid() )
 
 
