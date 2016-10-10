@@ -823,6 +823,7 @@ class ccitrinityApp( App ) :
 			def _on_sync_carousel( self  , args ) :
 						"""
 
+			adb -d shell
 						:return:
 						"""
 
