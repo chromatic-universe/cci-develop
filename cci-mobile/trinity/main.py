@@ -806,6 +806,8 @@ class ccitrinityApp( App ) :
 						:return:
 						"""
 
+						self.root.ids.trinity_carousel_id.load_next()
+						"""
 						if self.root.ids.packet_stream_btn.text ==  'aysnc services' :
 							self.root.ids.trinity_carousel_id.load_next()
 							self.root.ids.packet_stream_btn.text = 'tunnel services'
@@ -815,7 +817,7 @@ class ccitrinityApp( App ) :
 						else :
 							self.root.ids.packet_stream_btn.text = 'aysnc services'
 							self.root.ids.trinity_carousel_id.index = 0
-
+						"""
 
 
 			def _on_sync_carousel( self  , args ) :
@@ -825,16 +827,13 @@ class ccitrinityApp( App ) :
 						"""
 
 
+
 						if args == 0 :
-							self.root.ids.packet_stream_btn.text =  'aysnc services'
+							self.root.ids.trinity_item.title =  'cci-trinity~app services'
 						elif args == 1	 :
-							self.root.ids.packet_stream_btn.text =  'tunnel services'
+							self.root.ids.trinity_item.title  =  'cci-trinity~async services'
 						elif args == 2 :
-							self.root.ids.packet_stream_btn.text =  'app server'
-
-						pass
-
-
+							self.root.ids.trinity_item.title =  'cci-trinity~tunnel services'
 
 
 

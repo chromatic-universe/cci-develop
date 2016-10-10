@@ -61,43 +61,6 @@ kp = None
 TEMPLATE_PATH = os.path.join(os.path.join(os.path.dirname(__file__) , 'templates') )
 
 
-@tornado.gen.coroutine
-def consume():
-    c = clients.SingleConsumer(brokers=["localhost"])
-
-    yield c.connect()
-
-    while True:
-        msgs = yield c.consume("examples.colors")
-        for msg in msgs:
-            print(msg["color"])
-
-
-
-
-
-@tornado.gen.coroutine
-def consume():
-    c = clients.SingleConsumer(brokers=["localhost"])
-
-    yield c.connect()
-
-    while True:
-        msgs = yield c.consume("examples.colors")
-        for msg in msgs:
-            print(msg["color"])
-
-
-def run():
-    loop = ioloop.IOloop.instance()
-
-    loop.add_callback(consume)
-
-    try:
-        loop.start()
-    except KeyboardInterrupt:
-        loop.stop()
-
 
 
 # ---------------------------------------------------------------------------------------------
