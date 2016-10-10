@@ -26,7 +26,9 @@ from tornado.queues import Queue
 from tornado.ioloop import PeriodicCallback
 from tornado.locks import Semaphore
 from tornado.process import Subprocess , CalledProcessError
-from kafka import KafkaProducer
+
+#kafka
+from kiel import clients
 
 max_wait_seconds_before_shutdown  = 3
 
@@ -57,6 +59,45 @@ stream_bootstrap = None
 
 kp = None
 TEMPLATE_PATH = os.path.join(os.path.join(os.path.dirname(__file__) , 'templates') )
+
+
+@tornado.gen.coroutine
+def consume():
+    c = clients.SingleConsumer(brokers=["localhost"])
+
+    yield c.connect()
+
+    while True:
+        msgs = yield c.consume("examples.colors")
+        for msg in msgs:
+            print(msg["color"])
+
+
+
+
+
+@tornado.gen.coroutine
+def consume():
+    c = clients.SingleConsumer(brokers=["localhost"])
+
+    yield c.connect()
+
+    while True:
+        msgs = yield c.consume("examples.colors")
+        for msg in msgs:
+            print(msg["color"])
+
+
+def run():
+    loop = ioloop.IOloop.instance()
+
+    loop.add_callback(consume)
+
+    try:
+        loop.start()
+    except KeyboardInterrupt:
+        loop.stop()
+
 
 
 # ---------------------------------------------------------------------------------------------
@@ -174,7 +215,7 @@ class queue_stream_client() :
 					while True:
 						items = yield self.queued_items.get()
 						print items
-						kp.send( lname , json.dumps( items ) )
+						kp.produce( lname , json.dumps( items ) )
 				except Exception as e :
 					_logger.error( 'watch_stream_queue: %s' % e.message )
 
@@ -279,6 +320,32 @@ class queue_handler_stop_policy( tornado.web.RequestHandler ) :
 					self.write( '...could not stop...policy not started: %s' % moniker )
 
 
+
+
+# --------------------------------------------------------------------------------------
+@tornado.gen.coroutine
+def consume():
+    c = clients.SingleConsumer(brokers=["localhost"])
+
+    yield c.connect()
+
+    while True:
+        msgs = yield c.consume("examples.colors")
+        for msg in msgs:
+            print(msg["color"])
+
+
+
+# --------------------------------------------------------------------------------------
+def run():
+    loop = ioloop.IOloop.instance()
+
+    loop.add_callback(consume)
+
+    try:
+        loop.start()
+    except KeyboardInterrupt:
+        loop.stop()
 
 
 
@@ -471,7 +538,8 @@ if __name__ == "__main__":
 				_logger.info( '...starting stream tunneler ....' )
 				try :
 					s = str( stream_bootstrap['bootstrap_servers'] )
-					kp = KafkaProducer( bootstrap_servers = [s] )
+					kp = clients.Producer( brokers= [s] )
+					kp.connect()
 					_logger.info( '...streaming bootstrap initialized...%s' % s )
 				except Exception as e :
 					_logger.error( '...broken streaming..%s' % e.message )
@@ -515,7 +583,6 @@ if __name__ == "__main__":
 				tornado.ioloop.IOLoop.instance().add_callback( session_client.watch_session_queue )
 				# stream data
 				tornado.ioloop.IOLoop.instance().add_callback( stream_client.watch_stream_queue )
-
 
 				settings = {
 							"static_path": os.path.join(os.path.dirname(__file__), "static"),
