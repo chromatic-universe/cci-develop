@@ -21,6 +21,8 @@ from kivy.uix.label import Label
 from kivy.core.window import Window
 from kivy.utils import platform
 from kivy.clock import Clock , mainthread
+import tornado.websocket
+from tornado import gen 
 
 if platform == 'android' :
     from jnius import autoclass
@@ -39,7 +41,8 @@ class ccitrinityApp( App ) :
             trinity
             """
 
-
+            
+            
             def __init__( self ) :
                 """
 
@@ -68,6 +71,9 @@ class ccitrinityApp( App ) :
                 self._retry_on_fail_reps = 0
 
                 self._policy_thred = None
+                self._trinity_socket_thred = None
+
+                             
 
 
             """
@@ -86,6 +92,52 @@ class ccitrinityApp( App ) :
 
                 pass
             """
+
+
+            @gen.coroutine
+            def _manip_socket_stream( self ) :
+                """
+                :return:
+                """
+
+                socket_msg = { 'app_services' : self.root.ids.status_text ,
+                               'async_services' : self.root.ids.vulture_status_text ,
+                               'tunnel_services' : self.root.ids.manipulate_status_text }
+
+
+
+                try :
+
+                    client = yield tornado.websocket. \
+                            websocket_connect( "ws://localhost:7082/trinity-stream" )
+                    client.write_message("Testing from client")
+
+                    while True :
+                        msg = yield client.read_message()
+                        service , payload = msg.split( ':' )
+                        
+                        self._update_status( socket_msg[service] , payload )
+
+                except Exception as e :
+                    self._logger.error( e )
+
+
+
+
+            def _trinity_update_thred( self ) :
+                """
+
+                :return:
+                """
+
+                try :
+                    
+                    tornado.ioloop.IOLoop.instance().run_sync( self._manip_socket_stream )
+
+                except Exception as e :
+                    self._logger.error( e )
+
+                
 
             def _py_link( self ) :
 
@@ -109,6 +161,12 @@ class ccitrinityApp( App ) :
                         pid_vulture = vpidfile.read().strip()
                     self.root.ids.process_info.text = 'pid: %s   ~  port: 7080' % pid
                     self.root.ids.vulture_process_info.text = 'pid: %s   ~  port: 7081' % pid_vulture
+
+                    """
+                    self._trinity_socket_thred = threading.Thread( target = self._trinity_update_thred ,
+                                                                   daemon = True )
+                    self._trinity_socket_thred.start()
+                    """
                 except :
                     pass
 
@@ -123,18 +181,7 @@ class ccitrinityApp( App ) :
                 """
                 
                 self.root.ids.trinity_carousel_id.load_next()
-                """
-                if self.root.ids.packet_stream_btn%.text ==  'aysnc services' :
-                    self.root.ids.trinity_carousel_id.load_next()
-                    self.root.ids.packet_stream_btn.text = 'tunnel services'
-                elif self.root.ids.packet_stream_btn.text ==  'tunnel services'  :
-                    self.root.ids.trinity_carousel_id.load_next()
-                    self.root.ids.packet_stream_btn.text = 'app server'
-                else :
-                    self.root.ids.packet_stream_btn.text = 'aysnc services'
-                    self.root.ids.trinity_carousel_id.index = 0
-                """
-
+               
 
             def _on_sync_carousel( self  , args ) :
                 """
@@ -191,8 +238,8 @@ class ccitrinityApp( App ) :
                 """
                 os.chmod( './cci-bootstrap' , 0o755 )
                 os.chmod( './cci-bootstrap-v' , 0o755 )
-                
-              
+
+                         
 
                 self._update_status( self.root.ids.status_text , '...initializing...' )
                 self._update_status( self.root.ids.vulture_status_text , '...initializing...' )
@@ -221,7 +268,11 @@ class ccitrinityApp( App ) :
                             self.root.ids.process_info.text = 'pid: %s  port 7080' % self._pid
                             self.root.ids.vulture_process_info.text = 'pid: %s  port 7081' % self._pid_vulture
                             self._logger.info( '...server already running... pid %s....'  % self._pid )
-                                                 
+
+                            self._trinity_socket_thred = threading.Thread( target = self._trinity_update_thred )
+                            self._trinity_socket_thred.daemon = True
+                            self._trinity_socket_thred.start()
+                                                                     
                        
                 except Exception as e:
                        self._logger.error( '...error in  trinity server...' + e.message )
@@ -270,8 +321,8 @@ class ccitrinityApp( App ) :
                             self.root.ids.manipulate_tunnel_btn.text = 'manipulate tunnels'
                             self._update_status( self.root.ids.status_text , ' ...trinity started...' )
                             self._update_status( self.root.ids.status_text , ' ...trinity vulture started...' )
-                            self._update_status( self.root.ids.vulture_status_text , ' ...trinity vulture started...' )
-                            self._update_status( self.root.ids.vulture_tunnel_text , ' ...no user defined tunnels...' )
+                            self._update_status( self.root.ids.manipulate_status_text , ' ...trinity vulture started...' )
+                            self._update_status( self.root.ids.manilpulate_status_text , ' ...no user defined tunnels...' )
 
 
                             self._clock_event = Clock.schedule_interval( self._pid_callback, 2 )
@@ -310,6 +361,7 @@ class ccitrinityApp( App ) :
                         self.root.ids.process_info.text = 'port: 7080'
                         self.root.ids.vulture_process_info.text = 'port: 7081'
 
+                       
                         b_ret = True
                     
                     except OSError as e :    

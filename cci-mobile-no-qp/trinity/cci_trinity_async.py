@@ -62,28 +62,57 @@ db_bootstrap = None
 kp = None
 TEMPLATE_PATH = os.path.join(os.path.join(os.path.dirname(__file__) , 'templates') )
 
+socket_msg = ['app_services' , 'async_services' ,  'tunnel_services']
 
 
-class trinity_push_handler( tornado.websocket.WebSocketHandler ):
-    clients = []
-    def open(self):
-        print 'new connection'
-        self.write_message("Hello World")
-        trinity_push_handler.clients.append(self)
 
-    def on_message(self, message):
-        print 'message received %s' % message
-        self.write_message('ECHO: ' + message)
 
-    def on_close(self):
-        print 'connection closed'
-        trinity_push_handler.clients.remove(self)
+# ---------------------------------------------------------------------------------------------
+class trinity_push_handler( tornado.websocket.WebSocketHandler ) :
+        
+        clients = []
 
-    @classmethod
-    def write_to_clients(cls):
-        print "Writing to clients"
-        for client in cls.clients:
-            client.write_message("Hi there!")
+        def open( self ) :
+            """
+            open
+            """
+
+            self.write_message(  socket_msg[1] +  " :...this is the cci async server speaking from a web socket on port 7082..." ) 
+            self.write_message(  socket_msg[0] +  " :...this is the cci app server speaking from a web socket on port  7082..." )
+            self.write_message(  socket_msg[2] +  " :...this is cci tunnel services speaking from a web socket on port 7082..." ) 
+
+            trinity_push_handler.clients.append( self )
+
+
+
+        def on_message( self , message ) :
+            """
+            on_message
+            """
+
+            self.write_message( ' ...ack...' )
+
+
+
+        def on_close(self):
+            """
+
+            on_close
+            """
+
+            trinity_push_handler.clients.remove(self)
+
+
+
+        @classmethod
+        def broadcast_to_clients( cls ) :
+            """
+            :class:
+            :return:
+            """
+
+            for client in cls.clients:
+                client.write_message( '...broadcast....' + retr_local_ip_info() )
 
 
 
@@ -330,9 +359,9 @@ def start_policy_local() :
             :return:
 
             """
-           	try :
+            try :
 
-            
+
                 if default_policy_j['moniker'] in g_periodic_callbacks :
                     _logger.info( '..%s policy %s already in effect' % ( items['provider_type'] ,
                                                                          items['moniker']  ) )
