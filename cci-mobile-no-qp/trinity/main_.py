@@ -217,6 +217,9 @@ class ccitrinityApp( App ) :
 
 						is_running = False
 						try :
+
+                             with open( 'trinity_pid' , 'w' ) as f :
+                                 f.write( os.getpid() )
 							 pid = None
 							 pid_vulture = None
 							 try :

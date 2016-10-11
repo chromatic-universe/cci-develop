@@ -114,15 +114,17 @@ class ccitrinityApp( App ) :
 
 
 
-
+         
             
             def _move_carousel( self  ) :
                 """
 
                 :return:
                 """
-
-                if self.root.ids.packet_stream_btn.text ==  'aysnc services' :
+                
+                self.root.ids.trinity_carousel_id.load_next()
+                """
+                if self.root.ids.packet_stream_btn%.text ==  'aysnc services' :
                     self.root.ids.trinity_carousel_id.load_next()
                     self.root.ids.packet_stream_btn.text = 'tunnel services'
                 elif self.root.ids.packet_stream_btn.text ==  'tunnel services'  :
@@ -131,8 +133,7 @@ class ccitrinityApp( App ) :
                 else :
                     self.root.ids.packet_stream_btn.text = 'aysnc services'
                     self.root.ids.trinity_carousel_id.index = 0
-
-
+                """
 
 
             def _on_sync_carousel( self  , args ) :
@@ -140,15 +141,12 @@ class ccitrinityApp( App ) :
 
                 :return:
                 """
-
-
                 if args == 0 :
-                    self.root.ids.packet_stream_btn.text =  'aysnc services'
+                    self.root.ids.trinity_item.title =  'cci-trinity~app services'
                 elif args == 1	 :
-                    self.root.ids.packet_stream_btn.text =  'tunnel services'
+                    self.root.ids.trinity_item.title  =  'cci-trinity~async services'
                 elif args == 2 :
-                    self.root.ids.packet_stream_btn.text =  'app server'
-            
+                    self.root.ids.trinity_item.title =  'cci-trinity~tunnel services'        
 
 
 
@@ -194,6 +192,7 @@ class ccitrinityApp( App ) :
                 os.chmod( './cci-bootstrap' , 0o755 )
                 os.chmod( './cci-bootstrap-v' , 0o755 )
                 
+              
 
                 self._update_status( self.root.ids.status_text , '...initializing...' )
                 self._update_status( self.root.ids.vulture_status_text , '...initializing...' )
@@ -201,22 +200,27 @@ class ccitrinityApp( App ) :
                 try :
                    
                     self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/stream daemon....' )
+                    with open( 'trinity_pid' , 'w' ) as f :
+                        f.write( '%d' % os.getpid() )
 
                     if self._running() is False :
 
                             self.root.ids.bootstrap_switch.active = False
                             self._update_status( self.root.ids.status_text , ' ....trinity....' )
                             self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/stream daemon....' )
+                            self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/stream daemon....' )
 
                     else :
                             self._update_status( self.root.ids.status_text , ' ....trinity running....' )
                             self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/daemon running....' )
                             self.root.ids.manipulate_btn.background_color = [0,1,0,1]
+                            self.root.ids.manipulate_tunnel_btn.background_color = [0,1,0,1]
                             self.root.ids.bootstrap_switch.active = True
                             self.root.ids.manipulate_btn.text = 'manipulate streams'
+                            self.root.ids.manipulate_tunnel_btn.text = 'manipulate tunnels'
                             self.root.ids.process_info.text = 'pid: %s  port 7080' % self._pid
+                            self.root.ids.vulture_process_info.text = 'pid: %s  port 7081' % self._pid_vulture
                             self._logger.info( '...server already running... pid %s....'  % self._pid )
-
                                                  
                        
                 except Exception as e:
@@ -353,8 +357,8 @@ class ccitrinityApp( App ) :
                     self.root.ids.bootstrap_btn.text = 'start trinity'
                     self.root.ids.manipulate_btn.text = '~'
                     self.root.ids.manipulate_tunnel_btn.text = '~'
-                    #if self._clock_event :
-                    #    self._clock_event.cancel()
+                    if self._clock_event :
+                        self._clock_event.cancel()
                     self.root.ids.process_info.text = 'port: 7080'
                     self.root.ids.vulture_process_info.text = 'port: 7081'
 
@@ -392,8 +396,8 @@ class ccitrinityApp( App ) :
                         try :
                            
                             self._logger.info( '...bootstrap...' )
-                            os.system( "/data/data/com.chromaticuniverse.cci_trinity/files/app/cci-bootstrap-v -i 'chromatic universe~cci-trinity-vulture'" )
-                            os.system( "/data/data/com.chromaticuniverse.cci_trinity/files/app/cci-bootstrap -i 'chromatic universe~cci-trinity'" )
+                            os.system( "/data/data/com.chromaticuniverse.cci_trinity/files/app/cci-bootstrap" )
+                            os.system( "/data/data/com.chromaticuniverse.cci_trinity/files/app/cci-bootstrap-v" )
                             b_ret = True
                         except proc.CalledProcessError as e:
                             self._logger.error( 'bootstrap failed...' + e.message )

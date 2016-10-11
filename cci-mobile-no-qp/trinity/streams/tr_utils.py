@@ -3,7 +3,10 @@
 
 import os
 import sys
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO    
 import logging
 from math import ceil
 
@@ -114,52 +117,52 @@ def iw_device_mode( dev = 'wlan0') :
 
 # ----------------------------------------------------------------------
 def port_vulture( port ) :
-		"""
+            """
 
-		:param port:
-		:return pid:
-		"""
+            :param port:
+            :return pid:
+            """
 
-		pid = -1
-		try :
+            pid = -1
+            try :
 
-			if not os.geteuid() == 0 :
-				print  'need to be root to call port vulture...\n'
-				sys.exit( 1 )
-			cmd = list()
-			if os.path.exists( '/system/bin/busybox' ) :
-				cmd = [ 'busybox' , 'netstat' , '-tulpn']
-			else :
-				cmd = ['netstat' , '-tulpn']
-			nstat = proc.Popen( cmd , stdout=proc.PIPE )
-			cmd = ['grep' , port]
-			grep = proc.Popen( cmd , stdin=nstat.stdout , stdout=proc.PIPE )
-			nstat.stdout.close()
-			output = grep.communicate()[0]
-			nstat.wait()
+                if not os.geteuid() == 0 :
+                    print  ( 'need to be root to call port vulture...\n' )
+                    sys.exit( 1 )
+                cmd = list()
+                if os.path.exists( '/system/bin/busybox' ) :
+                    cmd = [ 'busybox' , 'netstat' , '-tulpn']
+                else :
+                    cmd = ['netstat' , '-tulpn']
+                nstat = proc.Popen( cmd , stdout=proc.PIPE )
+                cmd = ['grep' , port]
+                grep = proc.Popen( cmd , stdin=nstat.stdout , stdout=proc.PIPE )
+                nstat.stdout.close()
+                output = grep.communicate()[0]
+                nstat.wait()
 
-			segments = output.strip().split()
-			if len( segments ) :
-				if segments[0] == 'tcp' or segments[0] == 'tcp6' :
-					# pid will be last segment
-					raw_pid = segments[len( segments ) - 1]
-					s = raw_pid.split( '/')
-					pos =  s[0].find( ' ' )
-					if pos != -1 :
-						x = s[0][pos:]
-						x = s.strip().split()
-						pid = str( x )
-					else :
-						pid = int( s[0] )
+                segments = output.strip().split()
+                if len( segments ) :
+                    if segments[0] == 'tcp' or segments[0] == 'tcp6' :
+                        # pid will be last segment
+                        raw_pid = segments[len( segments ) - 1]
+                    s = raw_pid.split( '/')
+                    pos =  s[0].find( ' ' )
+                    if pos != -1 :
+                        x = s[0][pos:]
+                        x = s.strip().split()
+                        pid = str( x )
+                    else :
+                        pid = int( s[0] )
 
-			return 	True , pid
+                return 	True , pid
 
-		except ValueError as e :
-			print 'error in parameter list %s' % e.message
-			return False , -1
-		except OSError as e :
-			print 'binary does not exist?  %s' % e.message
-			return False , -1
+            except ValueError as e :
+                print ( "error in parameter list {:s}".format( e.message ) )
+                return False , -1
+            except OSError as e :
+                print ( "binary does not exist?  {:s}".format( e.message ) )
+                return False , -1
 
 
 
@@ -193,7 +196,7 @@ def iw_supported_interface_modes( dev = 'phy#0' ) :
 				segment_lst = segment.split()
 
 		except proc.CalledProcessError as e :
-			print e.message
+			print ( e.message )
 
 
 		return segment_lst
@@ -271,7 +274,7 @@ def init_logging( moniker = 'current_app' , fmt = log_format ) :
 
 if __name__ == '__main__' :
 
-		print retr_local_ip_info()
+		print ( retr_local_ip_info() )
 		"""
 		print '* ' * 39
 		print '\t\tchromatic universe cci-trinity packet streamer , 2016'
