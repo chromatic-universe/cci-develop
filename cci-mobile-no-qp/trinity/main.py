@@ -68,6 +68,8 @@ class ccitrinityApp( App ) :
                 self._pid = None
                 self._pid_vulture = None
                 self._clock_event = None
+                self._init_clock_event = None
+
                 self._retry_on_fail_reps = 0
 
                 self._policy_thred = None
@@ -75,8 +77,6 @@ class ccitrinityApp( App ) :
 
                              
 
-
-            """
 
             def on_pause(self):
                 # save data
@@ -91,7 +91,7 @@ class ccitrinityApp( App ) :
 
 
                 pass
-            """
+            
 
 
             @gen.coroutine
@@ -114,12 +114,12 @@ class ccitrinityApp( App ) :
 
                     while True :
                         msg = yield client.read_message()
-                        service , payload = msg.split( ':' )
-                        
-                        self._update_status( socket_msg[service] , payload )
+                        service , payload = msg.split( ':' )                         
+                        service = str( service.strip() )
+                        self._update_status( socket_msg[service] , str( payload ) )
 
                 except Exception as e :
-                    self._logger.error( e )
+                    self._logger.error( '..manip_socket_stream.. ' + e )
 
 
 
@@ -162,17 +162,24 @@ class ccitrinityApp( App ) :
                     self.root.ids.process_info.text = 'pid: %s   ~  port: 7080' % pid
                     self.root.ids.vulture_process_info.text = 'pid: %s   ~  port: 7081' % pid_vulture
 
-                    """
-                    self._trinity_socket_thred = threading.Thread( target = self._trinity_update_thred ,
-                                                                   daemon = True )
-                    self._trinity_socket_thred.start()
-                    """
                 except :
                     pass
 
 
 
-         
+
+            def _init_callback( self , dt ) :
+                 """
+                 :param interval:
+                 :return:
+                 """
+                 if not self._trinity_socket_thred :
+                    self._trinity_socket_thred = threading.Thread( target = self._trinity_update_thred )
+                    self._trinity_socket_thred.daemon = True
+                    self._trinity_socket_thred.start()
+
+
+
             
             def _move_carousel( self  ) :
                 """
@@ -269,9 +276,10 @@ class ccitrinityApp( App ) :
                             self.root.ids.vulture_process_info.text = 'pid: %s  port 7081' % self._pid_vulture
                             self._logger.info( '...server already running... pid %s....'  % self._pid )
 
-                            self._trinity_socket_thred = threading.Thread( target = self._trinity_update_thred )
-                            self._trinity_socket_thred.daemon = True
-                            self._trinity_socket_thred.start()
+                            if not self._trinity_socket_thred :
+                                self._trinity_socket_thred = threading.Thread( target = self._trinity_update_thred )
+                                self._trinity_socket_thred.daemon = True
+                                self._trinity_socket_thred.start()
                                                                      
                        
                 except Exception as e:
@@ -321,11 +329,11 @@ class ccitrinityApp( App ) :
                             self.root.ids.manipulate_tunnel_btn.text = 'manipulate tunnels'
                             self._update_status( self.root.ids.status_text , ' ...trinity started...' )
                             self._update_status( self.root.ids.status_text , ' ...trinity vulture started...' )
-                            self._update_status( self.root.ids.manipulate_status_text , ' ...trinity vulture started...' )
-                            self._update_status( self.root.ids.manilpulate_status_text , ' ...no user defined tunnels...' )
-
-
+                            self._update_status( self.root.ids.manipulate_status_text , ' ...no user defined tunnels...' )
+                            
+                            self._init_clock_event = Clock.schedule_once( self._init_callback, 15 )
                             self._clock_event = Clock.schedule_interval( self._pid_callback, 2 )
+
                     except Exception as e :
                             self._logger.error( '..._on_start_trinity...' + e.message )
                             self._update_status( self.root.ids.status_text , e.message )

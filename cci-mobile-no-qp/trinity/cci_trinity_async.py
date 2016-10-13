@@ -63,15 +63,20 @@ kp = None
 TEMPLATE_PATH = os.path.join(os.path.join(os.path.dirname(__file__) , 'templates') )
 
 socket_msg = ['app_services' , 'async_services' ,  'tunnel_services']
+trinity_push_q = Queue()
 
+trinity_push_clients = []
 
+# ---------------------------------------------------------------------------------------------
+def trinity_push_msg( message ) :
+    for client in trinity_push_clients :
+        client.write_message( message )
 
 
 # ---------------------------------------------------------------------------------------------
 class trinity_push_handler( tornado.websocket.WebSocketHandler ) :
         
-        clients = []
-
+        
         def open( self ) :
             """
             open
@@ -81,8 +86,9 @@ class trinity_push_handler( tornado.websocket.WebSocketHandler ) :
             self.write_message(  socket_msg[0] +  " :...this is the cci app server speaking from a web socket on port  7082..." )
             self.write_message(  socket_msg[2] +  " :...this is cci tunnel services speaking from a web socket on port 7082..." ) 
 
-            trinity_push_handler.clients.append( self )
+            trinity_push_clients.append( self )
 
+          
 
 
         def on_message( self , message ) :
@@ -90,7 +96,7 @@ class trinity_push_handler( tornado.websocket.WebSocketHandler ) :
             on_message
             """
 
-            self.write_message( ' ...ack...' )
+            self.write_message( 'async_services:...ack...' )
 
 
 
@@ -99,9 +105,10 @@ class trinity_push_handler( tornado.websocket.WebSocketHandler ) :
 
             on_close
             """
-
-            trinity_push_handler.clients.remove(self)
-
+            
+            if self in trinity_push_clients :
+                trinity_push_clients.remove( self )
+           
 
 
         @classmethod
@@ -111,7 +118,7 @@ class trinity_push_handler( tornado.websocket.WebSocketHandler ) :
             :return:
             """
 
-            for client in cls.clients:
+            for client in trinity_push_clients:
                 client.write_message( '...broadcast....' + retr_local_ip_info() )
 
 
@@ -353,6 +360,24 @@ def create_ssh_tunnel_callback() :
 
 
 
+# --------------------------------------------------------------------------------------
+def init_update_callback() :
+            """
+
+            :return:
+            """
+
+            try :
+                trinity_push_msg( socket_msg[1] +  " :...async server ok..." ) 
+                trinity_push_msg( socket_msg[0] +  " :...app server ok..." )
+                trinity_push_msg( socket_msg[2] +  " :...tunnel services ok..." ) 
+            except Exception as e :
+                _logger.error( e )
+
+
+
+
+# --------------------------------------------------------------------------------------
 def start_policy_local() :
             """
             :param json policy global:
@@ -410,7 +435,6 @@ def start_heartbeat_callback() :
 			except :
 				# non-critical ; move on
 				pass
-
 
 
 
@@ -645,14 +669,18 @@ if __name__ == "__main__":
                     _logger.info( '...scheduling default document policy ....' )
                     tornado.ioloop.IOLoop.instance().call_later( 60 , start_policy_local )
 
-                    push_application = tornado.web.Application([ (r'/trinity-stream', trinity_push_handler ) ,
-                                                                    ])
-    
                     # start web socket push
+                    push_application = tornado.web.Application([ (r'/trinity-stream', trinity_push_handler ) ,
+                                                                    ])    
                     _logger.info( '...starting web socket push server on port 7082 ....' )
                     http_server = tornado.httpserver.HTTPServer( push_application ) 
                     http_server.listen( 7082 )
+                    
+                    # set final callback for 10 seconds to signal init successs
+                    _logger.info( '...scheduling fanfare ....' )
+                    tornado.ioloop.IOLoop.instance().call_later( 15 , init_update_callback )
 
+                    
                     # run main io
                     _logger.info( '...starting main io loop ....' )
                     tornado.ioloop.IOLoop.instance().start()
