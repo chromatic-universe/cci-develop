@@ -119,7 +119,7 @@ def trinity_vulture() :
 def index() :
 
 			try :
-
+				"""
 				from sshtunnel import SSHTunnelForwarder
 
 				server = SSHTunnelForwarder(
@@ -130,6 +130,8 @@ def index() :
 											remote_bind_address=('127.0.0.1', 8888 )
 											)
 				_logger.info( '..good ssh tunnel....' )
+				"""
+				pass
 
 			except Exception as e :
 				_logger.error( '..bad ssh tunnel....%s' % e.message )
