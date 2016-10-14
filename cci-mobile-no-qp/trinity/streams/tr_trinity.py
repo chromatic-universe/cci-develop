@@ -2,7 +2,6 @@
 
 import os
 import subprocess as proc
-import platform
 import StringIO
 import sys
 
@@ -145,62 +144,87 @@ def process_linux_keys( log=None , key_motion = 'key_down' ) :
 			return 'done'
 
 
+# ---------------------------------------------------------------------
+def platform() :
+            """
+
+            :return string platform id:
+            """
+
+            ret = None
+            try :
+                cmd = ['busybox' , 'uname' , '-a' ]
+                out = proc.check_output( cmd )
+
+                pos = out.find( 'armv7' )
+                if pos == -1 :
+                    ret = 'linux'
+                else : 
+                    ret = 'android'
+
+            except :
+                return None
+
+            return ret
+
+                
+    
 
 
 # ---------------------------------------------------------------------
 def capture_screen( log=None ) :
-			"""
-			:param path to saved image:
-			:return
-			"""
+            """
+            :param path to saved image:
+            :return
+            """
 
 
-			b_ret = False
-			buf = StringIO.StringIO()
-			out = str()
+            b_ret = False
+            buf = StringIO.StringIO()
+            out = str()
 
-			try :
-					pos = sys.platform.find( 'linux4' )
-					if pos == -1 :
-						andr = False
-					else :
-						andr = True
-					if andr is True :
-						process_android_clicks( log=log )
-						process_android_keys( log=log )
-						out = proc.check_output( ['/system/bin/screencap' ,
-									              '-p' ] )
-						b_ret = True
-					else :
-						# linux
-						import pyscreenshot as ImageGrab
+            try :
+                    platform = platform()
+                    if not platform :
+                        log.error( '...could not determine platform...'  )
+                        return
+                    
+                    if platform == 'android' :
+                        process_android_clicks( log=log )
+                        process_android_keys( log=log )
+                        out = proc.check_output( ['/system/bin/screencap' ,
+                                                  '-p' ] )
+                        b_ret = True
+                    elif platform == 'linux' :
+                        # linux
+                        import pyscreenshot as ImageGrab
 
-						process_linux_clicks( log=log )
-						process_linux_keys( log=log )
-						screen = ImageGrab.grab()
-						buf = StringIO.StringIO()
-						screen.save( buf , 'PNG', quality=75)
-						buf.seek( 0 )
+                        process_linux_clicks( log=log )
+                        process_linux_keys( log=log )
+                        screen = ImageGrab.grab()
+                        buf = StringIO.StringIO()
+                        screen.save( buf , 'PNG', quality=75)
+                        buf.seek( 0 )
 
-						b_ret = True
+                        b_ret = True
 
-						return b_ret , buf.getvalue()
+                        return b_ret , buf.getvalue()
 
-			except proc.CalledProcessError as e :
-				    # this throws if the function call was
-					# made and failed. If the binary was
-					# not found we get a naked system exception ,
-					# handled next
-					log.error( e.message  )
-					return b_ret , e.message
-			except Exception as e :
-					log.error( e.message  )
-					out = e.message
-			finally :
-					if buf :
-						buf.close()
+            except proc.CalledProcessError as e :
+                    # this throws if the function call was
+                    # made and failed. If the binary was
+                    # not found we get a naked system exception ,
+                    # handled next
+                    log.error( e.message  )
+                    return b_ret , e.message
+            except Exception as e :
+                    log.error( e.message  )
+                    out = e.message
+            finally :
+                    if buf :
+                        buf.close()
 
-			return b_ret , out
+            return b_ret , out
 
 
 
