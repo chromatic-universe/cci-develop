@@ -29,24 +29,26 @@ _logger.addHandler( fh )
 @app.route( "/bimini" )
 def cci_trinity():
 
-			out = 'cci_trinity capture screen...'
-			io = StringIO()
-			try :
+                out = 'cci_trinity capture screen...'
+                io = StringIO()
+                try :
+                    _logger.info( '..bimini..capture screen....' )
+                    b_ret , out = tr_trinity.capture_screen( _logger )
+                    _logger.info( '...out file size...%d' % len( out ) )
 
-				b_ret , out = tr_trinity.capture_screen( _logger )
-				if not b_ret :
-					_logger.error( out )
-				else :
-					io.write( out )
-					io.seek( 0 )
+                    if not b_ret :
+                        _logger.error( out )
+                    else :
+                        io.write( out )
+                        io.seek( 0 )
 
 
-			except Exception as e :
-				out =  'error in cci_trinity.....'  + e.message
-				_logger.error( out )
-				return
+                except Exception as e :
+                    #out =  'error in cci_trinity.....'  + e.message
+                    _logger.error( e )
+                    return
 
-			return send_file( io , mimetype='image/png' )
+                return send_file( io , mimetype='image/png' )
 
 app.add_url_rule( '/bimini' ,
 				  'cci_trinity' ,

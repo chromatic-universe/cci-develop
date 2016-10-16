@@ -4,9 +4,9 @@ import os
 import subprocess as proc
 import StringIO
 import sys
-
 import Queue
 
+from PIL import Image
 
 
 click_queue = Queue.Queue()
@@ -121,7 +121,7 @@ def process_linux_keys( log=None , key_motion = 'key_down' ) :
 			:return:
 			"""
 
-			import pyautogui
+			import pyautoguid
 			try:
 
 				motion =  '-k'
@@ -145,7 +145,7 @@ def process_linux_keys( log=None , key_motion = 'key_down' ) :
 
 
 # ---------------------------------------------------------------------
-def platform() :
+def platform( log=None ) :
             """
 
             :return string platform id:
@@ -159,7 +159,9 @@ def platform() :
                 pos = out.find( 'armv7' )
                 if pos == -1 :
                     ret = 'linux'
+                    log.info( '..platform is linux' )
                 else : 
+                    log.info( '..platform is android' )
                     ret = 'android'
 
             except :
@@ -180,22 +182,27 @@ def capture_screen( log=None ) :
 
 
             b_ret = False
-            buf = StringIO.StringIO()
             out = str()
+            buf = None
 
             try :
-                    platform = platform()
+                    p = platform( log )
                     if not platform :
                         log.error( '...could not determine platform...'  )
-                        return
+                        return 
                     
-                    if platform == 'android' :
+                    if p == 'android' :
+                        
                         process_android_clicks( log=log )
                         process_android_keys( log=log )
-                        out = proc.check_output( ['/system/bin/screencap' ,
-                                                  '-p' ] )
+                        out = proc.check_output( ['screencap'] )
+
+                        log.info( '...out file size...%d' % len( out ) )
+                        
                         b_ret = True
-                    elif platform == 'linux' :
+                                                
+
+                    elif p == 'linux' :
                         # linux
                         import pyscreenshot as ImageGrab
 
@@ -207,7 +214,6 @@ def capture_screen( log=None ) :
                         buf.seek( 0 )
 
                         b_ret = True
-
                         return b_ret , buf.getvalue()
 
             except proc.CalledProcessError as e :
@@ -218,7 +224,7 @@ def capture_screen( log=None ) :
                     log.error( e.message  )
                     return b_ret , e.message
             except Exception as e :
-                    log.error( e.message  )
+                    log.error( '..error in tr_bimini...'  )
                     out = e.message
             finally :
                     if buf :

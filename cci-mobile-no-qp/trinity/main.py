@@ -32,6 +32,8 @@ kivy.require( '1.9.1' )
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 default_lib_path_2 = '/data/data/com.chromaticuniverse.cci_trinity/lib'
 default_lib_2 = 'libpython2.7.so'
+python_2 = 'python'
+python_27 = 'python2.7'
 
 t = 3
 
@@ -143,7 +145,10 @@ class ccitrinityApp( App ) :
 
                 try :
                     os.symlink( '%s/%s' % ( default_lib_path_2 , default_lib_2 ) ,                    
-                                './%s' % default_lib_2 ) 
+                                './%s' % default_lib_2 )  
+                    os.chmod( './%s' % python_2 , 0o755 )
+                    os.chmod( './%s' % python27 , 0o755 )
+
                 except :
                     pass
             
