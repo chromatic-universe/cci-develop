@@ -29,12 +29,9 @@ _logger.addHandler( fh )
 @app.route( "/bimini" )
 def cci_trinity():
 
-                out = 'cci_trinity capture screen...'
                 io = StringIO()
                 try :
-                    _logger.info( '..bimini..capture screen....' )
                     b_ret , out = tr_trinity.capture_screen( _logger )
-                    _logger.info( '...out file size...%d' % len( out ) )
 
                     if not b_ret :
                         _logger.error( out )

@@ -248,16 +248,16 @@ class ccitrinityApp( App ) :
 
                 :return:
                 """
-                os.chmod( './cci-bootstrap' , 0o755 )
-                os.chmod( './cci-bootstrap-v' , 0o755 )
-
-                         
 
                 self._update_status( self.root.ids.status_text , '...initializing...' )
                 self._update_status( self.root.ids.vulture_status_text , '...initializing...' )
 
                 try :
-                   
+
+                    os.chmod( './cci-bootstrap' , 0o755 )
+                    os.chmod( './cci-bootstrap-v' , 0o755 )
+                    
+ 
                     self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/stream daemon....' )
                     with open( 'trinity_pid' , 'w' ) as f :
                         f.write( '%d' % os.getpid() )

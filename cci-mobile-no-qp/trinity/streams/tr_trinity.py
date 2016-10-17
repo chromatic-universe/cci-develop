@@ -6,7 +6,6 @@ import StringIO
 import sys
 import Queue
 
-from PIL import Image
 
 
 click_queue = Queue.Queue()
@@ -59,7 +58,7 @@ def process_android_clicks( log=None  ) :
 				while not click_queue.empty() :
 					x , y = click_queue.get()
 					log.info( '..remote click....x%d:y%d'  % ( x , y  ) )
-					cmd = [ '/system/bin/orng' ,
+					cmd = [ 'su' , '-c' , '/system/bin/orng' ,
 							'-t' ,
 							'/dev/input/event3' ,
 							str( x )  ,
@@ -159,9 +158,7 @@ def platform( log=None ) :
                 pos = out.find( 'armv7' )
                 if pos == -1 :
                     ret = 'linux'
-                    log.info( '..platform is linux' )
                 else : 
-                    log.info( '..platform is android' )
                     ret = 'android'
 
             except :
@@ -195,12 +192,11 @@ def capture_screen( log=None ) :
                         
                         process_android_clicks( log=log )
                         process_android_keys( log=log )
-                        out = proc.check_output( ['screencap'] )
-
-                        log.info( '...out file size...%d' % len( out ) )
-                        
-                        b_ret = True
-                                                
+                        out = proc.check_output( ['su' ,
+                                                  '-c' , 
+                                                  '/system/bin/screencap' , 
+                                                  '-p' ] )                        
+                        b_ret = True                                                
 
                     elif p == 'linux' :
                         # linux
