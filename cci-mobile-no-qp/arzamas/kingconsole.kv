@@ -1,0 +1,42 @@
+#:import lv kivy.uix.listview
+#:import la kivy.adapters.listadapter
+
+
+<CciScreen>:
+    id: cci_screen
+    accordion_id: cci_accordion
+    name: 'screen_cci'
+    ConsoleAccordion:
+        _orientation: 'vertical'
+        _inner_orientation: 'horizontal'
+        #listner -call every root width or height change-
+        orientation_handler: self.check_orientation(root.width, root.height)
+
+        id: cci_accordion
+        on_touch_up: app._selected_accordion_item()
+
+        AccordionItem:
+            title: 'application_and_discovery'
+        AccordionItem:
+            title: 'transport'
+        AccordionItem:
+            title: 'network'
+        AccordionItem:
+            title: 'datalink'
+        AccordionItem:
+            title: 'stream'
+        AccordionItem:
+            title: 'cci-maelstrom'
+
+
+ScreenManagement:
+    CciScreen:
+
+
+
+<CciScreen>:
+    id: cci_screen
+    name: 'screen_cci'
+    ConsoleAccordion:
+
+
