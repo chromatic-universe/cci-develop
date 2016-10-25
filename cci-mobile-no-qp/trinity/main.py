@@ -320,7 +320,7 @@ class ccitrinityApp( App ) :
                     try :
                         self._update_status( self.root.ids.status_text , ' ....starting trinity....' )
                         b_ret = True
-                        b_ret = self._bootstrap_trinity_android()
+                        b_ret = self._bootstrap_trinity()
 
                         if not b_ret :
                             self._update_status( self.root.ids.status_text , ' ....trinity bootstrap failed....' )
@@ -340,7 +340,7 @@ class ccitrinityApp( App ) :
                             self._clock_event = Clock.schedule_interval( self._pid_callback, 2 )
 
                     except Exception as e :
-                            self._logger.error( '..._on_start_trinity...' + e.message )
+                            self._logger.error( '..._on_start_trinity...%s' % e.message )
                             self._update_status( self.root.ids.status_text , e.message )
                 else :
                    
@@ -379,7 +379,7 @@ class ccitrinityApp( App ) :
                     
                     except OSError as e :    
                         
-                        self._logger.error( 'kill server failed...' + e.strerror )
+                        self._logger.error( 'kill server failed...%s' % e.strerror )
                         self._update_status( self.root.ids.status_text , ' ...kill server failed...' + e.message )
 
         
@@ -449,7 +449,7 @@ class ccitrinityApp( App ) :
 
 
             
-            def _bootstrap_trinity_android( self ) :
+            def _bootstrap_trinity( self ) :
                 """
 
                 :return:
@@ -457,30 +457,39 @@ class ccitrinityApp( App ) :
 
                 b_ret = False
                 try :
-                    if platform == 'android' :   
+                        if platform == 'android' :   
+                            bootstrap_path = "/data/data/com.chromaticuniverse.cci_trinity/files/app"
+                            trinity_cmd = "%s/%s" % ( bootstrap_path , "cci-bootstrap" )
+                            async_cmd = "%s/%s" % ( bootstrap_path , "cci-bootstrap-v" )
+                        else :
+                            bootstrap_path = os.getcwd()
+                            trinity_cmd = "/usr/bin/python %s/cci_trinity.py &" % bootstrap_path
+                            async_cmd = "/usr/bin/python %s/cci_trinity_async.py &" % bootstrap_path
                         try :
                            
                             self._logger.info( '...bootstrap...' )
-                            os.system( "/data/data/com.chromaticuniverse.cci_trinity/files/app/cci-bootstrap" )
-                            os.system( "/data/data/com.chromaticuniverse.cci_trinity/files/app/cci-bootstrap-v" )
+                            ret = os.system( trinity_cmd )
+                            if ret != 0 :
+                                raise OSError( "..fork system app server failed..." )
+                            self._update_status( self.root.ids.status_text , '..cci_trinity_service started...' )
+                            self._update_status( self.root.ids.vulture_status_text ,  '..cci_trinity_service started...' )
+                            os.system( async_cmd )
+                            if ret != 0 :
+                                raise OSError( "..fork system call async server failed..." )
+                            self._update_status( self.root.ids.status_text , '..cci_async_service started...' )
+                            self._update_status( self.root.ids.vulture_status_text ,  '..cci_async_ervice started...' )
+
+                           
                             b_ret = True
                         except proc.CalledProcessError as e:
-                            self._logger.error( 'bootstrap failed...' + e.message )
+                            self._logger.error( 'bootstrap failed...' + e.message ) 
                         except OSError as e :
                             self._logger.error( 'file does not exist?...' + e.message )
-                            #sys.exit( 1 )
                         except ValueError as e :
                             self._logger.error( 'arguments foobar...' + e.message )
-                            #sys.exit( 1 )
                         except Exception as e :
                             self._logger.error(  e.message )
-
-                    else :
-                        self._logger.info( '...bootstrap of cci trinity service succeeded...' )
-                        b_ret = True
-
-                    self._update_status( self.root.ids.status_text , '..cci_trinity_service started...' )
-                    self._update_status( self.root.ids.vulture_status_text ,  '..cci_trinity_service started...' )
+                                              
 
                 except Exception as e :
                     self._logger.error(  '...error in  trinity server...'  + e.message )    
@@ -520,7 +529,7 @@ if __name__ == '__main__':
 
             #from kivy.core.window import Window
 
-            Window.size = ( 480 , 800 )
+            Window.size = ( 480 , 825 )
             ct = ccitrinityApp()
             ct.run()
 
