@@ -111,9 +111,6 @@ namespace cpp_real_stream
                 cci_kafka_preamble& operator= ( const cci_kafka_preamble& ckc ) = default;
                 //use unary bool compare
                 bool operator!() const { return !m_b_valid; }
-                //disable bitwise compare
-                friend bool operator== ( const cci_kafka_preamble &a , const cci_kafka_preamble &b ) = delete;
-                friend bool operator!= ( const cci_kafka_preamble &a , const cci_kafka_preamble &b ) = delete;
 
                 //dtor
                 virtual ~cci_kafka_preamble();
@@ -274,9 +271,6 @@ namespace cpp_real_stream
                 cci_kafka_consumer& operator= ( const cci_kafka_consumer& ckc ) = default;
                 //use unary bool compare
                 bool operator!() const { return !m_ptr_rd; }
-                //disable bitwise compare
-                friend bool operator== ( const cci_kafka_consumer &a , const cci_kafka_consumer &b ) = delete;
-                friend bool operator!= ( const cci_kafka_consumer &a , const cci_kafka_consumer &b ) = delete;
 
                 //dtor
                 virtual ~cci_kafka_consumer();
@@ -344,9 +338,6 @@ namespace cpp_real_stream
                 cci_kafka_producer& operator= ( const cci_kafka_producer& ckc ) = default;
                 //use unary bool compare
                 bool operator!() const { return !m_ptr_rd; }
-                //disable bitwise compare
-                friend bool operator== ( const cci_kafka_producer &a , const cci_kafka_producer &b ) = delete;
-                friend bool operator!= ( const cci_kafka_producer &a , const cci_kafka_producer &b ) = delete;
 
                 //dtor
                 virtual ~cci_kafka_producer();

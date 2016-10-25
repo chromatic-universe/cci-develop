@@ -1,5 +1,8 @@
 //cci_time_utils.h    william k. jonson 2016
 //c++ std
+#pragma once
+
+
 #include <chrono>
 #include <iostream>
 #include <sstream>
@@ -14,7 +17,7 @@
 #include <unistd.h>
 
 
-#pragma once
+
 
 namespace cpp_real_stream
 {
@@ -62,16 +65,16 @@ namespace cpp_real_stream
         {
             //we make some platform assumptions here about time structures and calcs,
             //but acceptable begin this class is not for scientific computing
+            friend std::ostream& operator<< ( std::ostream& ostr , time_utils& tu )
+            {
+                    ostr << tu.ret_stamp();
+                    return ostr;//<< tu.time_stamp();
+            }
+
 
             public :
 
-                friend std::ostream& operator<< ( std::ostream& ostr , time_utils& tu )
-                {
-                    ostr << tu.ret_stamp();
-                    return ostr;//<< tu.time_stamp();
-                }
-
-                //ctor
+                               //ctor
                 explicit time_utils( stamp_color sc = stamp_color::none ) : m_time( new std::time_t ) ,
                                                                             m_color { sc }
 
@@ -106,7 +109,7 @@ namespace cpp_real_stream
 
                 //dtor
                 //we only clear the default strean cerr
-                virtual ~time_utils() { clear_color(); };
+                virtual ~time_utils() {};
 
 
             protected :
@@ -124,7 +127,7 @@ namespace cpp_real_stream
 
                 //inspectors-accessors
                 const time_t_ptr raw_t() const noexcept { return m_time.get(); }
-                constexpr stamp_color color() const noexcept { return m_color; }
+                stamp_color color() const noexcept { return m_color; }
 
                 //mutators
                 void raw_t( std::unique_ptr<std::time_t>& t ) {  m_time = std::move( t ); }
@@ -157,7 +160,7 @@ namespace cpp_real_stream
                 {
                     //non-portable
                     ostr << colors[m_color]
-                         << st
+                         << st;
                 }
 
 

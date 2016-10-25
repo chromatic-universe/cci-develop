@@ -16,6 +16,8 @@ void cci_cli_output::failure( tclap::CmdLineInterface& c , tclap::ArgException& 
                   << "\n";
         m_tmu->clear_color();
 
+        usage( c  );
+
         exit( 1 );
 }
 

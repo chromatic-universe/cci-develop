@@ -12,7 +12,7 @@ rdkafka::Conf* cci_kafka_producer::topic_conf = rdkafka::Conf::create( rdkafka::
 //----------------------------------------------------------------------------------------
 cci_kafka_producer::cci_kafka_producer( kafka_preamble_ptr ptr_preamble ,
                                         bool events ) : m_preamble { ptr_preamble } ,
-                                                        m_tm30u(  std::make_unique<time_utils>( stamp_color::green ) ) ,
+                                                        m_tmu(  std::make_unique<time_utils>( stamp_color::green ) ) ,
                                                         m_ptr_rd { nullptr } ,
                                                         m_ptr_topic { nullptr } ,
                                                         m_cur_partition { 0 } ,
