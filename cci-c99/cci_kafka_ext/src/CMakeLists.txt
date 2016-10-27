@@ -6,8 +6,8 @@ cmake_minimum_required(VERSION 2.82)
 project(arm_kafka_ext)
 
 #cpp flags
-set(CMAKE_C_FLAGS_DEBUG "-fPIC -Wall -g -O0  -Qunused-arguments  -DDEBUG -std=c99")
-set(CMAKE_C_FLAGS_RELEASE "-fPIC -Wall -O3  -Qunused-arguments  -DNDEBUG -std=c99")
+set(CMAKE_C_FLAGS_DEBUG "-fPIC -Wall -g -O0  -DDEBUG -std=c99")
+set(CMAKE_C_FLAGS_RELEASE "-fPIC -Wall -O3   -DNDEBUG -std=c99")
 
 include_directories( ../include
                      $ENV{DEV}/include
@@ -29,4 +29,7 @@ add_executable(cci_ext_k  test.c)
 target_link_libraries(_cci_rdkafka_py -lrdkafka)
 target_link_libraries(cci_ext_k -lrdkafka)
 
-                             
+
+install_targets(/bin  cci_ext_k)
+install_targets(/lib  _cci_rdkafka_py)
+

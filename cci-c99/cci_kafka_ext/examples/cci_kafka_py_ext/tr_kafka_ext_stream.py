@@ -40,6 +40,7 @@ gkc = None
 def deactivate( sig ) :
 
 		if gkc :
+			logger.warning('...deactivating rdkafka...' )
 			# kill fgetc
 			sys.stdin.close()
 			# halt kafka
@@ -55,6 +56,8 @@ def sig_handler( sig , frame ) :
 		:return:
 		"""
 		logger.warning('...caught signal: %s', sig )
+
+		deactivate( sig )
 
 
 
@@ -90,14 +93,13 @@ if __name__ == "__main__"  :
 			# kc.start_offset = 0
 			kc.mode = 0
 			kc.argc = len( sys.argv )
-			# kc.argv = sys.argv
 
 
 			gkc = kc
 
 			# handlers
-			logger.info( '...cci_kf_consumer_preamble...' )
-			#rdkafka.cci_kf_consumer_preamble( kc )
+			logger.info( '...ex_parte_producer...' )
+			rdkafka.ex_parte_producer( kc )
 
 
 

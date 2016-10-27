@@ -714,7 +714,7 @@ void ex_parte_producer( kafka_context_ptr kc  )
     //init
     assert( kc );
 
-    kc->cci_production_preamble( kc );
+    cci_kf_production_preamble( kc );
 
     metadata_set( kc );
     _L( "broker and topic metadata configured...." , "%s\n" );
@@ -801,9 +801,7 @@ void ex_parte_consumer(  kafka_context_ptr kc )
     int wait_eof = 0;
     int err;
 
-    //preamble
-    kc->cci_consumer_preamble( kc );
-    assert( kc );
+    assert( kc->kafka_ptr );
 
     //set metadata
     if ( rd_kafka_brokers_add( kc->kafka_ptr , kc->brokers ) == 0 )
@@ -872,7 +870,7 @@ void ex_parte_consumer(  kafka_context_ptr kc )
                 message_ptr = rd_kafka_consumer_poll( kc->kafka_ptr , 1000 );
                 if ( message_ptr )
                 {
-                      	kc->cci_msg_consume( kc , message_ptr , NULL );
+                      	cci_kf_msg_consume( kc , message_ptr , NULL );
 
                         rd_kafka_message_destroy( message_ptr );
                 }

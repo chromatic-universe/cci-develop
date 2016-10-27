@@ -1,5 +1,7 @@
-2016-10-27 08:39:21,919.919.490098953:cci_kafka_ext:-1219795200:INFO:28725:...cci_kafka_ext...rdkafka c api interface..
-2016-10-27 08:39:21,919.919.811010361:cci_kafka_ext:-1219795200:INFO:28725:...topic is king-console-cci-maelstrom
-2016-10-27 08:39:21,919.919.960975647:cci_kafka_ext:-1219795200:INFO:28725:...brokers => cci-aws-1:9092
-2016-10-27 08:39:21,920.920.09806633:cci_kafka_ext:-1219795200:INFO:28725:...group => cci-group
-2016-10-27 08:39:21,920.920.28093338:cci_kafka_ext:-1219795200:INFO:28725:...cci_kf_consumer_preamble...
+2016-10-27 16:04:25,513.513.297080994:cci_kafka_ext:-1219381504:INFO:14426:...cci_kafka_ext...rdkafka c api interface..
+2016-10-27 16:04:25,513.513.813018799:cci_kafka_ext:-1219381504:INFO:14426:...topic is king-console-cci-maelstrom
+2016-10-27 16:04:25,513.513.992071152:cci_kafka_ext:-1219381504:INFO:14426:...brokers => cci-aws-1:9092
+2016-10-27 16:04:25,514.514.203071594:cci_kafka_ext:-1219381504:INFO:14426:...group => cci-group
+2016-10-27 16:04:25,514.514.378070831:cci_kafka_ext:-1219381504:INFO:14426:...ex_parte_producer...
+2016-10-27 16:05:05,629.629.750013351:cci_kafka_ext:-1219381504:WARNING:14426:...caught signal: 2
+2016-10-27 16:05:05,630.630.570888519:cci_kafka_ext:-1219381504:WARNING:14426:...deactivating rdkafka...
