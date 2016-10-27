@@ -15,9 +15,7 @@ include_directories( ${minikafkacpprun_SOURCE_DIR}
                      ../include
                    )
 #link location
-link_directories( $ENV{DEV_LIB}
-                  /usr/lib
-                  /usr/local/lib) 
+link_directories( /cci/dev_t/lib)
 
 #binary
 add_executable(cci_mini_kafka_run  cci_mini_kafka_run.cpp
@@ -31,4 +29,4 @@ add_executable(cci_mini_kafka_run  cci_mini_kafka_run.cpp
                                    
 
 #link libs
-target_link_libraries(cci_mini_kafka_run -lrdkafka++ -lprofiler )
+target_link_libraries(cci_mini_kafka_run -lrdkafka++ -lrdkafka -lprofiler )

@@ -109,7 +109,7 @@ namespace cpp_real_stream
 
                 //dtor
                 //we only clear the default strean cerr
-                virtual ~time_utils() {};
+                virtual ~time_utils() { clear_color(); };
 
 
             protected :

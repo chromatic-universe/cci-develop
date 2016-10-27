@@ -18,7 +18,10 @@ void sigterm( int sig )
 }
 
 bool b_events{ false };
+static std::pair<std::string,unsigned> split( const std::string& src );
 
+
+// ----------------------------------------------------------------------------------
 int main( int argc , char* argv[] )
 {
         //facade wrapper for librdkafka and libzookeeper
@@ -26,21 +29,16 @@ int main( int argc , char* argv[] )
         signal( SIGINT  , sigterm );
         signal( SIGTERM , sigterm );
 
-        char space { 040 };
 
         try
         {
             //boilerplate
             //time utils
             auto tmu( std::make_unique<time_utils>() );
-            tmu->time_stamp();
-            std::cerr << "cci_mini_kafka_run....\n";
+            std::cerr << "\n\n---------------------------------------------------------------------------------\n";
+            std::cerr << "\t\t\tcci-kafka-android ~ chromatic universe 2016....\n";
 
-            //brokers
-            auto brokers( std::make_unique<kafka_brokers>() );
-            brokers->emplace_back( std::make_unique<cci_kafka_broker>( "cci-aws-1" , 9092 , 0 ) );
-            //preamble
-            auto ckp( std::make_unique<cci_kafka_preamble>( brokers ) );
+
 
             std::vector<tclap::Arg*>  xorlist;
             xorlist.push_back( cci_kafka_preamble::consumer_switch.get() );
@@ -56,6 +54,34 @@ int main( int argc , char* argv[] )
            	cci_kafka_preamble::ccmd->setOutput( cli.get() );
             //parse the argv array.
         	cci_kafka_preamble::ccmd->parse( argc, argv );
+
+            //brokers
+            std::string brks { cci_kafka_preamble::the_brokers->getValue() };
+            auto pr = split( brks );
+            if( pr.first.compare( "nil"  ) == 0 )
+            {
+                tmu->color( stamp_color::red );
+                tmu->time_stamp();
+                std::cerr << "..invalid broker specification..\n";
+                tmu->time_stamp();
+                std::cerr <<  "....<endpoint:port,endpoint:port,...>,..aborting...\n\n";
+                tmu->clear_color();
+
+                exit( 1 );
+            }
+            std::cerr << "\nbroker:\t\t\t"
+                      << pr.first
+                      << "\n"
+                      << "port  :\t\t\t"
+                      << pr.second
+                      << "\n";
+            std::cerr << "---------------------------------------------------------------------------------------\n\n";
+
+
+            auto brokers( std::make_unique<kafka_brokers>() );
+            brokers->emplace_back( std::make_unique<cci_kafka_broker>( pr.first , pr.second , 0 ) );
+            //preamble
+            auto ckp( std::make_unique<cci_kafka_preamble>( brokers ) );
             //get debug switch
             ckp->events( cci_kafka_preamble::debug_switch->getValue() );
 
@@ -111,4 +137,35 @@ int main( int argc , char* argv[] )
         return 0;
 
 }
+
+
+// --------------------------------------------------------------------------------------------
+std::pair<std::string,unsigned> split( const std::string& src )
+{
+
+        const char colon {  ':' };
+        std::string str { src };
+
+        try
+        {
+            std::string::size_type st = src.find_first_of( colon );
+            if( st != std::string::npos )
+            {
+
+                auto pr = std::make_pair<std::string,unsigned>( src.substr( 0 , st  ),
+                                                                stoi( src.substr( st + 1 ) , nullptr , 0 ) ) ;
+
+                return pr;
+            }
+        }
+        catch( ... )
+        {
+            //
+        }
+
+        return std::make_pair<std::string,unsigned>( "nil" , 0 );
+}
+
+
+
 

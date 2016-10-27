@@ -1,0 +1,5 @@
+2016-10-27 08:39:21,919.919.490098953:cci_kafka_ext:-1219795200:INFO:28725:...cci_kafka_ext...rdkafka c api interface..
+2016-10-27 08:39:21,919.919.811010361:cci_kafka_ext:-1219795200:INFO:28725:...topic is king-console-cci-maelstrom
+2016-10-27 08:39:21,919.919.960975647:cci_kafka_ext:-1219795200:INFO:28725:...brokers => cci-aws-1:9092
+2016-10-27 08:39:21,920.920.09806633:cci_kafka_ext:-1219795200:INFO:28725:...group => cci-group
+2016-10-27 08:39:21,920.920.28093338:cci_kafka_ext:-1219795200:INFO:28725:...cci_kf_consumer_preamble...

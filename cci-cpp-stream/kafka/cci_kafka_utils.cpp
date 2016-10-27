@@ -47,8 +47,8 @@ void cci_cli_output::usage( tclap::CmdLineInterface& c )
 //----------------------------------------------------------------------------------------
 void cci_cli_output::version( tclap::CmdLineInterface& c )
 {
-    std::cerr << "cci_mini_kafka_run: version 0.12 william k. johnson 2016\n";
-    m_tmu->clear_color();
+         std::cerr << "cci-kafka-android: version 0.7 chromatic universe ~ william k. johnson 2016\n";
+         m_tmu->clear_color();
 
 }
 
