@@ -8,6 +8,16 @@ int quiet = 0;
 int run = 1;
 int exit_eof = 0;
 
+static  kafka_context* gkc;
+static void deactivate( int sig )
+{
+    assert( gkc );
+    //kill fgetc
+    fclose( stdin );
+    //halt kafka
+    gkc->is_running = 0;
+}
+
 //locals
 //------------------------------------------------------------------------
 //signals
@@ -89,6 +99,7 @@ void cci_kf_msg_consume( kafka_context_ptr kc ,
                          message_ptr_k rkmessage ,
                          void_ptr opaque )
 {
+
    if (rkmessage->err) {
 		if (rkmessage->err == RD_KAFKA_RESP_ERR__PARTITION_EOF) {
             _L( "" , "%s" );
@@ -123,7 +134,7 @@ void cci_kf_msg_consume( kafka_context_ptr kc ,
 
                 if (rkmessage->err == RD_KAFKA_RESP_ERR__UNKNOWN_PARTITION ||
                     rkmessage->err == RD_KAFKA_RESP_ERR__UNKNOWN_TOPIC)
-                        run = 0;
+                        kc->is_running = 0;
 		return;
 	}
 
@@ -135,14 +146,14 @@ void cci_kf_msg_consume( kafka_context_ptr kc ,
 
 	if (rkmessage->key_len) {
 		if (output == OUTPUT_HEXDUMP)
-			kc->cci_hex_dump(stdout, "Message Key",
+			cci_kf_hex_dump(stdout, "Message Key",
 				rkmessage->key, rkmessage->key_len);
 		else
 			printf("Key: %.*s\n",
 			       (int)rkmessage->key_len, (char *)rkmessage->key);
 	}
   	if (output == OUTPUT_HEXDUMP)
-		kc->cci_hex_dump(stdout, "Message Payload",
+		cci_kf_hex_dump(stdout, "Message Payload",
 			rkmessage->payload, rkmessage->len);
 	else
 		printf("%.*s\n",
@@ -457,7 +468,13 @@ void cci_kf_logger ( const rd_kafka_t* ptr_handle ,
 //------------------------------------------------------------------------
 void cci_kf_consumer_preamble( kafka_context_ptr kc )
 {
+    signal( SIGINT , deactivate );
+    signal( SIGTERM , deactivate );
+
+    gkc = kc;
+
      //init
+
     assert( kc  );
 
     char tmp[16];
@@ -801,6 +818,7 @@ void ex_parte_consumer(  kafka_context_ptr kc )
     int wait_eof = 0;
     int err;
 
+    cci_kf_consumer_preamble( kc );
     assert( kc->kafka_ptr );
 
     //set metadata
@@ -863,7 +881,7 @@ void ex_parte_consumer(  kafka_context_ptr kc )
 
     //consume messages
     kc->is_running = 1;
-    while ( kc->is_running )
+    while ( kc->is_running ==  1 )
     {
                 message_k_ptr message_ptr;
 
@@ -874,9 +892,12 @@ void ex_parte_consumer(  kafka_context_ptr kc )
 
                         rd_kafka_message_destroy( message_ptr );
                 }
+                else {  continue; }
     }
 
+
     //close
+
     err = rd_kafka_consumer_close( kc->kafka_ptr );
     if ( err )
     {
@@ -887,12 +908,16 @@ void ex_parte_consumer(  kafka_context_ptr kc )
     }
     else
     {
-          _L( "" , "%s");
+          rd_kafka_dump( stderr , kc->kafka_ptr );
+
           fprintf( stderr, "%% consumer closed..............\n");
           //destory partitions
           rd_kafka_topic_partition_list_destroy( kc->partitions_ptr );
+          //destroy topic
+          rd_kafka_topic_destroy( kc->topic_ptr );
           //destroy handle
           rd_kafka_destroy(  kc->kafka_ptr );
+
           int run = 5;
           while ( run-- > 0 && rd_kafka_wait_destroyed( 1000 ) == -1 )
           {

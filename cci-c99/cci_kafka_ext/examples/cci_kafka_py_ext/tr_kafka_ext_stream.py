@@ -44,7 +44,7 @@ def deactivate( sig ) :
 			# kill fgetc
 			sys.stdin.close()
 			# halt kafka
-			gkc.is_running = 0
+			kc.is_running = 0
 
 
 
@@ -86,7 +86,7 @@ if __name__ == "__main__"  :
 			# RD_KAFKA_PARTITION_UA ,
 			kc.partition = 0
 			kc.debug_flags = None
-			kc.dump_config = 0
+			kc.dump_config = 1
 			kc.is_running = 0
 			kc.exit_eof = 0
 			kc.wait_eof = 0
@@ -98,8 +98,11 @@ if __name__ == "__main__"  :
 			gkc = kc
 
 			# handlers
-			logger.info( '...ex_parte_producer...' )
-			rdkafka.ex_parte_producer( kc )
+			#logger.info( '...ex_parte_producer...' )
+			#rdkafka.ex_parte_producer( kc )
+
+			logger.info( '...ex_parte_consumer...' )
+			rdkafka.ex_parte_consumer( kc )
 
 
 
