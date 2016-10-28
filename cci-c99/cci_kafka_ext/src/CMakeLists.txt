@@ -23,11 +23,11 @@ add_library(_cci_rdkafka_py SHARED cci_mini_kafka.c
                                    test.c)
 set_target_properties(_cci_rdkafka_py PROPERTIES PREFIX "")
 
-add_executable(cci_ext_k  test.c)
+add_executable(cci_ext_k  test.c cci_async_q.c)
               
 #link libs
-target_link_libraries(_cci_rdkafka_py -lrdkafka)
-target_link_libraries(cci_ext_k -lrdkafka)
+target_link_libraries(_cci_rdkafka_py -lrdkafka -lnanomsg)
+target_link_libraries(cci_ext_k -lrdkafka -lnanomsg)
 
 
 install_targets(/bin  cci_ext_k)
