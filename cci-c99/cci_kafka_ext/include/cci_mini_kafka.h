@@ -1,6 +1,6 @@
 //cci_mini_kafka.h william k. johnson 2015
-#define _GNU_SOURCE
 #pragma once
+#define _GNU_SOURCE
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wmacro-redefined"
 
@@ -28,6 +28,10 @@
 #include <getopt.h>
 #include <sys/syscall.h>
 #include <signal.h>
+//nanomsg
+#include <nanomsg/nn.h>
+#include <nanomsg/reqrep.h>
+
 
 static  enum {
 	OUTPUT_HEXDUMP,
@@ -184,5 +188,11 @@ extern void ex_parte_producer( kafka_context_ptr kc );
 //------------------------------------------------------------------------
 //consumer
 extern void ex_parte_consumer( kafka_context_ptr kc );
-
+//------------------------------------------------------------------------
+//atomic prodduction
+extern void ex_parte_atomic_production( kafka_context_ptr kc ,
+                                        const char* packet ,
+                                        int len );
+//------------------------------------------------------------------------
+extern void configuration_dump( kafka_context_ptr kc );
 
