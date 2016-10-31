@@ -13,7 +13,6 @@
 #include "cci_mini_kafka.h"
 #include <cci_daemon.h>
 
-
 struct work
 {
     struct work *next;
@@ -27,7 +26,7 @@ struct work
 //--------------------------------------------------------------------------------
 extern uint64_t milliseconds (void);
 //--------------------------------------------------------------------------------
-extern int kafka_server_q( const char* url , kafka_context_ptr kc );
+extern int kafka_server_q( const char* url  , kafka_context_ptr kc );
 //--------------------------------------------------------------------------------
 extern int kafka_client_q ( const char* url , const char* packet , int* rfd , int len  );
 //------------------------------------------------------------------------
