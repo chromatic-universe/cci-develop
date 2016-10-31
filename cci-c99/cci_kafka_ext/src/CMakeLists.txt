@@ -19,26 +19,28 @@ include_directories( ../include
 link_directories( $ENV{DEV}/lib
                   /usr/lib)
 
-#shared library
+#shared libraries
 add_library(_cci_rdkafka_py SHARED cci_mini_kafka.c
                                    cci_rdkafka_py_wrap.c)
+                                  
+                                       
 #target prefix for pythone disutils and setuptools                               
 set_target_properties(_cci_rdkafka_py PROPERTIES PREFIX "")
 
 #binaries
 #python extension module test
-add_executable(cci_ext_k  test.c cci_kafka_async_q.c)
+add_executable(cci_ext_k  test.c)
 #sink q
 add_executable(cci_kafka_sink  cci_kafka_sink.c
                                cci_kafka_async_q.c
                                cci_daemon.c
                                cci_mini_kafka.c)
+#source dispatch
 add_executable(cci_kafka_source  cci_kafka_q_dispatch.c
                                  cci_kafka_async_q.c
                                  cci_daemon.c
                                  cci_mini_kafka.c)
                         
-#source dispatch
 
 #link libs
 target_link_libraries(_cci_rdkafka_py -lrdkafka -lnanomsg)

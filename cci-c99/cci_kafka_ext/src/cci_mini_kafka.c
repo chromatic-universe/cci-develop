@@ -611,6 +611,7 @@ void cci_kf_production_preamble( kafka_context_ptr kc )
      metadata_set( kc );
     _L( "broker and topic metadata configured...." , "%s\n" );
 
+    rd_kafka_dump( stderr , kc->kafka_ptr );
 
 }
 
@@ -753,12 +754,15 @@ void ex_parte_atomic_production( kafka_context_ptr kc ,
                      rd_kafka_err2str( rd_kafka_errno2err( errno ) ) );
           }
 
-          fprintf( stderr ,
+          char buf[512];
+          sprintf( buf ,
                   "%% sent %zd bytes to topic " \
                   "%s partition %i\n",
                    len ,
                    rd_kafka_topic_name( kc->topic_ptr ) ,
                    kc->partition );
+          _L( buf , "%s" );
+
 }
 
 
@@ -1224,8 +1228,8 @@ void configuration_dump( kafka_context_ptr kc )
 			if ( pass ==  0 )
             {
 				arr = rd_kafka_conf_dump( kc->conf_ptr , &cnt );
-                //_L( "" , "%s" );
-				//printf( "%%%%%% global config %%%%%%%\n" );
+                _L( "" , "%s" );
+				printf( "%%%%%% global config %%%%%%%\n" );
 			}
             else
             {

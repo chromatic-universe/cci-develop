@@ -104,6 +104,11 @@ int kafka_server_q( const char* url  , kafka_context_ptr kc )
                                  nn_freemsg ( work->request.msg_control );
                                  nn_freemsg( work->payload );
                             }
+                            // dispatch kafka atom
+                            ex_parte_atomic_production( kc ,
+                                                        work->payload ,
+                                                         strlen( (char*) work->payload )  + 1 );
+
                             nn_freemsg( work->payload );
                             free ( work );
                         }
