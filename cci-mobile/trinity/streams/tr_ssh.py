@@ -11,9 +11,11 @@ server = None
 
 # --------------------------------------------------------------------------------------
 def sig_handler( sig , frame ) :
-
-				os.kill( os.getpid() , signal.SIGTERM )
 				print 'foo'
+				os.kill( os.getpid() , signal.SIGTERM )
+
+
+
 
 
 
@@ -34,8 +36,8 @@ if __name__ == '__main__':
 
 				print(server.local_bind_port)
 
-				while True :
-					sleep( 1 )
+				#while True :
+				#	sleep( 1 )
 
 
 

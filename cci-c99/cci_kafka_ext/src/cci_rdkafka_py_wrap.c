@@ -5460,6 +5460,69 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ex_parte_atomic_production(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  kafka_context_ptr arg1 = (kafka_context_ptr) 0 ;
+  char *arg2 = (char *) 0 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ex_parte_atomic_production",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_kafka_context, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ex_parte_atomic_production" "', argument " "1"" of type '" "kafka_context_ptr""'"); 
+  }
+  arg1 = (kafka_context_ptr)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ex_parte_atomic_production" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = (char *)(buf2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ex_parte_atomic_production" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = (int)(val3);
+  ex_parte_atomic_production(arg1,(char const *)arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_configuration_dump(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  kafka_context_ptr arg1 = (kafka_context_ptr) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:configuration_dump",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_kafka_context, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "configuration_dump" "', argument " "1"" of type '" "kafka_context_ptr""'"); 
+  }
+  arg1 = (kafka_context_ptr)(argp1);
+  configuration_dump(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_print_args(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char **arg1 = (char **) 0 ;
@@ -5582,6 +5645,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"cci_kf_rebalance_cb", _wrap_cci_kf_rebalance_cb, METH_VARARGS, NULL},
 	 { (char *)"ex_parte_producer", _wrap_ex_parte_producer, METH_VARARGS, NULL},
 	 { (char *)"ex_parte_consumer", _wrap_ex_parte_consumer, METH_VARARGS, NULL},
+	 { (char *)"ex_parte_atomic_production", _wrap_ex_parte_atomic_production, METH_VARARGS, NULL},
+	 { (char *)"configuration_dump", _wrap_configuration_dump, METH_VARARGS, NULL},
 	 { (char *)"print_args", _wrap_print_args, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };

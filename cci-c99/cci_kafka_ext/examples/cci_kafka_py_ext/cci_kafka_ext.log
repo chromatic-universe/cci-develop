@@ -1,5 +1,4 @@
-2016-10-27 23:51:55,301.301.127910614:cci_kafka_ext:-1219774720:INFO:1834:...cci_kafka_ext...rdkafka c api interface..
-2016-10-27 23:51:55,301.301.493883133:cci_kafka_ext:-1219774720:INFO:1834:...topic is king-console-cci-maelstrom
-2016-10-27 23:51:55,301.301.640987396:cci_kafka_ext:-1219774720:INFO:1834:...brokers => cci-aws-1:9092
-2016-10-27 23:51:55,301.301.774978638:cci_kafka_ext:-1219774720:INFO:1834:...group => cci-group
-2016-10-27 23:51:55,301.301.933050156:cci_kafka_ext:-1219774720:INFO:1834:...ex_parte_consumer...
+2016-10-31 02:51:10,492.492.429018021:cci_kafka_ext:-1219352832:INFO:25513:...cci_kafka_ext...rdkafka c api interface..
+2016-10-31 02:51:10,492.492.824077606:cci_kafka_ext:-1219352832:INFO:25513:...topic is king-console-cci-maelstrom
+2016-10-31 02:51:10,492.492.975950241:cci_kafka_ext:-1219352832:INFO:25513:...brokers => localhost:9092
+2016-10-31 02:51:10,493.493.113040924:cci_kafka_ext:-1219352832:INFO:25513:...group => cci-group

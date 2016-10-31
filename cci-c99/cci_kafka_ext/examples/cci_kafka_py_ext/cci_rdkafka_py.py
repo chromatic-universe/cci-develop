@@ -234,6 +234,14 @@ def ex_parte_consumer(*args):
   return _cci_rdkafka_py.ex_parte_consumer(*args)
 ex_parte_consumer = _cci_rdkafka_py.ex_parte_consumer
 
+def ex_parte_atomic_production(*args):
+  return _cci_rdkafka_py.ex_parte_atomic_production(*args)
+ex_parte_atomic_production = _cci_rdkafka_py.ex_parte_atomic_production
+
+def configuration_dump(*args):
+  return _cci_rdkafka_py.configuration_dump(*args)
+configuration_dump = _cci_rdkafka_py.configuration_dump
+
 def print_args(*args):
   return _cci_rdkafka_py.print_args(*args)
 print_args = _cci_rdkafka_py.print_args

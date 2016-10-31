@@ -46,8 +46,6 @@ static void debug_set( conf_k_ptr ptr , const char* contexts );
 //------------------------------------------------------------------------
 static void _L( const char* buf , const char* format );
 //------------------------------------------------------------------------
-static void configuration_dump( kafka_context_ptr kc );
-//------------------------------------------------------------------------
 static int process_partition_list( partition_list_ptr* partitions  ,
                                                 const char*  topics ,
                                                 int* wait );
@@ -555,6 +553,7 @@ void cci_kf_consumer_preamble( kafka_context_ptr kc )
     _L( "instantiated consumer context....." , "%s\n" );
     rd_kafka_set_log_level( kc->kafka_ptr , LOG_DEBUG );
 
+
 }
 
 //------------------------------------------------------------------------
@@ -563,11 +562,6 @@ void cci_kf_production_preamble( kafka_context_ptr kc )
     char tmp[16];
     char errstr[512];
 
-
-
-    const char **arr;
-    size_t cnt;
-    int pass;
 
     kc->conf_ptr = rd_kafka_conf_new();
 
@@ -593,6 +587,7 @@ void cci_kf_production_preamble( kafka_context_ptr kc )
                              "produce.offset.report" ,
                              "true",  errstr ,
                              sizeof( errstr ) );
+
     rd_kafka_conf_set_dr_msg_cb( kc->conf_ptr ,
                                  kc->cci_msg_delivered );
 
@@ -612,6 +607,11 @@ void cci_kf_production_preamble( kafka_context_ptr kc )
     _L( "created kafka library context...." , "%s\n" );
 
      rd_kafka_set_log_level( kc->kafka_ptr , LOG_DEBUG );
+
+     metadata_set( kc );
+    _L( "broker and topic metadata configured...." , "%s\n" );
+
+    rd_kafka_dump( stderr , kc->kafka_ptr );
 
 }
 
@@ -716,94 +716,141 @@ void stream_out_partition_list ( FILE *fp ,
 
 }
 
+//------------------------------------------------------------------------
+void ex_parte_atomic_production( kafka_context_ptr kc ,
+                                 const char* packet ,
+                                 int len )
+{
+
+        assert( kc  );
+
+        int max_buf_len = 2048;
+
+        _L( "..production atom......" , "%s\n" );
+
+        // no-op
+        if( len > max_buf_len ) { return; }
+
+        //send produce message
+         if( rd_kafka_produce( kc->topic_ptr ,
+                                kc->partition,
+                                RD_KAFKA_MSG_F_COPY ,
+                                //payload and len
+                                (void*) packet ,
+                                len ,
+                                //optional key and its len
+                                NULL ,
+                                0 ,
+                                //message opaque, provided in
+                                //delivery report callback as
+                                //msg_opaque
+                                NULL ) == -1 )
+          {
+            fprintf( stderr ,
+                     "%% Failed to produce to topic %s "
+                     "partition %i: %s\n",
+                     rd_kafka_topic_name( kc->topic_ptr ) ,
+                     kc->partition ,
+                     rd_kafka_err2str( rd_kafka_errno2err( errno ) ) );
+          }
+
+          char buf[512];
+          sprintf( buf ,
+                  "%% sent %zd bytes to topic " \
+                  "%s partition %i\n",
+                   len ,
+                   rd_kafka_topic_name( kc->topic_ptr ) ,
+                   kc->partition );
+          _L( buf , "%s" );
+
+}
+
+
 
 //------------------------------------------------------------------------
 void ex_parte_producer( kafka_context_ptr kc  )
 {
-    assert( kc  );
+        assert( kc  );
 
-    int max_buf_len = 2048;
-   	char buf[max_buf_len];
-	int sendcnt = 0;
+        int max_buf_len = 2048;
+        char buf[max_buf_len];
+        int sendcnt = 0;
 
-    _L( "starting production......" , "%s\n" );
+        _L( "starting production......" , "%s\n" );
 
-    //init
-    assert( kc );
+        //init
+        assert( kc );
 
-    cci_kf_production_preamble( kc );
+        cci_kf_production_preamble( kc );
 
-    metadata_set( kc );
-    _L( "broker and topic metadata configured...." , "%s\n" );
+        kc->is_running = 1;
+        while ( kc->is_running && fgets( buf ,
+                                         sizeof( buf ) ,
+                                         stdin ) )
+        {
 
-    kc->is_running = 1;
-    while ( kc->is_running && fgets( buf ,
-                                     sizeof( buf ) ,
-                                     stdin ) )
-    {
+                  size_t len = strlen( buf );
+                  if( len > max_buf_len ) { break; }
+                  if( buf[len-1] == '\n' ) { buf[--len] = '\0'; }
 
-		  	  size_t len = strlen( buf );
-              if( len > max_buf_len ) { break; }
-			  if( buf[len-1] == '\n' ) { buf[--len] = '\0'; }
+                  //send produce message
+                  if( rd_kafka_produce( kc->topic_ptr ,
+                                        kc->partition,
+                                        RD_KAFKA_MSG_F_COPY ,
+                                        //payload and len
+                                        buf ,
+                                        len ,
+                                        //optional key and its len
+                                        NULL ,
+                                        0 ,
+                                        //message opaque, provided in
+                                        //delivery report callback as
+                                        //msg_opaque
+                                        NULL ) == -1 )
+                  {
+                    fprintf( stderr ,
+                             "%% Failed to produce to topic %s "
+                             "partition %i: %s\n",
+                             rd_kafka_topic_name( kc->topic_ptr ) ,
+                             kc->partition ,
+                             rd_kafka_err2str( rd_kafka_errno2err( errno ) ) );
 
-              //send produce message
-			  if( rd_kafka_produce( kc->topic_ptr ,
-                                    kc->partition,
-					                RD_KAFKA_MSG_F_COPY ,
-					                //payload and len
-            					    buf ,
-                                    len ,
-					                //optional key and its len
-					                NULL ,
-                                    0 ,
-					                //message opaque, provided in
-					                //delivery report callback as
-					                //msg_opaque
-					                NULL ) == -1 )
-              {
-				fprintf( stderr ,
-					     "%% Failed to produce to topic %s "
-				       	 "partition %i: %s\n",
-					     rd_kafka_topic_name( kc->topic_ptr ) ,
-                         kc->partition ,
-					     rd_kafka_err2str( rd_kafka_errno2err( errno ) ) );
+                             //poll to handle delivery reports
+                             rd_kafka_poll( kc->kafka_ptr  , 0 );
 
-				         //poll to handle delivery reports
- 				         rd_kafka_poll( kc->kafka_ptr  , 0 );
+                             continue;
+                 }
 
-                         continue;
-			 }
+                 fprintf( stderr ,
+                          "%% sent %zd bytes to topic " \
+                          "%s partition %i\n",
+                          len ,
+                          rd_kafka_topic_name( kc->topic_ptr ) ,
+                          kc->partition );
+                 sendcnt++;
+                 //poll to handle delivery reports
+                 rd_kafka_poll( kc->kafka_ptr , 0 );
 
-             fprintf( stderr ,
-                      "%% sent %zd bytes to topic " \
-				  	  "%s partition %i\n",
-				      len ,
-                      rd_kafka_topic_name( kc->topic_ptr ) ,
-                      kc->partition );
-			 sendcnt++;
-			 //poll to handle delivery reports
-			 rd_kafka_poll( kc->kafka_ptr , 0 );
+        }
 
-    }
+        //wait for messages to be delivered
+        while( kc->is_running && rd_kafka_outq_len( kc->kafka_ptr ) > 0 )
+        { rd_kafka_poll( kc->kafka_ptr , 100 ); }
 
-    //wait for messages to be delivered
-    while( kc->is_running && rd_kafka_outq_len( kc->kafka_ptr ) > 0 )
-    { rd_kafka_poll( kc->kafka_ptr , 100 ); }
-
-    //destroy topic
-    if( kc->topic_ptr )
-    {
-        fclose( stdin );
-        rd_kafka_topic_destroy( kc->topic_ptr );
-        kc->topic_ptr = NULL;
-    }
-    //destroy the handle
-    if( kc->kafka_ptr )
-    {
-        rd_kafka_destroy( kc->kafka_ptr );
-        kc->kafka_ptr = NULL;
-    }
-    _L( "topics and context deleted...."  , "%s\n" );
+        //destroy topic
+        if( kc->topic_ptr )
+        {
+            fclose( stdin );
+            rd_kafka_topic_destroy( kc->topic_ptr );
+            kc->topic_ptr = NULL;
+        }
+        //destroy the handle
+        if( kc->kafka_ptr )
+        {
+            rd_kafka_destroy( kc->kafka_ptr );
+            kc->kafka_ptr = NULL;
+        }
+        _L( "topics and context deleted...."  , "%s\n" );
 
 
 }
@@ -811,120 +858,120 @@ void ex_parte_producer( kafka_context_ptr kc  )
 //------------------------------------------------------------------------
 void ex_parte_consumer(  kafka_context_ptr kc )
 {
-   //init
-    assert( kc  );
+       //init
+        assert( kc  );
 
-    char errstr[512];
-    int wait_eof = 0;
-    int err;
+        char errstr[512];
+        int wait_eof = 0;
+        int err;
 
-    cci_kf_consumer_preamble( kc );
-    assert( kc->kafka_ptr );
+        cci_kf_consumer_preamble( kc );
+        assert( kc->kafka_ptr );
 
-    //set metadata
-    if ( rd_kafka_brokers_add( kc->kafka_ptr , kc->brokers ) == 0 )
-    {
-                _L( "could not instantiate brokers...." , "%s\n" );
-                _L( "" , "%s" );
-                fprintf( stderr, "%%\%s\n" , errstr );
+        //set metadata
+        if ( rd_kafka_brokers_add( kc->kafka_ptr , kc->brokers ) == 0 )
+        {
+                    _L( "could not instantiate brokers...." , "%s\n" );
+                    _L( "" , "%s" );
+                    fprintf( stderr, "%%\%s\n" , errstr );
 
-                exit( 1 );
-    }
-    _L( "configured brokers...." , "%s\n" );
+                    exit( 1 );
+        }
+        _L( "configured brokers...." , "%s\n" );
 
-    //group description
-    _L( "" , "%s" );
-     describe_groups( kc->kafka_ptr , kc->group_id );
+        //group description
+        _L( "" , "%s" );
+         describe_groups( kc->kafka_ptr , kc->group_id );
 
-    //redirect polling
-    rd_kafka_poll_set_consumer( kc->kafka_ptr );
+        //redirect polling
+        rd_kafka_poll_set_consumer( kc->kafka_ptr );
 
-    kc->partitions_ptr = rd_kafka_topic_partition_list_new( 10 );
-    _L( "servicing topic partition distribution...." , "%s\n" );
+        kc->partitions_ptr = rd_kafka_topic_partition_list_new( 10 );
+        _L( "servicing topic partition distribution...." , "%s\n" );
 
-    int is_subscription = process_partition_list( &kc->partitions_ptr  ,
-                                                  kc->topic_str ,
-                                                  &wait_eof );
+        int is_subscription = process_partition_list( &kc->partitions_ptr  ,
+                                                      kc->topic_str ,
+                                                      &wait_eof );
 
-    //subscribe
-    if ( is_subscription )
-    {
-                _L( "" , "%s" );
-                fprintf( stderr, "%% subscribing to %d topics....\n",
-                        kc->partitions_ptr->cnt );
+        //subscribe
+        if ( is_subscription )
+        {
+                    _L( "" , "%s" );
+                    fprintf( stderr, "%% subscribing to %d topics....\n",
+                            kc->partitions_ptr->cnt );
 
-                if ( ( err = rd_kafka_subscribe( kc->kafka_ptr , kc->partitions_ptr ) ) )
-                {
-                        _L( "" , "%s" );
-                        fprintf( stderr,
-                                "%% failed to start consuming topics: %s\n",
+                    if ( ( err = rd_kafka_subscribe( kc->kafka_ptr , kc->partitions_ptr ) ) )
+                    {
+                            _L( "" , "%s" );
+                            fprintf( stderr,
+                                    "%% failed to start consuming topics: %s\n",
+                                    rd_kafka_err2str( err ) );
+                            exit( 1 );
+                    }
+                    _L( "subscribed...." , "%s\n" );
+        }
+        else
+        {
+                    //assign partitions
+                    _L( "" , "%s" );
+                    fprintf( stderr , "%% assigning %d partitions\n" ,
+                                       kc->partitions_ptr->cnt );
+
+                    if ( ( err = rd_kafka_assign( kc->kafka_ptr , kc->partitions_ptr ) ) )
+                    {
+                            _L( "" , "%s" );
+                            fprintf( stderr,
+                                    "%% failed to assign partitions: %s\n",
+                                    rd_kafka_err2str( err ) );
+                    }
+        }
+
+        //consume messages
+        kc->is_running = 1;
+        while ( kc->is_running ==  1 )
+        {
+                    message_k_ptr message_ptr;
+
+                    message_ptr = rd_kafka_consumer_poll( kc->kafka_ptr , 1000 );
+                    if ( message_ptr )
+                    {
+                            cci_kf_msg_consume( kc , message_ptr , NULL );
+
+                            rd_kafka_message_destroy( message_ptr );
+                    }
+                    else {  continue; }
+        }
+
+
+        //close
+
+        err = rd_kafka_consumer_close( kc->kafka_ptr );
+        if ( err )
+        {
+              _L( "" , "%s\n" );
+              fprintf (stderr ,
+                       "%% failed to close consumer: %s\n",
                                 rd_kafka_err2str( err ) );
-                        exit( 1 );
-                }
-                _L( "subscribed...." , "%s\n" );
-    }
-    else
-    {
-                //assign partitions
-                _L( "" , "%s" );
-                fprintf( stderr , "%% assigning %d partitions\n" ,
-                                   kc->partitions_ptr->cnt );
+        }
+        else
+        {
+              rd_kafka_dump( stderr , kc->kafka_ptr );
 
-                if ( ( err = rd_kafka_assign( kc->kafka_ptr , kc->partitions_ptr ) ) )
-                {
-                        _L( "" , "%s" );
-                        fprintf( stderr,
-                                "%% failed to assign partitions: %s\n",
-                                rd_kafka_err2str( err ) );
-                }
-    }
+              fprintf( stderr, "%% consumer closed..............\n");
+              //destory partitions
+              rd_kafka_topic_partition_list_destroy( kc->partitions_ptr );
+              //destroy topic
+              rd_kafka_topic_destroy( kc->topic_ptr );
+              //destroy handle
+              rd_kafka_destroy(  kc->kafka_ptr );
 
-    //consume messages
-    kc->is_running = 1;
-    while ( kc->is_running ==  1 )
-    {
-                message_k_ptr message_ptr;
-
-                message_ptr = rd_kafka_consumer_poll( kc->kafka_ptr , 1000 );
-                if ( message_ptr )
-                {
-                      	cci_kf_msg_consume( kc , message_ptr , NULL );
-
-                        rd_kafka_message_destroy( message_ptr );
-                }
-                else {  continue; }
-    }
-
-
-    //close
-
-    err = rd_kafka_consumer_close( kc->kafka_ptr );
-    if ( err )
-    {
-          _L( "" , "%s\n" );
-          fprintf (stderr ,
-                   "%% failed to close consumer: %s\n",
-                            rd_kafka_err2str( err ) );
-    }
-    else
-    {
-          rd_kafka_dump( stderr , kc->kafka_ptr );
-
-          fprintf( stderr, "%% consumer closed..............\n");
-          //destory partitions
-          rd_kafka_topic_partition_list_destroy( kc->partitions_ptr );
-          //destroy topic
-          rd_kafka_topic_destroy( kc->topic_ptr );
-          //destroy handle
-          rd_kafka_destroy(  kc->kafka_ptr );
-
-          int run = 5;
-          while ( run-- > 0 && rd_kafka_wait_destroyed( 1000 ) == -1 )
-          {
-            _L( "waiting for librdkafka to decommission...." ,  "%s\n" );
-          }
-	      if ( run <= 0 ) { rd_kafka_dump( stderr , kc->kafka_ptr ); }
-    }
+              int run = 5;
+              while ( run-- > 0 && rd_kafka_wait_destroyed( 1000 ) == -1 )
+              {
+                _L( "waiting for librdkafka to decommission...." ,  "%s\n" );
+              }
+              if ( run <= 0 ) { rd_kafka_dump( stderr , kc->kafka_ptr ); }
+        }
 
 }
 
@@ -1175,6 +1222,7 @@ void configuration_dump( kafka_context_ptr kc )
 
         _L( "dumping configuration...." , "%s\n" );
         assert( kc->conf_ptr );
+
 		for ( pass = 0 ; pass < 2 ; pass++ )
         {
 			if ( pass ==  0 )
@@ -1201,7 +1249,6 @@ void configuration_dump( kafka_context_ptr kc )
 
 			rd_kafka_conf_dump_free( arr , cnt );
 		}
-
 
 }
 

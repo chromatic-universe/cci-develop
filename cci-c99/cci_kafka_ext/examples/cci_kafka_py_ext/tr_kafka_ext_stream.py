@@ -11,6 +11,9 @@ import signal
 import cci_rdkafka_py as rdkafka
 import _cci_rdkafka_py
 
+import cci_kafka_async_q as kafka_q
+from time import sleep
+
 log_format = '%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s'
 
 
@@ -35,6 +38,7 @@ logger.addHandler( fh )
 logger.addHandler( ch )
 
 gkc = None
+default_url = "tcp://127.0.0.1:7083";
 
 
 def deactivate( sig ) :
@@ -76,7 +80,7 @@ if __name__ == "__main__"  :
 			kc.topic_str = 'king-console-cci-maelstrom'
 			logger.info( '...topic is %s' % kc.topic_str )
 
-			kc.brokers = 'cci-aws-1:9092'
+			kc.brokers = 'localhost:9092'
 			logger.info( '...brokers => %s' % kc.brokers )
 
 			kc.group_id = 'cci-group'
@@ -87,7 +91,7 @@ if __name__ == "__main__"  :
 			kc.partition = 0
 			kc.debug_flags = None
 			kc.dump_config = 1
-			kc.is_running = 0
+			kc.is_running = 1
 			kc.exit_eof = 0
 			kc.wait_eof = 0
 			# kc.start_offset = 0
@@ -98,11 +102,12 @@ if __name__ == "__main__"  :
 			gkc = kc
 
 			# handlers
-			#logger.info( '...ex_parte_producer...' )
-			#rdkafka.ex_parte_producer( kc )
+			rdkafka.cci_kf_production_preamble( kc )
+			msg = 'the original corny snaps is back'
 
-			logger.info( '...ex_parte_consumer...' )
-			rdkafka.ex_parte_consumer( kc )
+			rdkafka.ex_parte_atomic_production( kc , msg , len( msg ) )
+			sleep( 3 )
+
 
 
 
