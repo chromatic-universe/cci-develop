@@ -3602,6 +3602,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_kafka_context_metadata_ptr_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct kafka_context *arg1 = (struct kafka_context *) 0 ;
+  metadata_ptr_k arg2 = (metadata_ptr_k) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:kafka_context_metadata_ptr_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_kafka_context, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "kafka_context_metadata_ptr_set" "', argument " "1"" of type '" "struct kafka_context *""'"); 
+  }
+  arg1 = (struct kafka_context *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_rd_kafka_metadata, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "kafka_context_metadata_ptr_set" "', argument " "2"" of type '" "metadata_ptr_k""'"); 
+  }
+  arg2 = (metadata_ptr_k)(argp2);
+  if (arg1) (arg1)->metadata_ptr = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_kafka_context_metadata_ptr_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct kafka_context *arg1 = (struct kafka_context *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  metadata_ptr_k result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:kafka_context_metadata_ptr_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_kafka_context, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "kafka_context_metadata_ptr_get" "', argument " "1"" of type '" "struct kafka_context *""'"); 
+  }
+  arg1 = (struct kafka_context *)(argp1);
+  result = (metadata_ptr_k) ((arg1)->metadata_ptr);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_rd_kafka_metadata, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_kafka_context_brokers_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   struct kafka_context *arg1 = (struct kafka_context *) 0 ;
@@ -4362,6 +4414,67 @@ SWIGINTERN PyObject *_wrap_kafka_context_argv_get(PyObject *SWIGUNUSEDPARM(self)
   arg1 = (struct kafka_context *)(argp1);
   result = (char **) ((arg1)->argv);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_p_char, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_kafka_context_result_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct kafka_context *arg1 = (struct kafka_context *) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:kafka_context_result_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_kafka_context, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "kafka_context_result_set" "', argument " "1"" of type '" "struct kafka_context *""'"); 
+  }
+  arg1 = (struct kafka_context *)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "kafka_context_result_set" "', argument " "2"" of type '" "char *""'");
+  }
+  arg2 = (char *)(buf2);
+  if (arg1->result) free((char*)arg1->result);
+  if (arg2) {
+    size_t size = strlen((const char *)(arg2)) + 1;
+    arg1->result = (char *)(char *)memcpy((char *)malloc((size)*sizeof(char)), (const char *)(arg2), sizeof(char)*(size));
+  } else {
+    arg1->result = 0;
+  }
+  resultobj = SWIG_Py_Void();
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_kafka_context_result_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct kafka_context *arg1 = (struct kafka_context *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:kafka_context_result_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_kafka_context, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "kafka_context_result_get" "', argument " "1"" of type '" "struct kafka_context *""'"); 
+  }
+  arg1 = (struct kafka_context *)(argp1);
+  result = (char *) ((arg1)->result);
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -5242,33 +5355,33 @@ fail:
 
 SWIGINTERN PyObject *_wrap_cci_kf_metadata_print(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  char *arg1 = (char *) 0 ;
-  struct rd_kafka_metadata *arg2 = (struct rd_kafka_metadata *) 0 ;
-  int res1 ;
-  char *buf1 = 0 ;
-  int alloc1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  kafka_context_ptr arg1 = (kafka_context_ptr) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:cci_kf_metadata_print",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_kafka_context, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cci_kf_metadata_print" "', argument " "1"" of type '" "char const *""'");
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cci_kf_metadata_print" "', argument " "1"" of type '" "kafka_context_ptr""'"); 
   }
-  arg1 = (char *)(buf1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_rd_kafka_metadata, 0 |  0 );
+  arg1 = (kafka_context_ptr)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cci_kf_metadata_print" "', argument " "2"" of type '" "struct rd_kafka_metadata const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cci_kf_metadata_print" "', argument " "2"" of type '" "char const *""'");
   }
-  arg2 = (struct rd_kafka_metadata *)(argp2);
-  cci_kf_metadata_print((char const *)arg1,(struct rd_kafka_metadata const *)arg2);
+  arg2 = (char *)(buf2);
+  cci_kf_metadata_print(arg1,(char const *)arg2);
   resultobj = SWIG_Py_Void();
-  if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return resultobj;
 fail:
-  if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return NULL;
 }
 
@@ -5523,6 +5636,27 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_cci_kf_retr_topics(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  kafka_context_ptr arg1 = (kafka_context_ptr) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:cci_kf_retr_topics",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_kafka_context, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cci_kf_retr_topics" "', argument " "1"" of type '" "kafka_context_ptr""'"); 
+  }
+  arg1 = (kafka_context_ptr)(argp1);
+  cci_kf_retr_topics(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_print_args(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char **arg1 = (char **) 0 ;
@@ -5576,6 +5710,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"kafka_context_conf_topic_ptr_get", _wrap_kafka_context_conf_topic_ptr_get, METH_VARARGS, NULL},
 	 { (char *)"kafka_context_topic_ptr_set", _wrap_kafka_context_topic_ptr_set, METH_VARARGS, NULL},
 	 { (char *)"kafka_context_topic_ptr_get", _wrap_kafka_context_topic_ptr_get, METH_VARARGS, NULL},
+	 { (char *)"kafka_context_metadata_ptr_set", _wrap_kafka_context_metadata_ptr_set, METH_VARARGS, NULL},
+	 { (char *)"kafka_context_metadata_ptr_get", _wrap_kafka_context_metadata_ptr_get, METH_VARARGS, NULL},
 	 { (char *)"kafka_context_brokers_set", _wrap_kafka_context_brokers_set, METH_VARARGS, NULL},
 	 { (char *)"kafka_context_brokers_get", _wrap_kafka_context_brokers_get, METH_VARARGS, NULL},
 	 { (char *)"kafka_context_topic_str_set", _wrap_kafka_context_topic_str_set, METH_VARARGS, NULL},
@@ -5604,6 +5740,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"kafka_context_argc_get", _wrap_kafka_context_argc_get, METH_VARARGS, NULL},
 	 { (char *)"kafka_context_argv_set", _wrap_kafka_context_argv_set, METH_VARARGS, NULL},
 	 { (char *)"kafka_context_argv_get", _wrap_kafka_context_argv_get, METH_VARARGS, NULL},
+	 { (char *)"kafka_context_result_set", _wrap_kafka_context_result_set, METH_VARARGS, NULL},
+	 { (char *)"kafka_context_result_get", _wrap_kafka_context_result_get, METH_VARARGS, NULL},
 	 { (char *)"kafka_context_cci_production_preamble_set", _wrap_kafka_context_cci_production_preamble_set, METH_VARARGS, NULL},
 	 { (char *)"kafka_context_cci_production_preamble_get", _wrap_kafka_context_cci_production_preamble_get, METH_VARARGS, NULL},
 	 { (char *)"kafka_context_cci_consumer_preamble_set", _wrap_kafka_context_cci_consumer_preamble_set, METH_VARARGS, NULL},
@@ -5647,6 +5785,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ex_parte_consumer", _wrap_ex_parte_consumer, METH_VARARGS, NULL},
 	 { (char *)"ex_parte_atomic_production", _wrap_ex_parte_atomic_production, METH_VARARGS, NULL},
 	 { (char *)"configuration_dump", _wrap_configuration_dump, METH_VARARGS, NULL},
+	 { (char *)"cci_kf_retr_topics", _wrap_cci_kf_retr_topics, METH_VARARGS, NULL},
 	 { (char *)"print_args", _wrap_print_args, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
@@ -5669,7 +5808,7 @@ static swig_type_info _swigt__p_kafka_context = {"_p_kafka_context", "struct kaf
 static swig_type_info _swigt__p_p_char = {"_p_p_char", "char **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_rd_kafka_conf_t = {"_p_rd_kafka_conf_t", "conf_k_ptr|rd_kafka_conf_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_rd_kafka_message_t = {"_p_rd_kafka_message_t", "message_ptr_k|rd_kafka_message_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_rd_kafka_metadata = {"_p_rd_kafka_metadata", "struct rd_kafka_metadata *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_rd_kafka_metadata = {"_p_rd_kafka_metadata", "struct rd_kafka_metadata *|metadata_ptr_k", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_rd_kafka_resp_err_t = {"_p_rd_kafka_resp_err_t", "rd_kafka_resp_err_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_rd_kafka_t = {"_p_rd_kafka_t", "handle_k_ptr|rd_kafka_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_rd_kafka_topic_conf_t = {"_p_rd_kafka_topic_conf_t", "topic_conf_k_ptr|rd_kafka_topic_conf_t *", 0, 0, (void*)0, 0};

@@ -9,12 +9,53 @@ int process_partition_list( partition_list_ptr* partitions  ,
 
 int main( int argc , char* argv[] )
 {
-        const char* tp = "greasy blase:0 foobar:1 ants-in-pants";
-        partition_list_ptr plp = rd_kafka_topic_partition_list_new( 10 );
 
-        int wt = 0;
+        kafka_context kc =
+        {
+              ///attributes
+              //
+              //lib context
+              .kafka_ptr = NULL ,
+              //config
+              .conf_ptr = NULL ,
+              //topic config
+              .conf_topic_ptr = NULL ,
+              //topic string
+              .topic_str = "king-console-cci-maelstrom" ,
+              //topic context
+              .topic_ptr = NULL ,
+              //default brokers
+              .brokers = "localhost:9092" ,
+              //group id
+              .group_id = "cci-group" ,
+              //partitions
+              .partitions_ptr = NULL ,
+              //random /partitioner
+              .partition = 0 , //RD_KAFKA_PARTITION_UA ,
+              //devug flags
+              .debug_flags = NULL ,
+              //dumb config
+              .dump_config = 1 ,
+              //running
+              .is_running = 0 ,
+              //eof - false
+              .exit_eof = 0 ,
+              //partition wait eof
+              .wait_eof = 0 ,
+              //queue offset )
+              .start_offset = 0 ,
+              //default mode consumer
+              .mode = 0 ,
+              //command line
+              .argc = argc ,
+              .argv = argv
+        };
 
-        process_partition_list( &plp , tp  , &wt );
+        cci_kf_production_preamble( &kc );
+        cci_kf_retr_topics( &kc );
+
+        fprintf( stderr , "hosts: %s\n" , kc.result );
+
 
         return 0;
 }

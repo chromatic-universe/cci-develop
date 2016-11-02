@@ -16,15 +16,23 @@ ScreenManager:
                 id: remote_accordion
                 GridLayout:
                     cols: 1
+                    id: image_layout
                     orientation: 'horizontal'
                     ScrollView:
                         effect_cls: ScrollEffect
                         FocusImage:
                             id: desktop
+                            allow_stretch: True
                             nocache: True
-                            source: 'remote.png'
+                            source: './img/rainbow_wave.png'
                             on_touch_down: app.send_click(args[1])
-                            size: self.texture_size
+                            #size: self.texture_size
+                            size_hint: (None, None)
+                            keep_ratio: True
+                            size_hint_y: None
+                            size_hint_x: None
+                            width: self.parent.width
+                            height: self.parent.width/self.image_ratio
                             size_hint: (None, None)
                     GridLayout:
                         cols: 3

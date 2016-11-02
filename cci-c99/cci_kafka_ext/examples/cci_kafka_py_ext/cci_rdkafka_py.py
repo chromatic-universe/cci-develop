@@ -89,6 +89,9 @@ class kafka_context(_object):
     __swig_setmethods__["topic_ptr"] = _cci_rdkafka_py.kafka_context_topic_ptr_set
     __swig_getmethods__["topic_ptr"] = _cci_rdkafka_py.kafka_context_topic_ptr_get
     if _newclass:topic_ptr = _swig_property(_cci_rdkafka_py.kafka_context_topic_ptr_get, _cci_rdkafka_py.kafka_context_topic_ptr_set)
+    __swig_setmethods__["metadata_ptr"] = _cci_rdkafka_py.kafka_context_metadata_ptr_set
+    __swig_getmethods__["metadata_ptr"] = _cci_rdkafka_py.kafka_context_metadata_ptr_get
+    if _newclass:metadata_ptr = _swig_property(_cci_rdkafka_py.kafka_context_metadata_ptr_get, _cci_rdkafka_py.kafka_context_metadata_ptr_set)
     __swig_setmethods__["brokers"] = _cci_rdkafka_py.kafka_context_brokers_set
     __swig_getmethods__["brokers"] = _cci_rdkafka_py.kafka_context_brokers_get
     if _newclass:brokers = _swig_property(_cci_rdkafka_py.kafka_context_brokers_get, _cci_rdkafka_py.kafka_context_brokers_set)
@@ -131,6 +134,9 @@ class kafka_context(_object):
     __swig_setmethods__["argv"] = _cci_rdkafka_py.kafka_context_argv_set
     __swig_getmethods__["argv"] = _cci_rdkafka_py.kafka_context_argv_get
     if _newclass:argv = _swig_property(_cci_rdkafka_py.kafka_context_argv_get, _cci_rdkafka_py.kafka_context_argv_set)
+    __swig_setmethods__["result"] = _cci_rdkafka_py.kafka_context_result_set
+    __swig_getmethods__["result"] = _cci_rdkafka_py.kafka_context_result_get
+    if _newclass:result = _swig_property(_cci_rdkafka_py.kafka_context_result_get, _cci_rdkafka_py.kafka_context_result_set)
     __swig_setmethods__["cci_production_preamble"] = _cci_rdkafka_py.kafka_context_cci_production_preamble_set
     __swig_getmethods__["cci_production_preamble"] = _cci_rdkafka_py.kafka_context_cci_production_preamble_get
     if _newclass:cci_production_preamble = _swig_property(_cci_rdkafka_py.kafka_context_cci_production_preamble_get, _cci_rdkafka_py.kafka_context_cci_production_preamble_set)
@@ -241,6 +247,10 @@ ex_parte_atomic_production = _cci_rdkafka_py.ex_parte_atomic_production
 def configuration_dump(*args):
   return _cci_rdkafka_py.configuration_dump(*args)
 configuration_dump = _cci_rdkafka_py.configuration_dump
+
+def cci_kf_retr_topics(*args):
+  return _cci_rdkafka_py.cci_kf_retr_topics(*args)
+cci_kf_retr_topics = _cci_rdkafka_py.cci_kf_retr_topics
 
 def print_args(*args):
   return _cci_rdkafka_py.print_args(*args)

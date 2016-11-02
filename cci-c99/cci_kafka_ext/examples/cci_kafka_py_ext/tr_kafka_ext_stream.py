@@ -80,7 +80,7 @@ if __name__ == "__main__"  :
 			kc.topic_str = 'king-console-cci-maelstrom'
 			logger.info( '...topic is %s' % kc.topic_str )
 
-			kc.brokers = 'localhost:9092'
+			kc.brokers = 'cci-aws-1:9092'
 			logger.info( '...brokers => %s' % kc.brokers )
 
 			kc.group_id = 'cci-group'
@@ -104,8 +104,9 @@ if __name__ == "__main__"  :
 			# handlers
 			rdkafka.cci_kf_production_preamble( kc )
 			msg = 'the original corny snaps is back'
-
-			rdkafka.ex_parte_atomic_production( kc , msg , len( msg ) )
+                        
+                        rdkafka.cci_kf_retr_topics( kc )
+                        print( kc.result.split( ',' ) )
 			sleep( 3 )
 
 

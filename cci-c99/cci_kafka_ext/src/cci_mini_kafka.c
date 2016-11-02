@@ -1,4 +1,4 @@
-//cci_mini_kafka.c william k. johnson 2015
+//cci_mini_kafka.c william k. johnson 2016
 
 #include <cci_mini_kafka.h>
 
@@ -16,6 +16,14 @@ static void deactivate( int sig )
     fclose( stdin );
     //halt kafka
     gkc->is_running = 0;
+}
+
+
+#define cci_asprintf(write_to, ...)           \
+{                                             \
+    char *tmp_string_for_extend = (write_to); \
+    asprintf(&(write_to), __VA_ARGS__);       \
+    free(tmp_string_for_extend);              \
 }
 
 //locals
@@ -242,9 +250,49 @@ void cci_kf_hex_dump( file_ptr fp ,
 }
 
 //------------------------------------------------------------------------
-void cci_kf_metadata_print ( const char *topic ,  const struct rd_kafka_metadata *metadata  )
+void cci_kf_retr_topics( kafka_context_ptr kc )
+{
+     assert( kc );
+
+     rd_kafka_resp_err_t err;;
+
+
+     err = rd_kafka_metadata( kc->kafka_ptr ,
+                              1 ,
+                              NULL ,
+                              &kc->metadata_ptr ,
+                              5000 );
+      if ( err != RD_KAFKA_RESP_ERR_NO_ERROR )
+      {
+            fprintf(stderr,
+            "%% failed to acquire metadata: %s\n",
+           rd_kafka_err2str( err ) );
+
+            return;
+      }
+
+      char* q = NULL;
+      for( int i = 0; i < kc->metadata_ptr->topic_cnt; i++ )
+      {
+            const metadata_topic_ptr_k t = &kc->metadata_ptr->topics[i];
+            if( q == NULL  )
+            {  cci_asprintf( q , "%s" , t->topic ); }
+            else { cci_asprintf( q , "%s,%s" , q , t->topic  ); }
+      }
+
+      kc->result = q;
+
+}
+
+
+//------------------------------------------------------------------------
+void cci_kf_metadata_print ( kafka_context_ptr kc , const char *topic  )
 {
      int i, j, k;
+
+
+     assert( kc->metadata_ptr );
+     metadata_ptr_k metadata = kc->metadata_ptr;
 
      printf( "\033[22;34mmetadata for %s (from broker %"PRId32": %s):\n" ,
               topic ? : "all topics" ,
@@ -611,7 +659,11 @@ void cci_kf_production_preamble( kafka_context_ptr kc )
      metadata_set( kc );
     _L( "broker and topic metadata configured...." , "%s\n" );
 
-    rd_kafka_dump( stderr , kc->kafka_ptr );
+    if( kc->dump_config )
+    {
+        rd_kafka_dump( stderr , kc->kafka_ptr );
+        cci_kf_metadata_print( kc , kc->topic_str );
+    }
 
 }
 
@@ -1102,6 +1154,7 @@ void metadata_set( kafka_context_ptr kc )
     assert( kc );
     assert( kc->kafka_ptr );
     assert( kc->brokers );
+    int err;
 
     //add brokers
 	if( rd_kafka_brokers_add( kc->kafka_ptr ,
@@ -1120,6 +1173,19 @@ void metadata_set( kafka_context_ptr kc )
 		_L( "invalid topic specified....." , "%s" );
 		exit( 1 );
 	}
+
+     err = rd_kafka_metadata( kc->kafka_ptr ,
+                              1 ,
+                              NULL ,
+                              &kc->metadata_ptr ,
+                              5000 );
+      if ( err != RD_KAFKA_RESP_ERR_NO_ERROR )
+      {
+            fprintf(stderr,
+            "%% failed to acquire metadata: %s\n",
+           rd_kafka_err2str(err));
+      }
+
 
 }
 

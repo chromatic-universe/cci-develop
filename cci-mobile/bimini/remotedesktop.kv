@@ -49,6 +49,12 @@ ScreenManager:
             Image:
                 id: desktop
                 nocache: True
+                allow_stretch: True
                 on_touch_down: app.send_click(args[1])
-                size: self.texture_size
+                #size: self.texture_size
+                keep_ratio: True
+                size_hint_y: None
+                size_hint_x: None
+                width: self.parent.width
+                height: self.parent.width/self.image_ratio
                 size_hint: (None, None)

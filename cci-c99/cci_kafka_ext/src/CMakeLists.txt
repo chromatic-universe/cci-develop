@@ -29,7 +29,7 @@ set_target_properties(_cci_rdkafka_py PROPERTIES PREFIX "")
 
 #binaries
 #python extension module test
-add_executable(cci_ext_k  test.c)
+add_executable(cci_ext_k  test.c cci_mini_kafka.c)
 #sink q
 add_executable(cci_kafka_sink  cci_kafka_sink.c
                                cci_kafka_async_q.c
@@ -44,7 +44,7 @@ add_executable(cci_kafka_source  cci_kafka_q_dispatch.c
 
 #link libs
 target_link_libraries(_cci_rdkafka_py -lrdkafka -lnanomsg)
-target_link_libraries(cci_ext_k -lrdkafka -lnanomsg)
+target_link_libraries(cci_ext_k -lrdkafka)
 target_link_libraries(cci_kafka_sink -lrdkafka -lnanomsg)
 target_link_libraries(cci_kafka_source -lrdkafka -lnanomsg)
 

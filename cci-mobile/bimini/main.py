@@ -147,7 +147,7 @@ def win_cb( window, width, height):
 # ------------------------------------------------------------------------------------------------
 class biminiApp( App ) :
 				"""
-				urnack
+				bimini
 				"""
 
 
@@ -218,7 +218,7 @@ class biminiApp( App ) :
 					"""
 
 					self.root.current = 'desktop'
-					self.root.ids.desktop.source = 'remote_2.png'
+					self.root.ids.desktop.source =  './img/rainbow_wave.png'
 
 
 					from kivy.core.window import Window
@@ -275,6 +275,7 @@ class biminiApp( App ) :
 												 'remote console' )
 
 						except Exception as e :
+							self.root.ids.desktop.source =  './img/rainbow_wave.png'
 							self._logger.error( e )
 							self.root.ids.console_interface.text += '%s   ....could not connect to %s->%s\n' % \
 																	( timestamp() ,self.root.ids.server.text , e.message )
@@ -285,6 +286,8 @@ class biminiApp( App ) :
 							popup.open()
 							self.root.ids.maelstrom_carousel_id.index = 0
 							self.move_to_accordion_item( self.root.ids.cci_bimini_accordion , 'cci-bimini' )
+
+
 
 
 
@@ -337,6 +340,8 @@ class biminiApp( App ) :
 
 
 					try :
+						desktop.allow_stretch = True
+						f = desktop.parent
 						if desktop.image.texture:
 							self.root.ids.desktop.texture = \
 								desktop.image.texture
@@ -468,7 +473,7 @@ class biminiApp( App ) :
 					"""
 
 					for child in acc.children :
-						if child.title == tag :
+						if child.title.find( tag ) != -1 :
 							child.collapse = False
 							child.canvas.ask_update()
 
@@ -520,18 +525,19 @@ class biminiApp( App ) :
 
 # --------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
+                
 
 				Config.set('graphics','resizable',0 )
 
 
-				Config.set( 'graphics', 'width', '480' )
-				Config.set( 'graphics', 'height', '800' )
-				Config.set( 'input', 'mouse', 'mouse,disable_multitouch' )
+				#Config.set( 'graphics', 'width', '480' )
+				#Config.set( 'graphics', 'height', '800' )
+				#Config.set( 'input', 'mouse', 'mouse,disable_multitouch' )
 
 
 				#from kivy.core.window import Window
 
-				Window.size = ( 480 , 800 )
+				#Window.size = ( 480 , 800 )
 
 
 				#Window.clearcolor = get_color_from_hex('#95a5a6')

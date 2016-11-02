@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stddef.h>
+#include <stdarg.h>
 #include <assert.h>
 #include <errno.h>
 #include <string.h>
@@ -41,7 +42,7 @@ static  enum {
 //types
 typedef FILE* file_ptr;
 typedef rd_kafka_message_t*                     message_ptr_k;
-typedef struct rd_kafka_metadata*               metadata_ptr_k;
+typedef const struct rd_kafka_metadata*               metadata_ptr_k;
 typedef struct rd_kafka_metadata_topic*         metadata_topic_ptr_k;
 typedef struct rd_kafka_metadata_partition*     metadata_partition_ptr_k;
 typedef rd_kafka_topic_t*                       topic_ptr_k;
@@ -61,6 +62,7 @@ typedef struct kafka_context
     conf_k_ptr         conf_ptr;
     topic_conf_k_ptr   conf_topic_ptr;
     topic_ptr_k        topic_ptr;
+    metadata_ptr_k     metadata_ptr;
     ///attributes
     //brokers
     const char*        brokers;
@@ -89,6 +91,8 @@ typedef struct kafka_context
     //commmand line
     int                argc;
     char**             argv;
+    //result
+    char*              result;
     ///services
     //ctors
     void               ( *cci_production_preamble ) ( struct kafka_context* kc );
@@ -163,8 +167,7 @@ extern void cci_kf_consumer_preamble( kafka_context_ptr kc );
 extern void cci_kf_hex_dump( file_ptr fp, const char *name, const void_ptr ptr , size_t len );
 //------------------------------------------------------------------------
 //metadata print
-extern void cci_kf_metadata_print (  const char *topic ,
-                                     const struct rd_kafka_metadata *metadata );
+extern void cci_kf_metadata_print (  kafka_context_ptr kc , const char *topic  );
 //------------------------------------------------------------------------
 //mini run
 extern void cci_kf_mini_run( kafka_context_ptr kc );
@@ -195,4 +198,7 @@ extern void ex_parte_atomic_production( kafka_context_ptr kc ,
                                         int len );
 //------------------------------------------------------------------------
 extern void configuration_dump( kafka_context_ptr kc );
+//------------------------------------------------------------------------
+extern void cci_kf_retr_topics( kafka_context_ptr kc );
+
 
