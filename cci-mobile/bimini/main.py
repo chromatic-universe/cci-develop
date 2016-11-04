@@ -341,7 +341,6 @@ class biminiApp( App ) :
 
 					try :
 						desktop.allow_stretch = True
-						f = desktop.parent
 						if desktop.image.texture:
 							self.root.ids.desktop.texture = \
 								desktop.image.texture
