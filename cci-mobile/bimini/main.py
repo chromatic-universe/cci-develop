@@ -371,7 +371,7 @@ class biminiApp( App ) :
 
 					try :
 
-						h = self._app_window.size[1]
+						
 						params = {'x': int(event.x),
 								  'y': int(self.root.ids.desktop.size[1] -
 										   event.y)}
