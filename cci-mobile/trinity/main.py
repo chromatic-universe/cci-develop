@@ -207,11 +207,11 @@ class ccitrinityApp( App ) :
 						:return:
 						"""
                                                 
-                                                try :
-                                                    from pyscreenshot import ImageGrab
-                                                    self._logger.info( '...screenshot ok....' )
-                                                except Exception as e :
-                                                    self._logger.error( e.message )
+						try :
+							from pyscreenshot import ImageGrab
+							self._logger.info( '...screenshot ok....' )
+						except Exception as e :
+							self._logger.error( e.message )
 
 
 						self._update_status( self.root.ids.status_text , '...initializing...' )
