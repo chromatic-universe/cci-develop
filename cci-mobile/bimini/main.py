@@ -371,7 +371,7 @@ class biminiApp( App ) :
 
 					try :
 
-
+						
 						params = {'x': int(event.x),
 								  'y': int(self.root.ids.desktop.size[1] -
 										   event.y)}
