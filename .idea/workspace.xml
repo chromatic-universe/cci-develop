@@ -13,7 +13,7 @@
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/buildozer.spec" line="28" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/main.py" line="1160" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/cci_trinity.py" line="194" />
-    <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/main.py" line="599" />
+    <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/main.py" line="600" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/king_console/main.py" line="1006" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/trinity/cci_trinity.py" />
     <bookmark url="file://$PROJECT_DIR$/cci-mobile/urnack/main.py" />
@@ -33,18 +33,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d317596-d6b0-4964-bce8-5885dd045ad9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/zonar_blob_detect/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/zonar_blob_detect/bad_zb_data_exceed_col_file" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/zonar_blob_detect/bad_zb_data_illegal" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/zonar_blob_detect/bad_zb_data_lopsided" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/zonar_blob_detect/readme.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/zonar_blob_detect/zb_data" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/zonar_blob_detect/zbd_test.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-python/zonar_blob_detect/zn_blob_detect.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci-moocher/cci-mooch.py" afterPath="$PROJECT_DIR$/cci-python/cci-moocher/cci-mooch.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cci-mobile-no-qp/trinity/streams/sr_ssh.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/cci_git_1.iml" afterPath="$PROJECT_DIR$/.idea/cci_git_1.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-python/cci/cci_utils/.idea/cci_utils.iml" afterPath="$PROJECT_DIR$/cci-python/cci/cci_utils/.idea/cci_utils.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_utils.py" afterPath="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_utils.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/main.py" afterPath="$PROJECT_DIR$/cci-mobile/trinity/main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile-no-qp/trinity/streams/tr_ssh.py" afterPath="$PROJECT_DIR$/cci-mobile-no-qp/trinity/streams/tr_ssh.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_ssh.py" afterPath="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_ssh.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cci_git_1.iws" />
@@ -77,46 +70,44 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="zn_blob_detect.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/cci-python/zonar_blob_detect/zn_blob_detect.py">
+      <file leaf-file-name="cci-mooch.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cci-python/cci-moocher/cci-mooch.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="6.232877" vertical-offset="0" max-vertical-offset="5122">
-              <caret line="350" column="62" selection-start-line="350" selection-start-column="62" selection-end-line="350" selection-end-column="62" />
-              <folding>
-                <element signature="e#48#57#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="zbd_test.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cci-python/zonar_blob_detect/zbd_test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="39" max-vertical-offset="2756">
-              <caret line="25" column="28" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
-              <folding>
-                <element signature="e#79#88#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="zb_data" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cci-python/zonar_blob_detect/zb_data">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="78" max-vertical-offset="156">
-              <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="5729" max-vertical-offset="6955">
+              <caret line="532" column="0" selection-start-line="516" selection-start-column="0" selection-end-line="532" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="readme.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cci-python/zonar_blob_detect/readme.md">
+      <file leaf-file-name="sshtunnel.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/streams/sshtunnel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="156" max-vertical-offset="390">
-              <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1131" max-vertical-offset="23101">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tr_ssh.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/streams/tr_ssh.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="559">
+              <caret line="23" column="41" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-10.136116" vertical-offset="10915" max-vertical-offset="11466">
+              <caret line="410" column="24" selection-start-line="410" selection-start-column="24" selection-end-line="410" selection-end-column="24" />
+              <folding>
+                <element signature="e#2#12#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -129,8 +120,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_nmap.py" />
-        <option value="$PROJECT_DIR$/cci-mobile/trinity/trinity_cpp.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_kafka_rest.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/templates/kafka_404.html" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/sqlite_404.html" />
@@ -168,8 +157,6 @@
         <option value="$PROJECT_DIR$/cci-mobile/bimini/remotedesktop.kv" />
         <option value="$PROJECT_DIR$/cci-mobile/bimini/bimini.kv" />
         <option value="$PROJECT_DIR$/cci-mobile/bimini/main.py" />
-        <option value="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_ssh.py" />
-        <option value="$PROJECT_DIR$/cci-mobile/trinity/main.py" />
         <option value="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_utils.py" />
         <option value="$PROJECT_DIR$/cci-python/cci-moocher/cci-mooch.py" />
         <option value="$PROJECT_DIR$/cci-python/cci_presents/bad_zb_data" />
@@ -180,6 +167,10 @@
         <option value="$PROJECT_DIR$/cci-python/zonar_blob_detect/zb_data" />
         <option value="$PROJECT_DIR$/cci-python/zonar_blob_detect/zbd_test.py" />
         <option value="$PROJECT_DIR$/cci-python/zonar_blob_detect/readme.md" />
+        <option value="$PROJECT_DIR$/cci-mobile-no-qp/trinity/streams/tr_ssh.py" />
+        <option value="$PROJECT_DIR$/cci-mobile-no-qp/trinity/streams/sr_ssh.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/trinity/streams/tr_ssh.py" />
+        <option value="$PROJECT_DIR$/cci-mobile/trinity/main.py" />
       </list>
     </option>
   </component>
@@ -216,7 +207,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -259,11 +249,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="cci-python" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="zonar_blob_detect" />
+              <option name="myItemId" value="cci-mobile-no-qp" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -277,11 +263,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="cci-python" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cci_presents" />
+              <option name="myItemId" value="cci-mobile" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -295,56 +277,17 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="cci-python" />
+              <option name="myItemId" value="cci-mobile" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="cci-moocher" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cci_git_1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cci_git_1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cci-python" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cci" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cci_git_1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cci_git_1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cci-python" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cci" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cci_mini_elastic" />
+              <option name="myItemId" value="trinity" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -373,11 +316,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/cci-mobile-no-qp/trinity/streams" />
       <recent name="$PROJECT_DIR$/cci-python/zonar_blob_detect" />
       <recent name="$PROJECT_DIR$/cci-mobile/trinity/templates" />
       <recent name="$PROJECT_DIR$/cci-mobile/trinity" />
       <recent name="$PROJECT_DIR$/cci-mobile/trinity/http-tunnel" />
-      <recent name="$PROJECT_DIR$/cci-mobile/trinity/streams" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/cci-python/zonar_blob_detect" />
@@ -387,7 +330,7 @@
       <recent name="$PROJECT_DIR$/cci-mobile/king_console/king_console" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests in zbd_test">
+  <component name="RunManager" selected="Python.main (1)">
     <configuration default="false" name="zbd_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -863,30 +806,30 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1600" height="875" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2397351" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23969072" sideWeight="0.49829933" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25902063" sideWeight="0.49829933" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32806325" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19602649" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28865978" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3271523" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23840207" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1617268" sideWeight="0.4935484" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.15496689" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21262887" sideWeight="0.5017007" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35438144" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34039736" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16344917" sideWeight="0.5064516" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24967907" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32847682" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Concurrent Activities Diagram" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32934928" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35496688" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2397351" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -987,27 +930,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/cci_trinity_async.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.714795" vertical-offset="5450" max-vertical-offset="7059">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/streams/tr_trinity.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1950" max-vertical-offset="3133">
-          <caret line="189" column="12" selection-start-line="189" selection-start-column="12" selection-end-line="189" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python2.7/dist-packages/tornado-4.5.dev1-py2.7-linux-i686.egg/tornado/http1connection.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="8909" max-vertical-offset="9516">
-          <caret line="710" column="0" selection-start-line="710" selection-start-column="0" selection-end-line="710" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/lib/python2.7/dist-packages/tornado-4.5.dev1-py2.7-linux-i686.egg/tornado/tcpserver.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="3196" max-vertical-offset="3731">
@@ -1108,13 +1030,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/streams/sshtunnel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.9876977" vertical-offset="1131" max-vertical-offset="23101">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/kc_thread_manager.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.2056239" vertical-offset="117" max-vertical-offset="975">
@@ -1190,14 +1105,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.734861" vertical-offset="1371" max-vertical-offset="10894">
-          <caret line="277" column="0" selection-start-line="277" selection-start-column="0" selection-end-line="277" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/king_console/cci_mini_mobile.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.0656304" vertical-offset="617" max-vertical-offset="1196">
@@ -1263,13 +1170,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/streams/tr_ssh.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.383821" vertical-offset="24" max-vertical-offset="637">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cci-mobile/king_console/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="4429" max-vertical-offset="15847">
@@ -1289,7 +1189,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.581741" vertical-offset="15638" max-vertical-offset="74009">
           <caret line="1224" column="34" selection-start-line="1224" selection-start-column="0" selection-end-line="1225" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1304,13 +1203,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="6.9002123" vertical-offset="0" max-vertical-offset="3328">
           <caret line="250" column="5" selection-start-line="250" selection-start-column="5" selection-end-line="250" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cci-python/cci-moocher/cci-mooch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="6492" max-vertical-offset="7072">
-          <caret line="532" column="0" selection-start-line="516" selection-start-column="0" selection-end-line="532" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1330,36 +1222,84 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-python/zonar_blob_detect/zb_data">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="156">
+        <state vertical-scroll-proportion="0.10714286" vertical-offset="0" max-vertical-offset="728">
           <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-python/zonar_blob_detect/zbd_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="39" max-vertical-offset="2756">
+        <state vertical-scroll-proportion="0.39285713" vertical-offset="39" max-vertical-offset="2756">
           <caret line="25" column="28" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
-          <folding>
-            <element signature="e#79#88#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-python/zonar_blob_detect/readme.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="390">
+        <state vertical-scroll-proportion="0.21428572" vertical-offset="0" max-vertical-offset="728">
           <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cci-python/zonar_blob_detect/zn_blob_detect.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="6.232877" vertical-offset="0" max-vertical-offset="5122">
-          <caret line="350" column="62" selection-start-line="350" selection-start-column="62" selection-end-line="350" selection-end-column="62" />
+        <state vertical-scroll-proportion="5.785714" vertical-offset="390" max-vertical-offset="5122">
+          <caret line="354" column="26" selection-start-line="354" selection-start-column="26" selection-end-line="354" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile-no-qp/trinity/streams/tr_ssh.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.46679688" vertical-offset="99" max-vertical-offset="611">
+          <caret line="26" column="66" selection-start-line="26" selection-start-column="66" selection-end-line="26" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile-no-qp/trinity/streams/sr_ssh.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5527344" vertical-offset="42" max-vertical-offset="624">
+          <caret line="25" column="16" selection-start-line="25" selection-start-column="16" selection-end-line="25" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-python/cci-moocher/cci-mooch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="5729" max-vertical-offset="6955">
+          <caret line="532" column="0" selection-start-line="516" selection-start-column="0" selection-end-line="532" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/streams/sshtunnel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1131" max-vertical-offset="23101">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/streams/tr_ssh.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="559">
+          <caret line="23" column="41" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python3.4/ntpath.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.13829787" vertical-offset="78" max-vertical-offset="8151">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cci-mobile/trinity/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.136116" vertical-offset="10915" max-vertical-offset="11466">
+          <caret line="410" column="24" selection-start-line="410" selection-start-column="24" selection-end-line="410" selection-end-column="24" />
           <folding>
-            <element signature="e#48#57#0" expanded="true" />
+            <element signature="e#2#12#0" expanded="true" />
           </folding>
         </state>
       </provider>

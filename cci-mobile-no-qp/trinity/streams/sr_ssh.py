@@ -12,6 +12,7 @@ server = None
 # --------------------------------------------------------------------------------------
 def sig_handler( sig , frame ) :
 
+
 				os.kill( os.getpid() , signal.SIGTERM )
 
 
@@ -25,7 +26,7 @@ if __name__ == '__main__':
 				server = SSHTunnelForwarder(
 											('localhost', 8765),
 											ssh_username="ubuntu",
-											ssh_pkey='/home/wiljoh/cci-develop.pem' ,
+											ssh_pkey='./cci-develop.pem' ,
 											local_bind_address=('127.0.0.1' , 3128 ) ,
 											remote_bind_address=('127.0.0.1', 8888 )
 											)

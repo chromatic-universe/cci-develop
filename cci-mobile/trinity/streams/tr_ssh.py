@@ -11,7 +11,7 @@ server = None
 
 # --------------------------------------------------------------------------------------
 def sig_handler( sig , frame ) :
-				print 'foo'
+				print ( 'foo' )
 				os.kill( os.getpid() , signal.SIGTERM )
 
 

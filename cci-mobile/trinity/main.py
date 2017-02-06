@@ -48,7 +48,7 @@ from kivy.utils import platform
 
 # cci
 from streams import tr_utils , \
-	                sshtunnel
+                    sshtunnel
 
 
 kivy.require( '1.9.1' )
@@ -60,815 +60,816 @@ t = 3
 
 # -------------------------------------------------------------------------------------------------
 class ConsolePopup( Popup  ) :
-				"""
+                """
 
-				"""
-				def on_press_dismiss( self , *args) :
+                """
+                def on_press_dismiss( self , *args) :
 
-					self.dismiss()
+                    self.dismiss()
 
-					return False
-
-
-				def on_press_context( self , *args) :
-
-					self.dismiss()
-
-					return False
+                    return False
 
 
-				def on_dismiss( self ) :
-					pass
+                def on_press_context( self , *args) :
+
+                    self.dismiss()
+
+                    return False
+
+
+                def on_dismiss( self ) :
+                    pass
 
 
 
 
 
 class ccitrinityApp( App ) :
-			"""
-			trinity
-			"""
+            """
+            trinity
+            """
 
 
-			def __init__( self ) :
-				"""
+            def __init__( self ) :
+                """
 
-				:return:
-				"""
+                :return:
+                """
 
-				super( ccitrinityApp , self ).__init__()
+                super( ccitrinityApp , self ).__init__()
 
 
-				# local logger
-				self._logger = logging.getLogger( "cci trinity" )
-				self._logger.setLevel( logging.DEBUG )
-				fh = logging.FileHandler(  'trinity' + '-debug.log', mode = 'a' )
-				fh.setLevel( logging.DEBUG )
-				formatter = logging.Formatter( log_format )
-				fh.setFormatter( formatter )
-				self._logger.addHandler( fh )
-				self._logger.info( self.__class__.__name__ + '...'  )
-				# params
-				self._db_path = self._retrieve_default_db_path()
-				self._stream_bootstrap = None
-				try :
-					j = json.loads( self._retrieve_config_atom( 'trinity-stream-toggle' )['map'] )
-				except :
-					self._logger.error( '..could not load trinity-stream-toggle' )
-				logger = None
-				lname = 'cci_trinity-' + tr_utils.local_mac_addr()
+                # local logger
+                self._logger = logging.getLogger( "cci trinity" )
+                self._logger.setLevel( logging.DEBUG )
+                fh = logging.FileHandler(  'trinity' + '-debug.log', mode = 'a' )
+                fh.setLevel( logging.DEBUG )
+                formatter = logging.Formatter( log_format )
+                fh.setFormatter( formatter )
+                self._logger.addHandler( fh )
+                self._logger.info( self.__class__.__name__ + '...'  )
+                # params
+                self._db_path = self._retrieve_default_db_path()
+                self._stream_bootstrap = None
+                try :
+                    j = json.loads( self._retrieve_config_atom( 'trinity-stream-toggle' )['map'] )
+                except :
+                    self._logger.error( '..could not load trinity-stream-toggle' )
+                logger = None
+                lname = 'cci_trinity-' + tr_utils.local_mac_addr()
 
-				self._pid = None
-				self._pid_vulture = None
-				self._clock_event = None
-				self._retry_on_fail_reps = 0
+                self._pid = None
+                self._pid_vulture = None
+                self._clock_event = None
+                self._retry_on_fail_reps = 0
 
-				self._policy_thred = None
+                self._policy_thred = None
 
 
 
 
-			@mainthread
-			def _enum_policy_record( self , jsn , moniker ) :
-				"""
+            @mainthread
+            def _enum_policy_record( self , jsn , moniker ) :
+                """
 
-				:param jsn json:
-				:return:
-				"""
-				if jsn is None :
-					return
+                :param jsn json:
+                :return:
+                """
+                if jsn is None :
+                    return
 
-				s = '\n\n' + 24 * '*'
-				header = 'default %s policy' % moniker
-				s += '\n' + header + '\n'
-				s += 24 * '*'
-				s += '\n'
-				for key , value in jsn.iteritems() :
-					s += '%s = %s\n' % ( key , value )
-				self._update_status( self.root.ids.vulture_status_text ,
-									 '...default %s policy initialized....%s' % ( moniker , s ) )
+                s = '\n\n' + 24 * '*'
+                header = 'default %s policy' % moniker
+                s += '\n' + header + '\n'
+                s += 24 * '*'
+                s += '\n'
+                for key , value in jsn.iteritems() :
+                    s += '%s = %s\n' % ( key , value )
+                self._update_status( self.root.ids.vulture_status_text ,
+                                     '...default %s policy initialized....%s' % ( moniker , s ) )
 
 
 
 
-			def _start_policy_thred( self ) :
-				"""
+            def _start_policy_thred( self ) :
+                """
 
-				:param sself:
-				:return:
-				"""
-				# start default document policy
-				try :
-					j = self._default_policy( True , 'document')
-					self._enum_policy_record( j , 'document' )
-					j = self._default_policy( True , 'stream')
-					self._enum_policy_record( j , 'stream' )
-					self._update_status( self.root.ids.status_text ,
-									 '..policies initialized..check streams for details.' )
+                :param sself:
+                :return:
+                """
+                # start default document policy
+                try :
+                    j = self._default_policy( True , 'document')
+                    self._enum_policy_record( j , 'document' )
+                    j = self._default_policy( True , 'stream')
+                    self._enum_policy_record( j , 'stream' )
+                    self._update_status( self.root.ids.status_text ,
+                                     '..policies initialized..check streams for details.' )
 
-				except Exception as e :
-					self._update_status( self.root.ids.status_text ,
-										 '...policy initialization failed..check aysnc services for details' )
+                except Exception as e :
+                    self._update_status( self.root.ids.status_text ,
+                                         '...policy initialization failed..check aysnc services for details' )
 
 
 
 
-			def _start_policy_callback( self , dt ) :
-						"""
+            def _start_policy_callback( self , dt ) :
+                        """
 
-						give vulture server time to initialize
+                        give vulture server time to initialize
 
-						:return:
-						"""
+                        :return:
+                        """
 
-						# start default document policy
-						self._policy_thred = threading.Thread( target = self._start_policy_thred ).start()
+                        # start default document policy
+                        self._policy_thred = threading.Thread( target = self._start_policy_thred ).start()
 
 
 
 
 
-			def on_stop( self ) :
-						"""
+            def on_stop( self ) :
+                        """
 
-						:return:
-						"""
+                        :return:
+                        """
 
 
-						if self._policy_thred :
-							self._policy_thred.join( timeout = 2 )
+                        if self._policy_thred :
+                            self._policy_thred.join( timeout = 2 )
 
 
 
 
-			def on_start(self) :
-						"""
+            def on_start(self) :
+                        """
 
-						:return:
-						"""
-                                                
-						try :
-							from pyscreenshot import ImageGrab
-							self._logger.info( '...screenshot ok....' )
-						except Exception as e :
-							self._logger.error( e.message )
+                        :return:
+                        """
 
+                        try :
+                            from pyscreenshot import ImageGrab
+                            self._logger.info( '...screenshot ok....' )
+                        except Exception as e :
+                            self._logger.error( e.message )
 
-						self._update_status( self.root.ids.status_text , '...initializing...' )
-						self._update_status( self.root.ids.vulture_status_text , '...initializing...' )
 
+                        self._update_status( self.root.ids.status_text , '...initializing...' )
+                        self._update_status( self.root.ids.vulture_status_text , '...initializing...' )
 
-						is_running = False
-						try :
-							 pid = None
-							 pid_vulture = None
-							 try :
-								 with open( 'pid' , 'r' ) as pidfile :
-									pid = pidfile.read().strip()
-								 with open( 'pid_vulture' , 'r' ) as v_pidfile :
-									pid_vulture = v_pidfile.read().strip()
-							 except :
-								 pass
 
-							 # check if processes are running
-							 if pid and pid_vulture:
-								 try :
-									# throws exception if process doesn't exist
-									is_running = os.path.exists( '/proc/%s' % pid )
-									self._pid = pid
-									is_running = os.path.exists( '/proc/%s' % pid_vulture )
-									self._pid_vulture = pid_vulture
-								 except :
-									# pid not running
-									pass
+                        is_running = False
+                        try :
+                             pid = None
+                             pid_vulture = None
+                             try :
+                                     with open( 'pid' , 'r' ) as pidfile :
+                                            pid = pidfile.read().strip()
+                                     with open( 'pid_vulture' , 'r' ) as v_pidfile :
+                                            pid_vulture = v_pidfile.read().strip()
+                             except :
+                                pass
 
-							 if is_running is False :
+                             if pid and pid_vulture :
+                                try :
+                                    pass
+                                except :
+                                    pass
 
 
-								self.root.ids.bootstrap_btn.background_color = [0,1,0,1]
-								self.root.ids.bootstrap_btn.text = 'start trinity'
-								self._update_status( self.root.ids.status_text , ' ....trinity....' )
-								self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/stream daemon....' )
 
-								"""
-								 # wrqputite pid
-								 with open( 'pid' , 'w' ) as pidfile :
-									 pidfile.write( str( os.getpid() ) + '\n'  )
-								 # start server
-								 IOLoop.instance().start()
-								"""
+                             # check if processes are running
+                             if pid and pid_vulture :
+                                 try :
+                                     # throws exception if process doesn't exist
+                                     is_running = os.path.exists( '/proc/%s' % pid )
+                                     self._pid = pid
+                                     is_running = os.path.exists( '/proc/%s' % pid_vulture )
+                                     self._pid_vulture = pid_vulture
+                                 except :
+                                     pass
 
-							 else :
-									self._update_status( self.root.ids.status_text , ' ....trinity running....' )
-									self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/daemon running....' )
-									self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
-									self.root.ids.manipulate_btn.background_color = [0,1,0,1]
-									self.root.ids.bootstrap_btn.text = 'stop trinity'
-									self.root.ids.manipulate_btn.text = 'manipulate streams'
-									self.root.ids.process_info.text = 'pid: %s  port 7080' % self._pid
-									self._logger.info( '...server already running... pid %s....'  % self._pid )
 
+                             if is_running is False :
 
+                                self.root.ids.bootstrap_btn.background_color = [0,1,0,1]
+                                self.root.ids.bootstrap_btn.text = 'start trinity'
+                                self._update_status( self.root.ids.status_text , ' ....trinity....' )
+                                self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/stream daemon....' )
 
 
 
-						except Exception as e:
-							_logger.error( '...error in  trinity server...' + e.message )
-							sys.exit( 1 )
+                             else :
+                                self._update_status( self.root.ids.status_text , ' ....trinity running....' )
+                                self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/daemon running....' )
+                                self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
+                                self.root.ids.manipulate_btn.background_color = [0,1,0,1]
+                                self.root.ids.bootstrap_btn.text = 'stop trinity'
+                                self.root.ids.manipulate_btn.text = 'manipulate streams'
+                                self.root.ids.process_info.text = 'pid: %s  port 7080' % self._pid
+                                self._logger.info( '...server already running... pid %s....'  % self._pid )
 
 
 
 
-			# android mishegas
-			def on_pause(self):
-				# save data
 
+                        except Exception as e:
+                                _logger.error( '...error in  trinity server...' + e.message )
+                                sys.exit( 1 )
 
-				return True
 
 
 
-			def on_resume( self ):
-				# something
+            # android mishegas
+            def on_pause(self):
+                # save data
 
 
-				pass
+                return True
 
 
 
-			def _debug_log_snippet( self ) :
-				"""
+            def on_resume( self ):
+                # something
 
-				:return:
-				"""
 
-				try :
+                pass
 
-					cmd = [ 'tail' ,
-							'-n' ,
-							'10' ,
-							'cci-trinity-server.log-debug.log'
-						   ]
-					return proc.check_output( cmd )
-				except proc.CalledProcessError as e:
-					self._logger.error( '..._debug_log_snippet...' + e.message )
 
 
+            def _debug_log_snippet( self ) :
+                """
 
-			@staticmethod
-			@mainthread
-			def _update_status( container , status ) :
-				"""
+                :return:
+                """
 
-				:param status:
-				:return:
-				"""
-				timestamp = 'cci-trinity~ {:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())
-				container.text = timestamp + status + '\n' + container.text
+                try :
 
+                    cmd = [ 'tail' ,
+                            '-n' ,
+                            '10' ,
+                            'cci-trinity-server.log-debug.log'
+                           ]
+                    return proc.check_output( cmd )
+                except proc.CalledProcessError as e:
+                    self._logger.error( '..._debug_log_snippet...' + e.message )
 
 
-			# ----------------------------------------------------------------------------------------------------
-			def _retrieve_config_atom( self , atom ) :
-					"""
 
-					:param atom:
-					:return:
-					"""
+            @staticmethod
+            @mainthread
+            def _update_status( container , status ) :
+                """
 
-					json_row = None
-					try :
+                :param status:
+                :return:
+                """
+                timestamp = 'cci-trinity~ {:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())
+                container.text = timestamp + status + '\n' + container.text
 
-						self._logger.info( '...retrieve_config_atom ...' )
-						con = sqlite3.connect( self._db_path )
-						con.row_factory = tr_utils.dict_factory
-						cur = con.cursor()
 
-						s =  'select map from metadata_config ' \
-							 'where moniker = "%s" '  %  atom
-						cur.execute( s )
 
-						json_row = cur.fetchone()
-						if json_row is not None :
-							self._logger.info( '...retrieved config map for ...%s' % atom )
-						else :
-							self._logger.error( '...could not retrieve atom for %s...' % atom )
-					except sqlite3.OperationalError as e :
-						self._logger.error( '...retrieve_policy statement failed...%s' , e.message )
+            # ----------------------------------------------------------------------------------------------------
+            def _retrieve_config_atom( self , atom ) :
+                    """
 
+                    :param atom:
+                    :return:
+                    """
 
-					return json_row
+                    json_row = None
+                    try :
 
+                        self._logger.info( '...retrieve_config_atom ...' )
+                        con = sqlite3.connect( self._db_path )
+                        con.row_factory = tr_utils.dict_factory
+                        cur = con.cursor()
 
+                        s =  'select map from metadata_config ' \
+                             'where moniker = "%s" '  %  atom
+                        cur.execute( s )
 
+                        json_row = cur.fetchone()
+                        if json_row is not None :
+                            self._logger.info( '...retrieved config map for ...%s' % atom )
+                        else :
+                            self._logger.error( '...could not retrieve atom for %s...' % atom )
+                    except sqlite3.OperationalError as e :
+                        self._logger.error( '...retrieve_policy statement failed...%s' , e.message )
 
-			def _retrieve_default_db_path( self ) :
-					"""
 
-					:return string db_path:
-					"""
-					db_path = None
-					try :
+                    return json_row
 
-						with open( 'bootstrap_db' , 'r' ) as f :
-							db_path = f.read().strip().split( '=' )[1]
-							db_path.lstrip()
 
-					except Exception as e :
-						self._logger.error( '...retrieve_default_db_path failed...%s' , e.message )
 
 
-					return db_path
+            def _retrieve_default_db_path( self ) :
+                    """
 
+                    :return string db_path:
+                    """
+                    db_path = None
+                    try :
 
+                        with open( 'bootstrap_db' , 'r' ) as f :
+                            db_path = f.read().strip().split( '=' )[1]
+                            db_path.lstrip()
 
+                    except Exception as e :
+                        self._logger.error( '...retrieve_default_db_path failed...%s' , e.message )
 
-			def _retrieve_policy(  self , policy_moniker , provider_type ) :
-					"""
 
-					:param policy_moniker:
-					:param provider_type:
-					:return:
-					"""
+                    return db_path
 
-					json_row = None
-					try :
 
-						self._logger.info( '...retrieve payload_policy ...' )
-						s =  '/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite'
-						con = sqlite3.connect( self._db_path )
-						con.row_factory = tr_utils.dict_factory
-						cur = con.cursor()
 
-						s =  'select * from payload_policy ' \
-							 'where moniker = "%s" '  \
-							 'and provider_type = "%s" ' \
-							 'and active = 1'  % ( policy_moniker , provider_type )
-						cur.execute( s )
 
-						json_row = cur.fetchone()
-						if json_row is not None :
-							self._logger.info( '...retrieved default policy...%s' % json.dumps( json_row ) )
-						else :
-							self._logger.error( '...could not retrieve default policy...' )
-					except sqlite3.OperationalError as e :
-						self._logger.error( '...retrieve_policy statement failed...%s' , e.message )
+            def _retrieve_policy(  self , policy_moniker , provider_type ) :
+                    """
 
+                    :param policy_moniker:
+                    :param provider_type:
+                    :return:
+                    """
 
-					return json_row
+                    json_row = None
+                    try :
 
+                        self._logger.info( '...retrieve payload_policy ...' )
+                        s =  '/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite'
+                        con = sqlite3.connect( self._db_path )
+                        con.row_factory = tr_utils.dict_factory
+                        cur = con.cursor()
 
+                        s =  'select * from payload_policy ' \
+                             'where moniker = "%s" '  \
+                             'and provider_type = "%s" ' \
+                             'and active = 1'  % ( policy_moniker , provider_type )
+                        cur.execute( s )
 
+                        json_row = cur.fetchone()
+                        if json_row is not None :
+                            self._logger.info( '...retrieved default policy...%s' % json.dumps( json_row ) )
+                        else :
+                            self._logger.error( '...could not retrieve default policy...' )
+                    except sqlite3.OperationalError as e :
+                        self._logger.error( '...retrieve_policy statement failed...%s' , e.message )
 
-			def _default_policy( self  , toggle , policy_type = None ) :
-				"""
 
-				:return:
-				"""
+                    return json_row
 
-				jsn = None
-				try :
-					jsn = self._retrieve_policy(  'default' , policy_type )
-					if int( jsn['active'] ) :
-						# start default policy
-						self._toggle_policy( jsn , toggle )
-				except Exception as e :
-					self._logger.info( '..exception..'  % e.message )
-					return None
 
 
-				return jsn
-			
-			
-			
 
+            def _default_policy( self  , toggle , policy_type = None ) :
+                """
 
+                :return:
+                """
 
+                jsn = None
+                try :
+                    jsn = self._retrieve_policy(  'default' , policy_type )
+                    if int( jsn['active'] ) :
+                        # start default policy
+                        self._toggle_policy( jsn , toggle )
+                except Exception as e :
+                    self._logger.info( '..exception..'  % e.message )
+                    return None
 
-			def _retry_toggle_policy_callback( self , jsn , toggle , * largs ) :
-				"""
 
-				:param json:
-				:param toggle:
-				:param largs:
-				:return:
-				"""
+                return jsn
 
-				try :
-					self._toggle_policy( jsn , toggle )
-					s = '..toggle policy retry succeeded..default policy initialized'
-					self._update_status( self.root.ids.vulture_status_text , s )
-					self._update_status( self.root.ids.status_text , s )
 
-					jsn = self._retrieve_policy(  'default' , 'document' )
-					self._enum_policy_record( jsn , 'document' )
-					jsn = self._retrieve_policy(  'default' , 'stream' )
-					self._enum_policy_record( jsn , 'stream' )
 
 
 
-				except Exception as e :
-					s = '..toggle policy failed...no more retries  %s..' % e.message
-					self._logger.error( s )
-					self._update_status( self.root.ids.vulture_status_text , s )
-					self._update_status( self.root.ids.status_text , s )
-					raise Exception( '..failure...' )
 
 
+            def _retry_toggle_policy_callback( self , jsn , toggle , * largs ) :
+                """
 
-			def _toggle_policy( self , jsn , toggle ) :
-				"""
+                :param json:
+                :param toggle:
+                :param largs:
+                :return:
+                """
 
-				:param json dictionary:
-				:toggle boolean:
-				:return:
-				"""
+                try :
+                    self._toggle_policy( jsn , toggle )
+                    s = '..toggle policy retry succeeded..default policy initialized'
+                    self._update_status( self.root.ids.vulture_status_text , s )
+                    self._update_status( self.root.ids.status_text , s )
 
-				try :
+                    jsn = self._retrieve_policy(  'default' , 'document' )
+                    self._enum_policy_record( jsn , 'document' )
+                    jsn = self._retrieve_policy(  'default' , 'stream' )
+                    self._enum_policy_record( jsn , 'stream' )
 
-					data = { 'moniker' : jsn['moniker'] ,
-							 'provider_type' : jsn['provider_type'] ,
-							 'interval' : str( jsn['run_interval'] ) ,
-							 'db_bootstrap' : '/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite'
-						   }
 
-					if toggle :
-						ps = 'start'
-					else :
-						ps = 'stop'
-					s = 'http://localhost:7081/trinity-vulture/%s' % ps
-					r = requests.post( s ,
-									   data = json.dumps( data ) )
-					if r.status_code != 200 :
-						raise( '...post policy %s %s start failed...' % ( jsn['moniker'] , jsn['provider_type'] ) )
-					self._logger.info( '...post policy succeeded for %s %s...' % ( jsn['provider_type'] , jsn['provider_type'] ) )
 
-				except Exception as e :
-					if self._retry_on_fail_reps :
-						return
-					s = '..toggle policy failed....retrying in 8 seconds %s..' % e.message
-					self._logger.error( s )
-					self._update_status( self.root.ids.vulture_status_text , s )
-					self._retry_on_fail_reps += 1
+                except Exception as e :
+                    s = '..toggle policy failed...no more retries  %s..' % e.message
+                    self._logger.error( s )
+                    self._update_status( self.root.ids.vulture_status_text , s )
+                    self._update_status( self.root.ids.status_text , s )
+                    raise Exception( '..failure...' )
 
-					Clock.schedule_once( partial( self._retry_toggle_policy_callback , jsn , toggle ) , 5 )
-					raise Exception( '..failure...' )
 
 
+            def _toggle_policy( self , jsn , toggle ) :
+                """
 
-			def _on_start_trinity( self ) :
-				"""
+                :param json dictionary:
+                :toggle boolean:
+                :return:
+                """
 
-				:return:
-				"""
+                try :
 
-				pid = str()
-				pid_vulture = str()
+                    data = { 'moniker' : jsn['moniker'] ,
+                             'provider_type' : jsn['provider_type'] ,
+                             'interval' : str( jsn['run_interval'] ) ,
+                             'db_bootstrap' : '/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite'
+                           }
 
-				self._logger.info( '..._on_start_trinity...' )
+                    if toggle :
+                        ps = 'start'
+                    else :
+                        ps = 'stop'
+                    s = 'http://localhost:7081/trinity-vulture/%s' % ps
+                    r = requests.post( s ,
+                                       data = json.dumps( data ) )
+                    if r.status_code != 200 :
+                        raise( '...post policy %s %s start failed...' % ( jsn['moniker'] , jsn['provider_type'] ) )
+                    self._logger.info( '...post policy succeeded for %s %s...' % ( jsn['provider_type'] , jsn['provider_type'] ) )
 
-				# start trinity
-				if self.root.ids.bootstrap_btn.text == 'start trinity' :
-					try :
-						self._update_status( self.root.ids.status_text , ' ....starting trinity....' )
+                except Exception as e :
+                    if self._retry_on_fail_reps :
+                        return
+                    s = '..toggle policy failed....retrying in 8 seconds %s..' % e.message
+                    self._logger.error( s )
+                    self._update_status( self.root.ids.vulture_status_text , s )
+                    self._retry_on_fail_reps += 1
 
-						b_ret = self._bootstrap_trinity()
+                    Clock.schedule_once( partial( self._retry_toggle_policy_callback , jsn , toggle ) , 5 )
+                    raise Exception( '..failure...' )
 
-						if not b_ret :
-							self._update_status( self.root.ids.status_text , ' ....trinity bootstrap failed....' )
-							return
-						else :
-							self._update_status( self.root.ids.status_text , ' ....trinity bootstrapped..running....' )
-							self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
-							self.root.ids.manipulate_btn.background_color = [0,1,0,1]
-							self.root.ids.manipulate_tunnel_btn.background_color = [0,1,0,1]
-							self.root.ids.bootstrap_btn.text = 'stop trinity'
-							self.root.ids.manipulate_btn.text = 'manipulate streams'
-							self.root.ids.manipulate_tunnel_btn.text = 'manipulate tunnels'
-							self._update_status( self.root.ids.status_text , ' ...trinity started...' )
-							self._clock_event = Clock.schedule_interval( self._pid_callback, 2 )
-					except Exception as e :
-						self._logger.error( '..._on_start_trinity...' + e.message )
-						self._update_status( self.root.ids.status_text , e.message )
 
-					# start trinity vulture
-					try :
-						self._update_status( self.root.ids.status_text , ' ....starting trinity vulture....' )
-						self._update_status( self.root.ids.vulture_status_text , ' ....starting trinity vulture....' )
-						b_ret = self._bootstrap_trinity_vulture()
 
-						if not b_ret :
-							self._update_status( self.root.ids.status_text , ' ....trinity vulture bootstrap failed....' )
-						else :
+            def _on_start_trinity( self ) :
+                """
 
-							self._update_status( self.root.ids.status_text , ' ....trinity vulture bootstrapped..running....' )
-							self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
-							self.root.ids.manipulate_btn.background_color = [0,1,0,1]
-							self.root.ids.manipulate_tunnel_btn.background_color = [0,1,0,1]
-							self.root.ids.bootstrap_btn.text = 'stop trinity'
-							self.root.ids.manipulate_btn.text = 'manipulate streams'
-							self.root.ids.manipulate_tunnel_btn.text = 'manipulate tunnels'
-							self._update_status( self.root.ids.status_text , ' ...trinity vulture started...' )
-							self._update_status( self.root.ids.vulture_status_text , ' ...trinity vulture started...' )
-							self._update_status( self.root.ids.vulture_tunnel_text , ' ...no user defined tunnels...' )
+                :return:
+                """
 
-							# schedule default policies to start in 8 seconds
-							self._update_status( self.root.ids.status_text ,
-												 '..waiting for async server to initialize policies...standby..' )
-							Clock.schedule_once( self._start_policy_callback , 7 )
+                pid = str()
+                pid_vulture = str()
 
-					except Exception as e :
-						self._logger.error( '..._on_start_trinity...vulture' + e.message )
-						self._update_status( self.root.ids.status_text , e.message )
+                self._logger.info( '..._on_start_trinity...' )
 
+                # start trinity
+                if self.root.ids.bootstrap_btn.text == 'start trinity' :
+                    try :
+                        self._update_status( self.root.ids.status_text , ' ....starting trinity....' )
 
-				else :
-					try :
-						try :
-							 with open( 'pid' , 'r' ) as pidfile :
-								pid = pidfile.read().strip()
-							 self._pid = pid
-							 with open( 'pid_vulture' , 'r' ) as pidfile :
-								pid_vulture = pidfile.read().strip()
-						except :
-							 pass
+                        b_ret = self._bootstrap_trinity()
 
-						try :
-							pos = sys.platform.find( 'linux4' )
-							cmd = list()
-							if pos == -1 :
-								andr = False
-							else :
-								andr = True
+                        if not b_ret :
+                            self._update_status( self.root.ids.status_text , ' ....trinity bootstrap failed....' )
+                            return
+                        else :
+                            self._update_status( self.root.ids.status_text , ' ....trinity bootstrapped..running....' )
+                            self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
+                            self.root.ids.manipulate_btn.background_color = [0,1,0,1]
+                            self.root.ids.manipulate_tunnel_btn.background_color = [0,1,0,1]
+                            self.root.ids.bootstrap_btn.text = 'stop trinity'
+                            self.root.ids.manipulate_btn.text = 'manipulate streams'
+                            self.root.ids.manipulate_tunnel_btn.text = 'manipulate tunnels'
+                            self._update_status( self.root.ids.status_text , ' ...trinity started...' )
+                            self._clock_event = Clock.schedule_interval( self._pid_callback, 2 )
+                    except Exception as e :
+                        self._logger.error( '..._on_start_trinity...' + e.message )
+                        self._update_status( self.root.ids.status_text , e.message )
 
-							# kill trinity
-							if platform == 'android':
-								cmd = ['su' ,
-									   '-c' ,
-									   'kill' ,
-									   '-9' ,
-									   pid]
-							else :
-								cmd = ['kill' ,
-									   '-9' ,
-									   pid]
+                    # start trinity vulture
+                    try :
+                        self._update_status( self.root.ids.status_text , ' ....starting trinity vulture....' )
+                        self._update_status( self.root.ids.vulture_status_text , ' ....starting trinity vulture....' )
+                        b_ret = self._bootstrap_trinity_vulture()
 
-							proc.check_output( cmd )
-							self._update_status( self.root.ids.status_text , ' ....trinity server stopped ....' )
-							# kill trinity-vulture
-							if platform == 'android':
-								cmd = ['su' ,
-									   '-c' ,
-									   'kill' ,
-									   '-9' ,
-									   pid_vulture]
-							else :
-								cmd = ['kill' ,
-									   '-9' ,
-									   pid_vulture]
-							proc.check_output( cmd )
-							self._update_status( self.root.ids.status_text , ' ....trinity vulture stopped ....' )
-							self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture stopped ....' )
-							self.root.ids.bootstrap_btn.background_color = [0,1,0,1]
-							self.root.ids.manipulate_btn.background_color = [1,0,0,1]
-							self.root.ids.manipulate_tunnel_btn.background_color = [1,0,0,1]
-							self.root.ids.bootstrap_btn.text = 'start trinity'
-							self.root.ids.manipulate_btn.text = '~'
-							if self._clock_event :
-								self._clock_event.cancel()
-							self.root.ids.process_info.text = 'port: 7080'
-							self.root.ids.vulture_process_info.text = 'port: 7081'
-						except proc.CalledProcessError as e:
-							self._logger.error( 'kill server failed...' + e.message )
-							self._update_status( self.root.ids.status_text , ' ...kill server failed...' + e.message )
+                        if not b_ret :
+                            self._update_status( self.root.ids.status_text , ' ....trinity vulture bootstrap failed....' )
+                        else :
 
-					except Exception as e :
-						self._logger.error( '..._on_stop_trinity...' + e.message )
-						self._update_status( self.root.ids.status_text , e.message )
+                            self._update_status( self.root.ids.status_text , ' ....trinity vulture bootstrapped..running....' )
+                            self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
+                            self.root.ids.manipulate_btn.background_color = [0,1,0,1]
+                            self.root.ids.manipulate_tunnel_btn.background_color = [0,1,0,1]
+                            self.root.ids.bootstrap_btn.text = 'stop trinity'
+                            self.root.ids.manipulate_btn.text = 'manipulate streams'
+                            self.root.ids.manipulate_tunnel_btn.text = 'manipulate tunnels'
+                            self._update_status( self.root.ids.status_text , ' ...trinity vulture started...' )
+                            self._update_status( self.root.ids.vulture_status_text , ' ...trinity vulture started...' )
+                            self._update_status( self.root.ids.vulture_tunnel_text , ' ...no user defined tunnels...' )
 
+                            # schedule default policies to start in 8 seconds
+                            self._update_status( self.root.ids.status_text ,
+                                                 '..waiting for async server to initialize policies...standby..' )
+                            Clock.schedule_once( self._start_policy_callback , 7 )
 
+                    except Exception as e :
+                        self._logger.error( '..._on_start_trinity...vulture' + e.message )
+                        self._update_status( self.root.ids.status_text , e.message )
 
 
+                else :
+                    try :
+                        try :
+                             with open( 'pid' , 'r' ) as pidfile :
+                                pid = pidfile.read().strip()
+                             self._pid = pid
+                             with open( 'pid_vulture' , 'r' ) as pidfile :
+                                pid_vulture = pidfile.read().strip()
+                        except :
+                             pass
 
-			def _pid_callback( self , dt ) :
-					pid = str()
+                        try :
+                            pos = sys.platform.find( 'linux4' )
+                            cmd = list()
+                            if pos == -1 :
+                                andr = False
+                            else :
+                                andr = True
 
-					with open( 'pid' , 'r' ) as pidfile :
-						pid = pidfile.read().strip()
-					with open( 'pid_vulture' , 'r' ) as vpidfile :
-						pid_vulture = vpidfile.read().strip()
-					self.root.ids.process_info.text = 'pid: %s   ~  port: 7080' % pid
-					self.root.ids.vulture_process_info.text = 'pid: %s   ~  port: 7081' % pid_vulture
+                            # kill trinity
+                            if platform == 'android':
+                                cmd = ['su' ,
+                                       '-c' ,
+                                       'kill' ,
+                                       '-9' ,
+                                       pid]
+                            else :
+                                cmd = ['kill' ,
+                                       '-9' ,
+                                       pid]
 
+                            proc.check_output( cmd )
+                            self._update_status( self.root.ids.status_text , ' ....trinity server stopped ....' )
+                            # kill trinity-vulture
+                            if platform == 'android':
+                                cmd = ['su' ,
+                                       '-c' ,
+                                       'kill' ,
+                                       '-9' ,
+                                       pid_vulture]
+                            else :
+                                cmd = ['kill' ,
+                                       '-9' ,
+                                       pid_vulture]
+                            proc.check_output( cmd )
+                            self._update_status( self.root.ids.status_text , ' ....trinity vulture stopped ....' )
+                            self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture stopped ....' )
+                            self.root.ids.bootstrap_btn.background_color = [0,1,0,1]
+                            self.root.ids.manipulate_btn.background_color = [1,0,0,1]
+                            self.root.ids.manipulate_tunnel_btn.background_color = [1,0,0,1]
+                            self.root.ids.bootstrap_btn.text = 'start trinity'
+                            self.root.ids.manipulate_btn.text = '~'
+                            if self._clock_event :
+                                self._clock_event.cancel()
+                            self.root.ids.process_info.text = 'port: 7080'
+                            self.root.ids.vulture_process_info.text = 'port: 7081'
+                        except proc.CalledProcessError as e:
+                            self._logger.error( 'kill server failed...' + e.message )
+                            self._update_status( self.root.ids.status_text , ' ...kill server failed...' + e.message )
 
+                    except Exception as e :
+                        self._logger.error( '..._on_stop_trinity...' + e.message )
+                        self._update_status( self.root.ids.status_text , e.message )
 
 
 
 
-			def _bootstrap_trinity( self ) :
-						"""
 
-						:return:
-						"""
+            def _pid_callback( self , dt ) :
+                    pid = str()
 
-						# another process ont that port?
-						#
+                    with open( 'pid' , 'r' ) as pidfile :
+                        pid = pidfile.read().strip()
+                    with open( 'pid_vulture' , 'r' ) as vpidfile :
+                        pid_vulture = vpidfile.read().strip()
+                    self.root.ids.process_info.text = 'pid: %s   ~  port: 7080' % pid
+                    self.root.ids.vulture_process_info.text = 'pid: %s   ~  port: 7081' % pid_vulture
 
-						b_ret = False
 
-						try:
-							s = socket.socket()
-							s.setsockopt( socket.SOL_SOCKET , socket.SO_REUSEADDR , 1 )
-							s.bind( ( socket.gethostname()  , 7080 ) )
-						except socket.error as e:
-							self._logger.error(  '..bootstrap failed...errno:%d...%s' % ( e[0] , e[1] ) )
-							return
 
 
-						pid = str()
-						try :
 
-								self._logger.info( "...bootstrapping cci_trinity....." )
-								cmd = list()
 
-								if platform == 'android':
-									cmd = [
-									  "su" ,
-									  "-c" ,
-									  "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-									  "./cci_trinity.pyo" ,
-									  "&"
-									  ]
-								else :
-									cmd = [
-									  "python" ,
-									  "./cci_trinity.py" ,
-									  "&"
-									  ]
+            def _bootstrap_trinity( self ) :
+                        """
 
+                        :return:
+                        """
 
-								proc.Popen( cmd )
-								self._logger.info( "...made proc call....." )
+                        # another process ont that port?
+                        #
 
+                        b_ret = False
 
-								try:
-									s = socket.socket()
-									s.setsockopt( socket.SOL_SOCKET , socket.SO_REUSEADDR , 1 )
-									s.bind( ( socket.gethostname()  , 7080 ) )
-									b_ret = True
-									self._logger.info( "bootstrapped cci_trinity....." )
-								except socket.error as e:
-									self._logger.info( "failed tp bootstrap cci_trinity....." )
-									b_ret = False
+                        try:
+                            s = socket.socket()
+                            s.setsockopt( socket.SOL_SOCKET , socket.SO_REUSEADDR , 1 )
+                            s.bind( ( socket.gethostname()  , 7080 ) )
+                        except socket.error as e:
+                            self._logger.error(  '..bootstrap failed...errno:%d...%s' % ( e[0] , e[1] ) )
+                            return
 
 
+                        pid = str()
+                        try :
 
+                                self._logger.info( "...bootstrapping cci_trinity....." )
+                                cmd = list()
 
-						except proc.CalledProcessError as e:
-							self._logger.error( 'bootstrap failed...' + e.message )
-						except OSError as e :
-							self._logger.error( 'file does not exist?...' + e.message )
-							#sys.exit( 1 )
-						except ValueError as e :
-							self._logger.error( 'arguments foobar...' + e.message )
-							#sys.exit( 1 )
-						except Exception as e :
-							self._logger.error(  e.message )
-							#sys.exit( 1 )
+                                if platform == 'android':
+                                    cmd = [
+                                      "su" ,
+                                      "-c" ,
+                                      "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
+                                      "./cci_trinity.pyo" ,
+                                      "&"
+                                      ]
+                                else :
+                                    cmd = [
+                                      "python" ,
+                                      "./cci_trinity.py" ,
+                                      "&"
+                                      ]
 
-						return b_ret
 
+                                proc.Popen( cmd )
+                                self._logger.info( "...made proc call....." )
 
 
+                                try:
+                                    s = socket.socket()
+                                    s.setsockopt( socket.SOL_SOCKET , socket.SO_REUSEADDR , 1 )
+                                    s.bind( ( socket.gethostname()  , 7080 ) )
+                                    b_ret = True
+                                    self._logger.info( "bootstrapped cci_trinity....." )
+                                except socket.error as e:
+                                    self._logger.info( "failed tp bootstrap cci_trinity....." )
+                                    b_ret = False
 
-			def _bootstrap_trinity_vulture( self ) :
-						"""
 
-						:return:
-						"""
-						b_ret = False
 
-						try :
 
-								self._logger.info( "...bootstrapping cci_trinity_vulture....." )
-								pos = sys.platform.find( 'linux4' )
-								if pos == -1 :
-									andr = False
-								else :
-									andr = True
-								cmd = list()
+                        except proc.CalledProcessError as e:
+                            self._logger.error( 'bootstrap failed...' + e.message )
+                        except OSError as e :
+                            self._logger.error( 'file does not exist?...' + e.message )
+                            #sys.exit( 1 )
+                        except ValueError as e :
+                            self._logger.error( 'arguments foobar...' + e.message )
+                            #sys.exit( 1 )
+                        except Exception as e :
+                            self._logger.error(  e.message )
+                            #sys.exit( 1 )
 
+                        return b_ret
 
-								if platform == 'android':
-									cmd = [
-									  "su" ,
-									  "-c" ,
-									  "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
-									  "./cci_trinity_async.pyo" ,
-									  "&"
-									  ]
-								else :
-									cmd = [
-									  "python" ,
-									  "./cci_trinity_async.py" ,
-									  "&"
-									  ]
 
 
 
-								proc.Popen( cmd )
+            def _bootstrap_trinity_vulture( self ) :
+                        """
 
-								try:
-									s = socket.socket()
-									s.setsockopt( socket.SOL_SOCKET , socket.SO_REUSEADDR , 1 )
-									s.bind( ( socket.gethostname()  , 7081 ) )
-									b_ret = True
-									self._logger.info( "bootstrapped cci_trinity_vulture....." )
-								except socket.error as e:
-									self._logger.info( "failed tp bootstrap cci_vulture_async....." + e.message  )
-									b_ret = False
+                        :return:
+                        """
+                        b_ret = False
 
+                        try :
 
+                                self._logger.info( "...bootstrapping cci_trinity_vulture....." )
+                                pos = sys.platform.find( 'linux4' )
+                                if pos == -1 :
+                                    andr = False
+                                else :
+                                    andr = True
+                                cmd = list()
 
-						except proc.CalledProcessError as e:
-							self._logger.error( 'bootstrap failed.async..' + e.message )
-						except OSError as e :
-							self._logger.error( 'async file does not exist?...' + e.message )
-							#sys.exit( 1 )
-						except ValueError as e :
-							self._logger.error( 'arguments foobar in async ...' + e.message )
-							#sys.exit( 1 )
-						except Exception as e :
-							self._logger.error(  e.message )
-							#sys.exit( 1 )
 
-						return b_ret
+                                if platform == 'android':
+                                    cmd = [
+                                      "su" ,
+                                      "-c" ,
+                                      "/data/data/com.hipipal.qpyplus/files/bin/qpython.sh" ,
+                                      "./cci_trinity_async.pyo" ,
+                                      "&"
+                                      ]
+                                else :
+                                    cmd = [
+                                      "python" ,
+                                      "./cci_trinity_async.py" ,
+                                      "&"
+                                      ]
 
 
 
-			def _move_carousel( self  ) :
-						"""
+                                proc.Popen( cmd )
 
-						:return:
-						"""
+                                try:
+                                    s = socket.socket()
+                                    s.setsockopt( socket.SOL_SOCKET , socket.SO_REUSEADDR , 1 )
+                                    s.bind( ( socket.gethostname()  , 7081 ) )
+                                    b_ret = True
+                                    self._logger.info( "bootstrapped cci_trinity_vulture....." )
+                                except socket.error as e:
+                                    self._logger.info( "failed tp bootstrap cci_vulture_async....." + e.message  )
+                                    b_ret = False
 
-						self.root.ids.trinity_carousel_id.load_next()
-						"""
-						if self.root.ids.packet_stream_btn.text ==  'aysnc services' :
-							self.root.ids.trinity_carousel_id.load_next()
-							self.root.ids.packet_stream_btn.text = 'tunnel services'
-						elif self.root.ids.packet_stream_btn.text ==  'tunnel services'  :
-							self.root.ids.trinity_carousel_id.load_next()
-							self.root.ids.packet_stream_btn.text = 'app server'
-						else :
-							self.root.ids.packet_stream_btn.text = 'aysnc services'
-							self.root.ids.trinity_carousel_id.index = 0
-						"""
 
 
-			def _on_sync_carousel( self  , args ) :
-						"""
-			
-						:return:
-						"""
+                        except proc.CalledProcessError as e:
+                            self._logger.error( 'bootstrap failed.async..' + e.message )
+                        except OSError as e :
+                            self._logger.error( 'async file does not exist?...' + e.message )
+                            #sys.exit( 1 )
+                        except ValueError as e :
+                            self._logger.error( 'arguments foobar in async ...' + e.message )
+                            #sys.exit( 1 )
+                        except Exception as e :
+                            self._logger.error(  e.message )
+                            #sys.exit( 1 )
 
+                        return b_ret
 
 
-						if args == 0 :
-							self.root.ids.trinity_item.title =  'cci-trinity~app services'
-						elif args == 1	 :
-							self.root.ids.trinity_item.title  =  'cci-trinity~async services'
-						elif args == 2 :
-							self.root.ids.trinity_item.title =  'cci-trinity~tunnel services'
 
+            def _move_carousel( self  ) :
+                        """
 
+                        :return:
+                        """
 
-			# attributes
-			@property
-			def logger( self ) :
-				return self._logger
-			@logger.setter
-			def logger( self , log ) :
-				self._logger = log
+                        self.root.ids.trinity_carousel_id.load_next()
+                        """
+                        if self.root.ids.packet_stream_btn.text ==  'aysnc services' :
+                            self.root.ids.trinity_carousel_id.load_next()
+                            self.root.ids.packet_stream_btn.text = 'tunnel services'
+                        elif self.root.ids.packet_stream_btn.text ==  'tunnel services'  :
+                            self.root.ids.trinity_carousel_id.load_next()
+                            self.root.ids.packet_stream_btn.text = 'app server'
+                        else :
+                            self.root.ids.packet_stream_btn.text = 'aysnc services'
+                            self.root.ids.trinity_carousel_id.index = 0
+                        """
+
+
+            def _on_sync_carousel( self  , args ) :
+                        """
+
+                        :return:
+                        """
+
+
+
+                        if args == 0 :
+                            self.root.ids.trinity_item.title =  'cci-trinity~app services'
+                        elif args == 1	 :
+                            self.root.ids.trinity_item.title  =  'cci-trinity~async services'
+                        elif args == 2 :
+                            self.root.ids.trinity_item.title =  'cci-trinity~tunnel services'
+
+
+
+            # attributes
+            @property
+            def logger( self ) :
+                return self._logger
+            @logger.setter
+            def logger( self , log ) :
+                self._logger = log
 
 
 
 
 if __name__ == '__main__':
 
-			Config.set('graphics','resizable',0 )
+            Config.set('graphics','resizable',0 )
 
 
-			Config.set( 'graphics', 'width', '480' )
-			Config.set( 'graphics', 'height', '800' )
-			Config.set( 'input', 'mouse', 'mouse,disable_multitouch' )
+            Config.set( 'graphics', 'width', '480' )
+            Config.set( 'graphics', 'height', '800' )
+            Config.set( 'input', 'mouse', 'mouse,disable_multitouch' )
 
 
-			#from kivy.core.window import Window
+            #from kivy.core.window import Window
 
-			Window.size = ( 480 , 800 )
-			ct = ccitrinityApp()
-			ct.run()
+            Window.size = ( 480 , 800 )
+            ct = ccitrinityApp()
+            ct.run()
 
 
 
