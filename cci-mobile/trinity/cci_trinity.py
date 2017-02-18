@@ -1,6 +1,5 @@
-
-# cci-trinity.py    william k. johnson  2016
-
+# cci-trinity.py    william k. johnson  2017
+#
 import sys
 # we're being bootstrapped by qpython , so we have to explicitly
 # add our site packages here, since they may or may not exist

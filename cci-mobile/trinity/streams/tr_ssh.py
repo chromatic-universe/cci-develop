@@ -25,7 +25,7 @@ if __name__ == '__main__':
 				signal.signal( signal.SIGINT , sig_handler )
 
 				server = SSHTunnelForwarder(
-											( 'localhost', 8765),
+											( 'localhost', 8766),
 											ssh_username="ubuntu",
 											ssh_pkey='/home/wiljoh/cci-develop.pem' ,
 											local_bind_address=('127.0.0.1' , 3128 ) ,
