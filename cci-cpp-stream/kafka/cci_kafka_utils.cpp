@@ -47,7 +47,7 @@ void cci_cli_output::usage( tclap::CmdLineInterface& c )
 //----------------------------------------------------------------------------------------
 void cci_cli_output::version( tclap::CmdLineInterface& c )
 {
-         std::cerr << "cci-kafka-android: version 0.7 chromatic universe ~ william k. johnson 2016\n";
+         std::cerr << "cci-kafka-stream: version 0.8 chromatic universe ~ william k. johnson 2017\n";
          m_tmu->clear_color();
 
 }

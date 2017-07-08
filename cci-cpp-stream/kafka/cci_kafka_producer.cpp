@@ -94,7 +94,7 @@ bool cci_kafka_producer::config_library_producer()
 //----------------------------------------------------------------------------------------
 bool cci_kafka_producer::config_topic( const std::string& topic )
 {
-        bool b_ret  { true };
+         bool b_ret  { true };
 
          m_tmu->time_stamp();
          std::cerr << "configuring topic...."
@@ -193,33 +193,52 @@ void cpp_real_stream::gen_kafka_meta_stream( const std::string& broker ,
                                              kafka_preamble_ptr preamble )
 {
     std::string errstr;
+    bool b_ret { false };
+    cpp_real_stream::topic_ptr ptr_topic { nullptr };
     std::unique_ptr<cci_kafka_producer> producer( new cci_kafka_producer( preamble ) );
+
+
     if( !!producer )
     {
-       //topic
-        if( producer->config_topic( topic ) )
-        {
-            //etch metadata
-            rdkafka::Metadata *metadata;
-            rdkafka::ErrorCode err = producer->rd_producer()->metadata(
-                                         false , //producer->topic() != nullptr ,
-                                         producer->topic() ,
-                                         &metadata ,
-                                         5000 );
-            if( err != rdkafka::ERR_NO_ERROR )
-            {
-                producer->tutils()->time_stamp();
-                std::cerr << "%% failed to acquire metadata: "
-                          << rdkafka::err2str( err )
-                          << "\n";
-            }
-            producer->tutils()->time_stamp();
-            std::cerr << "acquired topic metadata....\n";
-
-            stream_metadata_header( &std::cerr  , metadata , " kafka server" );
-            metadata_stream( &std::cerr , metadata->topics() );
-            //metadata_stream( &std::cerr , metadata->brokers() );
-
-       }
+	       	    //topic
+    		    if( !topic.empty() )
+		    {
+			if( ! producer->config_topic( topic ) )
+			{
+			       producer->tutils()->time_stamp();
+					std::cerr << "%% failed to confiure topic "
+						  << "\n";
+			       return;			
+			}
+			ptr_topic = producer->topic();
+			producer->tutils()->time_stamp();
+		    	std::cerr << "acquired topic metadata....\n";
+		    }
+		    else
+		    {
+			//all topics
+			ptr_topic = nullptr;
+			b_ret = true;		
+		    }
+		
+		    //etch metadata
+		    rdkafka::Metadata *metadata;
+		    rdkafka::ErrorCode err = producer->rd_producer()->metadata(
+						 b_ret ,
+						 ptr_topic ,
+						 &metadata ,
+						 5000 );
+		    if( err != rdkafka::ERR_NO_ERROR )
+		    {
+			producer->tutils()->time_stamp();
+			std::cerr << "%% failed to acquire metadata: "
+				  << rdkafka::err2str( err )
+				  << "\n";
+			return;
+		    }
+		    
+		    stream_metadata_header( &std::cerr  , metadata , " kafka server" );
+		    metadata_stream( &std::cerr , metadata->topics() );
+		    metadata_stream( &std::cerr , metadata->brokers() );            	
     }
 }

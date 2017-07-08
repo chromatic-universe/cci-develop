@@ -156,7 +156,7 @@ namespace cpp_real_stream
                 static std::unique_ptr<switch_arg>          consumer_switch;
                 static std::unique_ptr<switch_arg>          producer_switch;
                 static std::unique_ptr<value_arg>           topic_name;
-                static std::unique_ptr<value_arg>           topic_metadata;
+                static std::unique_ptr<switch_arg>          topic_metadata;
                 static std::unique_ptr<value_arg>           the_brokers;
 
                 //services

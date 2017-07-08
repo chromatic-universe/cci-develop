@@ -37,18 +37,16 @@ std::unique_ptr<switch_arg>         cci_kafka_preamble::producer_switch( new swi
 std::unique_ptr<value_arg>         cci_kafka_preamble::topic_name( new value_arg( "t" ,
                                                                                  "topic" ,
                                                                                  "topic for mode" ,
-                                                                                  true ,
+                                                                                  false ,
                                                                                   "" ,
                                                                                   "topic" ,
                                                                                   *cci_kafka_preamble::ccmd.get()
                                                                               ) );
 //topic metadata
-std::unique_ptr<value_arg>       cci_kafka_preamble::topic_metadata( new value_arg( "m" ,
+std::unique_ptr<switch_arg>       cci_kafka_preamble::topic_metadata( new switch_arg( "m" ,
                                                                                    "metadata" ,
                                                                                    "topic for metadata(empty for all)" ,
-                                                                                   false ,
-                                                                                   "" ,
-                                                                                   "meta"
+                                                                                   true
                                                                                    ) );
 //brokers
 std::unique_ptr<value_arg>      cci_kafka_preamble::the_brokers( new value_arg( "b" ,

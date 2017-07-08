@@ -117,8 +117,9 @@ int main( int argc , char* argv[] )
             }
             else if( cci_kafka_preamble::topic_metadata->isSet() )
             {
+
                 gen_kafka_meta_stream( cci_kafka_preamble::the_brokers->getValue() ,
-                                       cci_kafka_preamble::topic_metadata->getValue() ,
+                                       cci_kafka_preamble::topic_name->getValue()  ,
                                        0 ,
                                        ckp.get() );
             }
