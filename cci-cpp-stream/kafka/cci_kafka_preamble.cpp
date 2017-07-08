@@ -164,8 +164,11 @@ void cci_kafka_preamble::config_callbacks()
         m_mogrifier->show_log( m_b_events );
         //run
         m_mogrifier->run( true );
-        if(  gconf->set( kf_callback_mogrifier::k_callbacks[kafka_callback::kc_event] ,
-                    m_mogrifier.get() ,
+		
+	
+	std::string cbk_str { kf_callback_mogrifier::k_callbacks[kafka_callback::kc_event] };	
+        if(  gconf->set( cbk_str ,
+                    dynamic_cast<EventCb*>( m_mogrifier.get() ) ,
                     errstr ) !=  rdkafka::Conf::CONF_OK )
         {
             m_tmu->color( stamp_color::red );
