@@ -276,7 +276,7 @@ namespace cpp_real_stream
 							  //real message
 							  m_tym->color( stamp_color::blue );
 							  m_tym->time_stamp();
-							  std::cerr << "MESSAGE read msg at offset "
+							  std::cerr << "DELIVERY: read msg at offset "
 								       << message.offset()
 							       << "\n";
 							  if ( message.key() )
@@ -452,12 +452,31 @@ namespace cpp_real_stream
 				//no exit on eof
 				exit_on_eof( false );
 				run( true );
+
+				bool b_ret { false };
 					
 				//set event callback
 				std::string cbk_str { k_callbacks[kafka_callback::kc_event] };	
 				if(  gconf->set( cbk_str ,
 					    	this->kafka_event_cb() ,
-					    errstr ) !=  rdkafka::Conf::CONF_OK )
+					    errstr ) ==  rdkafka::Conf::CONF_OK )
+				
+				{
+				   std::cerr << "setting consumer callback....\n";
+				   cbk_str = k_callbacks[kafka_callback::kc_consumer];
+				   if(  gconf->set( cbk_str ,
+					    	this->kafka_consume_cb() ,
+					    errstr ) ==  rdkafka::Conf::CONF_OK )
+				    {
+					 std::cerr << "setting delivery callback....\n";
+					 if(  gconf->set( cbk_str ,
+					    	this->kafka_delivery_cb() ,
+					    errstr ) ==  rdkafka::Conf::CONF_OK )				    
+				    	 { b_ret = true; }
+				    }
+				}
+
+				if( !b_ret )
 				{
 				    m_tmu->color( stamp_color::red );
 				    m_tmu->time_stamp();
@@ -467,9 +486,9 @@ namespace cpp_real_stream
 				    m_b_valid = false;
 				}
 				else
-				{
+				{				   
 				    m_tmu->time_stamp();
-				    std::cerr << "kafka interface initialized.....\n";
+				    std::cerr << "kafka interface initialized..callbacks set...valid\n";
 				    m_b_valid = true;
 				}
 
