@@ -12,16 +12,7 @@ namespace tclap = TCLAP;
 namespace cpp_real_stream
 {
 
-        //enumerations
-        enum class kafka_callback : char
-        {
-            kc_sock ,
-            kc_open ,
-            kc_event ,
-            kc_consumer
-        };
-
-        //helpers
+                //helpers
         class cci_cli_output : public tclap::StdOutput
         {
             protected :

@@ -45,7 +45,7 @@ namespace cpp_real_stream
 			typename T ,     
 			template<class> class event_callback_policy,
 			template<class> class consumer_callback_policy ,
-                        template<class> class delivery_callback_policy>
+                        template<class> class delivery_callback_policy
 		 >
         class cci_kafka_preamble; 
         class delivery_report_cb;
@@ -84,6 +84,16 @@ namespace cpp_real_stream
             bf_port ,
             bf_partition
         };
+	
+        enum class kafka_callback : char
+        {
+            kc_sock ,
+            kc_open ,
+            kc_event ,
+            kc_consumer
+        };
+
+
 
 	
 

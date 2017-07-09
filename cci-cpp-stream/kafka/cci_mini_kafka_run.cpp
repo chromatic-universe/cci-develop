@@ -40,22 +40,22 @@ int main( int argc , char* argv[] )
 
 
             std::vector<tclap::Arg*>  xorlist;
-            xorlist.push_back( cci_kafka_preamble::consumer_switch.get() );
-            xorlist.push_back( cci_kafka_preamble::producer_switch.get() );
-            xorlist.push_back( cci_kafka_preamble::topic_metadata.get() );
-            cci_kafka_preamble::ccmd->xorAdd( xorlist );
+            xorlist.push_back( kafka_default_preamble::consumer_switch.get() );
+            xorlist.push_back( kafka_default_preamble::producer_switch.get() );
+            xorlist.push_back( kafka_default_preamble::topic_metadata.get() );
+            kafka_default_preamble::ccmd->xorAdd( xorlist );
 
             //cli stream
             std::ostringstream ostr;
             ostr << "librdkafka version is "
                  << rdkafka::version_str();
             auto cli( std::make_unique<cci_cli_output>( &ostr ) );
-           	cci_kafka_preamble::ccmd->setOutput( cli.get() );
+           	kafka_default_preamble::ccmd->setOutput( cli.get() );
             //parse the argv array.
-        	cci_kafka_preamble::ccmd->parse( argc, argv );
+        	kafka_default_preamble::ccmd->parse( argc, argv );
 
             //brokers
-            std::string brks { cci_kafka_preamble::the_brokers->getValue() };
+            std::string brks { kafka_default_preamble::the_brokers->getValue() };
             auto pr = split( brks );
             if( pr.first.compare( "nil"  ) == 0 )
             {
@@ -82,44 +82,44 @@ int main( int argc , char* argv[] )
             //preamble
             auto ckp =  std::make_unique<kafka_default_preamble>( brokers );
             //get debug switch
-            ckp->events( cci_kafka_preamble::debug_switch->getValue() );
+            ckp->events( kafka_default_preamble::debug_switch->getValue() );
 
             ckp->init();
             if( !ckp ) { exit( 1 ); }
 
             tmu->color( stamp_color::green );
             tmu->time_stamp();
-            if(  cci_kafka_preamble::consumer_switch->isSet() )
+            if(  kafka_default_preamble::consumer_switch->isSet() )
             {
                 //consumer
                 auto ckc( std::make_unique<cci_kafka_consumer>( ckp.get() , b_events ) );
                 if( !!ckc )
                 {
                     //topic
-                    if( ckc->config_topic( cci_kafka_preamble::topic_name->getValue()) )
+                    if( ckc->config_topic( kafka_default_preamble::topic_name->getValue()) )
                     {
                         ckc->consume();
                     }
                 }
             }
-            else if( cci_kafka_preamble::producer_switch->isSet() )
+            else if( kafka_default_preamble::producer_switch->isSet() )
             {
                 //producer
                 auto ckpr( std::make_unique<cci_kafka_producer>( ckp.get() , b_events ) );
                 if( !!ckpr )
                 {
                     //topic
-                    if( ckpr->config_topic( cci_kafka_preamble::topic_name->getValue() ) )
+                    if( ckpr->config_topic( kafka_default_preamble::topic_name->getValue() ) )
                     {
                         ckpr->produce();
                     }
                 }
             }
-            else if( cci_kafka_preamble::topic_metadata->isSet() )
+            else if( kafka_default_preamble::topic_metadata->isSet() )
             {
 
-                gen_kafka_meta_stream( cci_kafka_preamble::the_brokers->getValue() ,
-                                       cci_kafka_preamble::topic_name->getValue()  ,
+                gen_kafka_meta_stream( kafka_default_preamble::the_brokers->getValue() ,
+                                       kafka_default_preamble::topic_name->getValue()  ,
                                        0 ,
                                        ckp.get() );
             }

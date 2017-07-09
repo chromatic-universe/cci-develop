@@ -5,12 +5,6 @@
 using namespace cpp_real_stream;
 
 
-//static init
-callback_dictionary kf_callback_mogrifier::k_callbacks = { { kafka_callback::kc_sock        , "sock_cb" } ,
-                                                           { kafka_callback::kc_open        , "open_cb" } ,
-                                                           { kafka_callback::kc_event       ,  "event_cb" } ,
-                                                           { kafka_callback::kc_consumer    ,  "consumer_cb" }
-                                                         };
 
 //-----------------------------------------------------------------------
 std::ostream& operator<< ( std::ostream& ostr , const time_utils& tu )

@@ -6,10 +6,18 @@
 #include <unistd.h>
 
 
+
+
 namespace cpp_real_stream
 {
 
-	        	
+	        //static init
+		static callback_dictionary k_callbacks = { { kafka_callback::kc_sock        , "sock_cb" } ,
+							   { kafka_callback::kc_open        , "open_cb" } ,
+							   { kafka_callback::kc_event       ,  "event_cb" } ,
+							   { kafka_callback::kc_consumer    ,  "consumer_cb" }
+						         };
+		
 
 		//callback policies
 		template<typename T>
@@ -327,7 +335,7 @@ namespace cpp_real_stream
 			public :
 
 				//accessors-inspectors
-			 	rdkafka::DeliveryCb* kafka_delivery_cb() { return m_cbk.get(); }
+			 	rdkafka::DeliveryReportCb* kafka_delivery_cb() { return m_cbk.get(); }
 								
 				
 				
@@ -337,12 +345,12 @@ namespace cpp_real_stream
 		template <
 				typename T ,     
 				template<class> class event_callback_policy ,
-				template<class> class consumer_callback_policyi ,
+				template<class> class consumer_callback_policy ,
 				template<class> class delivery_callback_policy
 			 >
 		class cci_kafka_preamble : public event_callback_policy<T> ,
 					   public consumer_callback_policy<T> ,
-					   public delivery_callback_policy
+					   public delivery_callback_policy<T>
 		{
 
 		    public :
@@ -437,21 +445,18 @@ namespace cpp_real_stream
 			void config_callbacks()
 			{
 				//set event callback
-				/*m_tmu->time_stamp();
+				m_tmu->time_stamp();
 				std::cerr << "setting event callback....\n";
 
 				std::string errstr;
 				//no exit on eof
-				m_mogrifier->exit_on_eof( false );
-				//events
-				m_mogrifier->show_log( m_b_events );
-				//run
-				m_mogrifier->run( true );
+				exit_on_eof( false );
+				run( true );
 					
-				
-				std::string cbk_str { kf_callback_mogrifier::k_callbacks[kafka_callback::kc_event] };	
+				//set event callback
+				std::string cbk_str { k_callbacks[kafka_callback::kc_event] };	
 				if(  gconf->set( cbk_str ,
-					    dynamic_cast<EventCb*>( m_mogrifier.get() ) ,
+					    	this->kafka_event_cb() ,
 					    errstr ) !=  rdkafka::Conf::CONF_OK )
 				{
 				    m_tmu->color( stamp_color::red );
@@ -466,7 +471,7 @@ namespace cpp_real_stream
 				    m_tmu->time_stamp();
 				    std::cerr << "kafka interface initialized.....\n";
 				    m_b_valid = true;
-				}*/
+				}
 
 			}
 
@@ -520,6 +525,8 @@ namespace cpp_real_stream
 				    config_callbacks();
 				}
 
+				run( true );
+
 			}
 
 
@@ -544,7 +551,8 @@ namespace cpp_real_stream
 		         >
                 rdkafka::Conf* cci_kafka_preamble<T ,
                                                   event_callback_policy ,
-                                                  consumer_callback_policy>::gconf = rdkafka::Conf::create( rdkafka::Conf::CONF_GLOBAL );
+                                                  consumer_callback_policy ,
+                                                  delivery_callback_policy>::gconf = rdkafka::Conf::create( rdkafka::Conf::CONF_GLOBAL );
 		template <
 				typename T ,     
 				template<class> class event_callback_policy,
@@ -610,7 +618,7 @@ namespace cpp_real_stream
 			 >
                 std::unique_ptr<switch_arg> cci_kafka_preamble<T , 
                                                                event_callback_policy ,
-                                                               consumer_callback_policy
+                                                               consumer_callback_policy ,
                                                                delivery_callback_policy>::producer_switch( new switch_arg( "p" ,
 													"producer" ,
 													"place library into producer mode" ,
@@ -662,7 +670,7 @@ namespace cpp_real_stream
 		std::unique_ptr<value_arg>   cci_kafka_preamble<T , 
                                                                 event_callback_policy ,
                                                                 consumer_callback_policy ,
-                                                                delivery_callback_policy>>::the_brokers( new value_arg( "b" ,
+                                                                delivery_callback_policy>::the_brokers( new value_arg( "b" ,
 												       "brokers" ,
 												       "list of brokers host1:port1,host2:port2,etc," ,
 												       true ,
