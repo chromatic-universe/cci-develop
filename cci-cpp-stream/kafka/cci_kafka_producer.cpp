@@ -175,6 +175,51 @@ void cci_kafka_producer::produce()
 }
 
 
+//----------------------------------------------------------------------------------------
+void cci_kafka_producer::produce( const std::string& message )
+{
+	    m_tmu->time_stamp();
+	    std::cerr << "producing....\n";
+
+	    //read message from stdin
+	    bool run = true;
+       
+	    //produce message
+	    rdkafka::ErrorCode resp =  m_ptr_rd->produce (  m_ptr_topic ,
+							    m_cur_partition ,
+							    rdkafka::Producer::RK_MSG_COPY  ,
+							    const_cast<char *>( message.c_str( ) ) ,
+							    message.size() ,
+							    NULL ,
+							    NULL );
+	    if( resp != RdKafka::ERR_NO_ERROR )
+	    {
+		   m_tmu->time_stamp();
+		   std::cerr << "produce failed....\n";
+	    }
+	    else
+	    {
+		   m_tmu->time_stamp();
+		   std::cerr << "% Produced message ("
+			     << message.size()
+			     << " bytes)\n";
+	    }
+	    m_ptr_rd->poll( 0 );
+        
+	    run = true;
+
+	    while ( run && m_ptr_rd->outq_len() > 0 )
+	    {
+			m_tmu->time_stamp();
+			std::cerr << "waiting for "
+				  << m_ptr_rd->outq_len()
+				  << "\n";
+			m_ptr_rd->poll( 1000 ) ;
+	     }
+
+}
+
+
 
 //----------------------------------------------------------------------------------------
 void cpp_real_stream::gen_kafka_meta_stream( const std::string& broker ,

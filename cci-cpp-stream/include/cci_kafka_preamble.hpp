@@ -15,7 +15,8 @@ namespace cpp_real_stream
 		static callback_dictionary k_callbacks = { { kafka_callback::kc_sock        , "sock_cb" } ,
 							   { kafka_callback::kc_open        , "open_cb" } ,
 							   { kafka_callback::kc_event       ,  "event_cb" } ,
-							   { kafka_callback::kc_consumer    ,  "consumer_cb" }
+							   { kafka_callback::kc_consumer    ,  "consume_cb" } ,
+							   { kafka_callback::kc_delivery    ,  "dr_cb" }
 						         };
 		
 
@@ -462,13 +463,16 @@ namespace cpp_real_stream
 					    errstr ) ==  rdkafka::Conf::CONF_OK )
 				
 				{
+				   m_tmu->time_stamp();
 				   std::cerr << "setting consumer callback....\n";
 				   cbk_str = k_callbacks[kafka_callback::kc_consumer];
 				   if(  gconf->set( cbk_str ,
 					    	this->kafka_consume_cb() ,
 					    errstr ) ==  rdkafka::Conf::CONF_OK )
 				    {
+					 m_tmu->time_stamp();
 					 std::cerr << "setting delivery callback....\n";
+				         cbk_str = k_callbacks[kafka_callback::kc_delivery];
 					 if(  gconf->set( cbk_str ,
 					    	this->kafka_delivery_cb() ,
 					    errstr ) ==  rdkafka::Conf::CONF_OK )				    
@@ -702,5 +706,6 @@ namespace cpp_real_stream
 
 	
 }
+
 
 

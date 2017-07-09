@@ -89,7 +89,8 @@ namespace cpp_real_stream
             kc_sock ,
             kc_open ,
             kc_event ,
-            kc_consumer
+            kc_consumer ,
+	    kc_delivery
         };
 
 

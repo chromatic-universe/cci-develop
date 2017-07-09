@@ -155,7 +155,8 @@ namespace cpp_real_stream
 
                     //services
                     bool config_topic( const std::string& topic );
-                    void produce();
+                    virtual void produce();
+                    virtual void produce( const std::string& messge );
 
 
         };
