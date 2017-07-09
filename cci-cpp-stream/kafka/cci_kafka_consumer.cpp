@@ -120,7 +120,6 @@ void cci_kafka_consumer::consume()
        std::cerr << "consuming....\n";
        int use_ccb { 1 };
 
-       m_preamble->mogrifier()->run( true );
 
        //start
        rdkafka::ErrorCode resp = m_ptr_rd->start( m_ptr_topic ,
@@ -131,22 +130,22 @@ void cci_kafka_consumer::consume()
            m_tmu->color( stamp_color::red );
            m_tmu->time_stamp();
            std::cerr << "failed to start consumer...\n";
-   	       m_preamble->mogrifier()->run( false );
            m_tmu->clear_color();
+	  
+	   return;
        }
 
-       while( m_preamble->mogrifier()->run() )
+       while( m_preamble->run() )
        {
              if( -1 == m_ptr_rd->consume_callback(   m_ptr_topic ,
                                                      0 , //m_cur_partition ,
                                                      1000 ,
-                                                     m_preamble->mogrifier() ,
+                                                     m_preamble->kafka_consume_cb() ,
                                                      &use_ccb ) )
              {
                 m_tmu->color( stamp_color::red );
                 m_tmu->time_stamp();
                 std::cerr << "CONSUMPTION: error in consumption callback....\n";
-                m_preamble->mogrifier()->run( false );
                 m_tmu->clear_color();
              }
              m_ptr_rd->poll( 0 );

@@ -1,0 +1,1 @@
+/dev_t/bin/clang++   -Wall -g -rdynamic -O0  -Qunused-arguments  -DDEBUG -std=c++14   CMakeFiles/cci_mini_kafka_run.dir/cci_mini_kafka_run.cpp.o  -o cci_mini_kafka_run -rdynamic -lrdkafka++ -lrdkafka libcci_kafka_stream.so.1.0.0 -Wl,-rpath,/cci_src/cci-develop/cci-cpp-stream/kafka/build: 

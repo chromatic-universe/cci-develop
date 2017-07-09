@@ -11,10 +11,9 @@ set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O3  -rdynamic -Qunused-arguments  -DNDEBUG -
 
 #includes
 include_directories( ${cci-kafka-cpp-streamSOURCE_DIR}
-                     $ENV{DEV}/include
                      ../include
 	             ../../include
-                     
+                     $ENV{DEV}/include
                    )
 #link location
 link_directories( $ENV{DEV}/lib)
@@ -23,7 +22,6 @@ link_directories( $ENV{DEV}/lib)
 add_library(cci_kafka_stream SHARED  cci_kafka_stream.cpp
                                      cci_kafka_consumer.cpp 
                                      cci_kafka_producer.cpp
-                                     cci_kafka_preamble.cpp
                                      cci_kafka_utils.cpp)
 set_target_properties(cci_kafka_stream PROPERTIES
                                        VERSION 1.0.0

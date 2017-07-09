@@ -181,7 +181,8 @@ namespace cpp_real_stream
 
                 void time_stamp( std::string& str )
                 {
-                    std::ostringstream ostr;
+                    std::ostringstream ostr;//events
+
                     time_stamp( ostr );
 
                     str = ostr.str();

@@ -1,0 +1,8 @@
+/cci_src/cci-develop/cci-cpp-stream/kafka/build/CMakeFiles/rebuild_cache.dir
+/cci_src/cci-develop/cci-cpp-stream/kafka/build/CMakeFiles/edit_cache.dir
+/cci_src/cci-develop/cci-cpp-stream/kafka/build/CMakeFiles/cci_kafka_stream.dir
+/cci_src/cci-develop/cci-cpp-stream/kafka/build/CMakeFiles/install.dir
+/cci_src/cci-develop/cci-cpp-stream/kafka/build/CMakeFiles/list_install_components.dir
+/cci_src/cci-develop/cci-cpp-stream/kafka/build/CMakeFiles/cci_mini_kafka_run.dir
+/cci_src/cci-develop/cci-cpp-stream/kafka/build/CMakeFiles/install/local.dir
+/cci_src/cci-develop/cci-cpp-stream/kafka/build/CMakeFiles/install/strip.dir

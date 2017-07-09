@@ -80,7 +80,7 @@ int main( int argc , char* argv[] )
             auto brokers( std::make_unique<kafka_brokers>() );
             brokers->emplace_back( std::make_unique<cci_kafka_broker>( pr.first , pr.second , 0 ) );
             //preamble
-            auto ckp( std::make_unique<cci_kafka_preamble>( brokers ) );
+            auto ckp =  std::make_unique<kafka_default_preamble>( brokers );
             //get debug switch
             ckp->events( cci_kafka_preamble::debug_switch->getValue() );
 

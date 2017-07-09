@@ -52,7 +52,7 @@ bool cci_kafka_producer::config_library_producer()
         //seet delivery report callback
         std::string errstr;
         if( m_preamble->g_config()->set( "dr_cb" ,
-                                         m_preamble->mogrifier()->delivery_ptr() ,
+                                         m_preamble->kafka_delivery_cb() ,
                                          errstr ) != rdkafka::Conf::CONF_OK )
         {
             m_tmu->color( stamp_color::red );
