@@ -19,8 +19,7 @@ include_directories( ${cci-kafka-cpp-streamSOURCE_DIR}
 link_directories( $ENV{DEV}/lib)
 
 #library
-add_library(cci_kafka_stream SHARED  cci_kafka_stream.cpp
-                                     cci_kafka_consumer.cpp 
+add_library(cci_kafka_stream SHARED  cci_kafka_consumer.cpp 
                                      cci_kafka_producer.cpp
                                      cci_kafka_utils.cpp)
 set_target_properties(cci_kafka_stream PROPERTIES

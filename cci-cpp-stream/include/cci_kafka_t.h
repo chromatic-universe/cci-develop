@@ -63,7 +63,6 @@ namespace cpp_real_stream
         using topic_ptr = rdkafka::Topic*;
         using callback_dictionary = std::map<kafka_callback,std::string>;
         using kafka_mogrifier_ptr = kf_callback_mogrifier*;
-        using delivery_report_ptr = delivery_report_cb*;
         using switch_arg = tclap::SwitchArg;
         using value_arg = tclap::ValueArg<std::string>;
         using cmd_line = tclap::CmdLine;

@@ -174,17 +174,7 @@ void cci_kafka_producer::produce()
 
 }
 
-//----------------------------------------------------------------------------------------
-void delivery_report_cb::dr_cb( rdkafka::Message &message )
-{
-     m_tmu->time_stamp();
-     std::cerr << "message delivery for ("
-               <<  message.len()
-               << " bytes): "
-               << message.errstr()
-               << "\n";
 
-}
 
 //----------------------------------------------------------------------------------------
 void cpp_real_stream::gen_kafka_meta_stream( const std::string& broker ,
