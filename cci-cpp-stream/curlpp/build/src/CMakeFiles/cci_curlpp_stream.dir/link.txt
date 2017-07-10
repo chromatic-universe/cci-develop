@@ -1,0 +1,1 @@
+/dev_t/bin/clang++  -fPIC -Wall -g -rdynamic -O0  -Qunused-arguments  -DDEBUG -std=c++14  -shared -Wl,-soname,libcci_curlpp_stream.so.1 -o libcci_curlpp_stream.so.1.0.0 CMakeFiles/cci_curlpp_stream.dir/cci_curl_stream.cpp.o 
