@@ -4,10 +4,12 @@
 
 
 #include <cci_curl_stream_t.h>
-
+#include <cci_curl_preamble.hpp>
 
 namespace cpp_real_stream
 {
-			
+	
+		//forward declarations
+				
 }
 
