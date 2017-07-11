@@ -9,5 +9,9 @@ using namespace cpp_real_stream;
 
 int main( int argc , char** argv )
 {
+	 
+	//library init and de-init	
+	curlpp::Cleanup _cleanup;
+
 	return 0;
 }

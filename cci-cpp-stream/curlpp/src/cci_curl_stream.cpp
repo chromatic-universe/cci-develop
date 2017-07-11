@@ -4,4 +4,4 @@
 
 #include <cci_curl_stream.h>
 
-using namespace cpp_real_stream;
+

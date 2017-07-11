@@ -16,8 +16,6 @@
 #include <cassert>
 #include <sys/types.h>
 #include <unistd.h>
-//cci
-#include "cci_time_utils.h"
 
 //curlpp
 #include <curlpp/cURLpp.hpp>
@@ -25,4 +23,21 @@
 #include <curlpp/Options.hpp>
 #include <curlpp/Exception.hpp>
 #include <curlpp/Infos.hpp>
+
+//cci
+#include "cci_time_utils.h"
+
+
+
+namespace cpp_real_stream
+
+{
+		
+		//forward declarations
+		template <
+				typename T
+		         >
+                class cci_curl_preamble; 
+
+}
 
