@@ -9,8 +9,7 @@ namespace cpp_real_stream
 	
 	
 		//forward
-
-		
+				
 	
 
 		//services
@@ -58,14 +57,14 @@ namespace cpp_real_stream
 
 
 
-				private :
+			private :
 
 					//attributes
 					std::string   		m_url_str;
 					bool 			m_b_valid;
 					T 			context;
 				
-				public :
+			public :
 			
 					//accessors-mutators
 					std::string url() const noexcept { return m_url_str; }
