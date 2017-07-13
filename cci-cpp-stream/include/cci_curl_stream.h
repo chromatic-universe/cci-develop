@@ -10,6 +10,18 @@ namespace cpp_real_stream
 {
 	
 		//forward declarations
+
+
+
+		class  cci_curl_stream
+		{
+			public :
+				
+				//ctor 
+				cci_curl_stream()
+				{}
+		};
+
 				
 }
 

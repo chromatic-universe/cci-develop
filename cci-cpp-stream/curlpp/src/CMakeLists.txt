@@ -37,4 +37,8 @@ target_link_libraries(cci_mini_curl_run -lcurl
 install_targets(/lib cci_curlpp_stream)
 install_targets(/bin cci_mini_curl_run)
 
+install (DIRECTORY ../../include/ 
+         DESTINATION include)
+
+
 
