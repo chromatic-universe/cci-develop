@@ -7,6 +7,7 @@
 #include <memory>
 #include <set>
 #include <map>
+#include <list>
 #include <tuple>
 #include <algorithm>
 #include <type_traits>

@@ -17,7 +17,9 @@ int main( int argc , char** argv )
 		try
 		{
 			auto curl = std::make_unique<cci_curl_stream>();
-			curl->execute_base_bool_g( "http://localhost:7080/mongo/imap2017"  , &std::cerr );
+			curl->execute_base_bool_p( "http://localhost:7080/mongo/imap2017/plain_text_auth" ,
+                                                   "user=wiljoh&password=Argentina1" ,
+                                                   &std::cerr );
 		}
 		catch( curlpp::RuntimeError &e )
 		{

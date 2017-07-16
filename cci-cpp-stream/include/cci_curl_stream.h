@@ -41,10 +41,19 @@ namespace cpp_real_stream
 				void debug( const bool dbg ) { m_debug = dbg; }
 				
 				//base bool , i.e , non-parameterized-if the url returns
-				//get call returns anything ? true : false;
+				//get call returns anything  no error ? true : false;
 				//get
+				//effective as ping				
 				bool execute_base_bool_g( const std::string&  url  ,
 							  std::ostream* ostr );
+				//base bool woth post fields
+				//key pairs keu=value
+			        //get call returns anything  no error ? true : false;
+				//post
+				bool execute_base_bool_p( const std::string& url  ,
+							  const std::string& post_fields ,
+							  std::ostream* ostr );
+
 			
 
 				

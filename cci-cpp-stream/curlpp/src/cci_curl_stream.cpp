@@ -67,6 +67,7 @@ bool cci_curl_stream::execute_base_bool_g( const std::string& url ,
 			request.setOpt (Url( url ) );
 			curlpp::options::WriteStream ws( ostr );
 	           	request.setOpt( ws );
+			request.setOpt( FailOnError( true  ));
 			request.perform();	
 
 			return true;
@@ -92,3 +93,55 @@ bool cci_curl_stream::execute_base_bool_g( const std::string& url ,
 		return false; 
 
 }
+
+//---------------------------------------------------------------------------------------
+bool cci_curl_stream::execute_base_bool_p( const std::string& url  ,
+			  		   const std::string& post_fields ,
+			  		   std::ostream* ostr )
+{
+		curlpp::Easy request;				
+		if( debug() )	
+		{ debug_request( request ); }
+
+		try
+		{
+			
+			request.setOpt (Url( url ) );
+			curlpp::options::WriteStream ws( ostr );
+			request.setOpt( ws );
+			request.setOpt( FailOnError( true  ));
+
+			std::list<std::string> header; 
+    			header.push_back( "Content-Type: application/x-www-form-urlencoded" );     
+    			request.setOpt( curlpp::options::HttpHeader( header ) ); 
+
+			request.setOpt( curlpp::options::PostFields( post_fields ) );
+    			request.setOpt( curlpp::options::PostFieldSize( post_fields.length() ) );
+
+			request.perform();	
+
+			return true;
+		}
+		catch( curlpp::RuntimeError &e )
+		{
+			*ostr << e.what() 
+				      << "\n";
+		}
+		catch( curlpp::LogicError &e )
+		{
+			*ostr << e.what() 
+			      << "\n";
+		}
+		catch( ... )
+		{
+			std::cerr << "untyped exception...."
+				  << "\n";
+
+		}
+
+			
+		return false; 
+	
+}
+
+
