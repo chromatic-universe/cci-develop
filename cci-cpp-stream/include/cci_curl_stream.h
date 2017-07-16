@@ -30,10 +30,15 @@ namespace cpp_real_stream
 
 			private :
 
-				//
+				bool 		m_debug;
 				
 
 			public : 
+				
+				//accessors=inspectors
+				bool debug() const noexcept { return m_debug; }
+				//mutators
+				void debug( const bool dbg ) { m_debug = dbg; }
 				
 				//base bool , i.e , non-parameterized-if the url returns
 				//get call returns anything ? true : false;
