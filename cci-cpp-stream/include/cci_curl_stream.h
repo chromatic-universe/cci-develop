@@ -53,7 +53,8 @@ namespace cpp_real_stream
 				bool execute_base_bool_p( const std::string& url  ,
 							  const std::string& post_fields ,
 							  std::ostream* ostr );
-
+				//atomic insertion
+				//bool insert_atomic_payload
 			
 
 				
