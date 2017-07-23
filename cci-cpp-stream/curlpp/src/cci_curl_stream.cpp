@@ -144,5 +144,12 @@ bool cci_curl_stream::execute_base_bool_p( const std::string& url  ,
 		return false; 
 	
 }
-
-
+//
+//atomic insert , returns identifier by reference
+//---------------------------------------------------------------------------------------
+bool cci_curl_stream::instantiate_atomic_payload( std::string& moniker ,
+						  const std::string& header ,
+						  const std::string& resource_locator )
+{
+	return true;
+}

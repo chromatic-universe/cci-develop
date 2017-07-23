@@ -54,7 +54,9 @@ namespace cpp_real_stream
 							  const std::string& post_fields ,
 							  std::ostream* ostr );
 				//atomic insertion
-				//bool insert_atomic_payload
+				bool instantiate_atomic_payload( std::string& moniker ,
+								 const std::string& header ,
+								 const std::string& resource_locator );
 			
 
 				

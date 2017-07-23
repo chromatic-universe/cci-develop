@@ -12,7 +12,6 @@ using namespace rdkafka;
 //signals
 void sigterm( int sig )
 {
-    cci_kafka_consumer::crs_run = false;
     std::cerr << "\033[0m\n" ;
     exit( 1 );
 }
@@ -92,7 +91,7 @@ int main( int argc , char* argv[] )
             if(  kafka_default_preamble::consumer_switch->isSet() )
             {
                 //consumer
-                auto ckc( std::make_unique<cci_kafka_consumer>( ckp.get() , b_events ) );
+                auto ckc( std::make_unique<cci_kafka_consumer<kafka_preamble_ptr>>( ckp.get() , b_events ) );
                 if( !!ckc )
                 {
                     //topic

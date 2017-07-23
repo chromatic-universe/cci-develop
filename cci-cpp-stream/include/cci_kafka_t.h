@@ -38,7 +38,6 @@ namespace tclap = TCLAP;
 namespace cpp_real_stream
 {
 	//forward declarations
-        class cci_kafka_consumer;
         class kf_callback_mogrifier;
 	template<typename T> class event_callback_policy;
         template <
@@ -46,23 +45,22 @@ namespace cpp_real_stream
 			template<class> class event_callback_policy,
 			template<class> class consumer_callback_policy ,
                         template<class> class delivery_callback_policy
-		 >
+		 >	
         class cci_kafka_preamble; 
         class delivery_report_cb;
         enum class kafka_callback : char;
 
 
+
         //aliases
 	using cci_kafka_broker = std::tuple<std::string,int,int>;
         using broker_ptr = std::unique_ptr<cci_kafka_broker>;
-        using consumer_ptr = cci_kafka_consumer*;
         using kafka_brokers = std::vector<broker_ptr>;
         using brokers_ptr = kafka_brokers*;
         using rd_consumer_ptr = rdkafka::Consumer*;
         using rd_producer_ptr = rdkafka::Producer*;
         using topic_ptr = rdkafka::Topic*;
         using callback_dictionary = std::map<kafka_callback,std::string>;
-        using kafka_mogrifier_ptr = kf_callback_mogrifier*;
         using switch_arg = tclap::SwitchArg;
         using value_arg = tclap::ValueArg<std::string>;
         using cmd_line = tclap::CmdLine;
