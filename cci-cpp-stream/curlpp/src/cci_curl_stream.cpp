@@ -6,6 +6,7 @@
 
 using namespace cpp_real_stream;
 using namespace curlpp::Options;
+using nlohmann::json;
 
 namespace
 {

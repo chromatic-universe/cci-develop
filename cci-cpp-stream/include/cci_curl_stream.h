@@ -5,6 +5,8 @@
 
 #include <cci_curl_stream_t.h>
 #include <cci_curl_preamble.hpp>
+#include <json.hpp>
+
 
 namespace cpp_real_stream
 {
