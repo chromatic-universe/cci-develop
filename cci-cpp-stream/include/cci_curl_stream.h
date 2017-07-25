@@ -55,10 +55,18 @@ namespace cpp_real_stream
 				bool execute_base_bool_p( const std::string& url  ,
 							  const std::string& post_fields ,
 							  std::ostream* ostr );
-				//atomic insertion
-				bool instantiate_atomic_payload( std::string& moniker ,
-								 const std::string& header ,
-								 const std::string& resource_locator );
+				//atomic insertion -json; all string fields will have be serialized back to json
+				//in 200 http , moniker will be populated
+				bool instantiate_atomic_payload( //user siginificant reference , returned by callee , "nil by default" 
+								 nlohmann::json& moniker ,
+								 //meta info , maybe rfc2822 header
+								 const nlohmann::json& metadata ,	
+								 //url destination - not checking of validity , 							 
+								 const nlohmann::json& naked_archive_dest ,
+								 //payload location - if this is 'nil'(default)
+								 // , the location is contained in the url 
+								 nlohmann::json resource_locator  = {{ "resource_locator" , "nil" }}  ,
+								 std::ostream* ostr = nullptr );
 			
 
 				

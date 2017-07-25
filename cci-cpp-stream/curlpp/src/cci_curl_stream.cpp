@@ -6,7 +6,7 @@
 
 using namespace cpp_real_stream;
 using namespace curlpp::Options;
-using nlohmann::json;
+using json = nlohmann::json;
 
 namespace
 {
@@ -42,6 +42,9 @@ namespace
 			
 	
 	}
+
+	const std::string url_encode_t { "Content-Type: application/x-www-form-urlencoded" };
+	const std::string app_json_t   { "Content-Type: application/json" };
 }
 
 //---------------------------------------------------------------------------------------
@@ -95,7 +98,7 @@ bool cci_curl_stream::execute_base_bool_g( const std::string& url ,
 		return false; 
 
 }
-
+ 
 //---------------------------------------------------------------------------------------
 bool cci_curl_stream::execute_base_bool_p( const std::string& url  ,
 			  		   const std::string& post_fields ,
@@ -105,16 +108,19 @@ bool cci_curl_stream::execute_base_bool_p( const std::string& url  ,
 		if( debug() )	
 		{ debug_request( request ); }
 
+		ostr->flush();
+
 		try
 		{
 			
 			request.setOpt (Url( url ) );
+			//output write stream
 			curlpp::options::WriteStream ws( ostr );
 			request.setOpt( ws );
 			request.setOpt( FailOnError( true  ));
 
 			std::list<std::string> header; 
-    			header.push_back( "Content-Type: application/x-www-form-urlencoded" );     
+    			header.push_back( url_encode_t );     
     			request.setOpt( curlpp::options::HttpHeader( header ) ); 
 
 			request.setOpt( curlpp::options::PostFields( post_fields ) );
@@ -145,12 +151,71 @@ bool cci_curl_stream::execute_base_bool_p( const std::string& url  ,
 		return false; 
 	
 }
-//
-//atomic insert , returns identifier by reference
+//}
+//atomic insert by locator, returns identifier by reference
 //---------------------------------------------------------------------------------------
-bool cci_curl_stream::instantiate_atomic_payload( std::string& moniker ,
-						  const std::string& header ,
-						  const std::string& resource_locator )
+bool cci_curl_stream::instantiate_atomic_payload( json& moniker ,
+						  const json& metadata ,
+						  const json& naked_archive_dest ,
+						  json resource_locator ,
+						  std::ostream* ostr )
 {
-	return true;
+ 		
+		curlpp::Easy request;				
+		if( debug() )	
+		{ debug_request( request ); }
+
+
+		try
+		{
+			ostr->flush();
+		
+			//build json object from stream
+			std::ostringstream dostr;
+			dostr << metadata
+			      << naked_archive_dest
+			      << resource_locator;
+			auto jsn = std::make_unique<json>( dostr.str() );
+		
+			request.setOpt (Url( naked_archive_dest.at( "url" ).get<std::string>() ) );
+			//output write stream
+			curlpp::options::WriteStream ws( ostr );
+			request.setOpt( ws );
+			request.setOpt( FailOnError( true  ));
+
+			std::list<std::string> header; 
+    			header.push_back( app_json_t );     
+    			request.setOpt( curlpp::options::HttpHeader( header ) ); 
+
+			request.setOpt( curlpp::options::PostFields( jsn->dump() ) );
+    			request.setOpt( curlpp::options::PostFieldSize( jsn->dump().length() ) );
+
+			request.perform();	
+
+			return true;
+	
+		}
+		catch( curlpp::RuntimeError &e )
+		{
+			*ostr << e.what() 
+				      << "\n";
+		}
+		catch( curlpp::LogicError &e )
+		{
+			*ostr << e.what() 
+			      << "\n";
+		}
+		catch( std::exception& err )
+		{
+			*ostr << err.what() 
+			      << "\n";
+		}
+		catch( ... )
+		{
+			std::cerr << "untyped exception...."
+				  << "\n";
+
+		}
+
+		return true;
 }

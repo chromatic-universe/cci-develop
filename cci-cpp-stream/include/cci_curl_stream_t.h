@@ -11,6 +11,8 @@
 #include <tuple>
 #include <algorithm>
 #include <type_traits>
+#include <sstream>
+#include <iostream>
 //c runtime
 #include <ctime>
 #include <cstdint>
