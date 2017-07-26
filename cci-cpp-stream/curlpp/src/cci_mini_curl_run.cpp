@@ -24,7 +24,7 @@ int main( int argc , char** argv )
 		        auto ostr = std::make_unique<std::ostringstream>();
 			json mon;
 			json meta_j = { { "from" , "wiljoh" } };
-			json naked_j = { { "url" , "http://127/0.0.1:7080/mongo" } };
+			json naked_j = { { "url" , "http://127.0.0.1:7080/mongo/imap2017/instantiate_atomic_payload" } };
 			json resource_j = { { "resource_locator" , "file://opt/imap/spool/staging/foo" } } ;
 
 

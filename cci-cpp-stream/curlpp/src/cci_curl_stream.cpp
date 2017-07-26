@@ -175,7 +175,11 @@ bool cci_curl_stream::instantiate_atomic_payload( json& moniker ,
 			dostr << metadata
 			      << naked_archive_dest
 			      << resource_locator;
-			auto jsn = std::make_unique<json>( dostr.str() );
+			//auto jsn = std::make_unique<json>();
+			json jsn;
+			jsn["metadata"] = metadata;
+			jsn["naked_archive_dest"] = naked_archive_dest;
+			jsn["resource_locator"] = resource_locator;
 		
 			request.setOpt (Url( naked_archive_dest.at( "url" ).get<std::string>() ) );
 			//output write stream
@@ -187,8 +191,8 @@ bool cci_curl_stream::instantiate_atomic_payload( json& moniker ,
     			header.push_back( app_json_t );     
     			request.setOpt( curlpp::options::HttpHeader( header ) ); 
 
-			request.setOpt( curlpp::options::PostFields( jsn->dump() ) );
-    			request.setOpt( curlpp::options::PostFieldSize( jsn->dump().length() ) );
+			request.setOpt( curlpp::options::PostFields( jsn.dump() ) );
+    			request.setOpt( curlpp::options::PostFieldSize( jsn.dump().length() ) );
 
 			request.perform();	
 
