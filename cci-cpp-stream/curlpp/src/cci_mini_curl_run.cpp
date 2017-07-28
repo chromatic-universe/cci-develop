@@ -23,9 +23,9 @@ int main( int argc , char** argv )
                         //                         &std::cerr );
 		        auto ostr = std::make_unique<std::ostringstream>();
 			json mon;
-			json meta_j = { { "from" , "wiljoh" } };
+			json meta_j = { { "from" , "wiljoh@localhost" } , { "to" , "corny@snaps" } };
 			json naked_j = { { "url" , "http://127.0.0.1:7080/mongo/imap2017/instantiate_atomic_payload" } };
-			json resource_j = { { "resource_locator" , "file://opt/imap/spool/staging/foo" } } ;
+			json resource_j = { { "resource" , "/opt/imap_spool/staging/201707261829.7a9bee45" } } ;
 
 
 			curl->instantiate_atomic_payload( mon ,
