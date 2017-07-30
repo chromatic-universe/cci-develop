@@ -182,7 +182,7 @@ namespace cpp_real_stream
 								    << " "
 								    <<  static_cast<const char *>( message.payload() )
 								    << "\n";
-							  m_tym->color( stamp_color::green );
+							  m_tym->clear_color();
 
 							  break;
 							}
@@ -292,7 +292,7 @@ namespace cpp_real_stream
 								    << " "
 								    <<  static_cast<const char *>( message.payload() )
 								    << "\n";
-							  m_tym->color( stamp_color::green );
+							  m_tym->clear_color();
 
 							  break;
 							}
