@@ -42,5 +42,8 @@ namespace cpp_real_stream
 		         >
                 class cci_curl_preamble; 
 
+
+		using string_list = std::list<std::string>;
+
 }
 

@@ -209,11 +209,6 @@ bool cci_curl_stream::instantiate_atomic_payload( json& moniker ,
 			*ostr << e.what() 
 			      << "\n";
 		}
-		catch( std::exception& err )
-		{
-			*ostr << err.what() 
-			      << "\n";
-		}
 		catch( ... )
 		{
 			std::cerr << "untyped exception...."
@@ -223,3 +218,58 @@ bool cci_curl_stream::instantiate_atomic_payload( json& moniker ,
 
 		return true;
 }
+
+//---------------------------------------------------------------------------------------
+bool cci_curl_stream::results_by_naked_param( 	//naked param json 
+						const nlohmann::json& naked_paran ,	
+						//url , 							 
+						const nlohmann::json& dest ,
+						std::ostream* ostr )
+{
+		curlpp::Easy request;				
+		if( debug() )	
+		{ debug_request( request ); }
+
+
+		try
+		{
+			ostr->flush();
+		}
+		catch( curlpp::RuntimeError &e )
+		{
+			*ostr << e.what() 
+				      << "\n";
+		}
+		catch( curlpp::LogicError &e )
+		{
+			*ostr << e.what() 
+			      << "\n";
+		}
+		catch( ... )
+		{
+			std::cerr << "untyped exception...."
+				  << "\n";
+
+		}
+
+
+
+		return true;
+}
+
+//---------------------------------------------------------------------------------------
+void  cci_curl_stream::base_post( curlpp::Easy& req ,
+				  string_list& headers ,
+				  const std::string& post_fields )
+
+{
+		req.setOpt( FailOnError( true  ));
+		req.setOpt( curlpp::options::HttpHeader( headers ) ); 
+
+		req.setOpt( curlpp::options::PostFields( post_fields ) );
+		req.setOpt( curlpp::options::PostFieldSize( post_fields.length() ) );
+
+		req.perform();
+
+}
+
