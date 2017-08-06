@@ -39,8 +39,9 @@ namespace cpp_real_stream
 			
 				//helpers
 				virtual void base_post( curlpp::Easy& req ,
-						        string_list& headers ,
-						        const std::string& post_fields );
+						        const string_list& headers ,
+						        const std::string& post_fields ,
+                                                        std::ostream* ostr );
 				
 
 			public : 
@@ -81,9 +82,8 @@ namespace cpp_real_stream
 				//in unvalidated json form.
 				//post
 				virtual bool results_by_naked_param( 	//naked param json 
-									const nlohmann::json& naked_paran ,	
-									//url , 							 
-									const nlohmann::json& dest ,
+									const nlohmann::json& naked_param ,	
+									const nlohmann::json& url ,	
 									std::ostream* ostr = nullptr );
 
 			

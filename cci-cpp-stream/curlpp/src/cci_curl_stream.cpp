@@ -133,7 +133,7 @@ bool cci_curl_stream::execute_base_bool_p( const std::string& url  ,
 		catch( curlpp::RuntimeError &e )
 		{
 			*ostr << e.what() 
-				      << "\n";
+			      << "\n";
 		}
 		catch( curlpp::LogicError &e )
 		{
@@ -221,9 +221,8 @@ bool cci_curl_stream::instantiate_atomic_payload( json& moniker ,
 
 //---------------------------------------------------------------------------------------
 bool cci_curl_stream::results_by_naked_param( 	//naked param json 
-						const nlohmann::json& naked_paran ,	
-						//url , 							 
-						const nlohmann::json& dest ,
+						const nlohmann::json& naked_param ,
+						const nlohmann::json& url ,	
 						std::ostream* ostr )
 {
 		curlpp::Easy request;				
@@ -234,11 +233,24 @@ bool cci_curl_stream::results_by_naked_param( 	//naked param json
 		try
 		{
 			ostr->flush();
+
+			request.setOpt (Url( url.at( "url" ).get<std::string>() ) );
+
+			string_list headers;
+    			headers.push_back( app_json_t );  
+
+			base_post( request ,
+				   headers ,
+                                   naked_param.dump() ,
+                                   ostr );
+
+			return true;
+
 		}
 		catch( curlpp::RuntimeError &e )
-		{
+		{ 
 			*ostr << e.what() 
-				      << "\n";
+			      << "\n";
 		}
 		catch( curlpp::LogicError &e )
 		{
@@ -259,10 +271,16 @@ bool cci_curl_stream::results_by_naked_param( 	//naked param json
 
 //---------------------------------------------------------------------------------------
 void  cci_curl_stream::base_post( curlpp::Easy& req ,
-				  string_list& headers ,
-				  const std::string& post_fields )
+				  const string_list& headers ,
+				  const std::string& post_fields ,
+				  std::ostream* ostr )
 
 {
+
+		//output write stream
+		curlpp::options::WriteStream ws( ostr );
+		req.setOpt( ws );
+
 		req.setOpt( FailOnError( true  ));
 		req.setOpt( curlpp::options::HttpHeader( headers ) ); 
 

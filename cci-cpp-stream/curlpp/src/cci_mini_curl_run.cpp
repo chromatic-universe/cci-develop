@@ -22,17 +22,21 @@ int main( int argc , char** argv )
                         //                           "user=wiljoh&password=Argentina1" ,
                         //                         &std::cerr );
 		        auto ostr = std::make_unique<std::ostringstream>();
-			json mon;
-			json meta_j = { { "from" , "wiljoh@localhost" } , { "to" , "corny@snaps" } };
-			json naked_j = { { "url" , "http://127.0.0.1:7080/mongo/imap2017/instantiate_atomic_payload" } };
-			json resource_j = { { "resource" , "/opt/imap_spool/staging/201707261829.7a9bee45" } } ;
+			//json mon;
+			//json meta_j = { { "from" , "wiljoh@localhost" } , { "to" , "corny@snaps" } };
+			//json naked_j = { { "url" , "http://127.0.0.1:7080/mongo/imap2017/instantiate_atomic_payload" } };
+			//json resource_j = { { "resource" , "/opt/imap_spool/staging/201707261829.7a9bee45" } } ;
 
 
-			curl->instantiate_atomic_payload( mon ,
-					                  meta_j ,
-							  naked_j ,
-							  resource_j ,
-							  ostr.get() );
+			//curl->instantiate_atomic_payload( mon ,
+			//		                  meta_j ,
+			//				  naked_j ,
+			//				  resource_j ,
+			//				  ostr.get() );
+			json mon = { { "context" , "other_users" } };
+                        json url = { { "url" , "http://localhost:7080/mongo/imap2017/retr_namespace" } };
+			curl->results_by_naked_param( mon , url ,  ostr.get() );
+			
 
 		}
 		catch( curlpp::RuntimeError &e )
