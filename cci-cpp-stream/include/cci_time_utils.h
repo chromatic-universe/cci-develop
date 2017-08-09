@@ -178,6 +178,15 @@ namespace cpp_real_stream
 
                     return ostr.str();
                 }
+		
+		void null_stamp( std::ostream& ostr = std::cerr )
+                {
+                    //non-portable
+                    ostr << colors[m_color]
+                         << "";
+                }
+
+
 
                 void time_stamp( std::string& str )
                 {
