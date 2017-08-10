@@ -17,6 +17,13 @@ namespace cpp_real_stream
 		//aliases
 		using curl_strm_t = cci_curl_stream*;
 
+		template<typename T, typename... Args>
+		std::unique_ptr<T> make_unique(Args&&... args)
+		{
+		    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+		}
+
+		
 
 		class  cci_curl_stream
 		{

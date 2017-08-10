@@ -17,11 +17,11 @@ int main( int argc , char** argv )
 
 		try
 		{
-			auto curl = std::make_unique<cci_curl_stream>();
+			auto curl = make_unique<cci_curl_stream>();
 			//curl->execute_base_bool_p( "http://localhost:7080/mongo/imap2017/plain_text_auth" ,
                         //                           "user=wiljoh&password=Argentina1" ,
                         //                         &std::cerr );
-		        auto ostr = std::make_unique<std::ostringstream>();
+		        auto ostr = make_unique<std::ostringstream>();
 			//json mon;
 			//json meta_j = { { "from" , "wiljoh@localhost" } , { "to" , "corny@snaps" } };
 			//json naked_j = { { "url" , "http://127.0.0.1:7080/mongo/imap2017/instantiate_atomic_payload" } };

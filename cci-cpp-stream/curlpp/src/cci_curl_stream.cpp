@@ -26,7 +26,7 @@ namespace
 			}
 	};
 
-	std::unique_ptr<stream_debug> strd = std::make_unique<stream_debug>();
+	std::unique_ptr<stream_debug> strd = make_unique<stream_debug>();
 
 	//-------------------------------------------------------------------------------
 	void debug_request(  curlpp::Easy& req  )
