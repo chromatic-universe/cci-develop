@@ -1,1 +1,0 @@
-/usr/bin/clang++  -fPIC -Wall -g -rdynamic -O0  -Qunused-arguments  -DDEBUG -std=c++14  -shared -Wl,-soname,libcci_kafka_stream.so.1 -o libcci_kafka_stream.so.1.0.0 CMakeFiles/cci_kafka_stream.dir/cci_kafka_consumer.cpp.o CMakeFiles/cci_kafka_stream.dir/cci_kafka_producer.cpp.o CMakeFiles/cci_kafka_stream.dir/cci_kafka_utils.cpp.o  -L/dev_t/lib 
