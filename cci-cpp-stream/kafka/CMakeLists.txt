@@ -6,8 +6,8 @@ cmake_minimum_required(VERSION 2.8)
 project(cci-kafka-cpp-stream)
 
 #cpp flags
-set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g -rdynamic -O0  -Qunused-arguments  -DDEBUG -std=c++14")
-set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O3  -rdynamic -Qunused-arguments  -DNDEBUG -std=c++14")
+set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g -rdynamic -O0  -Qunused-arguments  -DDEBUG -std=c++1z")
+set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O3  -rdynamic -Qunused-arguments  -DNDEBUG -std=c++1z")
 
 #includes
 include_directories( ${cci-kafka-cpp-streamSOURCE_DIR}

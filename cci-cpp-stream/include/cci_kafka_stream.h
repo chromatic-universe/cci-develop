@@ -218,7 +218,7 @@ namespace cpp_real_stream
 	       while( m_preamble->run() )
 	       {
 		     if( -1 == m_ptr_rd->consume_callback(   m_ptr_topic ,
-							     0 , //m_cur_partition ,
+							     m_cur_partition ,
 							     1000 ,
 							     m_preamble->kafka_consume_cb() ,
 							     &use_ccb ) )
