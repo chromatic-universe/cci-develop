@@ -31,16 +31,17 @@ namespace cpp_real_stream
 											       m_b_valid{ false }
 				{
 				}		
-				catch( std::exception& err )
-				{
-					std::cerr << err.what() 
-						  << "\n";	
-				}
 				catch ( curlpp::RuntimeError & err )
 				{
 					std::cerr << err.what() 
 						  << "\n";
 				}
+				catch( std::exception& err )
+				{
+					std::cerr << err.what() 
+						  << "\n";	
+				}
+
 
 
 				//dtor
