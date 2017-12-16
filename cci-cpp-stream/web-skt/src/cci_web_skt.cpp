@@ -1,5 +1,3 @@
-//cci_web_skt_stream.hpp    chromatic universe 2017  william k. johnson
-
 
 #ifdef _WIN32
     #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
