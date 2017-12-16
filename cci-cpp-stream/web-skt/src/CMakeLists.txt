@@ -19,7 +19,7 @@ link_directories( $ENV{DEV}/lib)
 
 #library
 add_library(cci_web_skt_stream SHARED cci_web_skt_stream.cpp)
-set_target_properties(cci_web_skt PROPERTIES
+set_target_properties(cci_web_skt_stream PROPERTIES
                                   VERSION 1.0.0
                                   SOVERSION 1) 
 
@@ -32,7 +32,7 @@ add_executable(cci_mini_web_skt_run  cci_mini_web_skt_run.cpp)
 target_link_libraries(cci_mini_web_skt_run  cci_web_skt_stream)
 
 #install
-install_targets(/lib cci_web_skt+stream)
+install_targets(/lib cci_web_skt_stream)
 install_targets(/bin cci_mini_web_skt_run)
 
 install (DIRECTORY ../../include/ 

@@ -1,5 +1,4 @@
-#ifndef EASYWSCLIENT_HPP_20120819_MIOFVASDTNUASZDQPLFD
-#define EASYWSCLIENT_HPP_20120819_MIOFVASDTNUASZDQPLFD
+
 
 // This code comes from:
 // https://github.com/dhbaird/easywsclient
@@ -8,10 +7,13 @@
 // wget https://raw.github.com/dhbaird/easywsclient/master/easywsclient.hpp
 // wget https://raw.github.com/dhbaird/easywsclient/master/easywsclient.cpp
 
+//cci_web_skt_stream.hpp chromatic unvierse 2017 william k. johnson
+#pragma once
+
 #include <string>
 #include <vector>
 
-namespace easywsclient {
+namespace cpp_real_stream {
 
 struct Callback_Imp { virtual void operator()(const std::string& message) = 0; };
 struct BytesCallback_Imp { virtual void operator()(const std::vector<uint8_t>& message) = 0; };
@@ -69,4 +71,4 @@ class WebSocket {
 
 } // namespace easywsclient
 
-#endif /* EASYWSCLIENT_HPP_20120819_MIOFVASDTNUASZDQPLFD */
+

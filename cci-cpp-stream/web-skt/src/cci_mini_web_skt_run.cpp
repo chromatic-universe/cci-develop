@@ -8,7 +8,7 @@
 #include <memory>
 
 
-using easywsclient::WebSocket;
+using cpp_real_stream::WebSocket;
 
 int main( int argc , char** argv )
 {
