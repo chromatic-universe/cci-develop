@@ -93,6 +93,16 @@ namespace cpp_real_stream
 									const nlohmann::json& url ,	
 									std::ostream* ostr = nullptr );
 
+				//json result set; 
+				//naked param. i.e.,url post payload
+				//in unvalidated json form.
+				//post , async results
+				virtual bool results_by_naked_param_async( 	//naked param json 
+										const nlohmann::json& naked_param ,	
+										const nlohmann::json& url ,	
+										std::ostream* ostr = nullptr );
+
+
 			
 
 				

@@ -291,3 +291,11 @@ void  cci_curl_stream::base_post( curlpp::Easy& req ,
 
 }
 
+//---------------------------------------------------------------------------------------
+bool  cci_curl_stream::results_by_naked_param_async( 	const nlohmann::json& naked_param ,	
+							const nlohmann::json& url ,	
+						        std::ostream* ostr )
+{
+		return true;
+}
+
