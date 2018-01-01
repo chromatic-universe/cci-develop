@@ -1,4 +1,4 @@
-//cci_curl_stream.cpp   chroamtic universe  2017   william k. johnson
+ //cci_curl_stream.cpp   chroamtic universe  2017   william k. johnson
 
 
 
@@ -262,7 +262,7 @@ bool cci_curl_stream::instantiate_atomic_payload( json& moniker ,
 		catch( ... )
 		{
 			std::cerr << "untyped exception...."
-				  << "\n";
+				  << "\n"; 
 
 		}
 
@@ -348,92 +348,28 @@ bool  cci_curl_stream::results_by_naked_param_async( 	const nlohmann::json& nake
 						        std::ostream* ostr )
 {
 
-		curlpp::Easy request;				
-		if( debug() )	
-		{ debug_request( request ); }
-		
-			
+		bool b_ret { false };
+
 		try
 		{
-			ostr->flush();
+			std::future<std::string> future = invoke_async_post( url.at( "url" ).get<std::string>() ,
+                                                                             naked_param.dump() );
 
-			request.setOpt ( Url( url.at( "url" ).get<std::string>() ) );
-			request.setOpt ( Verbose( true ) );
-
-			string_list headers;
-    			headers.push_back( app_json_t );  
-
-			
-			//output write stream
-			curlpp::options::WriteStream ws( ostr );
-			request.setOpt( ws );
-
-			request.setOpt( FailOnError( true  ));
-			request.setOpt( curlpp::options::HttpHeader( headers ) ); 
-
-			request.setOpt( curlpp::options::PostFields( naked_param.dump() ) );
-			request.setOpt( curlpp::options::PostFieldSize( naked_param.dump().length() ) );
- 
-			int nb_left { 0 };
-			curlpp::Multi requests;
-			requests.add( &request );
-
-			//init request
-			while( !requests.perform( &nb_left ) ) 
-			{}
-			
-			while( nb_left )
+			std::cout << "waiting...invoke_async_post\n";
+		        std::future_status status;
+		        do
 			{
-				struct timeval timeout;
-				//select return code
-				int rc;
+				status = future.wait_for( std::chrono::seconds( 1 ) );
+				if( status == std::future_status::deferred ) 
+				{   std::cerr << "deferre\n"; }
+				else if( status == std::future_status::timeout )
+				{   std::cerr << "timeout\n"; }
+				else if( status == std::future_status::ready )
+                                {   std::cerr << "ready!\n"; }
 
-				fd_set fdread , fdwrite , fdexcep;
-				FD_ZERO( &fdread );
-				FD_ZERO( &fdwrite );
-				FD_ZERO( &fdexcep );
-				int max_fd;
-
-				//timeout
-				timeout.tv_sec = 1;
-				timeout.tv_usec = 0;
-				
-				//transfer file deacriptors
-				requests.fdset( &fdread , &fdwrite , &fdexcep , &max_fd );
-				//demux
-				rc = select( max_fd + 1 , &fdread , &fdwrite , &fdexcep , &timeout );
-				switch( rc )
-				{
-					case -1 :
-						//select error
-						nb_left = 0;
-						std::cerr << "...select error return....\n";
-						
-						break;
-
-					case 0 :
-						//timeout
-						std::cerr << "...timeout...\n";
-						break;
-
-					default :
-						//data to read or write on descriptor
-						{
-							std::cerr << "...default...\n";
-							while( !requests.perform( &nb_left ) ) 
-							{}
-						}
-						break;					
-							
-				}
-			}			
-			std::cerr << "nb lefts: " 
-                                  << nb_left
-				  << "\n";
-
-			enum_async_info( std::cerr , requests , request );
-
-			return true;
+		        } while ( status != std::future_status::ready ); 
+		 
+		        *ostr << future.get();
 
 		}
 		catch( curlpp::RuntimeError &e )
@@ -454,6 +390,6 @@ bool  cci_curl_stream::results_by_naked_param_async( 	const nlohmann::json& nake
 		}
 
 
-		return true;
+		return b_ret;
 }
 
