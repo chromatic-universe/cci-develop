@@ -12,6 +12,9 @@ using json = nlohmann::json;
 namespace
 {
 	
+	const std::string url_encode_t { "Content-Type: application/x-www-form-urlencoded" };
+	const std::string app_json_t   { "Content-Type: application/json" };
+	
 	//------------------------------------------------------------------------------
 	class stream_debug
 	{
@@ -65,20 +68,33 @@ namespace
 	}
 
 	//---------------------------------------------------------------------------------------
-	std::future<std::string> invoke_async( const std::string& url , const std::string& params )
+	std::future<std::string> invoke_async_post( const std::string& url , const std::string& params )
 	{
 			 return std::async( std::launch::async , 
 				[] ( const std::string& url , const std::string& params ) mutable 
 				{
-					std::ostringstream response;
+				      std::ostringstream response;
 
-					return response.str();
+				      std::list<std::string> header;
+				      header.push_back( app_json_t );
+
+				      curlpp::Easy r;
+				      r.setOpt( curlpp::options::Url( url ) );
+				      r.setOpt( curlpp::options::HttpHeader( header ) );
+                                      r.setOpt( FailOnError( true  ));
+				      r.setOpt( curlpp::options::PostFields( params ) );
+				      r.setOpt( curlpp::options::PostFieldSize( params.length() ) );
+
+				      r.setOpt( curlpp::options::WriteStream( &response ) );
+
+				      r.perform();	
+
+				      return response.str();
+
 				} , url , params );
 	}
 
 
-	const std::string url_encode_t { "Content-Type: application/x-www-form-urlencoded" };
-	const std::string app_json_t   { "Content-Type: application/json" };
 }
 
 //---------------------------------------------------------------------------------------
