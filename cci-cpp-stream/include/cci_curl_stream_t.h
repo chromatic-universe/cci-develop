@@ -13,6 +13,8 @@
 #include <type_traits>
 #include <sstream>
 #include <iostream>
+#include <future>
+#include <functional>
 //c runtime
 #include <ctime>
 #include <cstdint>
@@ -26,6 +28,7 @@
 #include <curlpp/Options.hpp>
 #include <curlpp/Exception.hpp>
 #include <curlpp/Infos.hpp>
+#include <curlpp/Multi.hpp>
 
 //cci
 #include "cci_time_utils.h"

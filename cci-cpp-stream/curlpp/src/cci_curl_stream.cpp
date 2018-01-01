@@ -3,6 +3,7 @@
 
 
 #include <cci_curl_stream.h>
+#include <cstdlib>
 
 using namespace cpp_real_stream;
 using namespace curlpp::Options;
@@ -42,6 +43,39 @@ namespace
 			
 	
 	}
+
+	//-------------------------------------------------------------------------------
+	void enum_async_info( std::ostream& ostr  , curlpp::Multi mult , curlpp::Easy& easy )
+	{
+		//transfer status
+		curlpp::Multi::Msgs msgs = mult.info();
+		for( auto atom : msgs )		
+		{
+			if( atom.second.msg == CURLMSG_DONE )	
+			{
+				if( atom.first == &easy  )	
+				{ 
+					ostr << "...request completed with status of "
+                                             << atom.second.code
+					     << "\n";
+					break;
+				}
+			}
+		}
+	}
+
+	//---------------------------------------------------------------------------------------
+	std::future<std::string> invoke_async( const std::string& url , const std::string& params )
+	{
+			 return std::async( std::launch::async , 
+				[] ( const std::string& url , const std::string& params ) mutable 
+				{
+					std::ostringstream response;
+
+					return response.str();
+				} , url , params );
+	}
+
 
 	const std::string url_encode_t { "Content-Type: application/x-www-form-urlencoded" };
 	const std::string app_json_t   { "Content-Type: application/json" };
@@ -291,11 +325,119 @@ void  cci_curl_stream::base_post( curlpp::Easy& req ,
 
 }
 
+
 //---------------------------------------------------------------------------------------
 bool  cci_curl_stream::results_by_naked_param_async( 	const nlohmann::json& naked_param ,	
 							const nlohmann::json& url ,	
 						        std::ostream* ostr )
 {
+
+		curlpp::Easy request;				
+		if( debug() )	
+		{ debug_request( request ); }
+		
+			
+		try
+		{
+			ostr->flush();
+
+			request.setOpt ( Url( url.at( "url" ).get<std::string>() ) );
+			request.setOpt ( Verbose( true ) );
+
+			string_list headers;
+    			headers.push_back( app_json_t );  
+
+			
+			//output write stream
+			curlpp::options::WriteStream ws( ostr );
+			request.setOpt( ws );
+
+			request.setOpt( FailOnError( true  ));
+			request.setOpt( curlpp::options::HttpHeader( headers ) ); 
+
+			request.setOpt( curlpp::options::PostFields( naked_param.dump() ) );
+			request.setOpt( curlpp::options::PostFieldSize( naked_param.dump().length() ) );
+ 
+			int nb_left { 0 };
+			curlpp::Multi requests;
+			requests.add( &request );
+
+			//init request
+			while( !requests.perform( &nb_left ) ) 
+			{}
+			
+			while( nb_left )
+			{
+				struct timeval timeout;
+				//select return code
+				int rc;
+
+				fd_set fdread , fdwrite , fdexcep;
+				FD_ZERO( &fdread );
+				FD_ZERO( &fdwrite );
+				FD_ZERO( &fdexcep );
+				int max_fd;
+
+				//timeout
+				timeout.tv_sec = 1;
+				timeout.tv_usec = 0;
+				
+				//transfer file deacriptors
+				requests.fdset( &fdread , &fdwrite , &fdexcep , &max_fd );
+				//demux
+				rc = select( max_fd + 1 , &fdread , &fdwrite , &fdexcep , &timeout );
+				switch( rc )
+				{
+					case -1 :
+						//select error
+						nb_left = 0;
+						std::cerr << "...select error return....\n";
+						
+						break;
+
+					case 0 :
+						//timeout
+						std::cerr << "...timeout...\n";
+						break;
+
+					default :
+						//data to read or write on descriptor
+						{
+							std::cerr << "...default...\n";
+							while( !requests.perform( &nb_left ) ) 
+							{}
+						}
+						break;					
+							
+				}
+			}			
+			std::cerr << "nb lefts: " 
+                                  << nb_left
+				  << "\n";
+
+			enum_async_info( std::cerr , requests , request );
+
+			return true;
+
+		}
+		catch( curlpp::RuntimeError &e )
+		{ 
+			*ostr << e.what() 
+			      << "\n";
+		}
+		catch( curlpp::LogicError &e )
+		{
+			*ostr << e.what() 
+			      << "\n";
+		}
+		catch( ... )
+		{
+			std::cerr << "untyped exception...."
+				  << "\n";
+
+		}
+
+
 		return true;
 }
 

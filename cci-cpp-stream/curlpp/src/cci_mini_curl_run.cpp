@@ -34,8 +34,8 @@ int main( int argc , char** argv )
 			//				  resource_j ,
 			//				  ostr.get() );
 			json mon = { { "context" , "other_users" } };
-                        json url = { { "url" , "http://localhost:7080/mongo/imap2017/retr_namespace" } };
-			curl->results_by_naked_param( mon , url ,  ostr.get() );
+                        json url = { { "url" , "http://localhost:7080//mongo/imap2017/retr_namespace" } };
+			curl->results_by_naked_param_async( mon , url ,  ostr.get() );
 			
 
 		}
