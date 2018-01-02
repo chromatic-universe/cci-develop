@@ -100,7 +100,8 @@ namespace cpp_real_stream
 				virtual bool results_by_naked_param_async( 	//naked param json 
 										const nlohmann::json& naked_param ,	
 										const nlohmann::json& url ,	
-										std::ostream* ostr = nullptr );
+										std::ostream* ostr = nullptr  ,
+                                                                                unsigned future_wait_duration_secs = 1 );
 
 
 			
