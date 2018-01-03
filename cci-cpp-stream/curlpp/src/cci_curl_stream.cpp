@@ -14,6 +14,8 @@ namespace
 	
 	const std::string url_encode_t { "Content-Type: application/x-www-form-urlencoded" };
 	const std::string app_json_t   { "Content-Type: application/json" };
+
+
 	
 	//------------------------------------------------------------------------------
 	class stream_debug
@@ -115,15 +117,18 @@ bool cci_curl_stream::execute_base_bool_g( const std::string& url ,
 		curlpp::Easy request;				
 		if( debug() )	
 		{ debug_request( request ); }
+		
+		//ostr->flush();
 
 		try
 		{
 			
 			request.setOpt (Url( url ) );
 			curlpp::options::WriteStream ws( ostr );
-	           	request.setOpt( ws );
+	                request.setOpt( ws );
 			request.setOpt( FailOnError( true  ));
-			request.perform();	
+			request.perform();
+
 
 			return true;
 		}

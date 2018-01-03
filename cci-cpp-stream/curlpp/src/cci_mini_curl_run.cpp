@@ -33,10 +33,14 @@ int main( int argc , char** argv )
 			//				  naked_j ,
 			//				  resource_j ,
 			//				  ostr.get() );
-			json mon = { { "context" , "other_users" } };
-                        json url = { { "url" , "http://localhost:7080//mongo/imap2017/retr_namespace" } };
-			curl->results_by_naked_param_async( mon , url ,  ostr.get() );
+			//json mon = { { "context" , "other_users" } };
+                        //json url = { { "url" , "http://localhost:7080//mongo/imap2017/retr_namespace" } };
+			//curl->results_by_naked_param_async( mon , url ,  ostr.get() );
+			//std::cerr  << ostr->str() << "\n";
+			curl->execute_base_bool_g( "http://localhost:7080/mongo/imap2017/retr_capabilities" ,
+                                                   ostr.get() );
 			std::cerr  << ostr->str() << "\n";
+                            
 			
 
 		}

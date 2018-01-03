@@ -13,6 +13,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O3  -rdynamic  -DNDEBUG -std=c++11")
 include_directories( ${cci_curk_ppSOURCE_DIR}
 	             ../../include
                      $ENV{DEV}/include
+		     $ENV{SOURCE_ROOT}/cci-daemon/include
                    )
 #link location
 link_directories( $ENV{DEV}/lib)
@@ -31,6 +32,7 @@ add_executable(cci_mini_curl_run  cci_mini_curl_run.cpp)
 #link libs
 target_link_libraries(cci_mini_curl_run -lcurl
 		                        -lcurlpp
+				        -lcci-daemon-core
 					 cci_curlpp_stream)
 
 #install
