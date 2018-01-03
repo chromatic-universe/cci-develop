@@ -117,7 +117,7 @@ def local_mac_addr() :
 			pass
 
 
-lname = 'king-console-intf' + local_mac_addr()
+lname = 'king-console-intf' #+ local_mac_addr()
 
 
 
