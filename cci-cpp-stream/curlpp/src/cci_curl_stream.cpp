@@ -377,6 +377,8 @@ bool  cci_curl_stream::results_by_naked_param_async( 	const nlohmann::json& nake
 		 
 		        *ostr << future.get();
 
+			b_ret = true;
+
 		}
 		catch( curlpp::RuntimeError &e )
 		{ 

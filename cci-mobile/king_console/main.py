@@ -1,4 +1,4 @@
-
+import datetime
 
 import sqlite3
 
@@ -74,7 +74,7 @@ from king_console.kc_stream 	import kc_mongo_config , \
 								       kc_kafka_config
 from king_console.kc_wireless import *
 
-
+from datetime import datetime
 
 
 
@@ -152,7 +152,7 @@ class stream_formatter( logging.Formatter ) :
 				def format( self , record ) :
 
 					data = {'@message': record.msg,
-							'@timestamp': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+							'@timestamp': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
 							'@type':  lname }
 
 
