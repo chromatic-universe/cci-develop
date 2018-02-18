@@ -347,20 +347,20 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 				    break;
 		    //group
 		    case 'g' :
-			kc->group_id = optarg;
-			break;
+			            kc->group_id = optarg;
+				    break;
 		    //group
 		    case 'd' :
-			kc->debug_flags = optarg;
-			break;
+				    kc->debug_flags = optarg;
+				    break;
 		    //dump configuration
 		    case 'x' :
 			kc->dump_config = 1;
 			break;
 		    //consumption offset
-			    case 'o':
-				    kc->start_offset = atoi( optarg );
-				    break;
+		    case 'o':
+		         kc->start_offset = atoi( optarg );
+  		         break;
 		    case 'v':
 			fprintf( stderr , "\033[22;32mcci_mini_kafka_run version 0.8 william k. johnson 2016\n\033[0m" );
 			exit( 0 );
