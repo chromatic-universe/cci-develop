@@ -15,6 +15,7 @@ include_directories( ${cci-kafka_utilSOURCE_DIR}
                      $ENV{DEV}/include
                      /usr/lib/i386-linux-gnu/glib-2.0/include
                      /usr/lib/x86_64-linux-gnu/glib-2.0/include
+                     /usr/lib/arm-linux-gnueabihf/glib-2.0/include
                      ../include
 	             ../../include                   
                    )
