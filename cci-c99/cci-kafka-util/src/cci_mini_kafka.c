@@ -1209,12 +1209,12 @@ void configuration_dump( kafka_context_ptr kc )
             {
 				arr = rd_kafka_conf_dump( kc->conf_ptr , &cnt );
                 _L( "" , "%s" );
-				printf( "%%%%%% global config %%%%%%%\n" );
+				printf( "*****  global config *****\n" );
 			}
             else
             {
                    _L( "" , "%s" );
-                   printf( "%%%%%% topic config %%%%%%\n" );
+                   printf( "****** topic config ******\n" );
                    arr = rd_kafka_topic_conf_dump( kc->conf_topic_ptr ,
 							                    &cnt );
 			}
