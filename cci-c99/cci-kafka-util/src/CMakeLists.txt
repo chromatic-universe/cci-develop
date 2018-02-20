@@ -24,12 +24,14 @@ link_directories( $ENV{DEV}/lib)
 
 #library
 add_library(cci_kafka_utils SHARED   cci_mini_kafka.c)
+
+target_link_libraries(cci_kafka_utils  -lrdkafka)
 set_target_properties(cci_kafka_utils PROPERTIES
                                       VERSION 1.0.0
                                       SOVERSION 1) 
 
 
-#binary
+
 add_executable(cci_mini_kafka_run  mini_kafka_run.c)                               
                                    
 

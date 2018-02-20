@@ -188,4 +188,3 @@ extern void cci_kf_rebalance_cb (  rd_kafka_t *rk,
                                    rd_kafka_topic_partition_list_t *partitions ,
                                    void *opaque );
 
-
