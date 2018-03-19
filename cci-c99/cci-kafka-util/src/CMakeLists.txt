@@ -32,17 +32,17 @@ set_target_properties(cci_kafka_utils PROPERTIES
 
 
 
-add_executable(cci_mini_kafka_run  mini_kafka_run.c)                               
+add_executable(chk-kafka mini_kafka_run.c)                               
                                    
 
 #link libs
-target_link_libraries(cci_mini_kafka_run -lrdkafka
-                                         -lglib-2.0
-                                          cci_kafka_utils)
+target_link_libraries(chk-kafka  -lrdkafka
+                                 -lglib-2.0
+                                  cci_kafka_utils)
 
 #install
 install_targets(/lib cci_kafka_utils)
-install_targets(/bin cci_mini_kafka_run)
+install_targets(/bin chk-kafka)
 
 install (DIRECTORY ../include/ 
          DESTINATION include)

@@ -660,7 +660,7 @@ void stream_out_usage( const char* binary )
 			"\n" \
 			"\n" ,
             "synopsis :\n"\
-                "\n\t\t mini utils for kafka server manip\n" ,
+                "\n\t\t mini utils for kafka server manip chromatic universe  2017\n" ,
 			binary ,
 			rd_kafka_version_str() ,
             rd_kafka_version()
