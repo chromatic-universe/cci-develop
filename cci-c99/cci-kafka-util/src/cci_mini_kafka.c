@@ -362,7 +362,7 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 		         kc->start_offset = atoi( optarg );
   		         break;
 		    case 'v':
-			fprintf( stderr , "\033[22;32mcci_mini_kafka_run version 0.8 william k. johnson 2016\n\033[0m" );
+			fprintf( stderr , "\033[22;32mcci_mini_kafka_run version 0.91 chromatic universe william k. johnson 2018\n\033[0m" );
 			exit( 0 );
 		    case 'h' :
 		    default :
