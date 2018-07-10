@@ -134,15 +134,23 @@ namespace cpp_real_stream
                 void color( const stamp_color sc ) { m_color = sc; }
 
                 //services
-                virtual std::string present() const noexcept
+                virtual std::string present()
                 {
-                    std::time_t result = time( nullptr );
-                    std::string sz = std::ctime( &result );
-                    sz.resize( sz.size() - 1 );
+                    //std::time_t result = time( nullptr );time c function thread safe
+                    //std::string sz = std::ctime( &result );
+                    //sz.resize( sz.size() - 1 );
 
+                    time_t rawtime;
+                    struct tm * timeinfo;
+
+                    time ( &rawtime );
+                    timeinfo = localtime ( &rawtime );
+                    std::string sz { asctime( timeinfo ) };
 
                     return sz;
+
                 }
+
 
                 void time_stamp( std::ostream& ostr = std::cerr )
                 {
@@ -178,7 +186,7 @@ namespace cpp_real_stream
 
                     return ostr.str();
                 }
-		
+
 		void null_stamp( std::ostream& ostr = std::cerr )
                 {
                     //non-portable
