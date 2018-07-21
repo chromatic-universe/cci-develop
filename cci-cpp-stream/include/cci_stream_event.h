@@ -4,3 +4,18 @@
 
 #pragma once
 
+
+#include <cci_kafka_stream.h>
+#include <cci_curl_stream.h>
+
+
+
+
+namespace cpp_real_stream
+{
+
+
+}
+
+
+
