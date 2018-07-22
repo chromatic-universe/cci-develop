@@ -31,7 +31,7 @@ int main( int argc , char* argv[] )
 
         try
         {
-            cci_kafka_producer* prod = new cci_kafka_producer( "imap_base_handler_events" );
+            cci_kafka_producer* prod = new cci_kafka_producer( "imap-base-handler-events" );
 
             //boilerplate
             //time utils

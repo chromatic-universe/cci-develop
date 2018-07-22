@@ -266,6 +266,7 @@ namespace cpp_real_stream
 
                     //helpers
                     bool config_library_producer();
+                    void quick_config_library_producer( const std::string& topic );
 
                     //single topic
                     static rdkafka::Conf *topic_conf;
@@ -297,6 +298,7 @@ namespace cpp_real_stream
                     //services
                     bool config_topic( const std::string& topic );
                     virtual void produce();
+                    virtual void minimal_produce();
                     virtual void produce( const std::string& messge );
 
 

@@ -18,17 +18,11 @@ cci_kafka_producer::cci_kafka_producer( const std::string& topic ) :   m_preambl
                                                                        m_cur_partition { 0 } ,
                                                                        m_b_events { false } ,
                                                                        m_kafka_conf { nullptr }
-                            {
+{
         try
         {
 
-            m_kafka_conf = rdkafka::Conf::create( rdkafka::Conf::CONF_GLOBAL );
-            assert( m_kafka_conf );
-            std::string errstr;
-            m_ptr_rd = rdkafka::Producer::create( m_kafka_conf , errstr );
-            if ( ! m_ptr_rd ) { std::cerr << "..could not create kafka lib handle...\n"; }
-            else { std::cerr << "..created kafka lib handle...\n"; }
-            m_kafka_conf->set(  "metadata.broker.list" , "cci-aws-2:9092" , errstr );
+            quick_config_library_producer( topic );
 
         }
         catch( const std::exception& err )
@@ -73,6 +67,36 @@ cci_kafka_producer::~cci_kafka_producer()
         rdkafka::wait_destroyed( 5000 );
 
  }
+
+
+//----------------------------------------------------------------------------------------
+void  cci_kafka_producer::quick_config_library_producer( const std::string& topic )
+{
+
+        m_kafka_conf = rdkafka::Conf::create( rdkafka::Conf::CONF_GLOBAL );
+        assert( m_kafka_conf );
+        //
+        std::string errstr;
+        m_kafka_conf->set(  "metadata.broker.list" , "cci-aws-2:9092" , errstr );
+        //
+        m_ptr_rd = rdkafka::Producer::create( m_kafka_conf , errstr );
+        if ( ! m_ptr_rd ) { std::cerr << "..could not create kafka lib handle...\n"; }
+        else { std::cerr << "..created kafka lib handle...\n"; }
+        //
+        m_ptr_topic = rdkafka::Topic::create( m_ptr_rd ,
+                                              topic ,
+                                              topic_conf ,
+                                              errstr );
+        if ( ! m_ptr_topic ) { std::cerr << "..could not create kafka topic...\n"; }
+        else { std::cerr << "..created kafka topic...\n"; }
+        //
+        if( m_ptr_topic )
+        {
+            minimal_produce();
+        }
+
+
+}
 
 //----------------------------------------------------------------------------------------
 bool cci_kafka_producer::config_library_producer()
@@ -203,6 +227,55 @@ void cci_kafka_producer::produce()
         }
 
 }
+
+//----------------------------------------------------------------------------------------
+void cci_kafka_producer::minimal_produce()
+{
+        std::cerr << "producing....\n";
+
+        //read message from stdin
+        bool run = true;
+        std::string line( "the original corny snaps" );
+        for (std::string line; run && std::getline(std::cin, line);)
+        {
+            if ( line.empty() )
+            {
+                m_ptr_rd->poll( 0 );
+	            continue;
+            }
+
+            //produce message
+            rdkafka::ErrorCode resp =  m_ptr_rd->produce (  m_ptr_topic ,
+                                                            m_cur_partition ,
+                                                            rdkafka::Producer::RK_MSG_COPY  ,
+                                                            const_cast<char *>(line.c_str( ) ) ,
+                                                            line.size() ,
+                                                            NULL ,
+                                                            NULL );
+            if( resp != RdKafka::ERR_NO_ERROR )
+            {
+                   std::cerr << "produce failed....\n";
+            }
+            else
+            {
+                   std::cerr << "% Produced message ("
+                             << line.size()
+                             << " bytes)\n";
+            }
+            m_ptr_rd->poll( 0 );
+        }
+        run = true;
+
+        while ( run && m_ptr_rd->outq_len() > 0)
+        {
+                std::cerr << "waiting for "
+                          << m_ptr_rd->outq_len()
+                          << "\n";
+                m_ptr_rd->poll( 1000 ) ;
+        }
+
+}
+
 
 
 //----------------------------------------------------------------------------------------
