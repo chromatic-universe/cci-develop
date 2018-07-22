@@ -92,7 +92,7 @@ void  cci_kafka_producer::quick_config_library_producer( const std::string& topi
         //
         if( m_ptr_topic )
         {
-            minimal_produce();
+            minimal_produce( R"({ "the-original-corny-snaps" : "snitch" })");
         }
 
 
@@ -229,50 +229,43 @@ void cci_kafka_producer::produce()
 }
 
 //----------------------------------------------------------------------------------------
-void cci_kafka_producer::minimal_produce()
+void cci_kafka_producer::minimal_produce(  const std::string& message  )
 {
         std::cerr << "producing....\n";
 
-        //read message from stdin
-        bool run = true;
-        std::string line( "the original corny snaps" );
-        for (std::string line; run && std::getline(std::cin, line);)
-        {
-            if ( line.empty() )
-            {
-                m_ptr_rd->poll( 0 );
-	            continue;
-            }
 
-            //produce message
-            rdkafka::ErrorCode resp =  m_ptr_rd->produce (  m_ptr_topic ,
-                                                            m_cur_partition ,
-                                                            rdkafka::Producer::RK_MSG_COPY  ,
-                                                            const_cast<char *>(line.c_str( ) ) ,
-                                                            line.size() ,
-                                                            NULL ,
-                                                            NULL );
-            if( resp != RdKafka::ERR_NO_ERROR )
-            {
-                   std::cerr << "produce failed....\n";
-            }
-            else
-            {
-                   std::cerr << "% Produced message ("
-                             << line.size()
-                             << " bytes)\n";
-            }
-            m_ptr_rd->poll( 0 );
-        }
-        run = true;
+	    //read message from stdin
+	    bool run = true;
 
-        while ( run && m_ptr_rd->outq_len() > 0)
-        {
-                std::cerr << "waiting for "
-                          << m_ptr_rd->outq_len()
-                          << "\n";
-                m_ptr_rd->poll( 1000 ) ;
-        }
+	    //produce message
+	    rdkafka::ErrorCode resp =  m_ptr_rd->produce (  m_ptr_topic ,
+							    m_cur_partition ,
+							    rdkafka::Producer::RK_MSG_COPY  ,
+							    const_cast<char *>( message.c_str( ) ) ,
+							    message.size() ,
+							    NULL ,
+							    NULL );
+	    if( resp != RdKafka::ERR_NO_ERROR )
+	    {
+		   std::cerr << "produce failed....\n";
+	    }
+	    else
+	    {
+		   std::cerr << "% produced message ("
+			     << message.size()
+			     << " bytes)\n";
+	    }
+	    m_ptr_rd->poll( 0 );
+
+	    run = true;
+
+	    while ( run && m_ptr_rd->outq_len() > 0 )
+	    {
+			std::cerr << "waiting for "
+				  << m_ptr_rd->outq_len()
+				  << "\n";
+			m_ptr_rd->poll( 250 ) ;
+	    }
 
 }
 
