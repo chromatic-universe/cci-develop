@@ -79,7 +79,7 @@ namespace cpp_real_stream
                     int64_t                         m_start_offset;
                     bool                            m_b_events;
 
-            public : 
+            public :
 
                     //accessors-inspectors
                     rd_consumer_ptr rd_consumer() noexcept { return m_ptr_rd; }
@@ -99,13 +99,13 @@ namespace cpp_real_stream
 
 	template<typename T>
 	cpp_real_stream::cci_kafka_consumer<T>::cci_kafka_consumer( T  ptr_preamble, bool events ) :
-										         topic_conf( rdkafka::Conf::create( rdkafka::Conf::CONF_TOPIC ) ) , 
+										         topic_conf( rdkafka::Conf::create( rdkafka::Conf::CONF_TOPIC ) ) ,
 											 m_preamble { ptr_preamble } ,
 											 m_tmu(  std::make_unique<time_utils>( stamp_color::green )  ) ,
 											 m_ptr_rd { nullptr } ,
 											 m_ptr_topic { nullptr } ,
 											 m_cur_partition { 0 } ,
-											 m_start_offset { rdkafka::Topic::OFFSET_BEGINNING } 
+											 m_start_offset { rdkafka::Topic::OFFSET_BEGINNING }
 	{
         	assert( ptr_preamble );
         	//library
@@ -211,7 +211,7 @@ namespace cpp_real_stream
 		   m_tmu->time_stamp();
 		   std::cerr << "failed to start consumer...\n";
 		   m_tmu->clear_color();
-		  
+
 		   return;
 	       }
 
@@ -236,9 +236,9 @@ namespace cpp_real_stream
 
 	}
 
-	
-	
-	
+
+
+
         //--------------------------------------------------------------------------------
         class cci_kafka_producer
         {
@@ -248,6 +248,7 @@ namespace cpp_real_stream
                 //ctor
                 explicit cci_kafka_producer( kafka_preamble_ptr ptr_preamble ,
                                              bool events = false );
+                cci_kafka_producer( const std::string& topic );
 
                 //move
                 cci_kafka_producer( cci_kafka_producer&& ckc ) = default;
@@ -279,6 +280,7 @@ namespace cpp_real_stream
                     topic_ptr                       m_ptr_topic;
                     int                             m_cur_partition;
                     bool                            m_b_events;
+                    rdkafka::Conf*                  m_kafka_conf;
 
              public :
 
@@ -290,6 +292,7 @@ namespace cpp_real_stream
                     topic_ptr topic() { return m_ptr_topic; }
                     //mutators
                     void events( bool ev ) { m_b_events = ev; }
+
 
                     //services
                     bool config_topic( const std::string& topic );

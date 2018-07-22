@@ -14,8 +14,8 @@ namespace cpp_real_stream
 {
 
                 //forward declarations
-                template<typename T , typename T2>
-                class stream_protocol_store;
+                template<typename T , typename T2 =  chromatic_protocol_store::cps_query>
+                class event_protocol_store;
 
                 //aliases
                 using kafka_producer_t = cci_kafka_producer*;
@@ -70,8 +70,9 @@ namespace cpp_real_stream
                             private :
 
                                 //attributes
-                                kafka_producer_t            m_producer;
-                                curl_stream_t               m_curl_stream;
+                                kafka_producer_t                                        m_producer;
+                                curl_stream_t                                           m_curl_stream;
+                                std::unique_ptr<event_protocol_store<cci_curl_stream>>  m_store;
 
 
                             protected :
@@ -98,7 +99,7 @@ namespace cpp_real_stream
 
                 };
                 //-------------------------------------------------------------------------------------------------------------------
-                template<typename T , typename T2 = chromatic_protocol_store::cps_query>
+                template<typename T , typename T2>
                 class event_protocol_store : public chromatic_protocol_store::dispatcher_intf<T,T2>
                 {
 

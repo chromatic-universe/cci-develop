@@ -9,6 +9,36 @@ using namespace rdkafka;
 //static initialization
 rdkafka::Conf* cci_kafka_producer::topic_conf = rdkafka::Conf::create( rdkafka::Conf::CONF_TOPIC );
 
+
+//---------------------------------------------------------------------------------------
+cci_kafka_producer::cci_kafka_producer( const std::string& topic ) :   m_preamble { nullptr } ,
+                                                                       m_tmu { nullptr } ,
+                                                                       m_ptr_rd { nullptr } ,
+                                                                       m_ptr_topic { nullptr } ,
+                                                                       m_cur_partition { 0 } ,
+                                                                       m_b_events { false } ,
+                                                                       m_kafka_conf { nullptr }
+                            {
+        try
+        {
+
+            m_kafka_conf = rdkafka::Conf::create( rdkafka::Conf::CONF_GLOBAL );
+            assert( m_kafka_conf );
+            std::string errstr;
+            m_ptr_rd = rdkafka::Producer::create( m_kafka_conf , errstr );
+            if ( ! m_ptr_rd ) { std::cerr << "..could not create kafka lib handle...\n"; }
+            else { std::cerr << "..created kafka lib handle...\n"; }
+            m_kafka_conf->set(  "metadata.broker.list" , "cci-aws-2:9092" , errstr );
+
+        }
+        catch( const std::exception& err )
+        {
+            std::cerr << err.what()
+                      << "\n";
+        }
+
+}
+
 //----------------------------------------------------------------------------------------
 cci_kafka_producer::cci_kafka_producer( kafka_preamble_ptr ptr_preamble ,
                                         bool events ) : m_preamble { ptr_preamble } ,
@@ -183,7 +213,7 @@ void cci_kafka_producer::produce( const std::string& message )
 
 	    //read message from stdin
 	    bool run = true;
-       
+
 	    //produce message
 	    rdkafka::ErrorCode resp =  m_ptr_rd->produce (  m_ptr_topic ,
 							    m_cur_partition ,
@@ -205,7 +235,7 @@ void cci_kafka_producer::produce( const std::string& message )
 			     << " bytes)\n";
 	    }
 	    m_ptr_rd->poll( 0 );
-        
+
 	    run = true;
 
 	    while ( run && m_ptr_rd->outq_len() > 0 )
@@ -243,7 +273,7 @@ void cpp_real_stream::gen_kafka_meta_stream( const std::string& broker ,
 			       producer->tutils()->time_stamp();
 					std::cerr << "%% failed to confiure topic "
 						  << "\n";
-			       return;			
+			       return;
 			}
 			ptr_topic = producer->topic();
 			producer->tutils()->time_stamp();
@@ -253,9 +283,9 @@ void cpp_real_stream::gen_kafka_meta_stream( const std::string& broker ,
 		    {
 			//all topics
 			ptr_topic = nullptr;
-			b_ret = true;		
+			b_ret = true;
 		    }
-		
+
 		    //etch metadata
 		    rdkafka::Metadata *metadata;
 		    rdkafka::ErrorCode err = producer->rd_producer()->metadata(
@@ -271,9 +301,9 @@ void cpp_real_stream::gen_kafka_meta_stream( const std::string& broker ,
 				  << "\n";
 			return;
 		    }
-		    
+
 		    stream_metadata_header( &std::cerr  , metadata , " kafka server" );
 		    metadata_stream( &std::cerr , metadata->topics() );
-		    metadata_stream( &std::cerr , metadata->brokers() );            	
+		    metadata_stream( &std::cerr , metadata->brokers() );
     }
 }

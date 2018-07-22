@@ -31,6 +31,8 @@ int main( int argc , char* argv[] )
 
         try
         {
+            cci_kafka_producer* prod = new cci_kafka_producer( "imap_base_handler_events" );
+
             //boilerplate
             //time utils
             auto tmu( std::make_unique<time_utils>() );
