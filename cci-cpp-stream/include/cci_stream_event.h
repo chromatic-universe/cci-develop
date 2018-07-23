@@ -91,6 +91,7 @@ namespace cpp_real_stream
                                 curl_stream_t  curl_strm() { return m_curl_stream; }
                                 stream_event_class event_class() const noexcept { return m_event_class; }
                                 transport_mechanism transport() const noexcept { return  m_transport; }
+                                event_protocol_store<cci_curl_stream>* store() { return m_store.get(); }
                                 //mutators
                                 void producer( kafka_producer_t kpt ) { m_producer = kpt; }
                                 void curl_strm( curl_stream_t cst ) { m_curl_stream = cst; }
