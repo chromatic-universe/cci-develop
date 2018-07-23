@@ -88,7 +88,7 @@ namespace cpp_real_stream
 
                                 //accessors-inspectiors
                                 kafka_producer_t  producer() { return m_producer; }
-                                curl_stream_t  curl_strml() { return m_curl_stream; }
+                                curl_stream_t  curl_strm() { return m_curl_stream; }
                                 stream_event_class event_class() const noexcept { return m_event_class; }
                                 transport_mechanism transport() const noexcept { return  m_transport; }
                                 //mutators

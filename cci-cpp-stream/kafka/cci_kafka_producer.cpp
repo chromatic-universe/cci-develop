@@ -51,7 +51,6 @@ cci_kafka_producer::cci_kafka_producer( kafka_preamble_ptr ptr_preamble ,
 //----------------------------------------------------------------------------------------
 cci_kafka_producer::~cci_kafka_producer()
 {
-        m_tmu->time_stamp();
         std::cerr << "removing kakfa context.....\n";
 
         if ( m_ptr_rd )
@@ -90,10 +89,10 @@ void  cci_kafka_producer::quick_config_library_producer( const std::string& topi
         if ( ! m_ptr_topic ) { std::cerr << "..could not create kafka topic...\n"; }
         else { std::cerr << "..created kafka topic...\n"; }
         //
-        if( m_ptr_topic )
+        /*if( m_ptr_topic )
         {
             minimal_produce( R"({ "the-original-corny-snaps" : "snitch" })");
-        }
+        }*/
 
 
 }
