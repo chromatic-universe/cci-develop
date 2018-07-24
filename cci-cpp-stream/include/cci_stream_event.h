@@ -37,7 +37,8 @@ namespace cpp_real_stream
 					tm_direct_p_and_s =  0 ,
                     tm_proxy_p_abd_s ,
                     tm_tunnel_p_and_s ,
-					tm_http_post_to_queue
+					tm_http_post_to_queue ,
+                    tm_iiop
 				};
 
 
