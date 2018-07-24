@@ -35,7 +35,7 @@ namespace cpp_real_stream
                 enum class transport_mechanism : unsigned long
 				{
 					tm_direct_p_and_s =  0 ,
-                    tm_proxy_p_abd_s ,
+                    tm_proxy_p_and_s ,
                     tm_tunnel_p_and_s ,
 					tm_http_post_to_queue ,
                     tm_iiop
@@ -83,6 +83,11 @@ namespace cpp_real_stream
                                 stream_event_class          m_event_class;
                                 transport_mechanism         m_transport;
 
+                                //helpers
+                                bool post_event_msg_async( const nlohmann::json&  js ,
+                                                           const std::string& meta_endpoint );
+
+
 
                             public :
 
@@ -98,6 +103,13 @@ namespace cpp_real_stream
                                 void curl_strm( curl_stream_t cst ) { m_curl_stream = cst; }
                                 void event_class( const stream_event_class& ec ) { m_event_class = ec; }
                                 void transport( const transport_mechanism& tm ) { m_transport = tm; }
+
+                                //services
+                                bool dispatch_post_msg( const nlohmann::json& js ,
+                                                        const std::string& meta_endpoint ,
+                                                        const bool& async = true );
+
+
 
                 };
                 //-------------------------------------------------------------------------------------------------------------------
