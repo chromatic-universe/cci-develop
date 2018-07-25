@@ -531,6 +531,7 @@ namespace cpp_real_stream
 			static std::unique_ptr<switch_arg>          consumer_switch;
 			static std::unique_ptr<switch_arg>          producer_switch;
 			static std::unique_ptr<switch_arg>          offset_end_switch;
+			static std::unique_ptr<switch_arg>          offset_begin_switch;
 			static std::unique_ptr<value_arg>           topic_name;
 			static std::unique_ptr<switch_arg>          topic_metadata;
 			static std::unique_ptr<value_arg>           the_brokers;
@@ -634,6 +635,25 @@ namespace cpp_real_stream
                                *cci_kafka_preamble::ccmd.get() ,
                                false
                             ) );
+
+         //start at offset beginning
+		template <
+				typename T ,
+				template<class> class event_callback_policy,
+				template<class> class consumer_callback_policy ,
+				template<class> class delivery_callback_policy
+		         >
+                std::unique_ptr<switch_arg> cci_kafka_preamble<T ,
+							    event_callback_policy ,
+                                consumer_callback_policy ,
+                                delivery_callback_policy>::offset_begin_switch( new switch_arg(  "a" ,
+                               "beginning" ,
+                               "start consuming at beginning offset" ,
+                               *cci_kafka_preamble::ccmd.get() ,
+                               false
+                            ) );
+
+
 
 		//consumer
 		template <
