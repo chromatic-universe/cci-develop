@@ -36,7 +36,7 @@ int main( int argc , char* argv[] )
             //boilerplate
             //time utils
             auto tmu( std::make_unique<time_utils>() );
-            std::cerr << "\n\t\t\tcci-kafka-stream  ~ chromatic universe 2017\n";
+            std::cerr << "\n\t\t\tcci-kafka-stream  ~ chromatic universe 2018\n";
 
 
 
