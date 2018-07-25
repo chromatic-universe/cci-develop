@@ -1,4 +1,4 @@
-//cci_kafka_preamble.hpp  william k. johnson 2017
+//cci_kafka_preamble.hpp  william k. johnson 2018
 
 #pragma once
 
@@ -18,20 +18,20 @@ namespace cpp_real_stream
 							   { kafka_callback::kc_consumer    ,  "consume_cb" } ,
 							   { kafka_callback::kc_delivery    ,  "dr_cb" }
 						         };
-		
+
 
 		//callback policies
 		template<typename T>
 		class default_event_callback
 		{
-				class  kafka_event_cbk : public rdkafka::EventCb 
+				class  kafka_event_cbk : public rdkafka::EventCb
 				{
 
 					public :
-					
+
 						kafka_event_cbk() :   m_ostr( &std::cerr) ,
 								      m_tym( new time_utils() ) ,
-								      m_run{ false } 
+								      m_run{ false }
 
 						{}
 
@@ -42,14 +42,14 @@ namespace cpp_real_stream
 						std::unique_ptr<time_utils>         m_tym;
 						bool 				    m_run;
 					public:
-						
+
 						//accessors-inspectors
-						std::ostream* stream() { return m_ostr; } 
+						std::ostream* stream() { return m_ostr; }
 						bool run() const noexcept { return m_run; }
-			
+
 						//mutators
 						void stream( std::ostream& ostr ) { m_ostr = ostr; }
-						void run( bool b_run ) { m_run = b_run; } 
+						void run( bool b_run ) { m_run = b_run; }
 
 						void event_cb ( rdkafka::Event &event )
 						{
@@ -70,7 +70,7 @@ namespace cpp_real_stream
 									<< event.str()
 									<< ")\n";
 								break;
-							      }	
+							      }
 							      case rdkafka::Event::EVENT_LOG:
 							      {
 								      m_tym->time_stamp();
@@ -94,11 +94,11 @@ namespace cpp_real_stream
 
 						}
 				};
-						
-		
+
+
 			public :
-			
-				
+
+
 				default_event_callback() : m_cbk( std::make_unique<kafka_event_cbk>() )
 				{}
 
@@ -107,32 +107,32 @@ namespace cpp_real_stream
 
 				~default_event_callback()
 				{}
-				
+
 				//attributes
 				T context;
 				std::unique_ptr<kafka_event_cbk> m_cbk;
-				
+
 
 			public :
 
 				//accessors-inspectors
 			 	rdkafka::EventCb* kafka_event_cb() { return m_cbk.get(); }
-								
-				
-				
+
+
+
 		};
 		//
 		template<typename T>
 		class default_consumer_callback
 		{
-				class  kafka_consumer_cbk : public rdkafka::ConsumeCb 
+				class  kafka_consumer_cbk : public rdkafka::ConsumeCb
 				{
 
 					public :
-					
+
 						kafka_consumer_cbk() :   m_ostr( &std::cerr) ,
 								         m_tym( new time_utils() ) ,
-									 m_run{ false } 
+									 m_run{ false }
 						{}
 
 					private :
@@ -144,16 +144,16 @@ namespace cpp_real_stream
 
 
 					public:
-						
+
 						//accessors-inspectors
-						std::ostream* stream() { return m_ostr; } 			
+						std::ostream* stream() { return m_ostr; }
 						bool run() const noexcept { return m_run; }
 
 						//mutators
 						void stream( std::ostream& ostr ) { m_ostr = ostr; }
-						void run( bool b_run ) { m_run = b_run; } 
+						void run( bool b_run ) { m_run = b_run; }
 
-						
+
 						//services
 						void consume_cb( rdkafka::Message &message ,  void *opaque )
 						{
@@ -202,47 +202,47 @@ namespace cpp_real_stream
 					    	 }
 					}
 				};
-						
-		
+
+
 			public :
-			
-				
+
+
 				default_consumer_callback() : m_cbk( std::make_unique<kafka_consumer_cbk>() )
 				{}
 
 
-		
+
 
 			protected :
 
 				~default_consumer_callback()
 				{}
-				
+
 				//attributes
 				T context;
 				std::unique_ptr<kafka_consumer_cbk> m_cbk;
-				
+
 
 			public :
 
 				//accessors-inspectors
 			 	rdkafka::ConsumeCb* kafka_consume_cb() { return m_cbk.get(); }
-								
-				
-				
+
+
+
 		};
 		//
 		template<typename T>
 		class default_delivery_callback
 		{
-				class  kafka_delivery_cbk : public rdkafka::DeliveryReportCb 
+				class  kafka_delivery_cbk : public rdkafka::DeliveryReportCb
 				{
 
 					public :
-					
+
 						kafka_delivery_cbk() :   m_ostr( &std::cerr) ,
 								         m_tym( new time_utils() ) ,
-									 m_run{ false } 
+									 m_run{ false }
 						{}
 
 					private :
@@ -254,16 +254,16 @@ namespace cpp_real_stream
 
 
 					public:
-						
+
 						//accessors-inspectors
-						std::ostream* stream() { return m_ostr; } 			
+						std::ostream* stream() { return m_ostr; }
 						bool run() const noexcept { return m_run; }
 
 						//mutators
 						void stream( std::ostream& ostr ) { m_ostr = ostr; }
-						void run( bool b_run ) { m_run = b_run; } 
+						void run( bool b_run ) { m_run = b_run; }
 
-						
+
 						//services
 						void dr_cb( rdkafka::Message &message )
 						{
@@ -312,39 +312,39 @@ namespace cpp_real_stream
 					    	 }
 					}
 				};
-						
-		
+
+
 			public :
-			
-				
+
+
 				default_delivery_callback() : m_cbk( std::make_unique<kafka_delivery_cbk>() )
 				{}
 
 
-		
+
 
 			protected :
 
 				~default_delivery_callback()
 				{}
-				
+
 				//attributes
 				T context;
 				std::unique_ptr<kafka_delivery_cbk> m_cbk;
-				
+
 
 			public :
 
 				//accessors-inspectors
 			 	rdkafka::DeliveryReportCb* kafka_delivery_cb() { return m_cbk.get(); }
-								
-				
-				
+
+
+
 		};
 
 		//--------------------------------------------------------------------------------
 		template <
-				typename T ,     
+				typename T ,
 				template<class> class event_callback_policy ,
 				template<class> class consumer_callback_policy ,
 				template<class> class delivery_callback_policy
@@ -385,7 +385,7 @@ namespace cpp_real_stream
 			bool m_eof;
 			bool m_run;
 
-			//helpers			
+			//helpers
 			//----------------------------------------------------------------------------------------
 			void config_metadata()
 			{
@@ -455,13 +455,13 @@ namespace cpp_real_stream
 				run( true );
 
 				bool b_ret { false };
-					
+
 				//set event callback
-				std::string cbk_str { k_callbacks[kafka_callback::kc_event] };	
+				std::string cbk_str { k_callbacks[kafka_callback::kc_event] };
 				if(  gconf->set( cbk_str ,
 					    	this->kafka_event_cb() ,
 					    errstr ) ==  rdkafka::Conf::CONF_OK )
-				
+
 				{
 				   m_tmu->time_stamp();
 				   std::cerr << "setting consumer callback....\n";
@@ -475,7 +475,7 @@ namespace cpp_real_stream
 				         cbk_str = k_callbacks[kafka_callback::kc_delivery];
 					 if(  gconf->set( cbk_str ,
 					    	this->kafka_delivery_cb() ,
-					    errstr ) ==  rdkafka::Conf::CONF_OK )				    
+					    errstr ) ==  rdkafka::Conf::CONF_OK )
 				    	 { b_ret = true; }
 				    }
 				}
@@ -490,7 +490,7 @@ namespace cpp_real_stream
 				    m_b_valid = false;
 				}
 				else
-				{				   
+				{
 				    m_tmu->time_stamp();
 				    std::cerr << "kafka interface initialized..callbacks set...valid\n";
 				    m_b_valid = true;
@@ -515,7 +515,7 @@ namespace cpp_real_stream
 			static rdkafka::Conf* g_config() { return gconf; }
 			bool exit_on_eof() { return m_eof; }
 			bool run() { return m_run; }
-			
+
 
 			//mutators
 			void events( bool ev ) { m_b_events = ev; }
@@ -530,6 +530,7 @@ namespace cpp_real_stream
 			static std::unique_ptr<switch_arg>          debug_switch;
 			static std::unique_ptr<switch_arg>          consumer_switch;
 			static std::unique_ptr<switch_arg>          producer_switch;
+			static std::unique_ptr<switch_arg>          offset_end_switch;
 			static std::unique_ptr<value_arg>           topic_name;
 			static std::unique_ptr<switch_arg>          topic_metadata;
 			static std::unique_ptr<value_arg>           the_brokers;
@@ -557,8 +558,8 @@ namespace cpp_real_stream
 
 
 		typedef cci_kafka_preamble<
-                                           placeholder,
-                                           default_event_callback ,
+                       placeholder,
+                       default_event_callback ,
 					   default_consumer_callback ,
 					   default_delivery_callback
                                           >  kafka_default_preamble;
@@ -566,8 +567,8 @@ namespace cpp_real_stream
 
 
 		//static initialization-this verbosity seems unavoidable
-	        template <
-				typename T ,     
+	     template <
+				typename T ,
 				template<class> class event_callback_policy,
 				template<class> class consumer_callback_policy,
 				template<class> class delivery_callback_policy
@@ -577,54 +578,71 @@ namespace cpp_real_stream
                                                   consumer_callback_policy ,
                                                   delivery_callback_policy>::gconf = rdkafka::Conf::create( rdkafka::Conf::CONF_GLOBAL );
 		template <
-				typename T ,     
+				typename T ,
 				template<class> class event_callback_policy,
 				template<class> class consumer_callback_policy ,
 				template<class> class delivery_callback_policy
 		         >
-                std::string cci_kafka_preamble<T , 
+                std::string cci_kafka_preamble<T ,
                                                event_callback_policy ,
                                                consumer_callback_policy ,
                                                delivery_callback_policy>::crs_metadata_key = "metadata.broker.list";
 
 		//command line
 		template <
-				typename T ,     
+				typename T ,
 				template<class> class event_callback_policy,
 				template<class> class consumer_callback_policy ,
-				template<class> class delivery_callback_policy 
+				template<class> class delivery_callback_policy
 		         >
                 std::unique_ptr<cmd_line> cci_kafka_preamble<T,
                                                              event_callback_policy ,
                                                              consumer_callback_policy ,
                                                              delivery_callback_policy>::ccmd( new cmd_line ( "cci_mini_kafka_run 2016" ,
-                                                                                                                 space , 
+                                                                                                                 space ,
                                                                                                                 "0.12" ) );
 
 		//debug
 		template <
-				typename T ,     
+				typename T ,
 				template<class> class event_callback_policy,
 				template<class> class consumer_callback_policy ,
 				template<class> class delivery_callback_policy
 		         >
                 std::unique_ptr<switch_arg> cci_kafka_preamble<T ,
-							       event_callback_policy ,
-                                                               consumer_callback_policy ,
-                                                               delivery_callback_policy>::debug_switch( new switch_arg(  "d" ,
+							    event_callback_policy ,
+                                consumer_callback_policy ,
+                                delivery_callback_policy>::debug_switch( new switch_arg(  "d" ,
 												       "debug" ,
 												       "add debug events to stream" ,
 												       *cci_kafka_preamble::ccmd.get() ,
 												       false
 												    ) );
+        //start at offset end
+		template <
+				typename T ,
+				template<class> class event_callback_policy,
+				template<class> class consumer_callback_policy ,
+				template<class> class delivery_callback_policy
+		         >
+                std::unique_ptr<switch_arg> cci_kafka_preamble<T ,
+							    event_callback_policy ,
+                                consumer_callback_policy ,
+                                delivery_callback_policy>::offset_end_switch( new switch_arg(  "x" ,
+                               "end" ,
+                               "start consuming at end offset" ,
+                               *cci_kafka_preamble::ccmd.get() ,
+                               false
+                            ) );
+
 		//consumer
 		template <
-				typename T ,     
+				typename T ,
 				template<class> class event_callback_policy,
 				template<class> class consumer_callback_policy ,
 				template<class> class delivery_callback_policy
 		        >
-                std::unique_ptr<switch_arg> cci_kafka_preamble<T , 
+                std::unique_ptr<switch_arg> cci_kafka_preamble<T ,
                                                                event_callback_policy ,
                                                                consumer_callback_policy ,
                                                                delivery_callback_policy>::consumer_switch( new switch_arg( "c" ,
@@ -634,12 +652,12 @@ namespace cpp_real_stream
 												       ) );
 		//producer
 		template <
-				typename T ,     
+				typename T ,
 				template<class> class event_callback_policy,
 				template<class> class consumer_callback_policy ,
 				template<class> class delivery_callback_policy
 			 >
-                std::unique_ptr<switch_arg> cci_kafka_preamble<T , 
+                std::unique_ptr<switch_arg> cci_kafka_preamble<T ,
                                                                event_callback_policy ,
                                                                consumer_callback_policy ,
                                                                delivery_callback_policy>::producer_switch( new switch_arg( "p" ,
@@ -650,7 +668,7 @@ namespace cpp_real_stream
 
 		//topic metadata
 		template <
-				typename T ,     
+				typename T ,
 				template<class> class event_callback_policy,
 				template<class> class consumer_callback_policy ,
 				template<class> class delivery_callback_policy
@@ -666,12 +684,12 @@ namespace cpp_real_stream
 
 		//topic
 		template <
-				typename T ,     
+				typename T ,
 				template<class> class event_callback_policy,
 				template<class> class consumer_callback_policy ,
 				template<class> class delivery_callback_policy
 			 >
-                std::unique_ptr<value_arg> cci_kafka_preamble<T , 
+                std::unique_ptr<value_arg> cci_kafka_preamble<T ,
                                                               event_callback_policy ,
                                                               consumer_callback_policy ,
                                                               delivery_callback_policy>::topic_name( new value_arg( "t" ,
@@ -685,12 +703,12 @@ namespace cpp_real_stream
 
 
 	        template<
-				typename T ,     
+				typename T ,
 				template<class> class event_callback_policy,
 				template<class> class consumer_callback_policy ,
 				template<class> class delivery_callback_policy
 			 >
-		std::unique_ptr<value_arg>   cci_kafka_preamble<T , 
+		std::unique_ptr<value_arg>   cci_kafka_preamble<T ,
                                                                 event_callback_policy ,
                                                                 consumer_callback_policy ,
                                                                 delivery_callback_policy>::the_brokers( new value_arg( "b" ,
@@ -704,7 +722,7 @@ namespace cpp_real_stream
 
 
 
-	
+
 }
 
 

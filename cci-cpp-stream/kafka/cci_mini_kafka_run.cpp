@@ -88,6 +88,7 @@ int main( int argc , char* argv[] )
             ckp->init();
             if( !ckp ) { exit( 1 ); }
 
+            bool end_offset= kafka_default_preamble::offset_end_switch->isSet();
             tmu->color( stamp_color::green );
             tmu->time_stamp();
             if(  kafka_default_preamble::consumer_switch->isSet() )

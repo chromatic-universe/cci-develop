@@ -79,20 +79,11 @@ void  cci_kafka_producer::quick_config_library_producer( const std::string& topi
         m_kafka_conf->set(  "metadata.broker.list" , "cci-aws-2:9092" , errstr );
         //
         m_ptr_rd = rdkafka::Producer::create( m_kafka_conf , errstr );
-        if ( ! m_ptr_rd ) { std::cerr << "..could not create kafka lib handle...\n"; }
-        else { std::cerr << "..created kafka lib handle...\n"; }
         //
         m_ptr_topic = rdkafka::Topic::create( m_ptr_rd ,
                                               topic ,
                                               topic_conf ,
                                               errstr );
-        if ( ! m_ptr_topic ) { std::cerr << "..could not create kafka topic...\n"; }
-        else { std::cerr << "..created kafka topic...\n"; }
-        //
-        /*if( m_ptr_topic )
-        {
-            minimal_produce( R"({ "the-original-corny-snaps" : "snitch" })");
-        }*/
 
 
 }
