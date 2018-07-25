@@ -44,7 +44,8 @@ int main( int argc , char* argv[] )
             xorlist.push_back( kafka_default_preamble::consumer_switch.get() );
             xorlist.push_back( kafka_default_preamble::producer_switch.get() );
             xorlist.push_back( kafka_default_preamble::topic_metadata.get() );
-            //kafka_default_preamble::ccmd->xorAdd( kafka_default_preamble::offset_end_switch  );
+            kafka_default_preamble::ccmd->xorAdd( xorlist );
+
 
             //cli stream
             std::ostringstream ostr;
@@ -97,6 +98,8 @@ int main( int argc , char* argv[] )
                 auto ckc( std::make_unique<cci_kafka_consumer<kafka_preamble_ptr>>( ckp.get() , b_events ) );
                 if( !!ckc )
                 {
+                    ckc->start_offset( std::stoi( kafka_default_preamble::offset_val->getValue() ) );
+
                     //topic
                     if( ckc->config_topic( kafka_default_preamble::topic_name->getValue()) )
                     {

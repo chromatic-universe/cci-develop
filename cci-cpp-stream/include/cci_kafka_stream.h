@@ -105,7 +105,7 @@ namespace cpp_real_stream
 											 m_ptr_rd { nullptr } ,
 											 m_ptr_topic { nullptr } ,
 											 m_cur_partition { 0 } ,
-											 m_start_offset { rdkafka::Topic::OFFSET_BEGINNING }
+											 m_start_offset { rdkafka::Topic::OFFSET_END }
 	{
         	assert( ptr_preamble );
         	//library
