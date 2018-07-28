@@ -10,18 +10,19 @@ using json = nlohmann::json;
 
 int main( int argc , char** argv )
 {
-	 
-		//library init and de-init	
+
+		//library init and de-init
 		curlpp::Cleanup _cleanup;
 
 
 		try
 		{
 			auto curl = make_unique<cci_curl_stream>();
+            curl->debug( false );
 			//curl->execute_base_bool_p( "http://localhost:7080/mongo/imap2017/plain_text_auth" ,
                         //                           "user=wiljoh&password=Argentina1" ,
                         //                         &std::cerr );
-		        auto ostr = make_unique<std::ostringstream>();
+            auto ostr = make_unique<std::ostringstream>();
 			//json mon;
 			//json meta_j = { { "from" , "wiljoh@localhost" } , { "to" , "corny@snaps" } };
 			//json naked_j = { { "url" , "http://127.0.0.1:7080/mongo/imap2017/instantiate_atomic_payload" } };
@@ -37,24 +38,24 @@ int main( int argc , char** argv )
                         //json url = { { "url" , "http://localhost:7080//mongo/imap2017/retr_namespace" } };
 			//curl->results_by_naked_param_async( mon , url ,  ostr.get() );
 			//std::cerr  << ostr->str() << "\n";
-			curl->execute_base_bool_g( "http://localhost:7080/mongo/imap2017/retr_capabilities" ,
+			curl->execute_base_bool_g( "https://api.ipdata.co/ip/?api-key=45994087ef1f05552c969997d1b64edf4caa35621f42c593200053aa" ,
                                                    ostr.get() );
 			std::cerr  << ostr->str() << "\n";
-                            
-			
+
+
 
 		}
 		catch( curlpp::RuntimeError &e )
 		{
-			std::cerr << e.what() 
+			std::cerr << e.what()
 				  << "\n";
 		}
 		catch( curlpp::LogicError &e )
 		{
-			std::cerr << e.what() 
+			std::cerr << e.what()
 				  << "\n";
 		}
-		
+
 
 		return 0;
 }

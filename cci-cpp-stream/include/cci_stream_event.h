@@ -148,6 +148,12 @@ namespace cpp_real_stream
                         std::unique_ptr<std::ostringstream>     m_result_stream;
 
 
+                     protected :
+
+                        //helpes
+                        std::string simplex_to_url_query( chromatic_protocol_store::simplex_dictionary& sd );
+
+
 
                      public :
 
@@ -168,10 +174,33 @@ namespace cpp_real_stream
                                                                chromatic_protocol_store::naked_post_t npt  = nullptr ,
                                                                unsigned future_wait = 1 );
                         //------------------------------------------------------------------------------------------
+                      	bool perform_boolean_find_ex( T2& q ,  chromatic_protocol_store::boolean_func_t  bft );
+                        //------------------------------------------------------------------------------------------
+                        bool perform_boolean_query( T2& q );
+                        //------------------------------------------------------------------------------------------
                         void prepare( T2& q )
                         {}
 
                 };
+
+                 //---------------------------------------------------------------------------------
+                template<typename T , typename T2>
+                std::string event_protocol_store<T,T2>::simplex_to_url_query( chromatic_protocol_store::simplex_dictionary& sd )
+                {
+                    std::string encoded;
+
+
+                    return encoded;
+                }
+
+
+                //---------------------------------------------------------------------------------
+                template<typename T , typename T2>
+                bool event_protocol_store<T,T2>::perform_boolean_query( T2& q )
+                {
+                    return true;
+                }
+
 
                 //---------------------------------------------------------------------------------
                 template<typename T , typename T2>
@@ -212,6 +241,52 @@ namespace cpp_real_stream
                     return b_ret;
 
                 }
+
+                //---------------------------------------------------------------------------------
+                template<typename T , typename T2>
+                bool event_protocol_store<T,T2>::perform_boolean_find_ex( T2& q ,
+                                                                          chromatic_protocol_store::boolean_func_t  bft )
+                {
+
+                    //post with parameters
+
+                    bool b_ret { false };
+
+                    try
+                    {
+                        m_result_stream->str( "" );
+
+                        if( m_ptr_stream->execute_base_bool_p(  q.url() ,
+                                                                simplex_to_url_encoded( q.simplex() ) ,
+                                                                m_result_stream.get() ) )
+                        {
+                            //std::cerr << out_stream();
+                            if( bft )
+                            {
+                                //criterion
+                                return bft( (void*) m_result_stream.get() );
+
+                            }
+                            b_ret = true;
+                        }
+
+                    }
+                    catch( std::exception& e )
+                    {
+                        std::cerr << e.what()
+                              << "\n";
+                    }
+                    catch( ... )
+                    {
+                        std::cerr << "untyped exception...."
+                              << "\n";
+
+                    }
+
+                    return b_ret;
+
+                }
+
 
 
 }
