@@ -150,9 +150,7 @@ namespace cpp_real_stream
 
                      protected :
 
-                        //helpes
-                        std::string simplex_to_url_query( chromatic_protocol_store::simplex_dictionary& sd );
-
+                        //
 
 
                      public :
@@ -167,6 +165,9 @@ namespace cpp_real_stream
                         std::ostringstream* out_stream() { return m_result_stream.get(); }
 
 
+
+                        //helpes
+                        std::string simplex_to_url_query( chromatic_protocol_store::simplex_dictionary& sd );
 
                         //service interface
                         //------------------------------------------------------------------------------------------
@@ -187,7 +188,29 @@ namespace cpp_real_stream
                 template<typename T , typename T2>
                 std::string event_protocol_store<T,T2>::simplex_to_url_query( chromatic_protocol_store::simplex_dictionary& sd )
                 {
-                    std::string encoded;
+                   	const char question { '?' };
+                    const char equals { '=' };
+                    std::string encoded{ question };
+                    unsigned sentinel { 0 };
+
+                    if( !sd.empty() )
+                    {
+                        for( auto iter : sd )
+                            {
+                                if( iter.first.length() == 0 )
+                                {
+                                    sentinel++;
+                                    continue;
+                                }
+                                encoded += iter.first;
+                                encoded += equals;
+                                encoded += iter.second;
+
+                                sentinel++;
+                                if( sentinel == sd.size() )
+                                { break; } else { encoded += ","; }
+                            }
+                    }
 
 
                     return encoded;
@@ -198,7 +221,34 @@ namespace cpp_real_stream
                 template<typename T , typename T2>
                 bool event_protocol_store<T,T2>::perform_boolean_query( T2& q )
                 {
-                    return true;
+
+                   	bool b_ret { false };
+                    std::string query { simplex_to_url_query( q.simplex() ) };
+                    query  = q.url() + "/" + query;
+                    std::cerr << "query->" << query << "\n";
+
+                    try
+                    {
+                        	m_result_stream->str( "" );
+                            m_ptr_stream->debug( false );
+
+                            b_ret = m_ptr_stream->execute_base_bool_g( query ,
+                                                                       m_result_stream.get() );
+
+                    }
+                    catch( const std::exception& err )
+                    {
+                        std::cerr << err.what()
+                                  << "\n";
+                    }
+                    catch( ... )
+                    {
+                        std::cerr << "untyped exception...."
+                              << "\n";
+
+                    }
+
+                    return b_ret;
                 }
 
 
