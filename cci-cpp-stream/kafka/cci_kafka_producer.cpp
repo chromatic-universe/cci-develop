@@ -321,25 +321,25 @@ void cpp_real_stream::gen_kafka_meta_stream( const std::string& broker ,
 
     if( !!producer )
     {
-	       	    //topic
-    		    if( !topic.empty() )
+	        //topic
+    	    if( !topic.empty() )
 		    {
-			if( ! producer->config_topic( topic ) )
-			{
-			       producer->tutils()->time_stamp();
-					std::cerr << "%% failed to confiure topic "
-						  << "\n";
-			       return;
-			}
-			ptr_topic = producer->topic();
-			producer->tutils()->time_stamp();
-		    	std::cerr << "acquired topic metadata....\n";
+                if( ! producer->config_topic( topic ) )
+                {
+                       producer->tutils()->time_stamp();
+                        std::cerr << "%% failed to confiure topic "
+                              << "\n";
+                       return;
+                }
+                ptr_topic = producer->topic();
+                producer->tutils()->time_stamp();
+                std::cerr << "acquired topic metadata....\n";
 		    }
 		    else
 		    {
-			//all topics
-			ptr_topic = nullptr;
-			b_ret = true;
+                //all topics
+                ptr_topic = nullptr;
+                b_ret = true;
 		    }
 
 		    //etch metadata
