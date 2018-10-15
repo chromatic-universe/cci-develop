@@ -6,8 +6,6 @@
 #include <unistd.h>
 
 
-
-
 namespace cpp_real_stream
 {
 
