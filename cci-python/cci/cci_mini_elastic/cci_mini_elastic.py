@@ -3,7 +3,7 @@
 
 #############
 # python standard
-import future
+
 import sys
 import os
 from os.path import expanduser

@@ -8,6 +8,7 @@
 namespace rdkafka = RdKafka;
 using rd_broker_vector =  rdkafka::Metadata::BrokerMetadataVector;
 using rd_topic_vector =   rdkafka::Metadata::TopicMetadataVector;
+using rd_topic_info_v =  std::vector<std::pair<std::string,unsigned>>;
 
 //for tuple unpcking
 //--------------------------------------------------------------------------------
@@ -65,6 +66,8 @@ inline void metadata_stream( std::ostream* const ostr ,  const  rd_topic_vector*
             *ostr << "\n";
  }
 
+
+
 //--------------------------------------------------------------------------------
 template <typename stream , typename metadata>
 inline void stream_metadata_header( stream* ostr ,
@@ -82,6 +85,22 @@ inline void stream_metadata_header( stream* ostr ,
                   << "\n\n";
 
 }
+
+//--------------------------------------------------------------------------------
+inline std::unique_ptr<rd_topic_info_v>  metadata_naked_stream( const  rd_topic_vector* topics )
+{
+            auto v_topics = std::make_unique<rd_topic_info_v>();
+
+            std::pair<std::string,unsigned> pr;
+            for( auto elem : *topics )
+            {
+                       pr.first = elem->topic();
+                       pr.second = elem->partitions()->size();
+                       v_topics->push_back( pr );
+            }
+
+            return v_topics;
+ }
 
 //--------------------------------------------------------------------------------
 template <typename stream , typename metadata>

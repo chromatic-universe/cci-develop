@@ -711,10 +711,10 @@ namespace cpp_real_stream
 				template<class> class consumer_callback_policy ,
 				template<class> class delivery_callback_policy
 			 >
-		std::unique_ptr<value_arg>   cci_kafka_preamble<T ,
-                                                                event_callback_policy ,
-                                                                consumer_callback_policy ,
-                                                                delivery_callback_policy>::the_brokers( new value_arg( "b" ,
+		        std::unique_ptr<value_arg>   cci_kafka_preamble<T ,
+                                                       event_callback_policy ,
+                                                       consumer_callback_policy ,
+                                                       delivery_callback_policy>::the_brokers( new value_arg( "b" ,
 												       "brokers" ,
 												       "list of brokers host1:port1,host2:port2,etc," ,
 												       true ,
