@@ -3,7 +3,7 @@
 
 import os
 import sys
-from StringIO import StringIO
+from io import StringIO
 import logging
 from math import ceil
 
@@ -11,7 +11,7 @@ import subprocess as proc
 import sqlite3
 import time
 import signal
-import Queue
+import queue
 import requests
 import datetime
 import json
@@ -30,9 +30,8 @@ except ImportError:  # python 3
 
 
 from application import app , mongo_no_resource_exception , _logger
-
+app.config["MONGO_URI"] = "mongodb://cci-aws-2:27017/myDatabase"
 app.config['MONGO_DBNAME'] = 'cci_maelstrom'
-app.config['MONGO_HOST'] = 'cci-server:8001'
 app.config['MONGO_CONNECT_TIMEOUT_MS'] = 5000
 app.config['MONGO_SOCKET_TIMEOUT_MS'] = 5000
 mongo = PyMongo( app )
@@ -40,14 +39,14 @@ mongo = PyMongo( app )
 
 
 def debug_write_api() :
-		# for api docs , build strings docstrings
-		with open( 'mongo.api' , 'w' ) as f :
-			for r in current_app.url_map.iter_rules() :
-			 	doc = current_app.view_functions.get(r.endpoint).func_doc
-				if not r.rule.startswith('/static') and r.rule.startswith( '/mongo' ) :
-					doc = doc.replace( '\t' , '' )
-					f.write( '<a href="%s">%s</a>' %  ( r.rule , r.rule ) )
-					f.write( '<pre>%s</pre><br>' % doc )
+        # for api docs , build strings docstrings
+            with open( 'mongo.api' , 'w' ) as f :
+                for r in current_app.url_map.iter_rules() :
+                    doc = current_app.view_functions.get(r.endpoint).func_doc
+                    if not r.rule.startswith('/static') and r.rule.startswith( '/mongo' ) :
+                        doc = doc.replace( '\t' , '' )
+                        f.write( '<a href="%s">%s</a>' %  ( r.rule , r.rule ) )
+                        f.write( '<pre>%s</pre><br>' % doc )
 
 
 
@@ -58,8 +57,8 @@ def mongo_api() :
 		try :
 			return redirect( url_for( 'cci_api' ) )
 		except Exception as e :
-				_logger.error( '...mongo_api %s' % e.message )
-				raise mongo_no_resource_exception( e.message )
+				_logger.error( '...mongo_api %s' % str( e ) )
+				raise mongo_no_resource_exception( str( e ) )
 
 app.add_url_rule( '/show_mongo_api' ,
 				  'mongo_api' ,
@@ -518,7 +517,7 @@ def dry_atomic_payload_insert( packet = None ) :
 					"enlisted" : "2016-07-26 23:14:23"
 				}
 			r = requests.post( 'http://localhost:7080/mongo/insert_atomic_payload', data = json.dumps(data) )
-			print r
+
 
 
 

@@ -14,7 +14,7 @@ import subprocess as proc
 import sqlite3
 import time
 import signal
-import Queue
+import queue
 import requests
 import datetime
 import base64

@@ -1,146 +1,146 @@
-# tr_trinity.py    william k. johnson  2016
+# tr_trinity.py    william k. johnson  2018
 
 import os
 import subprocess as proc
-import StringIO
+from io import StringIO , BytesIO
 import sys
-import Queue
+import queue
 
 
 
-click_queue = Queue.Queue()
-key_queue = Queue.Queue()
+click_queue = queue.Queue()
+key_queue = queue.Queue()
 
 key_motions = {
-				'key_down' : 0 ,
-				'key_up' : 1
-			  }
+                'key_down' : 0 ,
+                'key_up' : 1
+              }
 
 # ---------------------------------------------------------------------
 def process_linux_clicks( log=None  ) :
-			"""
-			:param log:
-			:param q:
-			:return:
-			"""
+            """
+            :param log:
+            :param q:
+            :return:
+            """
 
 
-			import pyautogui
-			try:
+            import pyautogui
+            try:
 
-				while not click_queue.empty() :
-					x , y = click_queue.get()
-					log.info( '..remote click....x%d:y%d'  % ( x , y  ) )
-					currentMouseX, currentMouseY = pyautogui.position()
-					log.info( '.local mouse....x%d:y%d'  % ( 	currentMouseX , currentMouseY ) )
-					pyautogui.moveTo( x , y )
-					pyautogui.click()
-			except Exception as e :
-				log.error( '...click....'  )
-				log.error( e.message )
-				return 'error'
+                while not click_queue.empty() :
+                    x , y = click_queue.get()
+                    log.info( '..remote click....x%d:y%d'  % ( x , y  ) )
+                    currentMouseX, currentMouseY = pyautogui.position()
+                    log.info( '.local mouse....x%d:y%d'  % ( 	currentMouseX , currentMouseY ) )
+                    pyautogui.moveTo( x , y )
+                    pyautogui.click()
+            except Exception as e :
+                log.error( '...click....'  )
+                log.error( str( e ) )
+                return 'error'
 
-			return 'done'
+            return 'done'
 
 
 
 
 # ---------------------------------------------------------------------
 def process_android_clicks( log=None  ) :
-			"""
-			:param log:
-			:return:
-			"""
+            """
+            :param log:
+            :return:
+            """
 
 
-			try:
+            try:
 
-				while not click_queue.empty() :
-					x , y = click_queue.get()
-					log.info( '..remote click....x%d:y%d'  % ( x , y  ) )
-					cmd = [ 'su' , '-c' , '/system/bin/orng' ,
-							'-t' ,
-							'/dev/input/event3' ,
-							str( x )  ,
-							str( y ) ]
-					out = proc.check_output( cmd )
-					log.info( out )
+                while not click_queue.empty() :
+                    x , y = click_queue.get()
+                    log.info( '..remote click....x%d:y%d'  % ( x , y  ) )
+                    cmd = [ 'su' , '-c' , '/system/bin/orng' ,
+                            '-t' ,
+                            '/dev/input/event3' ,
+                            str( x )  ,
+                            str( y ) ]
+                    out = proc.check_output( cmd )
+                    log.info( out )
 
-			except proc.CalledProcessError as e :
-				log.error( e.message )
-			except Exception as e :
-				log.error( '...click....'  )
-				log.error( e.message )
-				return 'error'
+            except proc.CalledProcessError as e :
+                log.error( str( e ) )
+            except Exception as e :
+                log.error( '...click....'  )
+                log.error( str( e ) )
+                return 'error'
 
-			return 'done'
+            return 'done'
 
 
 # ---------------------------------------------------------------------
 def process_android_keys( log=None , key_motion = 'key_down' ) :
-			"""
-			:param log:
-			:return:
-			"""
+            """
+            :param log:
+            :return:
+            """
 
 
-			try:
-				motion =  '-k'
-				if key_motions[key_motion] :
-					motion = '-u'
+            try:
+                motion =  '-k'
+                if key_motions[key_motion] :
+                    motion = '-u'
 
-				while not key_queue.empty() :
+                while not key_queue.empty() :
 
-					key = key_queue.get()
-					log.info( '..remote key....%d' % key  )
+                    key = key_queue.get()
+                    log.info( '..remote key....%d' % key  )
 
-					cmd = [ 'su' ,
-							'-c' ,
-							'/system/bin/orng' ,
-							'-k' ,
-							'/dev/input/event3' ,
-							str( key )  ,
-							'0' ]
-					out = proc.check_output( cmd )
-					log.info( out )
+                    cmd = [ 'su' ,
+                            '-c' ,
+                            '/system/bin/orng' ,
+                            '-k' ,
+                            '/dev/input/event3' ,
+                            str( key )  ,
+                            '0' ]
+                    out = proc.check_output( cmd )
+                    log.info( out )
 
-			except Exception as e :
-				log.error( '...keys....'  )
-				log.error( e.message )
-				return 'error'
+            except Exception as e :
+                log.error( '...keys....'  )
+                log.error( str( e ) )
+                return 'error'
 
-			return 'done'
+            return 'done'
 
 
 
 # ---------------------------------------------------------------------
 def process_linux_keys( log=None , key_motion = 'key_down' ) :
-			"""
-			:param log:
-			:return:
-			"""
+            """
+            :param log:
+            :return:
+            """
 
-			import pyautoguid
-			try:
+            import pyautogui
+            try:
 
-				motion =  '-k'
-				if key_motions[key_motion] :
-					motion = '-u'
+                motion =  '-k'
+                if key_motions[key_motion] :
+                    motion = '-u'
 
 
-				while not key_queue.empty() :
+                while not key_queue.empty() :
 
-					key = key_queue.get()
+                    key = key_queue.get()
 
-					log.info( '..remote key....%d' % key  )
-					pyautogui.keyDown( chr( key ) , 0.15 )
+                    log.info( '..remote key....%d' % key  )
+                    pyautogui.keyDown( chr( key ) , 0.15 )
 
-			except Exception as e :
-				log.error( '...keys....'  )
-				log.error( e.message )
-				return 'error'
+            except Exception as e :
+                log.error( '...keys....'  )
+                log.error( str( e ) )
+                return 'error'
 
-			return 'done'
+            return 'done'
 
 
 # ---------------------------------------------------------------------
@@ -155,7 +155,7 @@ def platform( log=None ) :
                 cmd = ['busybox' , 'uname' , '-a' ]
                 out = proc.check_output( cmd )
 
-                pos = out.find( 'armv7' )
+                pos = out.decode().find( 'armv7' )
                 if pos == -1 :
                     ret = 'linux'
                 else : 
@@ -205,8 +205,8 @@ def capture_screen( log=None ) :
                         process_linux_clicks( log=log )
                         process_linux_keys( log=log )
                         screen = ImageGrab.grab()
-                        buf = StringIO.StringIO()
-                        screen.save( buf , 'PNG', quality=75)
+                        buf = BytesIO()
+                        screen.save( buf , 'PNG', quality=75 )
                         buf.seek( 0 )
 
                         b_ret = True
@@ -217,11 +217,11 @@ def capture_screen( log=None ) :
                     # made and failed. If the binary was
                     # not found we get a naked system exception ,
                     # handled next
-                    log.error( e.message  )
-                    return b_ret , e.message
+                    log.error( str( e )  )
+                    return b_ret , str( e )
             except Exception as e :
                     log.error( '..error in tr_bimini...'  )
-                    out = e.message
+                    out = str( e )
             finally :
                     if buf :
                         buf.close()
@@ -233,41 +233,41 @@ def capture_screen( log=None ) :
 
 # ---------------------------------------------------------------------
 def capture_clicks( log=None  , request = None ) :
-			"""
-			:param log:
-			:return:
-			"""
+            """
+            :param log:
+            :return:
+            """
 
-			log.info( '...capture_clicks....' )
-			x = int( request.args.get('x') )
-			y = int( request.args.get('y') )
-			clk = ( x , y )
+            log.info( '...capture_clicks....' )
+            x = int( request.args.get('x') )
+            y = int( request.args.get('y') )
+            clk = ( x , y )
 
-			click_queue.put( clk )
+            click_queue.put( clk )
 
-			return 'done'
+            return 'done'
 
 
 
 # ---------------------------------------------------------------------
 def capture_keys( log=None  , request = None ) :
-			"""
+            """
 
-			:param log:
-			:param request:
-			:return:
-			"""
+            :param log:
+            :param request:
+            :return:
+            """
 
-			log.info( '...capture_keys....' )
-			k = int( request.args.get( 'key' ) )
+            log.info( '...capture_keys....' )
+            k = int( request.args.get( 'key' ) )
 
-			key_queue.put( k )
+            key_queue.put( k )
 
-			return 'done'
+            return 'done'
 
 
 
 # ------------------------------------------------------------------------------
 if __name__ == "__main__" :
 
-			capture_screen()
+            capture_screen()

@@ -2,6 +2,7 @@
 # remove qpython bootstrap and dempendencies
 
 import os
+import sys
 import copy
 import logging
 import importlib
@@ -79,7 +80,7 @@ class ccitrinityApp( App ) :
 
                              
 
-
+            
             def on_pause(self):
                 # save data
 
@@ -91,6 +92,14 @@ class ccitrinityApp( App ) :
             def on_resume( self ):
                 # something
 
+
+                pass
+
+
+            def on_stop( self  ) :
+                """
+                :return:
+                """
 
                 pass
             
@@ -254,27 +263,31 @@ class ccitrinityApp( App ) :
 
                 try :
 
-                    os.chmod( './cci-bootstrap' , 0o755 )
-                    os.chmod( './cci-bootstrap-v' , 0o755 )
                     
- 
+                    #os.chmod( './cci-bootstrap' , 0o755 )
+                    #os.chmod( './cci-bootstrap-v' , 0o755 )
+                    
+                    
+                    """
                     self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/stream daemon....' )
                     with open( 'trinity_pid' , 'w' ) as f :
                         f.write( '%d' % os.getpid() )
+                    """
 
                     if self._running() is False :
 
-                            self.root.ids.bootstrap_switch.active = False
+                            self.root.ids.bootstrap_btn.background_color = [0,1,0,1]
+                            self.root.ids.bootstrap_btn.text = 'start trinity'
                             self._update_status( self.root.ids.status_text , ' ....trinity....' )
-                            self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/stream daemon....' )
                             self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/stream daemon....' )
 
                     else :
+                            self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
+                            self.root.ids.bootstrap_btn.text = 'stop trinity'
                             self._update_status( self.root.ids.status_text , ' ....trinity running....' )
                             self._update_status( self.root.ids.vulture_status_text , ' ....trinity vulture/daemon running....' )
                             self.root.ids.manipulate_btn.background_color = [0,1,0,1]
                             self.root.ids.manipulate_tunnel_btn.background_color = [0,1,0,1]
-                            self.root.ids.bootstrap_switch.active = True
                             self.root.ids.manipulate_btn.text = 'manipulate streams'
                             self.root.ids.manipulate_tunnel_btn.text = 'manipulate tunnels'
                             self.root.ids.process_info.text = 'pid: %s  port 7080' % self._pid
@@ -285,10 +298,10 @@ class ccitrinityApp( App ) :
                                 self._trinity_socket_thred = threading.Thread( target = self._trinity_update_thred )
                                 self._trinity_socket_thred.daemon = True
                                 self._trinity_socket_thred.start()
-                                                                     
+                                                                                         
                        
                 except Exception as e:
-                       self._logger.error( '...error in  trinity server...' + e.message )
+                       self._logger.error( '...error in  trinity server...%s' % str( e ) )
                        sys.exit( 1 )
 
 
@@ -296,7 +309,7 @@ class ccitrinityApp( App ) :
 
 
 
-            def _on_start_trinity( self , instance , value ) :
+            def _on_start_trinity( self ) :
                 """
 
                 :return:
@@ -312,8 +325,9 @@ class ccitrinityApp( App ) :
 
                 self._logger.info( '..._on_start_trinity...' )
 
-                # start trinity
-                if value == True :
+                               
+                if self.root.ids.bootstrap_btn.text == 'start trinity' :
+                    # start trinity
                     if self._running() :
                         return
 
@@ -327,21 +341,22 @@ class ccitrinityApp( App ) :
                             return
                         else :
                             self._update_status( self.root.ids.status_text , ' ....trinity bootstrapped..running....' )
+                            self.root.ids.bootstrap_btn.background_color = [1,0,0,1]
+                            self.root.ids.bootstrap_btn.text = 'stop trinity'
                             self.root.ids.manipulate_btn.background_color = [0,1,0,1]
                             self.root.ids.manipulate_tunnel_btn.background_color = [0,1,0,1]
-                            self.root.ids.bootstrap_switch.active = True
                             self.root.ids.manipulate_btn.text = 'manipulate streams'
                             self.root.ids.manipulate_tunnel_btn.text = 'manipulate tunnels'
                             self._update_status( self.root.ids.status_text , ' ...trinity started...' )
                             self._update_status( self.root.ids.status_text , ' ...trinity vulture started...' )
                             self._update_status( self.root.ids.manipulate_status_text , ' ...no user defined tunnels...' )
-                            
+
                             self._init_clock_event = Clock.schedule_once( self._init_callback, 15 )
                             self._clock_event = Clock.schedule_interval( self._pid_callback, 2 )
 
                     except Exception as e :
-                            self._logger.error( '..._on_start_trinity...%s' % e.message )
-                            self._update_status( self.root.ids.status_text , e.message )
+                            self._logger.error( '..._on_start_trinity...%s' % str( e )  )
+                            self._update_status( self.root.ids.status_text , str( e ) )
                 else :
                    
                     pid = str()
@@ -364,9 +379,10 @@ class ccitrinityApp( App ) :
                         self._update_status( self.root.ids.status_text , ' ....trinity server stopped ....' )          
                         os.kill( int( pid_vulture ) , signal.SIGTERM )                   
                         self._update_status( self.root.ids.status_text , ' ....trinity vulture server stopped ....' )  
+                       	self.root.ids.bootstrap_btn.background_color = [0,1,0,1]
+                       	self.root.ids.bootstrap_btn.text = 'start trinity'
                         self.root.ids.manipulate_btn.background_color = [1,0,0,1]
                         self.root.ids.manipulate_tunnel_btn.background_color = [1,0,0,1]
-                        self.root.ids.bootstrap_switch.active = False
                         self.root.ids.manipulate_btn.text = '~'
                         self.root.ids.manipulate_tunnel_btn.text = '~'
                         if self._clock_event :
@@ -380,7 +396,7 @@ class ccitrinityApp( App ) :
                     except OSError as e :    
                         
                         self._logger.error( 'kill server failed...%s' % e.strerror )
-                        self._update_status( self.root.ids.status_text , ' ...kill server failed...' + e.message )
+                        self._update_status( self.root.ids.status_text , ' ...kill server failed...' )
 
         
 
@@ -432,7 +448,7 @@ class ccitrinityApp( App ) :
                 except OSError as e :    
                     
                     self._logger.error( 'kill server failed...' + e.strerror )
-                    self._update_status( self.root.ids.status_text , ' ...kill server failed...' + e.message )
+                    self._update_status( self.root.ids.status_text , ' ...kill server failed...' + str( e ) )
 
     
                 
@@ -463,8 +479,8 @@ class ccitrinityApp( App ) :
                             async_cmd = "%s/%s" % ( bootstrap_path , "cci-bootstrap-v" )
                         else :
                             bootstrap_path = os.getcwd()
-                            trinity_cmd = "/usr/bin/python %s/cci_trinity.py &" % bootstrap_path
-                            async_cmd = "/usr/bin/python %s/cci_trinity_async.py &" % bootstrap_path
+                            trinity_cmd = "/usr/bin/python3.5 %s/cci_trinity.py &" % bootstrap_path
+                            async_cmd = "/usr/bin/python3.5 %s/cci_trinity_async.py &" % bootstrap_path
                         try :
                            
                             self._logger.info( '...bootstrap...' )
@@ -477,22 +493,22 @@ class ccitrinityApp( App ) :
                             if ret != 0 :
                                 raise OSError( "..fork system call async server failed..." )
                             self._update_status( self.root.ids.status_text , '..cci_async_service started...' )
-                            self._update_status( self.root.ids.vulture_status_text ,  '..cci_async_ervice started...' )
+                            self._update_status( self.root.ids.vulture_status_text ,  '..cci_async_service started...' )
 
                            
                             b_ret = True
                         except proc.CalledProcessError as e:
-                            self._logger.error( 'bootstrap failed...' + e.message ) 
+                            self._logger.error( 'bootstrap failed...%s' % str( e ) )
                         except OSError as e :
-                            self._logger.error( 'file does not exist?...' + e.message )
+                            self._logger.error( 'file does not exist?...%s' % str( e ) )
                         except ValueError as e :
-                            self._logger.error( 'arguments foobar...' + e.message )
+                            self._logger.error( 'arguments foobar...%s' % str( e ) )
                         except Exception as e :
-                            self._logger.error(  e.message )
+                            self._logger.error(  str( e ) )
                                               
 
                 except Exception as e :
-                    self._logger.error(  '...error in  trinity server...'  + e.message )    
+                    self._logger.error(  '...error in  trinity server...%s'  % str( e ) )
 
 
                 return b_ret
@@ -522,14 +538,14 @@ if __name__ == '__main__':
             Config.set('graphics','resizable',0 )
 
 
-            Config.set( 'graphics', 'width', '480' )
-            Config.set( 'graphics', 'height', '800' )
-            Config.set( 'input', 'mouse', 'mouse,disable_multitouch' )
+            #Config.set( 'graphics', 'width', '480' )
+            #Config.set( 'graphics', 'height', '800' )
+            #Config.set( 'input', 'mouse', 'mouse,disable_multitouch' )
 
 
             #from kivy.core.window import Window
 
-            Window.size = ( 480 , 825 )
+            #Window.size = ( 480 , 825 )
             ct = ccitrinityApp()
             ct.run()
 

@@ -307,7 +307,6 @@ int build_py_env()
                                    "    private + '/lib/python2.7/', \n"
                                    "    private + '/lib/python2.7/lib-dynload/', \n"
                                    "    private + '/lib/python2.7/site-packages/', \n"
-                                   "    '/data/data/com.chromaticuniverse.cci_trinity/lib/', \n"
                                    "    argument ]\n"
                                );
 
@@ -364,7 +363,7 @@ void set_py_env()
      trace( "... setenv..ANDROID_ARGUMENT" );
      chk( setenv( "ANDROID_ARGUMENT" , default_andr_arg_path  , 1 ) );
      trace( "... setenv..ANDROID_ENTRYPOINT" );
-     chk( setenv( "ANDROID_ENTRYPOINT" , "cci_trinity_async.py" , 1 ) );
+     chk( setenv( "ANDROID_ENTRYPOINT" , "cci_trinity.py" , 1 ) );
 
 
 

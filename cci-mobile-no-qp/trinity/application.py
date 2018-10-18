@@ -12,8 +12,15 @@ _logger.setLevel( logging.DEBUG )
 fh = logging.FileHandler(  'cci-trinity-server.log' + '-debug.log', mode = 'a' )
 fh.setLevel( logging.DEBUG )
 formatter = logging.Formatter( log_format )
+# console
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+# format
 fh.setFormatter( formatter )
+ch.setFormatter(formatter)
+# add handlers
 _logger.addHandler( fh )
+_logger.addHandler(ch)
 
 
 

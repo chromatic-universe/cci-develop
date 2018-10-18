@@ -1,4 +1,4 @@
-# cci_trinity_async.py    william k. johnson  2016
+# cci_trinity_async.py    william k. johnson  2018
 
 
 
@@ -14,22 +14,23 @@ import importlib
 import socket
 import signal
 
-from tornado.ioloop import IOLoop
-import tornado.gen
 import urllib
 import sys
 import json
 from time import sleep
 import requests
+import tornado
 import tornado.web
 import tornado.websocket
 import tornado.httpserver
 from tornado.queues import Queue
 from tornado.ioloop import PeriodicCallback
+from tornado.ioloop import IOLoop
+from tornado import gen
 from tornado.locks import Semaphore
-from tornado.process import Subprocess , CalledProcessError
+
 #kafka
-from kiel import clients
+from kiel import clients , constants , exc
 
 max_wait_seconds_before_shutdown  = 3
 
@@ -197,7 +198,7 @@ class queue_client() :
 							g_periodic_callbacks[id] = pc
 
 				except Exception as e :
-					_logger.error( 'watch_queue: %s' % e.message )
+					_logger.error( 'watch_queue: %s' % str( e ) )
 				finally :
 					policy_semaphore.release()
 
@@ -219,7 +220,7 @@ class queue_session_client() :
 						r = requests.post('http://localhost:7080/mongo/update_device_status',
 										  data =  json.dumps( items  ) )
 				except Exception as e :
-					_logger.error( 'session_watch_queue: %s' % e.message )
+					_logger.error( 'session_watch_queue: %s' % str( e ) )
 
 
 
@@ -240,7 +241,7 @@ class queue_stream_client() :
 						print ( items )
 						#kp.send( lname , json.dumps( items ) )
 				except Exception as e :
-					_logger.error( 'watch_stream_queue: %s' % e.message )
+					_logger.error( 'watch_stream_queue: %s' % str( e ) )
 
 
 
@@ -263,7 +264,7 @@ class stream_queue_handler_post_msg( tornado.web.RequestHandler ) :
 					yield stream_client.queued_items.put( json_data )
 
 				except Exception as e :
-					_logger.error( 'stream_queue_handler_post_msg: %s' % e.message )
+					_logger.error( 'stream_queue_handler_post_msg: %s' % str( e ) )
 
 
 
@@ -288,7 +289,7 @@ class session_queue_handler_session_update( tornado.web.RequestHandler ) :
 					_logger.info( 'session queued a new item: %s' % self.request.body )
 					self.write( 'queued a new item: %s' % self.request.body )
 				except Exception as e :
-					_logger.error( 'session_queue_handler_update_session: %s' % e.message )
+					_logger.error( 'session_queue_handler_update_session: %s' % str( e ) )
 
 
 
@@ -313,7 +314,7 @@ class queue_handler_start_policy( tornado.web.RequestHandler ) :
 					_logger.info( 'queued a new item: %s' % self.request.body )
 					self.write( 'queued a new item: %s' % self.request.body )
 				except Exception as e :
-					_logger.error( 'queue_handler_start_policy: %s' % e.message )
+					_logger.error( 'queue_handler_start_policy: %s' % str( e ) )
 
 
 
@@ -362,46 +363,46 @@ def create_ssh_tunnel_callback() :
 
 # --------------------------------------------------------------------------------------
 def init_update_callback() :
-            """
+			"""
 
-            :return:
-            """
+			:return:
+			"""
 
-            try :
-                trinity_push_msg( socket_msg[1] +  " :...async server ok..." ) 
-                trinity_push_msg( socket_msg[0] +  " :...app server ok..." )
-                trinity_push_msg( socket_msg[2] +  " :...tunnel services ok..." ) 
-            except Exception as e :
-                _logger.error( e )
+			try :
+				trinity_push_msg( socket_msg[1] +  " :...async server ok..." )
+				trinity_push_msg( socket_msg[0] +  " :...app server ok..." )
+				trinity_push_msg( socket_msg[2] +  " :...tunnel services ok..." )
+			except Exception as e :
+				_logger.error( e )
 
 
 
 
 # --------------------------------------------------------------------------------------
 def start_policy_local() :
-            """
-            :param json policy global:
-            :return:
+			"""
+			:param json policy global:
+			:return:
 
-            """
-            try :
+			"""
+			try :
 
 
-                if default_policy_j['moniker'] in g_periodic_callbacks :
-                    _logger.info( '..%s policy %s already in effect' % ( items['provider_type'] ,
-                                                                         items['moniker']  ) )
-                    return
-                pc = PeriodicCallback( lambda: policy_callback( default_policy_j['provider_type'] ,
-                                                                default_policy_j['moniker'] ,
-                                                                db_bootstrap ) ,
-                                                                int( default_policy_j['run_interval'] ) * 1000 )
-                _logger.info( '..started periodic callback local cal with params%s' % json.dumps( default_policy_j ) )
-                pc.start()
-                g_periodic_callbacks[id] = pc
-                
+				if default_policy_j['moniker'] in g_periodic_callbacks :
+					_logger.info( '..%s policy %s already in effect' % ( items['provider_type'] ,
+																		 items['moniker']  ) )
+					return
+				pc = PeriodicCallback( lambda: policy_callback( default_policy_j['provider_type'] ,
+																default_policy_j['moniker'] ,
+																db_bootstrap ) ,
+																int( default_policy_j['run_interval'] ) * 1000 )
+				_logger.info( '..started periodic callback local cal with params%s' % json.dumps( default_policy_j ) )
+				pc.start()
+				g_periodic_callbacks[id] = pc
 
-            except Exception as e :
-                _logger.error( 'start policy local: %s' % e.message )
+
+			except Exception as e :
+				_logger.error( 'start policy local: %s' % str( e ) )
 
 
 
@@ -412,29 +413,29 @@ def start_policy_local() :
 # --------------------------------------------------------------------------------------
 def start_heartbeat_callback() :
 
-			"""
+							"""
 
-			:return:
-			"""
+							:return:
+							"""
 
-			# hearbeat
-			try :
+							# hearbeat
+							try :
 
-				j = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-update-interval' )['map'] )
-				heartbeat_interval = j['update_interval']
-				r = requests.get( 'http://localhost:7080/mongo/retr_device/%s' % tr_utils.local_mac_addr())
-				device_info = r.json()['result']
-				auth_http_id = device_info['auth_http_id']
+								j = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-update-interval' )['map'] )
+								heartbeat_interval = j['update_interval']
+								r = requests.get( 'http://localhost:7080/mongo/retr_device/%s' % tr_utils.local_mac_addr())
+								device_info = r.json()['result']
+								auth_http_id = device_info['auth_http_id']
 
-				# start hearbeat
-				pc = PeriodicCallback( lambda: update_status_callback( auth_http_id ) ,
-																	   int( heartbeat_interval )  * 1000 )
-				_logger.info( '..started periodic heartbeat callback with interval of %d...' % int( heartbeat_interval ) )
-				pc.start()
+								# start hearbeat
+								pc = PeriodicCallback( lambda: update_status_callback( auth_http_id ) ,
+																					   int( heartbeat_interval )  * 1000 )
+								_logger.info( '..started periodic heartbeat callback with interval of %d...' % int( heartbeat_interval ) )
+								pc.start()
 
-			except :
-				# non-critical ; move on
-				pass
+							except :
+								# non-critical ; move on
+								pass
 
 
 
@@ -444,12 +445,12 @@ def start_heartbeat_callback() :
 
 # --------------------------------------------------------------------------------------
 class cci_sibling_probe( tornado.web.RequestHandler )  :
-			"""
-			:return sibling device id
-			"""
+							"""
+							:return sibling device id
+							"""
 
 
-			pass
+							pass
 
 
 
@@ -483,6 +484,7 @@ def sig_handler( sig , frame ) :
 
 
 # --------------------------------------------------------------------------------------
+@tornado.gen.coroutine
 def shutdown() :
 			"""
 			:return:
@@ -490,25 +492,19 @@ def shutdown() :
 
 
 			_logger.info( '....will shutdown in %s seconds ...' , max_wait_seconds_before_shutdown )
-			io_loop = IOLoop.instance()
+			io_loop = IOLoop.current()
 
 			deadline = time.time() + max_wait_seconds_before_shutdown
 
-			for key , value in g_periodic_callbacks.iteritems() :
+			for key , value in g_periodic_callbacks.items() :
 				if value.is_running() :
 					_logger.info( '...shutting down policy %s ' %  key )
 					value.stop()
+			yield gen.sleep( 2 )
+
+			io_loop.stop()
 
 
-			def stop_loop():
-				now = time.time()
-				if now < deadline and ( io_loop._callbacks or io_loop._timeouts ) :
-					io_loop.add_timeout( now + 0.5 , stop_loop )
-					io_loop.add_timeout( now + 0.5 , stop_loop )
-				else:
-					io_loop.stop()
-
-			stop_loop()
 			_logger.info( '...shutdown....' )
 
 
@@ -535,7 +531,7 @@ def update_status_callback( http_id  ) :
 
 
 			except Exception as e :
-				_logger.error( e.message )
+				_logger.error( str( e ) )
 
 
 
@@ -543,26 +539,26 @@ def update_status_callback( http_id  ) :
 
 # -----------------------------------------------------------------------------------------
 def policy_callback( provider_type , moniker , db  ) :
-            """
+			"""
 
-            :param items : json
-            :return:
-            """
+			:param items : json
+			:return:
+			"""
 
 
-            live_stalker = None
-            try :
-                print ( "instantiating {:s} policy->{:s}  db={:s}".format( provider_type ,  moniker  , db  ) ) 
-                stalker = getattr( stream_mod , callback_class_dispatch['document'] )
-                live_stalker = stalker( db_connect_str = db )
-                live_stalker.prepare()
-                live_stalker.stalk()
-            except Exception as e :
-                print ( e.message )
-            finally :
-                # explicit delete; callbacks are reentrant and objects
-                # do not go out of scope
-                del live_stalker
+			live_stalker = None
+			try :
+				print ( "instantiating {:s} policy->{:s}  db={:s}".format( provider_type ,  moniker  , db  ) )
+				stalker = getattr( stream_mod , callback_class_dispatch['document'] )
+				live_stalker = stalker( db_connect_str = db )
+				live_stalker.prepare()
+				live_stalker.stalk()
+			except Exception as e :
+				print ( str( e ) )
+			finally :
+				# explicit delete; callbacks are reentrant and objects
+				# do not go out of scope
+				del live_stalker
 
 
 
@@ -572,119 +568,118 @@ def policy_callback( provider_type , moniker , db  ) :
 if __name__ == "__main__":
 
                           
-                # stream
-                try :                             
-                        j = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-stream-toggle' )['map'] )
-                        if j['status'] == 'on' :
-                                stream_bootstrap = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-kafka-bootstrap' )['map'] )
-                                _logger.info( '...starting stream tunneler ....' )
-                                s = str( stream_bootstrap['bootstrap_servers'] )
-                                kp = clients.Producer( brokers= [s] )
-                                kp.connect()
-                                _logger.info( '...streaming bootstrap initialized...%s' % s )
-                except Exception as e :
-                    _logger.error( '...broken streaming..%s' % e.message )
-                
-                # default policies
-                try :
-                    default_policy_j = tr_sqlite.retrieve_policy( 'default' , 'document' )
-                    _logger.info( j )
-                except Exception as e :
-                    _logger.error( '..could not retrieve document policy...%s' % e.message  )
-                         
+				# stream
+				try :
+					j = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-stream-toggle' )['map'] )
+					if j['status'] == 'on' :
+							stream_bootstrap = json.loads( tr_sqlite.retrieve_config_atom( 'trinity-kafka-bootstrap' )['map'] )
+							_logger.info( '...starting stream tunneler ....' )
+							s = str( stream_bootstrap['bootstrap_servers'] )
+							kp = clients.Producer( brokers= [s] )
+							kp.connect()
+							_logger.info( '...streaming bootstrap initialized...%s' % s )
+				except Exception as e :
+					_logger.error( '...broken streaming..%s' % str( e ) )
 
-                # queue vulture
-                client = queue_client()
-                session_client = queue_session_client()
-                stream_client = queue_stream_client()
-                is_running = False
-
-                pid = None
-                try :
-                    with open( 'cci-trinity-vulture-pid' , 'r' ) as pidfile :
-                        pid = pidfile.read().strip()
-                    with open( 'bootstrap_db' , 'r' ) as boot :
-                        db_bootstrap = boot.readline().split( '=' )[1].strip()
-                     
-                except :
-                     pass
-
-                # check if process is running
-                if pid :
-                    try :
-                    # throws exception if process doesn't exist
-                        os.kill( int( pid ) , 0 )
-                        is_running = True
-                    except :
-                        # pid not running
-                        pass
-
-                if not is_running :
-                    # Watch the queue for when new items show up
-                    _logger.info( '...initializing queue vulture....' )
-                    # policies
-                    tornado.ioloop.IOLoop.instance().add_callback( client.watch_queue )
-                    # session status
-                    tornado.ioloop.IOLoop.instance().add_callback( session_client.watch_session_queue )
-                    # stream data
-                    tornado.ioloop.IOLoop.instance().add_callback( stream_client.watch_stream_queue )
+				# default policies
+				try :
+					default_policy_j = tr_sqlite.retrieve_policy( 'default' , 'document' )
+					_logger.info( j )
+				except Exception as e :
+					_logger.error( '..could not retrieve document policy...%s' % str( e )  )
 
 
-                    settings = {
-                                "static_path": os.path.join(os.path.dirname(__file__), "static"),
-                               }
-                    # create the web server with async coroutines
-                    _logger.info( '...initializing http services....' )
-                    application = tornado.web.Application([	( r'/trinity-vulture/start', queue_handler_start_policy ) ,
-                                                            ( r'/trinity-vulture/stop' ,  queue_handler_stop_policy ) ,
-                                                            ( r'/trinity-vulture' ,  vulture_index ) ,
-                                                            ( r'/trinity-vulture/post_stream_msg' ,  stream_queue_handler_post_msg ) ,
-                                                            ( r'/trinity-vulture/session_update' ,  session_queue_handler_session_update ) ,
-                                                            ( r'/trinity-vulture/sibling' ,  cci_sibling_probe ) ,
-                                                            ] , Debug=True ,  **settings )
+				# queue vulture
+				client = queue_client()
+				session_client = queue_session_client()
+				stream_client = queue_stream_client()
+				is_running = False
 
-                    _logger.info( '...starting listener on port 7081....' )
-                    application.listen( 7081 )
+				pid = None
+				try :
+					with open( 'cci-trinity-vulture-pid' , 'r' ) as pidfile :
+						pid = pidfile.read().strip()
+					with open( 'bootstrap_db' , 'r' ) as boot :
+						db_bootstrap = boot.readline().split( '=' )[1].strip()
 
-                    # start siblings probe
-                    probe_thred = threading.Thread( target = probe_siblings_thred ).start()
-                    # start http tunnel for local passthrough(all traffic is tnneled , even local)
+				except :
+					pass
+
+				# check if process is running
+				if pid :
+					try :
+					# throws exception if process doesn't exist
+						os.kill( int( pid ) , 0 )
+						is_running = True
+					except :
+						# pid not running
+						pass
+
+				if not is_running :
+					# Watch the queue for when new items show up
+					_logger.info( '...initializing queue vulture....' )
+					# policies
+					IOLoop.instance().add_callback( client.watch_queue )
+					# session status
+					IOLoop.instance().add_callback( session_client.watch_session_queue )
+					# stream data
+					IOLoop.instance().add_callback( stream_client.watch_stream_queue )
+
+					settings = {
+								"static_path": os.path.join(os.path.dirname(__file__), "static"),
+							   }
+					# create the web server with async coroutines
+					_logger.info( '...initializing http services....' )
+					application = tornado.web.Application([	( r'/trinity-vulture/start', queue_handler_start_policy ) ,
+															( r'/trinity-vulture/stop' ,  queue_handler_stop_policy ) ,
+															( r'/trinity-vulture' ,  vulture_index ) ,
+															( r'/trinity-vulture/post_stream_msg' ,  stream_queue_handler_post_msg ) ,
+															( r'/trinity-vulture/session_update' ,  session_queue_handler_session_update ) ,
+															( r'/trinity-vulture/sibling' ,  cci_sibling_probe ) ,
+															] , Debug=True ,  **settings )
+
+					_logger.info( '...starting listener on port 7081....' )
+					application.listen( 7081 )
+
+					# start siblings probe
+					probe_thred = threading.Thread( target = probe_siblings_thred ).start()
+					# start http tunnel for local passthrough(all traffic is tnneled , even local)
 
 
-                    # signal handlers
-                    _logger.info( '...setting system signal handlers....' )
-                    signal.signal( signal.SIGTERM , sig_handler )
-                    signal.signal( signal.SIGINT , sig_handler )
+					# signal handlers
+					_logger.info( '...setting system signal handlers....' )
+					signal.signal( signal.SIGTERM , sig_handler )
+					signal.signal( signal.SIGINT , sig_handler )
 
-                     # write pid
-                    with open( 'cci-trinity-vulture-pid' , 'w' ) as pidfile :
-                         pidfile.write( str( os.getpid() ) + '\n'  )
+					# write pid
+					with open( 'cci-trinity-vulture-pid' , 'w' ) as pidfile :
+						pidfile.write( str( os.getpid() ) + '\n'  )
 
 
-                    # start heartbeat in 30 seconds
-                    _logger.info( '...scheduling hearbeat ....' )
-                    tornado.ioloop.IOLoop.instance().call_later( 30 , start_heartbeat_callback )
+					# start heartbeat in 30 seconds
+					_logger.info( '...scheduling hearbeat ....' )
+					IOLoop.instance().call_later( 30 , start_heartbeat_callback )
 
-                    # start default document policy in 60 seconds
-                    _logger.info( '...scheduling default document policy ....' )
-                    tornado.ioloop.IOLoop.instance().call_later( 60 , start_policy_local )
+					# start default document policy in 60 seconds
+					_logger.info( '...scheduling default document policy ....' )
+					IOLoop.instance().call_later( 60 , start_policy_local )
 
-                    # start web socket push
-                    push_application = tornado.web.Application([ (r'/trinity-stream', trinity_push_handler ) ,
-                                                                    ])    
-                    _logger.info( '...starting web socket push server on port 7082 ....' )
-                    http_server = tornado.httpserver.HTTPServer( push_application ) 
-                    http_server.listen( 7082 )
-                    
-                    # set final callback for 10 seconds to signal init successs
-                    _logger.info( '...scheduling fanfare ....' )
-                    tornado.ioloop.IOLoop.instance().call_later( 15 , init_update_callback )
+					# start web socket push
+					push_application = tornado.web.Application([ (r'/trinity-stream', trinity_push_handler ) ,
+																	])
+					_logger.info( '...starting web socket push server on port 7082 ....' )
+					http_server = tornado.httpserver.HTTPServer( push_application )
+					http_server.listen( 7082 )
 
-                    
-                    # run main io
-                    _logger.info( '...starting main io loop ....' )
-                    tornado.ioloop.IOLoop.instance().start()
+					# set final callback for 10 seconds to signal init successs
+					_logger.info( '...scheduling fanfare ....' )
+					IOLoop.instance().call_later( 15 , init_update_callback )
 
-                else :
-                    _logger.info( '...server already running... pid %s....'  % pid )
-                    sys.exit( 1 )
+
+					# run main io
+					_logger.info( '...starting main io loop ....' )
+					IOLoop.instance().start()
+
+				else :
+					_logger.info( '...server already running... pid %s....'  % pid )
+					sys.exit( 1 )

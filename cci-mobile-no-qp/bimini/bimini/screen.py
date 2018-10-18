@@ -325,7 +325,7 @@ class CciScreen( Screen ) :
 
 
 						except Exception as err :
-							print err
+							print ( err )
 
 
 

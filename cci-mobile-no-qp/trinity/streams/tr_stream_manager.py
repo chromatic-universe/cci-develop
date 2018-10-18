@@ -5,10 +5,7 @@ import os
 import sys
 #############
 import copy
-try:
-    from cStringIO import StringIO
-except:
-    from StringIO import StringIO
+from io import StringIO
 ##############
 import logging
 import argparse
@@ -16,7 +13,7 @@ import socket
 import fcntl
 import struct
 import subprocess as proc
-import urllib2
+import urllib3
 import requests
 import json
 import sqlite3
@@ -29,7 +26,7 @@ import datetime
 import sqlite3
 
 #cci
-import tr_utils
+import streams.tr_utils
 
 
 url_for_mongo =  'http://localhost:7080/mongo/'
@@ -440,34 +437,34 @@ class tr_payload_stalker( tr_stalker ) :
 
 
 				def _on_mongo_document( self )  :
-					"""
+							"""
 
-					:return
-					"""
+							:return
+							"""
 
 
-					self._logger.info( '....stalking sqlite3 db for mongodb.....' )
-					self._logger.info( '....drawing gross results.....' )
-					batch = self._stage_payloads()
-					self._logger.info( '....%d total atoms..' % len( batch )  )
+							self._logger.info( '....stalking sqlite3 db for mongodb.....' )
+							self._logger.info( '....drawing gross results.....' )
+							batch = self._stage_payloads()
+							self._logger.info( '....%d total atoms..' % len( batch )  )
 
-					try :
-						self._logger.info( '....enumerating batches.....batch_size = %s' % \
-										   self._policy_dictionary['batch_size'] )
-						self._logger.info( '....consuming enumerated batch.....' )
-						for row in batch :
-							 atom = self._sql_row_to_no_sql_atom( row )
-							 url = '%sinsert_atomic_payload' % url_for_mongo
-							 r = requests.post( url ,
-												data = json.dumps( atom ) )
-							 self._logger.info( '....post batch responded with %d...' % r.status_code )
-							 if r.status_code == 200 :
-								self._mark_payload_as_vultured( str( atom['payload_id'] ) )
-							 else :
-								 raise Exception( "....insert post failed...timed out to server?" )
+							try :
+								self._logger.info( '....enumerating batches.....batch_size = %s' % \
+												   self._policy_dictionary['batch_size'] )
+								self._logger.info( '....consuming enumerated batch.....' )
+								for row in batch :
+									atom = self._sql_row_to_no_sql_atom( row )
+									url = '%sinsert_atomic_payload' % url_for_mongo
+									r = requests.post( url ,
+									data = json.dumps( atom ) )
+									self._logger.info( '....post batch responded with %d...' % r.status_code )
+									if r.status_code == 200 :
+										self._mark_payload_as_vultured( str( atom['payload_id'] ) )
+									else :
+										raise Exception( "....insert post failed...timed out to server?" )
 
-					except Exception as e :
-						self._logger.error( e.message )
+							except Exception as e :
+								self._logger.error( str( e ) )
 
 
 
@@ -481,7 +478,7 @@ class tr_payload_stalker( tr_stalker ) :
 					:return
 					"""
 
-					print 'elasticsearch'
+					print (  'elasticsearch' )
 
 
 
@@ -524,9 +521,9 @@ def stalker_main() :
 					stalker.prepare()
 					stalker.stalk()
 				except ValueError as e :
-					print  'parameter snafu: %s' %  e.message
+					print( 'parameter snafu: %s' %  str( e ) )
 				except Exception as e :
-					print e.message
+					print( str( e ) )
 
 
 

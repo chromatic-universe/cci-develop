@@ -1,33 +1,15 @@
 # tr_sqlite.py    william k. johnson 2016
 
-
-import os
-import sys
-from StringIO import StringIO
-import logging
-from math import ceil
-
-import subprocess as proc
 import sqlite3
-import time
-import signal
-import Queue
-import requests
-import datetime
-import base64
 import json
-
-
-import flask
 from flask import Flask , request , send_file , render_template , url_for
 from flask import redirect , Response , current_app , jsonify , Blueprint
-from flask_pymongo import PyMongo
-from flask_restful import Resource, Api
+
 
 try:  # python 2
-    from urllib import urlencode
+	from urllib import urlencode
 except ImportError:  # python 3
-    from urllib.parse import urlencode
+	from urllib.parse import urlencode
 
 
 from application import app , _logger
@@ -35,22 +17,24 @@ from application import app , _logger
 default_db = None
 
 # cci
-import tr_utils
-
+import streams.tr_utils
 
 # -----------------------------------------------------------------------------
 def query_session() :
-			_logger.info( '...query_session...' )
-			id=request.form['session_id']
+						_logger.info( '...query_session...' )
+						id=request.form['session_id']
 
-			return redirect( url_for( 'session_call_history' ,
-									  device = '"' + tr_utils.local_mac_addr() + '"' ,
-									  session_id = '"' + id + '"' ) )
+						return redirect( url_for( 'session_call_history' ,
+												  device = '"' + streams.tr_utils.local_mac_addr() + '"' ,
+												  session_id = '"' + id + '"' ) )
 
-app.add_url_rule( '/query_session/' ,
-				  'query_session' ,
-				  view_func=query_session ,
-				  methods=['GET' , 'POST'] )
+try :
+	app.add_url_rule( '/query_session' ,
+					  'query_session' ,
+					  view_func=query_session ,
+					  methods=['GET' , 'POST'] )
+except :
+	pass
 
 
 
@@ -69,22 +53,24 @@ def session_call_reprise(  session_id , max_id , total_count , record_ptr )  :
 
 			cur = con.cursor()
 			cur.execute( "select * from session_call_history where session_name = %s" \
-				         " and idx < %d " \
+						 " and idx < %d " \
 						 "order by timestamp DESC " \
 						 "LIMIT %d" % ( session_id , int(max_id) - 15 , 15 ) )
 			rows = cur.fetchall()
 
 			return render_template( "list.html",
-									rows = rows ,
-									session_id = session_id ,
-									total_count = total_count ,
-									record_ptr = int( record_ptr ) + 15 ,
-									max_id = int(max_id) - 15 )
-
-app.add_url_rule( '/session_call_reprise/<session_id>/batch/<max_id>:<total_count>:<record_ptr>' ,
-				  'session_call_reprise' ,
-				  view_func=session_call_reprise ,
-				  methods=['GET'] )
+					rows = rows ,
+					session_id = session_id ,
+					total_count = total_count ,
+					record_ptr = int( record_ptr ) + 15 ,
+					max_id = int(max_id) - 15 )
+try :
+	app.add_url_rule( '/session_call_reprise/<session_id>/batch/<max_id>:<total_count>:<record_ptr>' ,
+					  'session_call_reprise' ,
+					  view_func=session_call_reprise ,
+					  methods=['GET'] )
+except :
+	pass
 
 
 
@@ -92,18 +78,20 @@ app.add_url_rule( '/session_call_reprise/<session_id>/batch/<max_id>:<total_coun
 
 # ----------------------------------------------------------------------------------------------------
 def session_call_history(  device , session_id )  :
-			   """
+				"""
 
-			  :return:
+				:return:
 
-			   """
+				"""
 
-			   _logger.info( '...aession_call_history...' )
-			   con = sqlite3.connect( "/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite" )
-			   con.row_factory = sqlite3.Row
+				count = 0
+				max_idx = 0
+				_logger.info( '...aession_call_history...' )
+				con = sqlite3.connect( "/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite" )
+				con.row_factory = sqlite3.Row
 
-			   cur = con.cursor()
-			   if session_id is not None :
+				cur = con.cursor()
+				if session_id is not None :
 					cur.execute( 'select count(*) as count , max( session_call_history.idx ) as ' \
 								 'max_idx  from sessions  session_call_history '
 								 'inner join  sessions on session_call_history.session_name = sessions.session_name '
@@ -119,15 +107,15 @@ def session_call_history(  device , session_id )  :
 									 'LIMIT %d' % ( session_id , device , 15 ) )
 
 
-						rows = cur.fetchall()
-						return render_template( "list.html" ,
-											rows = rows ,
-											session_id = session_id ,
-											total_count = count ,
-											record_ptr = len( rows ) ,
-											max_id = max_idx )
+					rows = cur.fetchall()
+					return render_template( "list.html" ,
+										rows = rows ,
+										session_id = session_id ,
+										total_count = count ,
+										record_ptr = len( rows ) ,
+										max_id = max_idx )
 
-			   else :
+				else :
 					# grab newest session marked as active
 					cur.execute( 	'select  max(session_call_history.idx)  as max_id  , session_call_history.session_name ' \
 									'from session_call_history ' \
@@ -160,17 +148,19 @@ def session_call_history(  device , session_id )  :
 
 					return render_template( "index.html" ,
 										message = 'no current sessions' )
+try :
+	app.add_url_rule( '/session_call_history/<device>' ,
+					  'session_call_history' ,
+					  defaults={'session_id': None} ,
+					  view_func=session_call_history ,
+					  methods=['GET'] )
 
-app.add_url_rule( '/session_call_history/<device>' ,
-				  'session_call_history' ,
-				  defaults={'session_id': None} ,
-				  view_func=session_call_history ,
-				  methods=['GET'] )
-app.add_url_rule( '/session_call_history/<device>/<session_id>' ,
-				  'session_call_history' ,
-				  view_func=session_call_history ,
-				  methods=['GET'] )
-
+	app.add_url_rule( '/session_call_history/<device>/<session_id>' ,
+					  'session_call_history' ,
+					  view_func=session_call_history ,
+					  methods=['GET'] )
+except :
+	pass
 
 
 # ----------------------------------------------------------------------------------------------------
@@ -187,7 +177,7 @@ def retrieve_policy( policy_moniker , provider_type ) :
 
 						_logger.info( '...retrieve payload_policy ...' )
 						con = sqlite3.connect( "/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite" )
-						con.row_factory = tr_utils.dict_factory
+						con.row_factory = streams.tr_utils.dict_factory
 						cur = con.cursor()
 
 						s =  'select * from payload_policy ' \
@@ -202,7 +192,7 @@ def retrieve_policy( policy_moniker , provider_type ) :
 						else :
 							_logger.error( '...could not retrieve default policy...' )
 					except sqlite3.OperationalError as e :
-						_logger.error( '...retrieve_policy statement failed...%s' , e.message )
+						_logger.error( '...retrieve_policy statement failed...%s' , str( e ) )
 
 
 					return json_row
@@ -223,7 +213,7 @@ def retrieve_default_db_path() :
 							db_path = f.read().strip().split( '=' )[1]
 
 					except Exception as e :
-						_logger.error( '...retrieve_default_db_path failed...%s' , e.message )
+						_logger.error( '...retrieve_default_db_path failed...%s' , str( e ) )
 
 
 					return db_path
@@ -243,7 +233,7 @@ def retrieve_config_atom( atom ) :
 
 						_logger.info( '...retrieve_config_atom ...' )
 						con = sqlite3.connect( "/data/media/com.chromaticuniverse.cci_trinity/king_console.sqlite" )
-						con.row_factory = tr_utils.dict_factory
+						con.row_factory = streams.tr_utils.dict_factory
 						cur = con.cursor()
 
 						s =  'select map from metadata_config ' \
@@ -256,7 +246,7 @@ def retrieve_config_atom( atom ) :
 						else :
 							_logger.error( '...could not retrieve atom for %s...' % atom )
 					except sqlite3.OperationalError as e :
-						_logger.error( '...retrieve_policy statement failed...%s' , e.message )
+						_logger.error( '...retrieve_policy statement failed...%s' , str( e ) )
 
 
 					return json_row

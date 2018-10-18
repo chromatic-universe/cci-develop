@@ -1,20 +1,9 @@
 # tr_kafka.py    william k. johnson 2016
 
 
-import os
-import sys
-from StringIO import StringIO
-import logging
-from math import ceil
-from flask import Flask , request , send_file , render_template , url_for
+
 from flask import redirect , Response , jsonify
 from flask_restful import Resource, Api , reqparse, abort
-import subprocess as proc
-import sqlite3
-import time
-import signal
-import Queue
-import requests
 import json
 
 #from pykafka import KafkaClient
@@ -23,8 +12,8 @@ import json
 from application import app , \
 	                    _logger , \
 					    kafka_no_resource_exception
-import tr_sqlite
-import tr_utils
+import streams.tr_sqlite
+import streams.tr_utils
 
 api = Api( app )
 
@@ -48,7 +37,7 @@ def init_kafka_consumer( param_dictionary = None ) :
 
 
 				except Exception as e :
-					_logger.error( 'error in init consumer...%s' % e.message )
+					_logger.error( 'error in init consumer...%s' % str( e ) )
 
 
 
@@ -62,10 +51,13 @@ def abort_no_exist_version( version  ) :
 				:return:
 				"""
 
+				pass
+				'''
 				if todo_id not in TODOS:
 
 					abort( 404 ,
 						   message="version {} doesn't exist".format( version ) )
+				'''
 
 
 
@@ -174,7 +166,7 @@ class cci_kafka_topics( Resource ) :
 							
 						except Exception as e :
 
-							topics =  { "error" : e.message }
+							topics =  { "error" : str( e ) }
 
 						return topics
 

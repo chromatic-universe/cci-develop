@@ -1,13 +1,13 @@
-# tr_bimini.py    william k. johnson  2016
+# tr_bimini.py    william k. johnson  2018
 
 import os
 import sys
-from StringIO import StringIO
+from io import StringIO , BytesIO
 import logging
 from flask import Flask , request , send_file , render_template , url_for
 
 #cci
-import tr_trinity
+import streams.tr_trinity
 
 from application import app
 
@@ -29,9 +29,9 @@ _logger.addHandler( fh )
 @app.route( "/bimini" )
 def cci_trinity():
 
-                io = StringIO()
+                io = BytesIO()
                 try :
-                    b_ret , out = tr_trinity.capture_screen( _logger )
+                    b_ret , out = streams.tr_trinity.capture_screen( _logger )
 
                     if not b_ret :
                         _logger.error( out )
@@ -42,7 +42,7 @@ def cci_trinity():
 
                 except Exception as e :
                     #out =  'error in cci_trinity.....'  + e.message
-                    _logger.error( e )
+                    _logger.error( 'bimini->' + e )
                     return
 
                 return send_file( io , mimetype='image/png' )
@@ -63,7 +63,7 @@ def click() :
 			:return:
 			"""
 
-			return tr_trinity.capture_clicks( log = _logger ,
+			return streams.tr_trinity.capture_clicks( log = _logger ,
 										   request = request )
 
 app.add_url_rule( '/bimini/click' ,
@@ -82,7 +82,7 @@ def key() :
 			:return:
 			"""
 
-			return tr_trinity.capture_keys( log = _logger ,
+			return streams.tr_trinity.capture_keys( log = _logger ,
 										 request = request )
 
 app.add_url_rule( '/bimini/key' ,

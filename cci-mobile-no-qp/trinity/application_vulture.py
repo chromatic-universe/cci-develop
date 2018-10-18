@@ -12,8 +12,14 @@ _logger.setLevel( logging.DEBUG )
 fh = logging.FileHandler(  'cci-trinity-vulture.log' + '-debug.log', mode = 'a' )
 fh.setLevel( logging.DEBUG )
 formatter = logging.Formatter( log_format )
+# console
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+# formatter
+ch.setFormatter(formatter)
 fh.setFormatter( formatter )
 _logger.addHandler( fh )
+_logger.addHandler( ch )
 
 
 
