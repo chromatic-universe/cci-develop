@@ -43,6 +43,81 @@ namespace cpp_real_stream
 
 
                 //-------------------------------------------------------------------------------------------------------------------
+                template<typename T>
+                class stream_event_consumer_procedure
+                {
+
+                    public :
+
+                        stream_event_consumer_procedure( T meta ) :  m_meta { meta }
+                        {
+                        }
+
+                    private :
+
+                        //attributes
+                        T  			                 m_meta;
+                        std::unique_ptr<std::thread> m_runnable;
+
+
+                    protected :
+
+                        //attributes
+
+
+                        //dtor
+                        virtual ~stream_event_consumer_procedure()
+                        {
+                            fini();
+                        }
+
+
+                    public :
+
+                        //accessors-inspectors
+                        std::string meta() const noexcept { return m_meta; }
+
+
+                        //services
+                        int proc_init();
+                        int perform();
+                        int fini();
+
+                };
+
+                //services
+                template<typename T>
+                int  stream_event_consumer_procedure<T>::proc_init()
+                {
+
+                    //if( perform() == -1 ) { exit( 0 ); }
+                    m_runnable = std::make_unique<std::thread>(
+                                           &stream_event_consumer_procedure<T>::perform , this );
+
+                    return 0;
+                }
+
+
+                //
+                template<typename T>
+                int stream_event_consumer_procedure<T>::perform()
+                {
+                    m_meta->consume();
+
+                    return 0;
+                }
+
+                template<typename T>
+                int stream_event_consumer_procedure<T>::fini()
+                {
+                     m_runnable->join();
+
+                     return 0;
+                }
+
+
+
+                //-------------------------------------------------------------------------------------------------------------------
                 class cci_stream_event
                 {
 

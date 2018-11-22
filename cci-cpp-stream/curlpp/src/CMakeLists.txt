@@ -6,8 +6,8 @@ cmake_minimum_required(VERSION 3.2)
 project(cci_curl_pp)
 
 #cpp flags
-set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g -rdynamic -O0  -DDEBUG -std=c++11")
-set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O3  -rdynamic  -DNDEBUG -std=c++11")
+set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g -rdynamic -O0  -DDEBUG -std=c++1z")
+set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O3  -rdynamic  -DNDEBUG -std=c++1z")
 
 #includes
 include_directories( ${cci_curk_ppSOURCE_DIR}

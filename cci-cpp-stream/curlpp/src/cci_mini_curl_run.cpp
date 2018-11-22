@@ -2,6 +2,10 @@
 
 
 #include <cci_curl_stream.h>
+#include <chrono>
+#include <thread>
+
+using namespace std::chrono_literals;
 
 
 using namespace cpp_real_stream;
@@ -38,9 +42,15 @@ int main( int argc , char** argv )
                         //json url = { { "url" , "http://localhost:7080//mongo/imap2017/retr_namespace" } };
 			//curl->results_by_naked_param_async( mon , url ,  ostr.get() );
 			//std::cerr  << ostr->str() << "\n";
-			curl->execute_base_bool_g( "https://api.ipdata.co/ip/?api-key=45994087ef1f05552c969997d1b64edf4caa35621f42c593200053aa" ,
-                                                   ostr.get() );
-			std::cerr  << ostr->str() << "\n";
+            for( ;; )
+            {
+                curl->execute_base_bool_g( "http://192.168.1.199:9200" ,
+                                                       ostr.get() );
+                std::cerr  << ostr->str() << "\n";
+
+                std::this_thread::sleep_for( 3s ) ;
+            }
+
 
 
 
