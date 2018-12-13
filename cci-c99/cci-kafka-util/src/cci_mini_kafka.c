@@ -1,4 +1,4 @@
-//cci_mini_kafka.c william k. johnson 2015
+//cci_mini_kafka.c   chromatic universe   william k. johnson 2018
 
 #include <cci_mini_kafka.h>
 
@@ -395,15 +395,16 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 	     }
 	     if( kc->mode == 'P' )
 	     {
-		ex_parte_producer( kc );
+		 ex_parte_producer( kc );
 	     }
 	     else if( ( kc->mode == 'C' ) || ( kc->mode == 'D' ) )
 	     {
 		//consumer
-		ex_parte_consumer( kc );
+		 ex_parte_consumer( kc );
 	     }
 	     else if( kc->mode == 'L' )
 	     {
+            _L( "...metadata...." , "%s\n" );
 	     }
 	     else
 	     {
@@ -1132,15 +1133,25 @@ void sig_usr1 ( int sig )
 //------------------------------------------------------------------------
 void _L( const char* buf , const char* format )
 {
-  	struct timeval tv;
-	gettimeofday( &tv, NULL );
-    fprintf( stderr ,
-             "\033[22;34m%u.%03u CCI-MINI-KAFKA-RUN:\033[0m" ,
-             (int) tv.tv_sec ,
-             (int) ( tv.tv_usec / 1000 ) );
-    fprintf( stderr ,
-             format ,
-             buf  );
+        time_t timer;
+        char buffer[26];
+        struct tm* tm_info;
+
+        time( &timer );
+        tm_info = localtime( &timer );
+
+        strftime( buffer, 26, "%Y-%m-%d %H:%M:%S", tm_info );
+
+        struct timeval tv;
+        gettimeofday( &tv, NULL );
+        fprintf( stderr ,
+                 "\033[22;34m%u.%03u CCI-KAFKA-PLEX %s:\033[0m" ,
+                 (int) tv.tv_sec ,
+                 (int) ( tv.tv_usec / 1000 ) ,
+                 buffer );
+        fprintf( stderr ,
+                 format ,
+                 buf  );
 
 }
 
