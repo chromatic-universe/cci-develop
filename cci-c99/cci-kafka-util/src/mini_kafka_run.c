@@ -28,7 +28,7 @@ int main( int argc , char* argv[] )
                           //topic config
                           .conf_topic_ptr = NULL ,
                           //topic string
-                          .topic_str = "the_original_corny_snaps" ,
+                          .topic_str = NULL ,
                           //topic context
                           .topic_ptr = NULL ,
                           //default brokers

@@ -36,12 +36,16 @@ static void ex_parte_producer( kafka_context_ptr kc );
 //------------------------------------------------------------------------
 //consumer
 static void ex_parte_consumer( kafka_context_ptr kc );
+//metadatar
+static void ex_parte_metadata( kafka_context_ptr kc );
 //------------------------------------------------------------------------
 static void make_kafka_handle( kafka_context_ptr kc  );
 //------------------------------------------------------------------------
 static void make_kafka_logger( kafka_context_ptr kc );
 //------------------------------------------------------------------------
 static void metadata_set( kafka_context_ptr kc );
+//------------------------------------------------------------------------
+static void metadata_set_ex( kafka_context_ptr kc );
 //------------------------------------------------------------------------
 static void debug_set( conf_k_ptr ptr , const char* contexts );
 //------------------------------------------------------------------------
@@ -239,7 +243,7 @@ void cci_kf_metadata_print ( const char *topic ,  const struct rd_kafka_metadata
 {
      int i, j, k;
 
-     printf( "\033[22;34mmetadata for %s (from broker %"PRId32": %s):\n" ,
+     printf( "\033[1;37mmetadata for %s (from broker %"PRId32": %s):\n" ,
               topic ? : "all topics" ,
               metadata->orig_broker_id ,
               metadata->orig_broker_name );
@@ -258,7 +262,7 @@ void cci_kf_metadata_print ( const char *topic ,  const struct rd_kafka_metadata
       for( i = 0; i < metadata->topic_cnt; i++ )
       {
                 const metadata_topic_ptr_k t = &metadata->topics[i];
-                printf( "  topic \"%s\" with %i partitions:" ,
+                printf( " \033[0;37mtopic \"%s\" with %i partitions:\033[0m" ,
                         t->topic,
                         t->partition_cnt );
 
@@ -296,7 +300,7 @@ void cci_kf_metadata_print ( const char *topic ,  const struct rd_kafka_metadata
 
                 }//end topic partitions
       }//end topics
-      printf( "\033[0m" );
+      printf( "\031[0m" );
 }
 
 //------------------------------------------------------------------------
@@ -390,26 +394,27 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 	     if( kc->mode == 0 )
 
 	     {
-		 fprintf( stderr, "mode must be specified...\n" );
-		 exit( 1 );
+		    fprintf( stderr, "mode must be specified...\n" );
+		    exit( 1 );
 	     }
 	     if( kc->mode == 'P' )
 	     {
-		 ex_parte_producer( kc );
+		    ex_parte_producer( kc );
 	     }
 	     else if( ( kc->mode == 'C' ) || ( kc->mode == 'D' ) )
 	     {
-		//consumer
-		 ex_parte_consumer( kc );
+		    //consumer
+		    ex_parte_consumer( kc );
 	     }
 	     else if( kc->mode == 'L' )
 	     {
-            _L( "...metadata...." , "%s\n" );
-	     }
+             //metadata
+             ex_parte_metadata( kc );
+         }
 	     else
 	     {
-		 fprintf( stderr, "unrecognized mode...\n" );
-		 exit( 1 );
+		    fprintf( stderr, "unrecognized mode...\n" );
+		    exit( 1 );
 	     }
 
 }
@@ -541,58 +546,58 @@ void cci_kf_consumer_preamble( kafka_context_ptr kc )
 //------------------------------------------------------------------------
 void cci_kf_production_preamble( kafka_context_ptr kc )
 {
-    char tmp[16];
-    char errstr[512];
+        char tmp[16];
+        char errstr[512];
 
 
 
-    const char **arr;
-    size_t cnt;
-    int pass;
+        const char **arr;
+        size_t cnt;
+        int pass;
 
-    kc->conf_ptr = rd_kafka_conf_new();
+        kc->conf_ptr = rd_kafka_conf_new();
 
-    if( kc->debug_flags )
-    {
-        _L( "setting debug level....." , "%s\n" );
-       debug_set( kc->conf_ptr , kc->debug_flags );
-    }
+        if( kc->debug_flags )
+        {
+            _L( "setting debug level....." , "%s\n" );
+           debug_set( kc->conf_ptr , kc->debug_flags );
+        }
 
-    //set logger
-    rd_kafka_conf_set_log_cb( kc->conf_ptr , kc->cci_logger );
-    //quick termination
-   	snprintf(tmp, sizeof(tmp), "%i", SIGIO);
-	rd_kafka_conf_set( kc->conf_ptr ,
-                       "internal.termination.signal" ,
-                       tmp ,
-                       NULL ,
-                       0 );
-    //topic config
-    kc->conf_topic_ptr = rd_kafka_topic_conf_new();
+        //set logger
+        rd_kafka_conf_set_log_cb( kc->conf_ptr , kc->cci_logger );
+        //quick termination
+        snprintf(tmp, sizeof(tmp), "%i", SIGIO);
+        rd_kafka_conf_set( kc->conf_ptr ,
+                           "internal.termination.signal" ,
+                           tmp ,
+                           NULL ,
+                           0 );
+        //topic config
+        kc->conf_topic_ptr = rd_kafka_topic_conf_new();
 
-    rd_kafka_topic_conf_set( kc->conf_topic_ptr ,
-                             "produce.offset.report" ,
-                             "true",  errstr ,
-                             sizeof( errstr ) );
-    rd_kafka_conf_set_dr_msg_cb( kc->conf_ptr ,
-                                 kc->cci_msg_delivered );
+        rd_kafka_topic_conf_set( kc->conf_topic_ptr ,
+                                 "produce.offset.report" ,
+                                 "true",  errstr ,
+                                 sizeof( errstr ) );
+        rd_kafka_conf_set_dr_msg_cb( kc->conf_ptr ,
+                                     kc->cci_msg_delivered );
 
-    _L( "emplaced report callback procs..." , "%s\n" );
-    if( kc->dump_config ) { configuration_dump( kc ); }
+        _L( "emplaced report callback procs..." , "%s\n" );
+        if( kc->dump_config ) { configuration_dump( kc ); }
 
-    //create kafka handle
-    if ( !( kc->kafka_ptr = rd_kafka_new( RD_KAFKA_PRODUCER ,
-                                          kc->conf_ptr ,
-                                          errstr ,
-                                          sizeof(errstr) ) ) )
-    {
-        _L( "%% failed to create new producer..." , "%s\n" );
+        //create kafka handle
+        if ( !( kc->kafka_ptr = rd_kafka_new( RD_KAFKA_PRODUCER ,
+                                              kc->conf_ptr ,
+                                              errstr ,
+                                              sizeof(errstr) ) ) )
+        {
+            _L( "%% failed to create new producer..." , "%s\n" );
 
-        exit(1);
-    }
-    _L( "created kafka library context...." , "%s\n" );
+            exit(1);
+        }
+        _L( "created kafka library context...." , "%s\n" );
 
-     rd_kafka_set_log_level( kc->kafka_ptr , LOG_DEBUG );
+         rd_kafka_set_log_level( kc->kafka_ptr , LOG_DEBUG );
 
 }
 
@@ -747,7 +752,7 @@ void ex_parte_producer( kafka_context_ptr kc  )
 				       	 "partition %i: %s\n",
 					     rd_kafka_topic_name( kc->topic_ptr ) ,
                          kc->partition ,
-					     rd_kafka_err2str( rd_kafka_errno2err( errno ) ) );
+					     rd_kafka_err2str( rd_kafka_last_error() ) );
 
 				         //poll to handle delivery reports
  				         rd_kafka_poll( kc->kafka_ptr  , 0 );
@@ -792,220 +797,266 @@ void ex_parte_producer( kafka_context_ptr kc  )
 //------------------------------------------------------------------------
 void ex_parte_consumer(  kafka_context_ptr kc )
 {
-   //init
-    assert( kc  );
+       //init
+        assert( kc  );
 
-    char errstr[512];
-    int wait_eof = 0;
-    int err;
+        char errstr[512];
+        int wait_eof = 0;
+        int err;
 
-    //preamble
-    kc->cci_consumer_preamble( kc );
-    assert( kc );
+        //preamble
+        kc->cci_consumer_preamble( kc );
+        assert( kc );
 
-    //set metadata
-    if ( rd_kafka_brokers_add( kc->kafka_ptr , kc->brokers ) == 0 )
-    {
-                _L( "could not instantiate brokers...." , "%s\n" );
-                _L( "" , "%s" );
-                fprintf( stderr, "%%\%s\n" , errstr );
+        //set metadata
+        if ( rd_kafka_brokers_add( kc->kafka_ptr , kc->brokers ) == 0 )
+        {
+                    _L( "could not instantiate brokers...." , "%s\n" );
+                    _L( "" , "%s" );
+                    fprintf( stderr, "%%\%s\n" , errstr );
 
-                exit( 1 );
-    }
-    _L( "configured brokers...." , "%s\n" );
+                    exit( 1 );
+        }
+        _L( "configured brokers...." , "%s\n" );
 
-    //group description
-    _L( "" , "%s" );
-     describe_groups( kc->kafka_ptr , kc->group_id );
+        //group description
+        _L( "" , "%s" );
+         describe_groups( kc->kafka_ptr , kc->group_id );
 
-    //redirect polling
-    rd_kafka_poll_set_consumer( kc->kafka_ptr );
+        //redirect polling
+        rd_kafka_poll_set_consumer( kc->kafka_ptr );
 
-    kc->partitions_ptr = rd_kafka_topic_partition_list_new( 10 );
-    _L( "servicing topic partition distribution...." , "%s\n" );
+        kc->partitions_ptr = rd_kafka_topic_partition_list_new( 10 );
+        _L( "servicing topic partition distribution...." , "%s\n" );
 
-    int is_subscription = process_partition_list( &kc->partitions_ptr  ,
-                                                  kc->topic_str ,
-                                                  &wait_eof );
+        int is_subscription = process_partition_list( &kc->partitions_ptr  ,
+                                                      kc->topic_str ,
+                                                      &wait_eof );
 
-    //subscribe
-    if ( is_subscription )
-    {
-                _L( "" , "%s" );
-                fprintf( stderr, "%% subscribing to %d topics....\n",
-                        kc->partitions_ptr->cnt );
+        //subscribe
+        if ( is_subscription )
+        {
+                    _L( "" , "%s" );
+                    fprintf( stderr, "%% subscribing to %d topics....\n",
+                            kc->partitions_ptr->cnt );
 
-                if ( ( err = rd_kafka_subscribe( kc->kafka_ptr , kc->partitions_ptr ) ) )
-                {
-                        _L( "" , "%s" );
-                        fprintf( stderr,
-                                "%% failed to start consuming topics: %s\n",
+                    if ( ( err = rd_kafka_subscribe( kc->kafka_ptr , kc->partitions_ptr ) ) )
+                    {
+                            _L( "" , "%s" );
+                            fprintf( stderr,
+                                    "%% failed to start consuming topics: %s\n",
+                                    rd_kafka_err2str( err ) );
+                            exit( 1 );
+                    }
+                    _L( "subscribed...." , "%s\n" );
+        }
+        else
+        {
+                    //assign partitions
+                    _L( "" , "%s" );
+                    fprintf( stderr , "%% assigning %d partitions\n" ,
+                                       kc->partitions_ptr->cnt );
+
+                    if ( ( err = rd_kafka_assign( kc->kafka_ptr , kc->partitions_ptr ) ) )
+                    {
+                            _L( "" , "%s" );
+                            fprintf( stderr,
+                                    "%% failed to assign partitions: %s\n",
+                                    rd_kafka_err2str( err ) );
+                    }
+        }
+
+        //consume messages
+        kc->is_running = 1;
+        while ( kc->is_running )
+        {
+                    message_k_ptr message_ptr;
+
+                    message_ptr = rd_kafka_consumer_poll( kc->kafka_ptr , 1000 );
+                    if ( message_ptr )
+                    {
+                            kc->cci_msg_consume( kc , message_ptr , NULL );
+
+                            rd_kafka_message_destroy( message_ptr );
+                    }
+        }
+
+        //close
+        err = rd_kafka_consumer_close( kc->kafka_ptr );
+        if ( err )
+        {
+              _L( "" , "%s\n" );
+              fprintf (stderr ,
+                       "%% failed to close consumer: %s\n",
                                 rd_kafka_err2str( err ) );
-                        exit( 1 );
-                }
-                _L( "subscribed...." , "%s\n" );
-    }
-    else
-    {
-                //assign partitions
-                _L( "" , "%s" );
-                fprintf( stderr , "%% assigning %d partitions\n" ,
-                                   kc->partitions_ptr->cnt );
+        }
+        else
+        {
+              _L( "" , "%s");
+              fprintf( stderr, "%% consumer closed..............\n");
+              //destory partitions
+              rd_kafka_topic_partition_list_destroy( kc->partitions_ptr );
+              //destroy handle
+              rd_kafka_destroy(  kc->kafka_ptr );
+              int run = 5;
+              while ( run-- > 0 && rd_kafka_wait_destroyed( 1000 ) == -1 )
+              {
+                _L( "waiting for librdkafka to decommission...." ,  "%s\n" );
+              }
+              if ( run <= 0 ) { rd_kafka_dump( stderr , kc->kafka_ptr ); }
+        }
 
-                if ( ( err = rd_kafka_assign( kc->kafka_ptr , kc->partitions_ptr ) ) )
-                {
-                        _L( "" , "%s" );
-                        fprintf( stderr,
-                                "%% failed to assign partitions: %s\n",
-                                rd_kafka_err2str( err ) );
-                }
-    }
+}
 
-    //consume messages
-    kc->is_running = 1;
-    while ( kc->is_running )
-    {
-                message_k_ptr message_ptr;
+//-----------------------------------------------------------------------
+void ex_parte_metadata( kafka_context_ptr kc )
+{
 
-                message_ptr = rd_kafka_consumer_poll( kc->kafka_ptr , 1000 );
-                if ( message_ptr )
-                {
-                      	kc->cci_msg_consume( kc , message_ptr , NULL );
+         _L( "...metadata...." , "%s\n" );
 
-                        rd_kafka_message_destroy( message_ptr );
-                }
-    }
+        kc->cci_production_preamble( kc );
+        rd_kafka_resp_err_t err = RD_KAFKA_RESP_ERR_NO_ERROR;
+        metadata_set_ex( kc );
+        _L( "broker and topic metadata configured...." , "%s\n" );
 
-    //close
-    err = rd_kafka_consumer_close( kc->kafka_ptr );
-    if ( err )
-    {
-          _L( "" , "%s\n" );
-          fprintf (stderr ,
-                   "%% failed to close consumer: %s\n",
-                            rd_kafka_err2str( err ) );
-    }
-    else
-    {
-          _L( "" , "%s");
-          fprintf( stderr, "%% consumer closed..............\n");
-          //destory partitions
-          rd_kafka_topic_partition_list_destroy( kc->partitions_ptr );
-          //destroy handle
-          rd_kafka_destroy(  kc->kafka_ptr );
-          int run = 5;
-          while ( run-- > 0 && rd_kafka_wait_destroyed( 1000 ) == -1 )
-          {
-            _L( "waiting for librdkafka to decommission...." ,  "%s\n" );
-          }
-	      if ( run <= 0 ) { rd_kafka_dump( stderr , kc->kafka_ptr ); }
-    }
+         //Fetch metadata
+        _L( "...fetching metadata...." , "%s\n" );
+
+        const struct rd_kafka_metadata *metadata;
+        err = rd_kafka_metadata( kc->kafka_ptr ,
+                                 kc->topic_ptr ? 0 : 1 ,
+                                 kc->topic_ptr ,
+                                 &metadata ,
+                                 5000 );
+        if  (err != RD_KAFKA_RESP_ERR_NO_ERROR )
+        { _L( rd_kafka_err2str( err ) , "...fetch metadata failed d%s/n" ); }
+        else { kc->cci_topic_metadata( kc->topic_str , metadata ); }
+
+        rd_kafka_metadata_destroy( metadata );
+
+        //destroy topic and ttopic config
+        if( kc->topic_ptr )
+        {
+            fclose( stdin );
+            rd_kafka_topic_destroy( kc->topic_ptr );
+            kc->topic_ptr = NULL;
+        }
+        //destroy the handle
+        if( kc->kafka_ptr )
+        {
+            rd_kafka_destroy( kc->kafka_ptr );
+            kc->kafka_ptr = NULL;
+        }
+
+        _L( "topics and context deleted...."  , "%s\n" );
+        _L( "...end fetch metadata metadata...." , "%s\n" );
+
 
 }
 
 //------------------------------------------------------------------------
 void make_kafka_handle( kafka_context_ptr kc   )
 {
-    char errstr[512];
-    char tmp[16];
+        char errstr[512];
+        char tmp[16];
 
-    //init conf
-    _L( "new configuration..." , "%s\n" );
-    kc->conf_ptr = rd_kafka_conf_new();
-    assert( kc->conf_ptr );
-    //quick termination
-	snprintf( tmp , sizeof( tmp ) , "%i" , SIGIO );
-	rd_kafka_conf_set( kc->conf_ptr ,
-                        "internal.termination.signal" ,
-                        tmp ,
-                        NULL ,
-                        0 );
-    //debug
-    if( kc->debug_flags )
-    {
-        _L( "setting debug flags...." , "%s\n" );
-        if ( rd_kafka_conf_set( kc->conf_ptr ,
-                               "debug" ,
-                                kc->debug_flags ,
-                                errstr ,
-                                sizeof( errstr ))  !=
-                                RD_KAFKA_CONF_OK)
+        //init conf
+        _L( "new configuration..." , "%s\n" );
+        kc->conf_ptr = rd_kafka_conf_new();
+        assert( kc->conf_ptr );
+        //quick termination
+        snprintf( tmp , sizeof( tmp ) , "%i" , SIGIO );
+        rd_kafka_conf_set( kc->conf_ptr ,
+                            "internal.termination.signal" ,
+                            tmp ,
+                            NULL ,
+                            0 );
+        //debug
+        if( kc->debug_flags )
         {
-            fprintf( stderr ,
-                    "%%debug configuration failed: %s: %s\n",
-                     errstr ,
-                     "all" );
-            exit( 1) ;
+            _L( "setting debug flags...." , "%s\n" );
+            if ( rd_kafka_conf_set( kc->conf_ptr ,
+                                   "debug" ,
+                                    kc->debug_flags ,
+                                    errstr ,
+                                    sizeof( errstr ))  !=
+                                    RD_KAFKA_CONF_OK)
+            {
+                fprintf( stderr ,
+                        "%%debug configuration failed: %s: %s\n",
+                         errstr ,
+                         "all" );
+                exit( 1) ;
+            }
         }
-    }
-    //client consumer group
-    _L( "setting consumer groups...." , "%s\n" );
-    if( !kc->group_id )  { kc->group_id = "cci-group"; }
-    if ( rd_kafka_conf_set( kc->conf_ptr ,
-                            "group.id" ,
-                            kc->group_id ,
-                            errstr ,
-                            sizeof( errstr ) ) !=
-                            RD_KAFKA_CONF_OK )
-    {
-                        fprintf( stderr ,
-                                 "%% %s\n" ,
-                                 errstr );
-                        exit ( 1 );
-    }
+        //client consumer group
+        _L( "setting consumer groups...." , "%s\n" );
+        if( !kc->group_id )  { kc->group_id = "cci-group"; }
+        if ( rd_kafka_conf_set( kc->conf_ptr ,
+                                "group.id" ,
+                                kc->group_id ,
+                                errstr ,
+                                sizeof( errstr ) ) !=
+                                RD_KAFKA_CONF_OK )
+        {
+                            fprintf( stderr ,
+                                     "%% %s\n" ,
+                                     errstr );
+                            exit ( 1 );
+        }
 
-    //topic conf
-    _L( "topic oconfiguration...." , "%s\n" );
-	kc->conf_topic_ptr  = rd_kafka_topic_conf_new();
-    assert( kc->conf_topic_ptr );
+        //topic conf
+        _L( "topic oconfiguration...." , "%s\n" );
+        kc->conf_topic_ptr  = rd_kafka_topic_conf_new();
+        assert( kc->conf_topic_ptr );
 
-    //broker offset storag
-    _L( "setting broker offset storage...." , "%s\n" );
-    if( rd_kafka_topic_conf_set( kc->conf_topic_ptr ,
-                                 "offset.store.method",
-                                 "broker",
-                                 errstr ,
-                                 sizeof( errstr ) ) !=
-                                 RD_KAFKA_CONF_OK )
-    {
-                        fprintf( stderr ,
-                                "%% %s\n" ,
-                                errstr );
-                        exit( 1 );
-    }
+        //broker offset storag
+        _L( "setting broker offset storage...." , "%s\n" );
+        if( rd_kafka_topic_conf_set( kc->conf_topic_ptr ,
+                                     "offset.store.method",
+                                     "broker",
+                                     errstr ,
+                                     sizeof( errstr ) ) !=
+                                     RD_KAFKA_CONF_OK )
+        {
+                            fprintf( stderr ,
+                                    "%% %s\n" ,
+                                    errstr );
+                            exit( 1 );
+        }
 
-    //default topic config for pattern-matched topics
-    _L( "setting default topic...." , "%s\n" );
-    rd_kafka_conf_set_default_topic_conf( kc->conf_ptr , kc->conf_topic_ptr );
-    _L( "rebalance callbacke set...." , "%s\n" );
-    //rebalance callback call for partition reassignment
-    rd_kafka_conf_set_rebalance_cb( kc->conf_ptr , kc->cci_partition_rebalance );
+        //default topic config for pattern-matched topics
+        _L( "setting default topic...." , "%s\n" );
+        rd_kafka_conf_set_default_topic_conf( kc->conf_ptr , kc->conf_topic_ptr );
+        _L( "rebalance callbacke set...." , "%s\n" );
+        //rebalance callback call for partition reassignment
+        rd_kafka_conf_set_rebalance_cb( kc->conf_ptr , kc->cci_partition_rebalance );
 
-    //file scope pointer
-    context = kc;
+        //file scope pointer
+        context = kc;
 
-    //create kafka handle
-    _L( "creating library context...." , "%s\n" );
-	if( !( kc->kafka_ptr = rd_kafka_new( kc->mode == 'C' ? RD_KAFKA_CONSUMER
-                                          : RD_KAFKA_PRODUCER ,
-                                         kc->conf_ptr ,
-					                     errstr ,
-                                         sizeof( errstr ) ) ) )
-    {
-			fprintf( stderr ,
-				     "%% Failed to create new context: %s\n",
-				      errstr );
+        //create kafka handle
+        _L( "creating library context...." , "%s\n" );
+        if( !( kc->kafka_ptr = rd_kafka_new( kc->mode == 'C' ? RD_KAFKA_CONSUMER
+                                              : RD_KAFKA_PRODUCER ,
+                                             kc->conf_ptr ,
+                                             errstr ,
+                                             sizeof( errstr ) ) ) )
+        {
+                fprintf( stderr ,
+                         "%% Failed to create new context: %s\n",
+                          errstr );
 
-			exit( 1 );
-	}
+                exit( 1 );
+        }
 
-    _L( "redirecting log stream...." , "%s\n" );
-    //redirect rd_kafka_poll() to consumer_poll()
-    rd_kafka_poll_set_consumer( kc->kafka_ptr );
+        _L( "redirecting log stream...." , "%s\n" );
+        //redirect rd_kafka_poll() to consumer_poll()
+        rd_kafka_poll_set_consumer( kc->kafka_ptr );
 
-    //partition list
-    _L( "setting up partition list...." , "%s\n" );
-    kc->partitions_ptr = rd_kafka_topic_partition_list_new( 10 );
+        //partition list
+        _L( "setting up partition list...." , "%s\n" );
+        kc->partitions_ptr = rd_kafka_topic_partition_list_new( 10 );
 
 
 
@@ -1027,29 +1078,62 @@ void make_kafka_logger( kafka_context_ptr kc  )
 //------------------------------------------------------------------------
 void metadata_set( kafka_context_ptr kc )
 {
-    assert( kc );
-    assert( kc->kafka_ptr );
-    assert( kc->brokers );
+        assert( kc );
+        assert( kc->kafka_ptr );
+        assert( kc->brokers );
 
-    //add brokers
-	if( rd_kafka_brokers_add( kc->kafka_ptr ,
-                              kc->brokers ) == 0 )
-    {
-          _L( "%% No valid brokers specified....." , "%s\n" );
-	      exit( 1 );
-	}
+        //add brokers
+        if( rd_kafka_brokers_add( kc->kafka_ptr ,
+                                  kc->brokers ) == 0 )
+        {
+              _L( "%% No valid brokers specified....." , "%s\n" );
+              exit( 1 );
+        }
 
-	//create topic
-	kc->topic_ptr = rd_kafka_topic_new( kc->kafka_ptr ,
-                                        kc->topic_str ,
-                                        kc->conf_topic_ptr );
-    if( !kc->topic_ptr )
-    {
-		_L( "invalid topic specified....." , "%s" );
-		exit( 1 );
-	}
+        //create topic
+        kc->topic_ptr = rd_kafka_topic_new( kc->kafka_ptr ,
+                                            kc->topic_str ,
+                                            kc->conf_topic_ptr );
+        if( !kc->topic_ptr )
+        {
+            _L( "invalid topic specified....." , "%s" );
+            exit( 1 );
+        }
 
 }
+
+//------------------------------------------------------------------------
+void metadata_set_ex( kafka_context_ptr kc )
+{
+        assert( kc );
+        assert( kc->kafka_ptr );
+        assert( kc->brokers );
+
+        //add brokers
+        if( rd_kafka_brokers_add( kc->kafka_ptr ,
+                                  kc->brokers ) == 0 )
+        {
+              _L( "%% No valid brokers specified....." , "%s\n" );
+              exit( 1 );
+        }
+
+        if( kc->topic_str )
+        {
+            //create topic
+            kc->topic_ptr = rd_kafka_topic_new( kc->kafka_ptr ,
+                                                kc->topic_str ,
+                                                kc->conf_topic_ptr );
+            if( !kc->topic_ptr )
+            {
+                _L( "invalid topic specified....." , "%s" );
+                exit( 1 );
+            }
+        }
+        else
+        { kc->topic_ptr = NULL; }
+
+}
+
 
 //------------------------------------------------------------------------
 void debug_set( conf_k_ptr ptr , const char* contexts )
@@ -1174,7 +1258,7 @@ int describe_groups (rd_kafka_t *rk, const char *group)
                 const struct rd_kafka_group_info *gi = &grplist->groups[i];
                 int j;
 
-                printf("Group \"%s\" in state %s on broker %d (%s:%hu)\n",
+                printf("Group \"%s\" in state %s on broker %d (%s:%d)\n",
                        gi->group, gi->state,
                        gi->broker.id, gi->broker.host, gi->broker.port);
                 if (gi->err)
