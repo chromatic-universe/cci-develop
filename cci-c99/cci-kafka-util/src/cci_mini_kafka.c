@@ -314,68 +314,68 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 				     kc->argv ,
 				     "PCLDt:d:p:b:o:g:xevh" ) ) != -1 )
 	     {
-		 switch( opt )
-		 {
-		    ///modes
-		    //producer
-		    case 'P' :
-		    //consumer
-			    case 'C' :
-		    //group description
-		    case 'D' :
-		    //metadata list mode
-		    case 'L' :
-			if( kc->mode )
-			{
-			    _L( "mode has already been set..." , "%s\n" );
-			    exit( 1 );
-			}
-			kc->mode = opt;
-			break;
+             switch( opt )
+             {
+                ///modes
+                //producer
+                case 'P' :
+                //consumer
+                    case 'C' :
+                //group description
+                case 'D' :
+                //metadata list mode
+                case 'L' :
+                if( kc->mode )
+                {
+                    _L( "mode has already been set..." , "%s\n" );
+                    exit( 1 );
+                }
+                kc->mode = opt;
+                break;
 
-		    //consumption offset
-		    case 'e':
-				    kc->exit_eof = 1;
-				    break;
-		    //topic
-		    case 't' :
-				    kc->topic_str = optarg;
-				    break;
-		    //partition
-	   	    case 'p':
-				    kc->partition = atoi( optarg );
-				    break;
-		    //brokers
-		    case 'b' :
-				    kc->brokers = optarg;
-				    break;
-		    //group
-		    case 'g' :
-			            kc->group_id = optarg;
-				    break;
-		    //group
-		    case 'd' :
-				    kc->debug_flags = optarg;
-				    break;
-		    //dump configuration
-		    case 'x' :
-			kc->dump_config = 1;
-			break;
-		    //consumption offset
-		    case 'o':
-		         kc->start_offset = atoi( optarg );
-  		         break;
-		    case 'v':
-			fprintf( stderr , "\033[22;32mcci_mini_kafka_run version 0.91 chromatic universe william k. johnson 2018\n\033[0m" );
-			exit( 0 );
-		    case 'h' :
-		    default :
-		    {
-			//executable moniker as arg
-			stream_out_usage( kc->argv[0] );
-			exit( 0 );
-		    }
-		 }
+                //consumption offset
+                case 'e':
+                        kc->exit_eof = 1;
+                        break;
+                //topic
+                case 't' :
+                        kc->topic_str = optarg;
+                        break;
+                //partition
+                case 'p':
+                        kc->partition = atoi( optarg );
+                        break;
+                //brokers
+                case 'b' :
+                        kc->brokers = optarg;
+                        break;
+                //group
+                case 'g' :
+                            kc->group_id = optarg;
+                        break;
+                //group
+                case 'd' :
+                        kc->debug_flags = optarg;
+                        break;
+                //dump configuration
+                case 'x' :
+                kc->dump_config = 1;
+                break;
+                //consumption offset
+                case 'o':
+                     kc->start_offset = atoi( optarg );
+                     break;
+                case 'v':
+                    fprintf( stderr , "\033[22;32mcci_mini_kafka_run version 0.91 chromatic universe william k. johnson 2018\n\033[0m" );
+                    exit( 0 );
+                case 'h' :
+                default :
+                {
+                    //executable moniker as arg
+                    stream_out_usage( kc->argv[0] );
+                    exit( 0 );
+                }
+             }
 
 	     }
 
