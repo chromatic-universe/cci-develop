@@ -636,11 +636,11 @@ void stream_out_usage( const char* binary )
 			"\n\033[0m" \
 			" options:\n" \
 			"  -C              consumer mode:\n" \
-            "                  writes fetched messages to stdout\n" \
+            "                  \twrites fetched messages to stdout\n" \
             "  -P              producer mode:\n" \
-            "                  queries broker for metadata information\n" \
+            "                  \tpost messages from stdout to stream...\n" \
             "  -L              metadata list mode\n" \
-            "                  queries broker for metadata information\n" \
+            "                  \tqueries broker for metadata information\n" \
             "  -D              describe consumer group\n" \
 			"  -t <topics>     topics to fetch / produce\n" \
                         "\t\t  for balanced consumer groups use the 'topic1 topic2..'" \
@@ -660,7 +660,7 @@ void stream_out_usage( const char* binary )
 			"\n" \
 			"\n" ,
             "synopsis :\n"\
-                "\n\t\t mini utils for kafka server manip chromatic universe  2017\n" ,
+                "\n\t\t kafka demultiplexer and event manager for <cci mta stream ecosys> chromatic universe  2018\n" ,
 			binary ,
 			rd_kafka_version_str() ,
             rd_kafka_version()
