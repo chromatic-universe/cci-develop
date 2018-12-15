@@ -390,7 +390,7 @@ void cci_kf_mini_run( kafka_context_ptr kc )
                      kc->start_offset = atoi( optarg );
                      break;
                 case 'v':
-                    fprintf( stderr , "\033[22;32mcci_mini_kafka_run version 0.91 chromatic universe william k. johnson 2018\n\033[0m" );
+                    fprintf( stderr , "\033[22;32mcci_kafka_plex version 0.91 chromatic universe , william k. johnson 2018\n\033[0m" );
                     exit( 0 );
                 case 'h' :
                 default :
@@ -658,7 +658,7 @@ void stream_out_usage( const char* binary )
 {
      //stream , small subset of options
      fprintf( stderr ,
-			"\033[22;32m%s\nusage:\n\t\t-C|-P|-L|D -t <topic> [-o <offset>]\n" \
+			"\033[22;32m%s\nusage:\n\t\t-C|-P|-L|D -t <topic> [-o <offset>] [-z hex message]\n" \
 			"\t\t[-p <partition>] [-x dump-config] [-b <host1:port1,host2:port2,..>] [-g <group-id>]\n" \
 			"\n" \
             "binary: %s\n" \
