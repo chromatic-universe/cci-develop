@@ -42,7 +42,7 @@ typedef void* void_ptr;
 static  enum {
 	OUTPUT_HEXDUMP,
 	OUTPUT_RAW,
-} output = OUTPUT_HEXDUMP;
+} output = OUTPUT_RAW;
 
 //types
 typedef FILE* file_ptr;

@@ -95,26 +95,30 @@ void cci_kf_msg_consume( kafka_context_ptr kc ,
                          message_ptr_k rkmessage ,
                          void_ptr opaque )
 {
-   if (rkmessage->err) {
-		if (rkmessage->err == RD_KAFKA_RESP_ERR__PARTITION_EOF) {
-            _L( "" , "%s" );
-			fprintf(stderr,
-				"consumer reached end of %s [%"PRId32"] "
-			       "message queue at offset %"PRId64"\n",
-			       rd_kafka_topic_name(rkmessage->rkt),
-			       rkmessage->partition, rkmessage->offset);
+           if( rkmessage->err )
+           {
+                if( rkmessage->err == RD_KAFKA_RESP_ERR__PARTITION_EOF )
+                {
+                    _L( "" , "%s" );
+                    fprintf( stderr ,
+                             "consumer reached end of %s [%"PRId32"] "
+                             "message queue at offset %"PRId64"\n",
+                             rd_kafka_topic_name( rkmessage->rkt ) ,
+                             rkmessage->partition, rkmessage->offset );
 
-			if ( kc->exit_eof && --kc->wait_eof == 0) {
-                                fprintf(stderr,
-                                        "%% All partition(s) reached EOF: "
-                                        "exiting\n");
-				kc->is_running = 0;
-                        }
+                    if ( kc->exit_eof && --kc->wait_eof == 0)
+                    {
+                                        fprintf (stderr,
+                                                "%% All partition(s) reached EOF: "
+                                                "exiting\n" );
+                                                 kc->is_running = 0;
+                     }
 
-			return;
-		}
-
-                if (rkmessage->rkt)
+                     return;
+                 }
+                 //
+                 if ( rkmessage->rkt )
+                 {
                         fprintf(stderr, "%% Consume error for "
                                 "topic \"%s\" [%"PRId32"] "
                                 "offset %"PRId64": %s\n",
@@ -122,39 +126,54 @@ void cci_kf_msg_consume( kafka_context_ptr kc ,
                                 rkmessage->partition,
                                 rkmessage->offset,
                                 rd_kafka_message_errstr(rkmessage));
-                else
+
+                 }
+                 else
+                 {
                         fprintf(stderr, "%% Consumer error: %s: %s\n",
                                 rd_kafka_err2str(rkmessage->err),
                                 rd_kafka_message_errstr(rkmessage));
+                 }
 
-                if (rkmessage->err == RD_KAFKA_RESP_ERR__UNKNOWN_PARTITION ||
+                 if (rkmessage->err == RD_KAFKA_RESP_ERR__UNKNOWN_PARTITION ||
                     rkmessage->err == RD_KAFKA_RESP_ERR__UNKNOWN_TOPIC)
-                        run = 0;
-		return;
-	}
+                    {   run = 0; }
 
-		fprintf(stdout, "%% Message (topic %s [%"PRId32"], "
-                        "offset %"PRId64", %zd bytes):\n",
-                        rd_kafka_topic_name(rkmessage->rkt),
-                        rkmessage->partition,
-			rkmessage->offset, rkmessage->len);
+                return;
+            }
 
-	if (rkmessage->key_len) {
-		if (output == OUTPUT_HEXDUMP)
-			kc->cci_hex_dump(stdout, "Message Key",
-				rkmessage->key, rkmessage->key_len);
-		else
-			printf("Key: %.*s\n",
-			       (int)rkmessage->key_len, (char *)rkmessage->key);
-	}
-  	if (output == OUTPUT_HEXDUMP)
-		kc->cci_hex_dump(stdout, "Message Payload",
-			rkmessage->payload, rkmessage->len);
-	else
-		printf("%.*s\n",
-		       (int)rkmessage->len, (char *)rkmessage->payload);
+            fprintf( stdout ,
+                    "%% Message (topic %s [%"PRId32"], "
+                    "offset %"PRId64", %zd bytes):\n" ,
+                    rd_kafka_topic_name (rkmessage->rkt  ),
+                    rkmessage->partition,
+                    rkmessage->offset ,
+                    rkmessage->len );
+
+            if (rkmessage->key_len) {
+                if (output == OUTPUT_HEXDUMP)
+                    kc->cci_hex_dump(stdout, "Message Key",
+                        rkmessage->key, rkmessage->key_len);
+                else
+                    printf("Key: %.*s\n",
+                           (int)rkmessage->key_len, (char *)rkmessage->key);
+            }
+            if( output == OUTPUT_HEXDUMP )
+            {
+                kc->cci_hex_dump( stdout ,
+                                  "Message Payload" ,
+                                rkmessage->payload ,
+                                rkmessage->len );
+            }
+            else
+            {
+                printf( "%.*s\n",
+                        (int) rkmessage->len ,
+                        (char *) rkmessage->payload );
+            }
 
 }
+
 
 //------------------------------------------------------------------------
 //partition rebalance
