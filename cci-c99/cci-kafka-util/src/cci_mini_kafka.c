@@ -24,7 +24,8 @@ static int describe_groups ( rd_kafka_t *rk , const char *group ) ;
 //partitions
 static int process_partition_list( partition_list_ptr* partitions ,
                                    const gchar*  topics ,
-                                   int* wait );
+                                   int* wait ,
+                                   int offset );
 //------------------------------------------------------------------------
 //rebalance stream
 void stream_out_partition_list ( FILE *fp ,
@@ -158,7 +159,7 @@ void cci_kf_msg_consume( kafka_context_ptr kc ,
                     printf("Key: %.*s\n",
                            (int)rkmessage->key_len, (char *)rkmessage->key);
             }
-            if( output == OUTPUT_HEXDUMP )
+            if( kc->hex_out == OUTPUT_HEXDUMP )
             {
                 kc->cci_hex_dump( stdout ,
                                   "Message Payload" ,
@@ -331,7 +332,7 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 
 	     while ( ( opt = getopt( kc->argc ,
 				     kc->argv ,
-				     "PCLDt:d:p:b:o:g:xevh" ) ) != -1 )
+				     "PCLDt:d:p:b:o:g:xzevh" ) ) != -1 )
 	     {
              switch( opt )
              {
@@ -352,7 +353,7 @@ void cci_kf_mini_run( kafka_context_ptr kc )
                 kc->mode = opt;
                 break;
 
-                //consumption offset
+                //exit eof
                 case 'e':
                         kc->exit_eof = 1;
                         break;
@@ -374,12 +375,16 @@ void cci_kf_mini_run( kafka_context_ptr kc )
                         break;
                 //group
                 case 'd' :
-                        kc->debug_flags = optarg;
-                        break;
+                    kc->debug_flags = optarg;
+                    break;
                 //dump configuration
                 case 'x' :
-                kc->dump_config = 1;
-                break;
+                    kc->dump_config = 1;
+                    break;
+                //hex
+                case 'z' :
+                    kc->hex_out = OUTPUT_HEXDUMP;
+                    break;
                 //consumption offset
                 case 'o':
                      kc->start_offset = atoi( optarg );
@@ -479,86 +484,86 @@ void cci_kf_logger ( const rd_kafka_t* ptr_handle ,
 //------------------------------------------------------------------------
 void cci_kf_consumer_preamble( kafka_context_ptr kc )
 {
-     //init
-    assert( kc  );
+         //init
+        assert( kc  );
 
-    char tmp[16];
-    char errstr[512];
+        char tmp[16];
+        char errstr[512];
 
-    _L( "consuming....." , "%s\n" );
-    kc->conf_ptr = rd_kafka_conf_new();
-    kc->conf_topic_ptr = rd_kafka_topic_conf_new();
+        _L( "consuming....." , "%s\n" );
+        kc->conf_ptr = rd_kafka_conf_new();
+        kc->conf_topic_ptr = rd_kafka_topic_conf_new();
 
 
-    if( kc->debug_flags )
-    {
-        _L( "setting debug level....." , "%s\n" );
-       debug_set( kc->conf_ptr , kc->debug_flags );
-    }
-    //set logger
-    rd_kafka_conf_set_log_cb( kc->conf_ptr , kc->cci_logger );
+        if( kc->debug_flags )
+        {
+            _L( "setting debug level....." , "%s\n" );
+           debug_set( kc->conf_ptr , kc->debug_flags );
+        }
+        //set logger
+        rd_kafka_conf_set_log_cb( kc->conf_ptr , kc->cci_logger );
 
-    //quick termination
-   	snprintf(tmp, sizeof(tmp), "%i", SIGIO);
-	rd_kafka_conf_set( kc->conf_ptr ,
-                       "internal.termination.signal" ,
-                       tmp ,
-                       NULL ,
-                       0 );
-    _L( "setting configuration......." , "%s\n" );
-    if( !kc->group_id ){ kc->group_id = "cci-group"; }
-    if ( rd_kafka_conf_set( kc->conf_ptr ,
-                            "group.id",
-                            kc->group_id,
-                            errstr ,
-                            sizeof( errstr ) ) !=
-                            RD_KAFKA_CONF_OK)
-    {
-            _L( "" , "%s" );
-            fprintf( stderr, "%% %s\n", errstr );
+        //quick termination
+        snprintf(tmp, sizeof(tmp), "%i", SIGIO);
+        rd_kafka_conf_set( kc->conf_ptr ,
+                           "internal.termination.signal" ,
+                           tmp ,
+                           NULL ,
+                           0 );
+        _L( "setting configuration......." , "%s\n" );
+        if( !kc->group_id ){ kc->group_id = "cci-group"; }
+        if ( rd_kafka_conf_set( kc->conf_ptr ,
+                                "group.id",
+                                kc->group_id,
+                                errstr ,
+                                sizeof( errstr ) ) !=
+                                RD_KAFKA_CONF_OK)
+        {
+                _L( "" , "%s" );
+                fprintf( stderr, "%% %s\n", errstr );
 
-            exit(1);
-    }
-    _L( "consumer groups configured...." , "%s\n" );
+                exit(1);
+        }
+        _L( "consumer groups configured...." , "%s\n" );
 
-    //use broker based offset storage
-    if ( rd_kafka_topic_conf_set( kc->conf_topic_ptr ,
-                                  "offset.store.method" ,
-                                  "broker" ,
-                                   errstr ,
-                                   sizeof( errstr ) ) !=
-                                   RD_KAFKA_CONF_OK)
-    {
+        //use broker based offset storage
+        if ( rd_kafka_topic_conf_set( kc->conf_topic_ptr ,
+                                      "offset.store.method" ,
+                                      "broker" ,
+                                       errstr ,
+                                       sizeof( errstr ) ) !=
+                                       RD_KAFKA_CONF_OK)
+        {
+                   _L( "" , "%s" );
+                  fprintf( stderr, "%% %s\n", errstr );
+
+                  exit(1);
+
+        }
+        _L( "configured offset storage...." , "%s\n" );
+
+        //set default topic config for pattern-matched topics
+        rd_kafka_conf_set_default_topic_conf( kc->conf_ptr , kc->conf_topic_ptr );
+
+        //callback called on partition assignment changes
+        rd_kafka_conf_set_rebalance_cb( kc->conf_ptr , kc->cci_partition_rebalance );
+        _L( "set rebalancing context......." , "%s\n" );
+
+        //consumer
+        if ( !( kc->kafka_ptr = rd_kafka_new( RD_KAFKA_CONSUMER ,
+                                              kc->conf_ptr ,
+                                              errstr ,
+                                              sizeof( errstr ) ) ) )
+        {
+               _L( "could not create consumer context...." , "%s\n" );
                _L( "" , "%s" );
-              fprintf( stderr, "%% %s\n", errstr );
+               fprintf( stderr, "%% %s\n", errstr );
 
-              exit(1);
-
-    }
-    _L( "configured offset storage...." , "%s\n" );
-
-    //set default topic config for pattern-matched topics
-    rd_kafka_conf_set_default_topic_conf( kc->conf_ptr , kc->conf_topic_ptr );
-
-    //callback called on partition assignment changes
-    rd_kafka_conf_set_rebalance_cb( kc->conf_ptr , kc->cci_partition_rebalance );
-    _L( "set rebalancing context......." , "%s\n" );
-
-    //consumer
-    if ( !( kc->kafka_ptr = rd_kafka_new( RD_KAFKA_CONSUMER ,
-                                          kc->conf_ptr ,
-                                          errstr ,
-                                          sizeof( errstr ) ) ) )
-    {
-           _L( "could not create consumer context...." , "%s\n" );
-           _L( "" , "%s" );
-           fprintf( stderr, "%% %s\n", errstr );
-
-            exit( 1 );
-    }
-    context = kc;
-    _L( "instantiated consumer context....." , "%s\n" );
-    rd_kafka_set_log_level( kc->kafka_ptr , LOG_DEBUG );
+                exit( 1 );
+        }
+        context = kc;
+        _L( "instantiated consumer context....." , "%s\n" );
+        rd_kafka_set_log_level( kc->kafka_ptr , LOG_DEBUG );
 
 }
 
@@ -672,7 +677,7 @@ void stream_out_usage( const char* binary )
                         " format\n" \
                         "\t\t  and for static assignment use " \
                         "'topic1:part1 topic1:part2 topic2:part1..'\n"\
-            "  -o <offset>     offset to start queue consumption\n" \
+            "  -o <offset>     offset to start queue consumption(0..n | OFFSET_END=-1  | OFFSET_BEGINNING=-2\n" \
             "  -p <num>        partition (random partitioner)\n" \
 			"  -b <brokers>    broker address (localhost:9092)\n" \
             "  -g <groups>     consumer group ids\n" \
@@ -680,6 +685,7 @@ void stream_out_usage( const char* binary )
                          "\t\t  :generic, broker, topic, metadata, producer, queue, msg\n" \
                          "\t\t  protocol, cgrp, security, fetch, all\n"\
             "  -x  dump configuration\n"
+            "  -z  hex consumer messages=yes\n"
             "  -v  version\n"\
             "  -h  help\n\n" \
 			"\n" \
@@ -850,7 +856,8 @@ void ex_parte_consumer(  kafka_context_ptr kc )
 
         int is_subscription = process_partition_list( &kc->partitions_ptr  ,
                                                       kc->topic_str ,
-                                                      &wait_eof );
+                                                      &wait_eof ,
+                                                      kc->start_offset );
 
         //subscribe
         if ( is_subscription )
@@ -1175,7 +1182,8 @@ void debug_set( conf_k_ptr ptr , const char* contexts )
 //------------------------------------------------------------------------
 int process_partition_list( partition_list_ptr* partitions  ,
                                                 const gchar*  topics ,
-                                                int* wait )
+                                                int* wait ,
+                                                int offset )
 {
     // form 1 => <topic1 topic2 etc.> balanced partition
     // form 2 => <topic1:0 topic2:1 etc> statically assigned partition
@@ -1205,7 +1213,7 @@ int process_partition_list( partition_list_ptr* partitions  ,
                 wait++;
             }else{ topic = vector[i]; }
             //add to partition assignment list
-            rd_kafka_topic_partition_list_add( *partitions , topic , partition );
+            rd_kafka_topic_partition_list_add( *partitions , topic , partition )->offset = RD_KAFKA_OFFSET_END;
             g_strfreev( atom );
             atom = NULL;
         }
@@ -1218,7 +1226,7 @@ int process_partition_list( partition_list_ptr* partitions  ,
                                "configured partitions for %d balanced topic(s)..\n" ,
                                i ) :
                       fprintf( stderr ,
-                               "configured partitions for %d static topic(s)..\n" ,
+                               "configured patoartitions for %d static topic(s)..\n" ,
                                i );
 
 

@@ -43,6 +43,8 @@ int main( int argc , char* argv[] )
                           .debug_flags = NULL ,
                           //dumb config
                           .dump_config = 0 ,
+                          //hex message output
+                          .hex_out = OUTPUT_RAW ,
                           //running
                           .is_running = 0 ,
                           //eof - false
@@ -50,7 +52,7 @@ int main( int argc , char* argv[] )
                           //partition wait eof
                           .wait_eof = 0 ,
                           //queue offset
-                          .start_offset = 0 ,
+                          .start_offset = RD_KAFKA_OFFSET_END ,
                           //default mode consumer
                           .mode = 0 ,
                           //command line

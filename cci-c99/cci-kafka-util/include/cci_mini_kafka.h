@@ -60,78 +60,80 @@ typedef rd_kafka_topic_partition_list_t*        partition_list_ptr;
 //structures
 typedef struct kafka_context
 {
-    //library context
-    handle_k_ptr       kafka_ptr;
-    ///interface references
-    conf_k_ptr         conf_ptr;
-    topic_conf_k_ptr   conf_topic_ptr;
-    topic_ptr_k        topic_ptr;
-    ///attributes
-    //brokers
-    const char*        brokers;
-    //topic string
-    const char*        topic_str;
-    //group
-    const char*        group_id;
-    //partition list
-    partition_list_ptr partitions_ptr;
-    //mode
-    char               mode;
-    //partition
-    int                partition;
-    //debug flags
-    const char*        debug_flags;
-    //dumbp config
-    int                dump_config;
-    //running
-    int                is_running;
-    //exit consuming on nom more messages
-    int                exit_eof;
-    //partitions waiting for eof
-    int                wait_eof;
-    //start offset for consumption
-    int64_t            start_offset;
-    //commmand line
-    int                argc;
-    char**             argv;
-    ///services
-    //ctors
-    void               ( *cci_production_preamble ) ( struct kafka_context* kc );
-    void               ( *cci_consumer_preamble ) ( struct kafka_context* kc );
-    //main
-    void               ( *cci_mini_run )( struct kafka_context* kc );
-    //dtor
-    void               ( *cci_release_context ) (  struct kafka_context* kc  , int wait );
-    //signal stop
-    void               ( *cci_stop_signal ) ( struct kafka_context* kc );
-    //signal usr1
-    void               ( *cci_usr1_signal ) ( struct kafka_context* kc );
-    //logging
-    void               ( *cci_logger ) ( const rd_kafka_t* ptr_handle ,
-                                         int level ,
-                                         const char *fac ,
-                                         const char *buf );
-    //hex dump
-    void               ( *cci_hex_dump  ) ( file_ptr fp ,
-                                            const char* name ,
-                                            const void_ptr ptr ,
-                                            size_t len );
-    //topic metadata
-    void               ( *cci_topic_metadata ) ( const char *topic ,
-                                                 const struct rd_kafka_metadata *metadata  );
-    //consume
-    void               ( *cci_msg_consume ) ( struct kafka_context* kc ,
-                                              message_ptr_k rkmessage ,
-                                              void_ptr opaque );
-    //producer callback
-    void               ( *cci_msg_delivered ) ( rd_kafka_t *rk ,
-                                                const rd_kafka_message_t* rkmessage ,
-                                                void_ptr opaque );
-    //rebalance callback
-    void               ( *cci_partition_rebalance )( rd_kafka_t *rk ,
-                                                     rd_kafka_resp_err_t err ,
-			                                         rd_kafka_topic_partition_list_t *partitions ,
-                                                     void *opaque ) ;
+            //library context
+            handle_k_ptr       kafka_ptr;
+            ///interface references
+            conf_k_ptr         conf_ptr;
+            topic_conf_k_ptr   conf_topic_ptr;
+            topic_ptr_k        topic_ptr;
+            ///attributes
+            //brokers
+            const char*        brokers;
+            //topic string
+            const char*        topic_str;
+            //group
+            const char*        group_id;
+            //partition list
+            partition_list_ptr partitions_ptr;
+            //mode
+            char               mode;
+            //partition
+            int                partition;
+            //debug flags
+            const char*        debug_flags;
+            //dumbp config
+            int                dump_config;
+            //hex message output
+            int                hex_out;
+            //running
+            int                is_running;
+            //exit consuming on nom more messages
+            int                exit_eof;
+            //partitions waiting for eof
+            int                wait_eof;
+            //start offset for consumption
+            int64_t            start_offset;
+            //commmand line
+            int                argc;
+            char**             argv;
+            ///services
+            //ctors
+            void               ( *cci_production_preamble ) ( struct kafka_context* kc );
+            void               ( *cci_consumer_preamble ) ( struct kafka_context* kc );
+            //main
+            void               ( *cci_mini_run )( struct kafka_context* kc );
+            //dtor
+            void               ( *cci_release_context ) (  struct kafka_context* kc  , int wait );
+            //signal stop
+            void               ( *cci_stop_signal ) ( struct kafka_context* kc );
+            //signal usr1
+            void               ( *cci_usr1_signal ) ( struct kafka_context* kc );
+            //logging
+            void               ( *cci_logger ) ( const rd_kafka_t* ptr_handle ,
+                                                 int level ,
+                                                 const char *fac ,
+                                                 const char *buf );
+            //hex dump
+            void               ( *cci_hex_dump  ) ( file_ptr fp ,
+                                                    const char* name ,
+                                                    const void_ptr ptr ,
+                                                    size_t len );
+            //topic metadata
+            void               ( *cci_topic_metadata ) ( const char *topic ,
+                                                         const struct rd_kafka_metadata *metadata  );
+            //consume
+            void               ( *cci_msg_consume ) ( struct kafka_context* kc ,
+                                                      message_ptr_k rkmessage ,
+                                                      void_ptr opaque );
+            //producer callback
+            void               ( *cci_msg_delivered ) ( rd_kafka_t *rk ,
+                                                        const rd_kafka_message_t* rkmessage ,
+                                                        void_ptr opaque );
+            //rebalance callback
+            void               ( *cci_partition_rebalance )( rd_kafka_t *rk ,
+                                                             rd_kafka_resp_err_t err ,
+                                                             rd_kafka_topic_partition_list_t *partitions ,
+                                                             void *opaque ) ;
 
 
 
