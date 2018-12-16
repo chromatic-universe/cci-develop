@@ -690,8 +690,8 @@ void stream_out_usage( const char* binary )
             "  -h  help\n\n" \
 			"\n" \
 			"\n" ,
-            "synopsis :\n"\
-                "\n\t\t kafka demultiplexer and event manager for <cci mta stream ecosys> chromatic universe  2018\n" ,
+            "chromatic universe 2018 :\n"\
+                "\n\t\t kafka demultiplexer and event manager for <cci mta stream ecosys> \n" ,
 			binary ,
 			rd_kafka_version_str() ,
             rd_kafka_version()
