@@ -687,14 +687,22 @@ void stream_out_usage( const char* binary )
             "  -x  dump configuration\n"
             "  -z  hex consumer messages=yes\n"
             "  -v  version\n"\
-            "  -h  help\n\n" \
-			"\n" \
+            "  -h  help\n%s" \
+            "\n" \
 			"\n" ,
-            "chromatic universe 2018 :\n"\
+            "----------------cci-kafka-plex------------chromatic universe 2018------ :\n"\
                 "\n\t\t kafka demultiplexer and event manager for <cci mta stream ecosys> \n" ,
 			binary ,
 			rd_kafka_version_str() ,
-            rd_kafka_version()
+            rd_kafka_version() ,
+            "\033[22;32m\n--------------------------------------------------------------------------------------\n\n" \
+            "binary: cci-stream-mta\n" \
+            "version: 0.82\033[0m\n\n" \
+            " options:\n" \
+            "  -M              mta transfer mode:\n" \
+            "                  \tmessage transfer agent rpc" \
+            "\n--------------------------------------------------------------------------------------\033[0m\n\n" \
+
           );
 }
 
