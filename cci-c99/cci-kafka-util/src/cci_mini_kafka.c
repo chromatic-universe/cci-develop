@@ -340,11 +340,13 @@ void cci_kf_mini_run( kafka_context_ptr kc )
                 //producer
                 case 'P' :
                 //consumer
-                    case 'C' :
+                case 'C' :
                 //group description
                 case 'D' :
                 //metadata list mode
                 case 'L' :
+                //message transfer agent streams
+                case 'M' :
                 if( kc->mode )
                 {
                     _L( "mode has already been set..." , "%s\n" );
@@ -371,27 +373,27 @@ void cci_kf_mini_run( kafka_context_ptr kc )
                         break;
                 //group
                 case 'g' :
-                            kc->group_id = optarg;
+                        kc->group_id = optarg;
                         break;
                 //group
                 case 'd' :
-                    kc->debug_flags = optarg;
-                    break;
+                        kc->debug_flags = optarg;
+                        break;
                 //dump configuration
                 case 'x' :
-                    kc->dump_config = 1;
-                    break;
+                        kc->dump_config = 1;
+                        break;
                 //hex
                 case 'z' :
-                    kc->hex_out = OUTPUT_HEXDUMP;
-                    break;
+                        kc->hex_out = OUTPUT_HEXDUMP;
+                        break;
                 //consumption offset
                 case 'o':
-                     kc->start_offset = atoi( optarg );
-                     break;
+                        kc->start_offset = atoi( optarg );
+                        break;
                 case 'v':
-                    fprintf( stderr , "\033[22;32mcci_kafka_plex version 0.91 chromatic universe , william k. johnson 2018\n\033[0m" );
-                    exit( 0 );
+                        fprintf( stderr , "\033[22;32mcci_kafka_plex version 0.91 chromatic universe , william k. johnson 2018\n\033[0m" );
+                        exit( 0 );
                 case 'h' :
                 default :
                 {
@@ -405,12 +407,12 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 
 	     if( kc->dump_config )
 	     {
-		 kc->conf_ptr = rd_kafka_conf_new();
-		 kc->conf_topic_ptr = rd_kafka_topic_conf_new();
+             kc->conf_ptr = rd_kafka_conf_new();
+             kc->conf_topic_ptr = rd_kafka_topic_conf_new();
 
-		 configuration_dump( kc );
+             configuration_dump( kc );
 
-		 if( !kc->mode ) { exit( 0 ); }
+             if( !kc->mode ) { exit( 0 ); }
 	     }
 
 
@@ -423,17 +425,40 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 	     }
 	     if( kc->mode == 'P' )
 	     {
+
+            if(  ( kc->topic_str == NULL ) || ( kc->brokers == NULL ) )
+            {
+                _L( "error in producer mode: topic and brokers must be specified....\n" , "%s\n" );
+                stream_out_usage( kc->argv[0] );
+                exit( 1 );
+            }
+
 		    ex_parte_producer( kc );
 	     }
 	     else if( ( kc->mode == 'C' ) || ( kc->mode == 'D' ) )
 	     {
+
+            if(  ( kc->topic_str == NULL ) || ( kc->brokers == NULL ) )
+            {
+                _L( "error in consume mode: topic and brokers must be specified....\n" , "%s\n" );
+                stream_out_usage( kc->argv[0] );
+                exit( 1 );
+            }
+
 		    //consumer
 		    ex_parte_consumer( kc );
 	     }
 	     else if( kc->mode == 'L' )
 	     {
-             //metadata
-             ex_parte_metadata( kc );
+            if(  ( kc->topic_str == NULL ) || ( kc->brokers == NULL ) )
+            {
+                _L( "error in metadata mode: topic and brokers must be specified....\n" , "%s\n" );
+                stream_out_usage( kc->argv[0] );
+                exit( 1 );
+            }
+
+            //metadata
+            ex_parte_metadata( kc );
          }
 	     else
 	     {
@@ -658,7 +683,7 @@ void stream_out_usage( const char* binary )
 {
      //stream , small subset of options
      fprintf( stderr ,
-			"\033[22;32m%s\nusage:\n\t\t-C|-P|-L|D -t <topic> [-o <offset>] [-z hex message]\n" \
+			"\033[22;32m%s\nusage:\n\t\t[-C|-P|-L|-D|-M] -t <topic> [-o <offset>] [-z hex message]\n" \
 			"\t\t[-p <partition>] [-x dump-config] [-b <host1:port1,host2:port2,..>] [-g <group-id>]\n" \
 			"\n" \
             "binary: %s\n" \

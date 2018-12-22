@@ -42,14 +42,14 @@ int main( int argc , char** argv )
                         //json url = { { "url" , "http://localhost:7080//mongo/imap2017/retr_namespace" } };
 			//curl->results_by_naked_param_async( mon , url ,  ostr.get() );
 			//std::cerr  << ostr->str() << "\n";
-            for( ;; )
-            {
-                curl->execute_base_bool_g( "http://192.168.1.199:9200" ,
+            //for( ;; )
+            //{
+                curl->execute_base_bool_g( "http://192.168.1.221:9200" ,
                                                        ostr.get() );
                 std::cerr  << ostr->str() << "\n";
 
-                std::this_thread::sleep_for( 3s ) ;
-            }
+             //   std::this_thread::sleep_for( 3s ) ;
+            //}
 
 
 

@@ -32,7 +32,7 @@ int main( int argc , char* argv[] )
                           //topic context
                           .topic_ptr = NULL ,
                           //default brokers
-                          .brokers = "cci-aws-1:9092" ,
+                          .brokers = NULL ,
                           //group id
                           .group_id = "cci-group" ,
                           //partitions
