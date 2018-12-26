@@ -726,8 +726,9 @@ void stream_out_usage( const char* binary )
             "binary: cci-stream-mta\n" \
             "version: 0.82\033[0m\n\n" \
             " options:\n" \
-            "  -M              mta transfer mode:\n" \
-            "                  \tmessage transfer agent rpc" \
+            "  -M                mta transfer mode:\n" \
+            "                    \tmessage transfer agent rpc\n" \
+        	"  -e <topics>       same as -t except exclusively mta managed topics\n" \
             "\n\033[22;32m\n--------------------------------------------------------------------------------------\033[0m\n\n" \
 
           );
