@@ -421,6 +421,8 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 
 	     {
 		    fprintf( stderr, "mode must be specified...\n" );
+            stream_out_usage( kc->argv[0] );
+
 		    exit( 1 );
 	     }
 	     if( kc->mode == 'P' )
@@ -726,7 +728,7 @@ void stream_out_usage( const char* binary )
             " options:\n" \
             "  -M              mta transfer mode:\n" \
             "                  \tmessage transfer agent rpc" \
-            "\n--------------------------------------------------------------------------------------\033[0m\n\n" \
+            "\n\033[22;32m\n--------------------------------------------------------------------------------------\033[0m\n\n" \
 
           );
 }
