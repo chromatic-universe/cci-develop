@@ -34,7 +34,7 @@ int main( int argc , char* argv[] )
                           //default brokers
                           .brokers = NULL ,
                           //group id
-                          .group_id = "cci-group" ,
+                          .group_id = NULL ,
                           //partitions
                           .partitions_ptr = NULL ,
                           //random /partitioner

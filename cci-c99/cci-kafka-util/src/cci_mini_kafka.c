@@ -421,7 +421,7 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 
 	     {
 		    fprintf( stderr, "mode must be specified...\n" );
-            stream_out_usage( kc->argv[0] );
+            //stream_out_usage( kc->argv[0] );
 
 		    exit( 1 );
 	     }
@@ -440,9 +440,11 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 	     else if( ( kc->mode == 'C' ) || ( kc->mode == 'D' ) )
 	     {
 
-            if(  ( kc->topic_str == NULL ) || ( kc->brokers == NULL ) )
+            if(  ( kc->topic_str == NULL ) ||
+                 ( kc->brokers == NULL )   ||
+                 ( kc->group_id == NULL ) )
             {
-                _L( "error in consume mode: topic and brokers must be specified....\n" , "%s\n" );
+                _L( "error in consume mode: topic , group id and brokers must be specified....\n" , "%s\n" );
                 stream_out_usage( kc->argv[0] );
                 exit( 1 );
             }
