@@ -420,18 +420,18 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 	     if( kc->mode == 0 )
 
 	     {
-		    fprintf( stderr, "mode must be specified...\n" );
-            //stream_out_usage( kc->argv[0] );
+                stream_out_usage( kc->argv[0] );
+		        _L(  "\033[0;31mmode must be specified...\n\033[0m" , "%s\n"  );
 
-		    exit( 1 );
+		        exit( 1 );
 	     }
 	     if( kc->mode == 'P' )
 	     {
 
             if(  ( kc->topic_str == NULL ) || ( kc->brokers == NULL ) )
             {
-                _L( "error in producer mode: topic and brokers must be specified....\n" , "%s\n" );
                 stream_out_usage( kc->argv[0] );
+                _L(  "\033[0;31merror in producer mode: topic and brokers must be specified....\n\033[0m" , "%s\n" );
                 exit( 1 );
             }
 
@@ -444,8 +444,8 @@ void cci_kf_mini_run( kafka_context_ptr kc )
                  ( kc->brokers == NULL )   ||
                  ( kc->group_id == NULL ) )
             {
-                _L( "error in consume mode: topic , group id and brokers must be specified....\n" , "%s\n" );
                 stream_out_usage( kc->argv[0] );
+                _L(  "\033[0;31merror in consume mode: topic , group id and brokers must be specified....\033[0m\n" , "%s\n" );
                 exit( 1 );
             }
 
@@ -456,7 +456,7 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 	     {
             if(  ( kc->topic_str == NULL ) || ( kc->brokers == NULL ) )
             {
-                _L( "error in metadata mode: topic and brokers must be specified....\n" , "%s\n" );
+                _L( "\033[0;31merror in metadata mode: topic and brokers must be specified.....\n\033[0m" , "%s\n" );
                 stream_out_usage( kc->argv[0] );
                 exit( 1 );
             }
