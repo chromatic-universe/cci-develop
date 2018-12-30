@@ -488,6 +488,8 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 
          //free optarg copiesl neccessary since optarg and argv strings are mutabel
          if( kc->topic_str != NULL ) { free( kc->topic_str );  }
+         if( kc->brokers! = NULL ) { free( kc->brokers );  }
+         if( kc->group_id != NULL ) { free( kc->group_id );  }
          //free cli map
          cci_cli_dictionary_free( cdt  );
 
