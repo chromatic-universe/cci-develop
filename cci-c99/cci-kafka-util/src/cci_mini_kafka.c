@@ -464,6 +464,9 @@ void cci_kf_mini_run( kafka_context_ptr kc )
             //metadata
             ex_parte_metadata( kc );
          }
+         else if( kc->mode == 'M' )
+	     {
+         }
 	     else
 	     {
 		    fprintf( stderr, "unrecognized mode...\n" );
