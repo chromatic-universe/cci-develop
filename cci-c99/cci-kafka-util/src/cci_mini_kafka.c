@@ -2,11 +2,15 @@
 
 #include <cci_mini_kafka.h>
 
+
 static kafka_context_ptr  context = NULL;
 
 int quiet = 0;
 int run = 1;
 int exit_eof = 0;
+
+typedef  cci_cli_dictionary* cli_dictionary_t;
+
 
 //locals
 //------------------------------------------------------------------------
@@ -329,6 +333,8 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 
 	     int opt;
 	     quiet = !isatty( STDIN_FILENO );
+         cli_dictionary_t  cdt = cci_cli_dictionary_new();
+
 
 	     while ( ( opt = getopt( kc->argc ,
 				     kc->argv ,
@@ -353,31 +359,38 @@ void cci_kf_mini_run( kafka_context_ptr kc )
                     exit( 1 );
                 }
                 kc->mode = opt;
+                cci_cli_dictionary_add( cdt , "mode" , &opt );
                 break;
 
                 //exit eof
                 case 'e':
                         kc->exit_eof = 1;
+                        cci_cli_dictionary_add( cdt , "exit_eof" , &opt );
                         break;
                 //topic
                 case 't' :
-                        kc->topic_str = optarg;
+                        kc->topic_str = strdup( optarg );
+                        cci_cli_dictionary_add( cdt , "topic" , &opt );
                         break;
                 //partition
                 case 'p':
                         kc->partition = atoi( optarg );
+                        cci_cli_dictionary_add( cdt , "partition" , &opt );
                         break;
                 //brokers
                 case 'b' :
-                        kc->brokers = optarg;
+                        kc->brokers = strdup( optarg );
+                        cci_cli_dictionary_add( cdt , "brokers" , &opt );
                         break;
                 //group
                 case 'g' :
-                        kc->group_id = optarg;
+                        kc->group_id = strdup( optarg );
+                        cci_cli_dictionary_add( cdt , "group" , &opt );
                         break;
-                //group
+                //debug
                 case 'd' :
                         kc->debug_flags = optarg;
+                        cci_cli_dictionary_add( cdt , "debug" , &opt );
                         break;
                 //dump configuration
                 case 'x' :
@@ -472,6 +485,12 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 		    fprintf( stderr, "unrecognized mode...\n" );
 		    exit( 1 );
 	     }
+
+         //free optarg copiesl neccessary since optarg and argv strings are mutabel
+         if( kc->topic_str != NULL ) { free( kc->topic_str );  }
+         //free cli map
+         cci_cli_dictionary_free( cdt  );
+
 
 }
 

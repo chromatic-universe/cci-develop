@@ -33,6 +33,8 @@
 
 //contrib
 #include <librdkafka/rdkafka.h>
+//cci
+#include <cci_cli_dictionary.h>
 
 
 //types
@@ -56,6 +58,9 @@ typedef rd_kafka_topic_conf_t*                  topic_conf_k_ptr;
 typedef rd_kafka_t*                             handle_k_ptr;
 typedef rd_kafka_message_t*                     message_k_ptr;
 typedef rd_kafka_topic_partition_list_t*        partition_list_ptr;
+
+
+
 
 //structures
 typedef struct kafka_context

@@ -23,7 +23,8 @@ include_directories( ${cci-kafka_utilSOURCE_DIR}
 link_directories( $ENV{DEV}/lib)
 
 #library
-add_library(cci_kafka_utils SHARED   cci_mini_kafka.c)
+add_library(cci_kafka_utils SHARED   cci_mini_kafka.c
+                                     cci_cli_dictionary.c)
 
 target_link_libraries(cci_kafka_utils  -lrdkafka)
 set_target_properties(cci_kafka_utils PROPERTIES
@@ -37,8 +38,8 @@ add_executable(cci-kafka-plex mini_kafka_run.c)
 
 #link libs
 target_link_libraries(cci-kafka-plex  -lrdkafka
-                                 -lglib-2.0
-                                  cci_kafka_utils)
+                                      -lglib-2.0
+                                      cci_kafka_utils)
 
 #install
 install_targets(/lib cci_kafka_utils)
