@@ -1,7 +1,7 @@
 //cci_mini_kafka.c   chromatic universe   william k. johnson 2018
 
 #include <cci_mini_kafka.h>
-
+#include <cci_cli_dictionary.h>
 
 static kafka_context_ptr  context = NULL;
 
@@ -372,7 +372,7 @@ void cci_kf_mini_run( kafka_context_ptr kc )
                         break;
                 //topic
                 case 't' :
-                        kc->topic_str = strdup( optarg );
+                        kc->topic_str = (char*)  strdup( optarg );
                         cci_cli_dictionary_add( cdt , "topic" , &opt );
                         break;
                 //partition
@@ -382,17 +382,17 @@ void cci_kf_mini_run( kafka_context_ptr kc )
                         break;
                 //brokers
                 case 'b' :
-                        kc->brokers = strdup( optarg );
+                        kc->brokers = (char*) strdup( optarg );
                         cci_cli_dictionary_add( cdt , "brokers" , &opt );
                         break;
                 //group
                 case 'g' :
-                        kc->group_id = strdup( optarg );
+                        kc->group_id = (char*) strdup( optarg );
                         cci_cli_dictionary_add( cdt , "group" , &opt );
                         break;
                 //debug
                 case 'd' :
-                        kc->debug_flags = strdup( optarg );
+                        kc->debug_flags = (char*) strdup( optarg );
                         cci_cli_dictionary_add( cdt , "debug" , &opt );
                         break;
                 //dump configuration
