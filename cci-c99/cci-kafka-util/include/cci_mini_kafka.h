@@ -73,11 +73,11 @@ typedef struct kafka_context
             topic_ptr_k        topic_ptr;
             ///attributes
             //brokers
-            const char*        brokers;
+            char*        brokers;
             //topic string
-            const char*        topic_str;
+            char*        topic_str;
             //group
-            const char*        group_id;
+            char*        group_id;
             //partition list
             partition_list_ptr partitions_ptr;
             //mode
@@ -85,7 +85,7 @@ typedef struct kafka_context
             //partition
             int                partition;
             //debug flags
-            const char*        debug_flags;
+            char*        debug_flags;
             //dumbp config
             int                dump_config;
             //hex message output
@@ -99,7 +99,7 @@ typedef struct kafka_context
             //start offset for consumption
             int64_t            start_offset;
             //group
-            const char*        group;
+            char*        group;
             //commmand line
             int                argc;
             char**             argv;

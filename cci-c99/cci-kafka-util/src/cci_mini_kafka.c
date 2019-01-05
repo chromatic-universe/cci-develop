@@ -41,8 +41,10 @@ static void ex_parte_producer( kafka_context_ptr kc );
 //------------------------------------------------------------------------
 //consumer
 static void ex_parte_consumer( kafka_context_ptr kc );
-//metadatar
+//metadata
 static void ex_parte_metadata( kafka_context_ptr kc );
+//mta
+static void ex_parte_mta();
 //------------------------------------------------------------------------
 static void make_kafka_handle( kafka_context_ptr kc  );
 //------------------------------------------------------------------------
@@ -334,6 +336,7 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 	     int opt;
 	     quiet = !isatty( STDIN_FILENO );
          cli_dictionary_t  cdt = cci_cli_dictionary_new();
+         cli_dictionary_t  mta_cdt = cci_cli_dictionary_new();
 
 
 	     while ( ( opt = getopt( kc->argc ,
@@ -389,7 +392,7 @@ void cci_kf_mini_run( kafka_context_ptr kc )
                         break;
                 //debug
                 case 'd' :
-                        kc->debug_flags = optarg;
+                        kc->debug_flags = strdup( optarg );
                         cci_cli_dictionary_add( cdt , "debug" , &opt );
                         break;
                 //dump configuration
@@ -488,10 +491,12 @@ void cci_kf_mini_run( kafka_context_ptr kc )
 
          //free optarg copiesl neccessary since optarg and argv strings are mutabel
          if( kc->topic_str != NULL ) { free( kc->topic_str );  }
-         if( kc->brokers! = NULL ) { free( kc->brokers );  }
+         if( kc->brokers != NULL ) { free( kc->brokers );  }
          if( kc->group_id != NULL ) { free( kc->group_id );  }
-         //free cli map
+         if( kc->debug_flags != NULL ) { free( kc->debug_flags );  }
+         //free cli maps
          cci_cli_dictionary_free( cdt  );
+         cci_cli_dictionary_free( mta_cdt  );
 
 
 }
@@ -1041,6 +1046,12 @@ void ex_parte_metadata( kafka_context_ptr kc )
 
 
 }
+
+//-----------------------------------------------------------------------
+void ex_parte_mta()
+{
+}
+
 
 //------------------------------------------------------------------------
 void make_kafka_handle( kafka_context_ptr kc   )
