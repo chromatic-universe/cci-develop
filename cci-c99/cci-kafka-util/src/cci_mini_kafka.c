@@ -950,6 +950,8 @@ void ex_parte_consumer(  kafka_context_ptr kc )
                     fprintf( stderr , "%% assigning %d partitions\n" ,
                                        kc->partitions_ptr->cnt );
 
+                    //assing partitions here
+
                     if ( ( err = rd_kafka_assign( kc->kafka_ptr , kc->partitions_ptr ) ) )
                     {
                             _L( "" , "%s" );
