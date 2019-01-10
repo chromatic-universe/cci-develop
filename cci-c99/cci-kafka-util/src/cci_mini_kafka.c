@@ -896,6 +896,7 @@ void ex_parte_consumer(  kafka_context_ptr kc )
         int wait_eof = 0;
         int err;
 
+
         //preamble
         kc->cci_consumer_preamble( kc );
         assert( kc );

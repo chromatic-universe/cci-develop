@@ -38,7 +38,7 @@ int main( int argc , char* argv[] )
                           //partitions
                           .partitions_ptr = NULL ,
                           //random /partitioner
-                          .partition = 0 , //RD_KAFKA_PARTITION_UA ,
+                          .partition = -1 , //RD_KAFKA_PARTITION_UA ,
                           //devug flags
                           .debug_flags = NULL ,
                           //dumb config
