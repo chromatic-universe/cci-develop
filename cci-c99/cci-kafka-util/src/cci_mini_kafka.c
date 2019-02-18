@@ -1,4 +1,4 @@
-//cci_mini_kafka.c   chromatic universe   william k. johnson 2018
+//cci_mini_kafka.c   chromatic universe   william k. johnson 2019
 
 #include <cci_mini_kafka.h>
 #include <cci_cli_dictionary.h>
