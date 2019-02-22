@@ -98,7 +98,7 @@ typedef struct kafka_context
             int                wait_eof;
             //start offset for consumption
             int64_t            start_offset;
-            /i/group
+            //group
             char*        group;
             //commmand line
             int                argc;
