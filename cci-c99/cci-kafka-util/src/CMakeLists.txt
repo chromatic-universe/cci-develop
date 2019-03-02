@@ -20,13 +20,15 @@ include_directories( ${cci-kafka_utilSOURCE_DIR}
 	             ../../include                   
                    )
 #link location
-link_directories( $ENV{DEV}/lib)
+link_directories( $ENV{DEV}/lib
+	         /usr/lib/aarch64-linux-gnu)
 
 #library
 add_library(cci_kafka_utils SHARED   cci_mini_kafka.c
                                      cci_cli_dictionary.c)
 
-target_link_libraries(cci_kafka_utils  -lrdkafka)
+target_link_libraries(cci_kafka_utils  -lrdkafka
+	                               -lglib-2.0)
 set_target_properties(cci_kafka_utils PROPERTIES
                                       VERSION 1.0.0
                                       SOVERSION 1) 
