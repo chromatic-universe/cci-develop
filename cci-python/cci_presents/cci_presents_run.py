@@ -13,8 +13,8 @@ from flask import Flask ,\
                   flash , \
                   render_template ,\
                   redirect
-from flask.ext.googlemaps import GoogleMaps
-from flask.ext.mail import Message, Mail
+from flask_googlemaps import GoogleMaps
+from flask_mail import Message, Mail
 from flask_sockets import Sockets
 
 
