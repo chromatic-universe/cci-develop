@@ -61,12 +61,12 @@ def ping_subnet( destination = None ) :
         for addr in range( 0 , 255 ):
             try :
                 #put request on wire
-                print prefix + str( addr )
+                print ( prefix + str( addr ) )
                 reply = ping_atom( prefix + str( addr ) )
                 if reply is not None :
                     replies.append( reply )
             except Exception as err :
-                print err
+                print ( err )
 
         return replies
 
@@ -77,8 +77,8 @@ if __name__ == '__main__' :
         stream = sys.stdout
         reply = ping_atom( 'www.google.com' )
         if reply is None :
-            print "ping failed....."
+            print ( "ping failed....." )
         else :
-            print 'ping succeeded'
+            print ( 'ping succeeded' )
 
 

@@ -6,7 +6,7 @@ import sys
 #############
 import doctest
 import unittest
-from sets import Set
+#from sets import Set
 from abc import abstractmethod , ABCMeta
 import copy
 try:
@@ -35,7 +35,7 @@ const.security_groups = 'security_groups'
 const.net_interfaces = 'net_interfaces'
 const.volumes = 'volumes'
 const.aws_cli_dump = ['aws' , 'ec2' , 'describe-instances' , '--profile']
-aws_output_t = Set( ['text', 'table' ,'json'] )
+aws_output_t = set( ['text', 'table' ,'json'] )
 
 
 
@@ -258,7 +258,7 @@ if __name__ == '__main__' :
             aws = cci_mini_aws_bot()
             # profile_metadata = aws.enum_all_profiles()
             aws.aws_cli_display_dump( out_func=aws.output_to_buffer_handler )
-            print aws.buffer
+            print ( aws.buffer )
             # print profile_metadata
             #context = click.get_current_context()
 
