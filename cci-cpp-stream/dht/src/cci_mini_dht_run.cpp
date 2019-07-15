@@ -1,5 +1,8 @@
-#include <opendht.h>
 #include <vector>
+
+
+#include <cci_dht_stream.h>
+
 
 int main()
 {

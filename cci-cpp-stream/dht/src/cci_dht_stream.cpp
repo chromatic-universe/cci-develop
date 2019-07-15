@@ -4,11 +4,11 @@
 #include <cci_dht_stream.h>
 
 
-using namespace cci_cpp_stream;
+using namespace cpp_real_stream;
 
 
 //-------------------------------------------------------------------------------------
-cci_dht_stream::ccu_dht_stream()
+cci_dht_stream::cci_dht_stream()
 {
         //
 }

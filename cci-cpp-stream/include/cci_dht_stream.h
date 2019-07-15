@@ -31,7 +31,7 @@ namespace cpp_real_stream
 
                                 //ctors
                                 cci_dht_stream();
-                                explicit cci_dht_stream();
+                                //explicit cci_dht_stream();
 
 
                                 //dtor
