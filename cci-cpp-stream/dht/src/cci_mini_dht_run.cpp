@@ -14,7 +14,14 @@ int main()
 
         // Join the network through any running node,
         // here using a known bootstrap node.
-        node.bootstrap("bootstrap.ring.cx", "4222");
+        node.bootstrap("50.122.108.135", "13003");
+        std::cerr << node.getNodesStats( AF_INET ).toString() << "\n";
+        if( ! node.isRunning() )
+        {
+            std::cerr << "...not....\n";
+            _exit( 1 );
+        }
+
 
         // put some data on the dht
         std::vector<uint8_t> some_data(5, 10);
