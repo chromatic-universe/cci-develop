@@ -11,6 +11,34 @@ using namespace std::chrono_literals;
 using namespace cpp_real_stream;
 using json = nlohmann::json;
 
+bool retr_kernel_addr_space_snapshot( json& out , const std::string& internal_url )
+ {
+          auto adapter_strm = std::make_unique<cci_curl_stream>();
+
+          assert( adapter_strm );
+          adapter_strm->debug( false );
+          auto ostr = std::make_unique<std::ostringstream>();
+
+          const std::string retr_call { "retr_one_addr_space_metadata" };
+          std::ostringstream dostr;
+          dostr << internal_url
+                << "/"
+                << retr_call;
+
+          json mon = { { "moniker" , "cci_stream_mta" } };
+          json naked_j = { { "url" ,  dostr.str() } };
+
+
+          bool b_ret = adapter_strm->results_by_naked_param_async( mon ,
+                                                                   naked_j ,
+                                                                   ostr.get() );
+          if( b_ret )
+          { out = json::parse( ostr->str() ); }
+
+          return b_ret;
+
+ }
+
 
 int main( int argc , char** argv )
 {
@@ -21,12 +49,15 @@ int main( int argc , char** argv )
 
 		try
 		{
-			auto curl = make_unique<cci_curl_stream>();
-            curl->debug( false );
+            json j;
+            bool b_ret = retr_kernel_addr_space_snapshot( j  , "http://localhost:7901/cci_mta_trinity" );
+            if( b_ret ) { std::cout << j.dump( 4 ) << "\n";  }
+			//auto curl = make_unique<cci_curl_stream>();
+            //curl->debug( false );
 			//curl->execute_base_bool_p( "http://localhost:7080/mongo/imap2017/plain_text_auth" ,
                         //                           "user=wiljoh&password=Argentina1" ,
                         //                         &std::cerr );
-            auto ostr = make_unique<std::ostringstream>();
+            //auto ostr = make_unique<std::ostringstream>();
 			//json mon;
 			//json meta_j = { { "from" , "wiljoh@localhost" } , { "to" , "corny@snaps" } };
 			//json naked_j = { { "url" , "http://127.0.0.1:7080/mongo/imap2017/instantiate_atomic_payload" } };
@@ -44,9 +75,9 @@ int main( int argc , char** argv )
 			//std::cerr  << ostr->str() << "\n";
             //for( ;; )
             //{
-                curl->execute_base_bool_g( "http://192.168.1.221:9200" ,
-                                                       ostr.get() );
-                std::cerr  << ostr->str() << "\n";
+            //    curl->execute_base_bool_g( "http://192.168.1.221:9200" ,
+            //                                           ostr.get() );
+            //    std::cerr  << ostr->str() << "\n";
 
              //   std::this_thread::sleep_for( 3s ) ;
             //}

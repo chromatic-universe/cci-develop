@@ -76,7 +76,7 @@ void  cci_kafka_producer::quick_config_library_producer( const std::string& topi
         assert( m_kafka_conf );
         //
         std::string errstr;
-        m_kafka_conf->set(  "metadata.broker.list" , "ec2-34-239-10-164.compute-1.amazonaws.com:9092,cci-arm-ssd:9093" , errstr );
+        m_kafka_conf->set(  "metadata.broker.list" , "cci-aws-2" , errstr );
         //
         m_ptr_rd = rdkafka::Producer::create( m_kafka_conf , errstr );
         //
