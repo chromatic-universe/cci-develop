@@ -2,7 +2,7 @@ aniso8601==1.1.0
 clang==3.5
 conda==3.17.0
 conda-env==2.4.2
-Django==1.9.4
+Django==1.11.28
 django-rest-api==0.1.5
 djangorestframework==3.3.3
 dominate==2.1.17
