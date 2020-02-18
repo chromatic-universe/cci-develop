@@ -35,6 +35,9 @@ bool retr_kernel_addr_space_snapshot( json& out , const std::string& internal_ur
           if( b_ret )
           { out = json::parse( ostr->str() ); }
 
+          std::cerr << ostr.str()
+                    << "\n";
+
           return b_ret;
 
  }

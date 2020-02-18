@@ -254,8 +254,8 @@ namespace cpp_real_stream
                 cci_kafka_producer( cci_kafka_producer&& ckc ) = default;
                 cci_kafka_producer& operator= ( cci_kafka_producer&& ckc )  = default;
                 //copy
-                cci_kafka_producer( const cci_kafka_producer& ckc ) = default;
-                cci_kafka_producer& operator= ( const cci_kafka_producer& ckc ) = default;
+                //cci_kafka_producer( const cci_kafka_producer& ckc ) = default;
+                //cci_kafka_producer& operator= ( const cci_kafka_producer& ckc ) = default;
                 //use unary bool compare
                 bool operator!() const { return !m_ptr_rd; }
 
