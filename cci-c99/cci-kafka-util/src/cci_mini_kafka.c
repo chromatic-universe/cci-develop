@@ -837,41 +837,7 @@ void ex_parte_producer( kafka_context_ptr kc  )
 					                //message opaque, provided in
 					                //delivery report callback as
 					                //msg_opaque
-					                NULL ) == -1 )   mta_addr_space_snapshot.h
-            mta_embrace_peer.h
-            mta_enum_external_metrics.h
-            mta_enum_interface.h
-            mta_enumerate_plugins.h
-            mta_enumerate_supported_servers.h
-            mta_external_static_opaque.h
-            mta_insmod.h
-            mta_kernel_common.h
-            mta_kernel_events.h
-            mta_load_plugin.h
-            mta_lsmod.h
-            mta_make_kernel.h
-            mta_modprobe.h
-            mta_ping.h
-            mta_query_bootstrap_endpoint.h
-            mta_query_daylight.h
-            mta_query_personality.h
-            mta_rmmod.h
-            mta_shutdown.h
-            mta_stat_version.h
-            mta_try_acquire_identity.h
-            mta_try_bootstrap_endpoint.h
-            mta_try_enumerate_endpoints.h
-            mta_try_gen_peer_metadata.h
-            mta_try_make_daylight.h
-            mta_try_make_subscriber_endpoint.h
-            mta_try_open_index.h
-            mta_try_open_peer_compulsion.h
-            mta_try_open_spool.h
-            mta_try_post_backstream_endpoint.h
-            mta_try_unmake_daylight.h
-            mta_try_unmake_subscriber_endpoint.h
-            mta_unload_plugin.h
-            mta_unmake_kernel.h
+					                NULL ) == -1 )
 
               {
 				fprintf( stderr ,
