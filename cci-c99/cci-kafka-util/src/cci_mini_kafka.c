@@ -748,7 +748,7 @@ void stream_out_usage( const char* binary )
             "  -h  help\n%s" \
             "\n" \
 			"\n" ,
-            "----------------cci-kafka-plex------------chromatic universe 2018------ :\n"\
+            "----------------cci-kafka-plex------------chromatic universe 2020------ :\n"\
                 "\n\t\t kafka demultiplexer and event manager for <cci mta stream ecosys> \n" ,
 			binary ,
 			rd_kafka_version_str() ,
