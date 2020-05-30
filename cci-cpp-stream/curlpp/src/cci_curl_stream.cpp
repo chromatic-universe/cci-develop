@@ -84,10 +84,12 @@ namespace
 				      curlpp::Easy r;
 				      r.setOpt( curlpp::options::Url( url ) );
 				      r.setOpt( curlpp::options::HttpHeader( header ) );
-                                      r.setOpt( FailOnError( true  ));
+                      r.setOpt( FailOnError( true  ));
 				      r.setOpt( curlpp::options::PostFields( params ) );
 				      r.setOpt( curlpp::options::PostFieldSize( params.length() ) );
 				      r.setOpt( curlpp::options::Timeout( 60L ) );
+				      r.setOpt( curlpp::options::ConnectTimeout( 10L ) );
+
 
 				      r.setOpt( curlpp::options::WriteStream( &response ) );
 
