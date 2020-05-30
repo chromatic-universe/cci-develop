@@ -87,6 +87,7 @@ namespace
                                       r.setOpt( FailOnError( true  ));
 				      r.setOpt( curlpp::options::PostFields( params ) );
 				      r.setOpt( curlpp::options::PostFieldSize( params.length() ) );
+				      r.setOpt( curlpp::options::Timeout( 60L ) );
 
 				      r.setOpt( curlpp::options::WriteStream( &response ) );
 
