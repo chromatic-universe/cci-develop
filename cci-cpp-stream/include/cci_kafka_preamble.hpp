@@ -258,7 +258,7 @@ namespace cpp_real_stream
 						bool run() const noexcept { return m_run; }
 
 						//mutators
-						void stream( std::ostream& ostr ) { m_ostr = ostr; }
+						void stream( std::ostream* ostr ) { m_ostr = ostr; }
 						void run( bool b_run ) { m_run = b_run; }
 
 
@@ -275,21 +275,21 @@ namespace cpp_real_stream
 							  //real message
 							  m_tym->color( stamp_color::blue );
 							  m_tym->time_stamp();
-							  std::cerr << "DELIVERY: read msg at offset "
-								       << message.offset()
-							       << "\n";
+							  *m_ostr << "DELIVERY: read msg at offset "
+								     << message.offset()
+							         << "\n";
 							  if ( message.key() )
 							  {
 							    m_tym->time_stamp();
-							    std::cerr << "key: "
-								      << message.key() << std::endl;
+							    *m_ostr << "key: "
+								        << message.key() << std::endl;
 							  }
 							  m_tym->time_stamp();
-							  std::cerr << "message-len:"
-								    <<  message.len()
-								    << " "
-								    <<  static_cast<const char *>( message.payload() )
-								    << "\n";
+							  *m_ostr << "message-len:"
+								      <<  message.len()
+								      << " "
+								      <<  static_cast<const char *>( message.payload() )
+								      << "\n";
 							  m_tym->clear_color();
 
 							  break;
@@ -334,7 +334,8 @@ namespace cpp_real_stream
 			public :
 
 				//accessors-inspectors
-			 	rdkafka::DeliveryReportCb* kafka_delivery_cb() { return m_cbk.get(); }
+			 	//rdkafka::DeliveryReportCb* kafka_delivery_cb() { return m_cbk.get(); }
+			 	kafka_delivery_cbk* kafka_delivery_cb() { return m_cbk.get(); }
 
 
 
