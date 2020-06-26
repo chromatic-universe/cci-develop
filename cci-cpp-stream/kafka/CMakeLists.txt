@@ -34,6 +34,7 @@ add_executable(cci_mini_kafka_run  cci_mini_kafka_run.cpp)
 #link libs
 target_link_libraries(cci_mini_kafka_run -lrdkafka++
 		                         -lrdkafka
+					 -lstdc++
 					 cci_kafka_stream)
 
 #install
