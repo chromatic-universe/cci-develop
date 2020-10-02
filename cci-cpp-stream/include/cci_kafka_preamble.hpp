@@ -46,7 +46,7 @@ namespace cpp_real_stream
 						bool run() const noexcept { return m_run; }
 
 						//mutators
-						void stream( std::ostream& ostr ) { m_ostr = ostr; }
+						void stream( std::ostream& ostr ) { m_ostr = &ostr; }
 						void run( bool b_run ) { m_run = b_run; }
 
 						void event_cb ( rdkafka::Event &event )
@@ -148,7 +148,7 @@ namespace cpp_real_stream
 						bool run() const noexcept { return m_run; }
 
 						//mutators
-						void stream( std::ostream& ostr ) { m_ostr = ostr; }
+						void stream( std::ostream& ostr ) { m_ostr = &ostr; }
 						void run( bool b_run ) { m_run = b_run; }
 
 
