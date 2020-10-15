@@ -92,7 +92,7 @@ int main( int argc , char* argv[] )
             tmu->time_stamp();
             if(  kafka_default_preamble::consumer_switch->isSet() )
             {
-                //consumer
+                //consumer▾
                 auto ckc( std::make_unique<cci_kafka_consumer<kafka_preamble_ptr>>( ckp.get() , b_events ) );
                 if( !!ckc )
                 {
@@ -120,11 +120,14 @@ int main( int argc , char* argv[] )
             }
             else if( kafka_default_preamble::topic_metadata->isSet() )
             {
-
-                gen_kafka_meta_stream( kafka_default_preamble::the_brokers->getValue() ,
+                int dw =  gen_kafka_meta_stream( kafka_default_preamble::the_brokers->getValue() ,
                                        kafka_default_preamble::topic_name->getValue()  ,
                                        0 ,
                                        ckp.get() );
+                if( dw == 0)
+                {  printf( "APACHE-KAFKA OK:...retrieved metadate....\n" ); }
+                else { printf( "APACHE-KAFKA: CRITICAL..could not retrieve metadata for broker...\n");  }
+
             }
         }
         catch ( tclap::ArgException &e )
@@ -136,7 +139,7 @@ int main( int argc , char* argv[] )
                       << "\n";
         }
 
-
+        printf( "APACHE-KAFKA OK:...retrieved metadate....\n" );
         return 0;
 
 }

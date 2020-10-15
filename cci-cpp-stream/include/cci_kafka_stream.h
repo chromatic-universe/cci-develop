@@ -306,7 +306,7 @@ namespace cpp_real_stream
 
 
 
-        void gen_kafka_meta_stream( const std::string& broker  ,
+        int  gen_kafka_meta_stream( const std::string& broker  ,
                                     const std::string& topic ,
                                     int partition ,
                                     kafka_preamble_ptr preamble = nullptr );

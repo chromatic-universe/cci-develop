@@ -262,7 +262,7 @@ namespace cpp_real_stream
 						void run( bool b_run ) { m_run = b_run; }
 
 
-						//services
+                        //services
 						void dr_cb( rdkafka::Message &message )
 						{
 						    switch ( message.err() )

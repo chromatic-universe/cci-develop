@@ -308,7 +308,7 @@ void cci_kafka_producer::produce( const std::string& message )
 
 
 //----------------------------------------------------------------------------------------
-void cpp_real_stream::gen_kafka_meta_stream( const std::string& broker ,
+int  cpp_real_stream::gen_kafka_meta_stream( const std::string& broker ,
                                              const std::string& topic ,
                                              int partition ,
                                              kafka_preamble_ptr preamble )
@@ -329,7 +329,7 @@ void cpp_real_stream::gen_kafka_meta_stream( const std::string& broker ,
                        producer->tutils()->time_stamp();
                         std::cerr << "%% failed to confiure topic "
                               << "\n";
-                       return;
+                       return 2;
                 }
                 ptr_topic = producer->topic();
                 producer->tutils()->time_stamp();
@@ -351,15 +351,17 @@ void cpp_real_stream::gen_kafka_meta_stream( const std::string& broker ,
 						 5000 );
 		    if( err != rdkafka::ERR_NO_ERROR )
 		    {
-			producer->tutils()->time_stamp();
-			std::cerr << "%% failed to acquire metadata: "
-				  << rdkafka::err2str( err )
-				  << "\n";
-			return;
+                producer->tutils()->time_stamp();
+                std::cerr << "%% failed to acquire metadata: "
+                      << rdkafka::err2str( err )
+                      << "\n";
+                return 2;
 		    }
 
 		    stream_metadata_header( &std::cerr  , metadata , " kafka server" );
 		    metadata_stream( &std::cerr , metadata->topics() );
 		    metadata_stream( &std::cerr , metadata->brokers() );
     }
+
+    return 0;
 }
