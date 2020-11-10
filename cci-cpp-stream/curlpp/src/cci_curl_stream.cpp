@@ -176,6 +176,9 @@ bool cci_curl_stream::execute_base_bool_g( const std::string& url ,
 			curlpp::options::WriteStream ws( ostr );
 	                request.setOpt( ws );
 			request.setOpt( FailOnError( true  ));
+            if( m_https == true )
+            { request.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
+
 			request.perform();
 
 
@@ -229,6 +232,9 @@ bool cci_curl_stream::execute_base_bool_p( const std::string& url  ,
 
 			request.setOpt( curlpp::options::PostFields( post_fields ) );
     			request.setOpt( curlpp::options::PostFieldSize( post_fields.length() ) );
+            if( m_https == true )
+            { request.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
+
 
 			request.perform();
 
@@ -297,6 +303,9 @@ bool cci_curl_stream::instantiate_atomic_payload( json& moniker ,
 
 			request.setOpt( curlpp::options::PostFields( jsn.dump() ) );
     			request.setOpt( curlpp::options::PostFieldSize( jsn.dump().length() ) );
+            if( m_https == true )
+            { request.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
+
 
 			request.perform();
 
@@ -341,12 +350,12 @@ bool cci_curl_stream::results_by_naked_param( 	//naked param json
 			request.setOpt (Url( url.at( "url" ).get<std::string>() ) );
 
 			string_list headers;
-    			headers.push_back( app_json_t );
+    		headers.push_back( app_json_t );
 
-			base_post( request ,
-				   headers ,
-                                   naked_param.dump() ,
-                                   ostr );
+			base_post(  request ,
+				        headers ,
+                        naked_param.dump() ,
+                        ostr );
 
 			return true;
 
@@ -390,6 +399,8 @@ void  cci_curl_stream::base_post( curlpp::Easy& req ,
 
 		req.setOpt( curlpp::options::PostFields( post_fields ) );
 		req.setOpt( curlpp::options::PostFieldSize( post_fields.length() ) );
+        if( m_https == true )
+        {req.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
 
 		req.perform();
 
