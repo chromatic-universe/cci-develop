@@ -16,6 +16,13 @@ namespace
 	const std::string url_encode_t { "Content-Type: application/x-www-form-urlencoded" };
 	const std::string app_json_t   { "Content-Type: application/json" };
 
+   	std::future<std::string> invoke_async_post( const std::string& url ,
+                                                const std::string& params );
+    std::future<std::string> invoke_async_post_ssl(  const std::string& url ,
+                                                     const std::string& params ,
+                                                     bool verify_host = true );
+
+
 
 
 	//------------------------------------------------------------------------------
@@ -71,10 +78,11 @@ namespace
 	}
 
 	//---------------------------------------------------------------------------------------
-	std::future<std::string> invoke_async_post( const std::string& url , const std::string& params )
+	std::future<std::string> invoke_async_post( const std::string& url ,
+                                                const std::string& params )
 	{
-			 return std::async( std::launch::async ,
-				[] ( const std::string& url , const std::string& params ) mutable
+			    return std::async( std::launch::async ,
+				[&] ( const std::string& url , const std::string& params ) mutable
 				{
 				      std::ostringstream response;
 
@@ -90,6 +98,40 @@ namespace
 				      r.setOpt( curlpp::options::Timeout( 60L ) );
 				      r.setOpt( curlpp::options::ConnectTimeout( 10L ) );
 
+				      r.setOpt( curlpp::options::WriteStream( &response ) );
+
+				      r.perform();
+
+				      return response.str();
+
+				} , url , params );
+	}
+
+    //---------------------------------------------------------------------------------------
+	std::future<std::string> invoke_async_post_ssl ( const std::string& url ,
+                                                     const std::string& params ,
+                                                     const bool verify_host )
+	{
+			    return std::async( std::launch::async ,
+				[&] ( const std::string& url , const std::string& params ) mutable
+				{
+				      std::ostringstream response;
+
+				      std::list<std::string> header;
+				      header.push_back( app_json_t );
+                      unsigned verify;
+                      verify_host == true ? verify = 2L : verify = 0L;
+
+				      curlpp::Easy r;
+				      r.setOpt( curlpp::options::Url( url ) );
+				      r.setOpt( curlpp::options::HttpHeader( header ) );
+                      r.setOpt( FailOnError( true  ));
+				      r.setOpt( curlpp::options::PostFields( params ) );
+				      r.setOpt( curlpp::options::PostFieldSize( params.length() ) );
+				      r.setOpt( curlpp::options::Timeout( 60L ) );
+				      r.setOpt( curlpp::options::ConnectTimeout( 10L ) );
+                      r.setOpt( curlpp::options::SslVerifyHost( 0 ) );
+                      //r.setOpt( curlpp::options::SslVerifyPeer( 0 ) );
 
 				      r.setOpt( curlpp::options::WriteStream( &response ) );
 
@@ -101,10 +143,13 @@ namespace
 	}
 
 
+
 }
 
 //---------------------------------------------------------------------------------------
-cci_curl_stream::cci_curl_stream() : m_debug { true }
+cci_curl_stream::cci_curl_stream() : m_debug { true } ,
+                                     m_https { false  } ,
+                                     m_verify_host { false  }
 {
 }
 
@@ -353,23 +398,28 @@ void  cci_curl_stream::base_post( curlpp::Easy& req ,
 
 //---------------------------------------------------------------------------------------
 bool  cci_curl_stream::results_by_naked_param_async( 	const nlohmann::json& naked_param ,
-							const nlohmann::json& url ,
-						        std::ostream* ostr ,
-							unsigned future_wait_duration_secs )
+                                                        const nlohmann::json& url ,
+                                                        std::ostream* ostr ,
+                                                        unsigned future_wait_duration_secs )
 {
 
 		bool b_ret { false };
+        std::future<std::string> future;
 
 		try
 		{
-			std::future<std::string> future = invoke_async_post( url.at( "url" ).get<std::string>() ,
-                                                                             naked_param.dump() );
+			if( m_https == true ) { future = invoke_async_post_ssl( url.at( "url" ).get<std::string>() ,
+                                                                   naked_param.dump() ,
+                                                                   m_verify_host  ); }
+            else { std::future<std::string> future = invoke_async_post( url.at( "url" ).get<std::string>() ,
+                                                                                         naked_param.dump() ); }
+
 
 			std::cout << "waiting...invoke_async_post\n";
-		        std::future_status status;
-		        do
+	        std::future_status status;
+            do
 			{
-				status = future.wait_for( std::chrono::seconds( 1 ) );
+                status = future.wait_for( std::chrono::seconds( 1 ) );
 				if( status == std::future_status::deferred )
 				{   std::cerr << "deferre\n"; }
 				else if( status == std::future_status::timeout )

@@ -42,6 +42,39 @@ bool retr_kernel_addr_space_snapshot( json& out , const std::string& internal_ur
 
  }
 
+bool retr_fetch_inquiry( json& out , const std::string& internal_url )
+{
+          auto adapter_strm = std::make_unique<cci_curl_stream>();
+
+          assert( adapter_strm );
+          adapter_strm->debug( false );
+          adapter_strm->https( true  );
+          adapter_strm->verify_host( false );
+          auto ostr = std::make_unique<std::ostringstream>();
+
+          const std::string retr_call { "fetch_ping_query" };
+          std::ostringstream dostr;
+          dostr << internal_url
+                << "/"
+                << retr_call;
+
+          json mon = { { "moniker" , "cci_stream_mta" } };
+          json naked_j = { { "url" ,  dostr.str() } };
+
+
+          bool b_ret = adapter_strm->results_by_naked_param_async( mon ,
+                                                                   naked_j ,
+                                                                   ostr.get() );
+          if( b_ret )
+          { out = json::parse( ostr->str() ); }
+
+          //std::cerr << ostr->str()
+          //          << "\n";
+
+          return b_ret;
+
+ }
+
 
 int main( int argc , char** argv )
 {
@@ -53,7 +86,7 @@ int main( int argc , char** argv )
 		try
 		{
             json j;
-            bool b_ret = retr_kernel_addr_space_snapshot( j  , "http://localhost:7901/cci_mta_trinity" );
+            bool b_ret = retr_fetch_inquiry( j  , "https://localhost:7081/cci_mta_trinity" );
             if( b_ret ) { std::cout << j.dump( 4 ) << "\n";  }
 			//auto curl = make_unique<cci_curl_stream>();
             //curl->debug( false );
@@ -67,7 +100,7 @@ int main( int argc , char** argv )
 			//json resource_j = { { "resource" , "/opt/imap_spool/staging/201707261829.7a9bee45" } } ;
 
 
-			//curl->instantiate_atomic_payload( mon ,
+            //curl->instantiate_atomic_payload( mon ,
 			//		                  meta_j ,
 			//				  naked_j ,
 			//				  resource_j ,

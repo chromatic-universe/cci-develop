@@ -1,4 +1,4 @@
-//cci_curl_steam.h    chromatic universe   2017  william k. johnson
+//cci_curl_steam.h    chromatic universe   2017-2020    william k. johnson
 
 #pragma once
 
@@ -41,23 +41,30 @@ namespace cpp_real_stream
 			private :
 
 				bool 		m_debug;
+                bool        m_https;
+                bool        m_verify_host;
 
 
 			protected :
 
 				//helpers
 				virtual void base_post( curlpp::Easy& req ,
-						        const string_list& headers ,
-						        const std::string& post_fields ,
-                                                        std::ostream* ostr );
+                                        const string_list& headers ,
+                                        const std::string& post_fields ,
+                                        std::ostream* ostr );
 
 
 			public :
 
 				//accessors=inspectors
 				virtual bool debug() const noexcept { return m_debug; }
+				virtual bool https() const noexcept { return m_https; }
+				virtual bool verify_host() const noexcept { return m_verify_host; }
+
 				//mutators
 				virtual void debug( const bool dbg ) { m_debug = dbg; }
+                virtual void https( const bool ssl ) { m_https = ssl; }
+                virtual void verify_host( const bool verify  ) { m_verify_host = verify; }
 
 				//base bool , i.e , non-parameterized-if the url returns
 				//get call returns anything  no error ? true : false;
@@ -70,39 +77,39 @@ namespace cpp_real_stream
 			        //get call returns anything  no error ? true : false;
 				//post
 				virtual bool execute_base_bool_p( const std::string& url  ,
-							  const std::string& post_fields ,
-							  std::ostream* ostr );
+                                                  const std::string& post_fields ,
+                                                  std::ostream* ostr );
 				//atomic insertion -json; all string fields will have be serialized back to json
 				//in 200 http , moniker will be populated
 				//post
 				virtual bool instantiate_atomic_payload( //user siginificant reference , returned by callee , "nil by default"
-									 nlohmann::json& moniker ,
-									 //meta info , maybe rfc2822 header
-									 const nlohmann::json& metadata ,
-									 //url destination - not checking of validity ,
-									 const nlohmann::json& naked_archive_dest ,
-									 //payload location - if this is 'nil'(default)
-									 // , the location is contained in the url
-									 nlohmann::json resource_locator  = {{ "resource_locator" , "nil" }}  ,
-									 std::ostream* ostr = nullptr );
+                                                         nlohmann::json& moniker ,
+                                                         //meta info , maybe rfc2822 header
+                                                         const nlohmann::json& metadata ,
+                                                         //url destination - not checking of validity ,
+                                                         const nlohmann::json& naked_archive_dest ,
+                                                         //payload location - if this is 'nil'(default)
+                                                         // , the location is contained in the url
+                                                         nlohmann::json resource_locator  = {{ "resource_locator" , "nil" }}  ,
+                                                         std::ostream* ostr = nullptr );
 				//json result set;
 				//naked param. i.e.,url post payload
 				//in unvalidated json form.
 				//post
 				virtual bool results_by_naked_param( 	//naked param json
-									const nlohmann::json& naked_param ,
-									const nlohmann::json& url ,
-									std::ostream* ostr = nullptr );
+                                                        const nlohmann::json& naked_param ,
+                                                        const nlohmann::json& url ,
+                                                        std::ostream* ostr = nullptr );
 
 				//json result set;
 				//naked param. i.e.,url post payload
 				//in unvalidated json form.
 				//post , async results
 				virtual bool results_by_naked_param_async( 	//naked param json
-										const nlohmann::json& naked_param ,
-										const nlohmann::json& url ,
-										std::ostream* ostr = nullptr  ,
-                                                                                unsigned future_wait_duration_secs = 1 );
+                                                            const nlohmann::json& naked_param ,
+                                                            const nlohmann::json& url ,
+                                                            std::ostream* ostr = nullptr  ,
+                                                            unsigned future_wait_duration_secs = 1 );
 
 
 
