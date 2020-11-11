@@ -348,6 +348,10 @@ bool cci_curl_stream::results_by_naked_param( 	//naked param json
 			ostr->flush();
 
 			request.setOpt (Url( url.at( "url" ).get<std::string>() ) );
+           	request.setOpt( FailOnError( true  ));
+            if( m_https == true )
+            { request.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
+
 
 			string_list headers;
     		headers.push_back( app_json_t );

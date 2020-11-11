@@ -11,8 +11,9 @@ using namespace std::chrono_literals;
 using namespace cpp_real_stream;
 using json = nlohmann::json;
 
+//---------------------------------------------------------------------------------------------
 bool retr_kernel_addr_space_snapshot( json& out , const std::string& internal_url )
- {
+{
           auto adapter_strm = std::make_unique<cci_curl_stream>();
 
           assert( adapter_strm );
@@ -40,8 +41,9 @@ bool retr_kernel_addr_space_snapshot( json& out , const std::string& internal_ur
 
           return b_ret;
 
- }
+}
 
+//---------------------------------------------------------------------------------------------
 bool retr_fetch_inquiry( json& out , const std::string& internal_url )
 {
           auto adapter_strm = std::make_unique<cci_curl_stream>();
@@ -73,9 +75,45 @@ bool retr_fetch_inquiry( json& out , const std::string& internal_url )
 
           return b_ret;
 
- }
+}
 
 
+//---------------------------------------------------------------------------------------------
+bool retr_db_connection_info( json& out , const std::string& internal_url )
+{
+          auto adapter_strm = std::make_unique<cci_curl_stream>();
+
+          assert( adapter_strm );
+          adapter_strm->debug( false );
+          adapter_strm->https( true  );
+          adapter_strm->verify_host( false );
+          auto ostr = std::make_unique<std::ostringstream>();
+
+          const std::string retr_call { "db_connection_info" };
+          std::ostringstream dostr;
+          dostr << internal_url
+                << "/"
+                << retr_call;
+
+          json mon = { { "moniker" , "cci_stream_mta" } };
+          json naked_j = { { "url" ,  dostr.str() } };
+
+
+          bool b_ret = adapter_strm->results_by_naked_param_async( mon ,
+                                                                   naked_j ,
+                                                                   ostr.get() );
+          if( b_ret )
+          { out = json::parse( ostr->str() ); }
+
+          //std::cerr << ostr->str()
+          //          << "\n";
+
+          return b_ret;
+
+}
+
+
+//---------------------------------------------------------------------------------------------
 int main( int argc , char** argv )
 {
 
@@ -86,7 +124,7 @@ int main( int argc , char** argv )
 		try
 		{
             json j;
-            bool b_ret = retr_fetch_inquiry( j  , "https://localhost:7081/cci_mta_trinity" );
+            bool b_ret = retr_db_connection_info( j  , "https://localhost:7080/mongo.imap2017" );
             if( b_ret ) { std::cout << j.dump( 4 ) << "\n";  }
 			//auto curl = make_unique<cci_curl_stream>();
             //curl->debug( false );
