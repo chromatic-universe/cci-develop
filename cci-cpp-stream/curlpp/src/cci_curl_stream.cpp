@@ -337,6 +337,7 @@ bool cci_curl_stream::results_by_naked_param( 	//naked param json
 						const nlohmann::json& naked_param ,
 						const nlohmann::json& url ,
 						std::ostream* ostr )
+
 {
 		curlpp::Easy request;
 		if( debug() )
@@ -350,7 +351,7 @@ bool cci_curl_stream::results_by_naked_param( 	//naked param json
 			request.setOpt (Url( url.at( "url" ).get<std::string>() ) );
            	request.setOpt( FailOnError( true  ));
             if( m_https == true )
-            { request.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
+            { request.setOpt( curlpp::options::SslVerifyHost( 0 ) ); }
 
 
 			string_list headers;
@@ -404,7 +405,7 @@ void  cci_curl_stream::base_post( curlpp::Easy& req ,
 		req.setOpt( curlpp::options::PostFields( post_fields ) );
 		req.setOpt( curlpp::options::PostFieldSize( post_fields.length() ) );
         if( m_https == true )
-        {req.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
+        {req.setOpt( curlpp::options::SslVerifyHost( 0 ) );}
 
 		req.perform();
 
@@ -434,7 +435,7 @@ bool  cci_curl_stream::results_by_naked_param_async( 	const nlohmann::json& nake
 	        std::future_status status;
             do
 			{
-                status = future.wait_for( std::chrono::seconds( 1 ) );
+                status = future.wait_for( std::chrono::seconds( 9 ) );
 				if( status == std::future_status::deferred )
 				{   std::cerr << "deferre\n"; }
 				else if( status == std::future_status::timeout )

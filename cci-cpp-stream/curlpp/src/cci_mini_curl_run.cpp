@@ -89,13 +89,13 @@ bool retr_db_connection_info( json& out , const std::string& internal_url )
           adapter_strm->verify_host( false );
           auto ostr = std::make_unique<std::ostringstream>();
 
-          const std::string retr_call { "db_connection_info" };
+          const std::string retr_call { "plain_text_auth" };
           std::ostringstream dostr;
           dostr << internal_url
                 << "/"
                 << retr_call;
 
-          json mon = { { "moniker" , "cci_stream_mta" } };
+          json mon = { { "user" , "mann-k" } , { "password" ,  "Argentina1" } };
           json naked_j = { { "url" ,  dostr.str() } };
 
 
@@ -104,6 +104,7 @@ bool retr_db_connection_info( json& out , const std::string& internal_url )
                                                                    ostr.get() );
           if( b_ret )
           { out = json::parse( ostr->str() ); }
+          else{ std::cerr  << "..failed....\n"; }
 
           //std::cerr << ostr->str()
           //          << "\n";
@@ -124,7 +125,7 @@ int main( int argc , char** argv )
 		try
 		{
             json j;
-            bool b_ret = retr_db_connection_info( j  , "https://localhost:7080/mongo.imap2017" );
+            bool b_ret = retr_db_connection_info( j  , "https://localhost:7080/mongo/imap2017" );
             if( b_ret ) { std::cout << j.dump( 4 ) << "\n";  }
 			//auto curl = make_unique<cci_curl_stream>();
             //curl->debug( false );
