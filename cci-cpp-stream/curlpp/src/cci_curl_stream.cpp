@@ -23,7 +23,10 @@ namespace
                                                      bool verify_host = true );
 
 
-    const std::string tornado_cert { "/etc/chromatic-universe/certs/cur_cert/tornado_cert.pem" };
+    const std::string tornado_cert { "/etc/chromatic-universe/certs/" };
+    const std::string endpoint_dsn_env { "ENDPOINT_DSN" };
+    std::string cert_path;
+
 
 	//------------------------------------------------------------------------------
 	class stream_debug
@@ -116,7 +119,6 @@ namespace
 				[&] ( const std::string& url , const std::string& params ) mutable
 				{
 				      std::ostringstream response;
-
 				      std::list<std::string> header;
 				      header.push_back( app_json_t );
                       unsigned verify;
@@ -152,6 +154,15 @@ cci_curl_stream::cci_curl_stream() : m_debug { true } ,
                                      m_https { false  } ,
                                      m_verify_host { false  }
 {
+        char* env = ::getenv( endpoint_dsn_env.c_str() );
+        if( env == nullptr ) { std::cerr << "...could not retrieve dsn environment...\n";  }
+        else { m_endpoint_dsn = env; }
+
+        std::ostringstream ostr;
+        ostr << tornado_cert
+             << m_endpoint_dsn;
+        cert_path = ostr.str();
+
 }
 
 //-------------------------- )-----------------------------------------------------------

@@ -43,6 +43,7 @@ namespace cpp_real_stream
 				bool 		m_debug;
                 bool        m_https;
                 bool        m_verify_host;
+                std::string m_endpoint_dsn;
 
 
 			protected :
@@ -60,11 +61,13 @@ namespace cpp_real_stream
 				virtual bool debug() const noexcept { return m_debug; }
 				virtual bool https() const noexcept { return m_https; }
 				virtual bool verify_host() const noexcept { return m_verify_host; }
+				virtual std::string endpoint_dsn() const noexcept { return m_endpoint_dsn; }
 
 				//mutators
 				virtual void debug( const bool dbg ) { m_debug = dbg; }
                 virtual void https( const bool ssl ) { m_https = ssl; }
                 virtual void verify_host( const bool verify  ) { m_verify_host = verify; }
+                virtual void endpoint_dsn( const std::string&  endpoint  ) { m_endpoint_dsn = endpoint; }
 
 				//base bool , i.e , non-parameterized-if the url returns
 				//get call returns anything  no error ? true : false;
