@@ -125,7 +125,7 @@ int main( int argc , char** argv )
 		try
 		{
             json j;
-            bool b_ret = retr_db_connection_info( j  , "https://localhost:7080/mongo/imap2017" );
+            bool b_ret = retr_db_connection_info( j  , "https://chromatic-1:7080/mongo/imap2017" );
             if( b_ret ) { std::cout << j.dump( 4 ) << "\n";  }
 			//auto curl = make_unique<cci_curl_stream>();
             //curl->debug( false );

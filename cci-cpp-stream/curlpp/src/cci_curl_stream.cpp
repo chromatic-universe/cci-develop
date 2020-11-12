@@ -23,7 +23,7 @@ namespace
                                                      bool verify_host = true );
 
 
-
+    const std::string tornado_cert { "/etc/chromatic-universe/certs/cur_cert/tornado_cert.pem" };
 
 	//------------------------------------------------------------------------------
 	class stream_debug
@@ -69,7 +69,7 @@ namespace
 				if( atom.first == &easy  )
 				{
 					ostr << "...request completed with status of "
-                                             << atom.second.code
+                         << atom.second.code
 					     << "\n";
 					break;
 				}
@@ -130,7 +130,8 @@ namespace
 				      r.setOpt( curlpp::options::PostFieldSize( params.length() ) );
 				      r.setOpt( curlpp::options::Timeout( 60L ) );
 				      r.setOpt( curlpp::options::ConnectTimeout( 10L ) );
-                      r.setOpt( curlpp::options::SslVerifyHost( 0 ) );
+                      //r.setOpt( curlpp::options::SslVerifyHost( 0 ) );
+                      r.setOpt( curlpp::options::CaInfo ( tornado_cert ) );
                       //r.setOpt( curlpp::options::SslVerifyPeer( 0 ) );
 
 				      r.setOpt( curlpp::options::WriteStream( &response ) );
@@ -177,7 +178,8 @@ bool cci_curl_stream::execute_base_bool_g( const std::string& url ,
 	                request.setOpt( ws );
 			request.setOpt( FailOnError( true  ));
             if( m_https == true )
-            { request.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
+            //{ request.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
+            { request.setOpt( curlpp::options::CaInfo ( tornado_cert ) ); }
 
 			request.perform();
 
@@ -233,7 +235,8 @@ bool cci_curl_stream::execute_base_bool_p( const std::string& url  ,
 			request.setOpt( curlpp::options::PostFields( post_fields ) );
     			request.setOpt( curlpp::options::PostFieldSize( post_fields.length() ) );
             if( m_https == true )
-            { request.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
+            //{ request.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
+            { request.setOpt( curlpp::options::CaInfo ( tornado_cert ) ); }
 
 
 			request.perform();
@@ -304,7 +307,9 @@ bool cci_curl_stream::instantiate_atomic_payload( json& moniker ,
 			request.setOpt( curlpp::options::PostFields( jsn.dump() ) );
     			request.setOpt( curlpp::options::PostFieldSize( jsn.dump().length() ) );
             if( m_https == true )
-            { request.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
+            //{ request.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
+            { request.setOpt( curlpp::options::CaInfo ( tornado_cert ) ); }
+
 
 
 			request.perform();
@@ -351,7 +356,11 @@ bool cci_curl_stream::results_by_naked_param( 	//naked param json
 			request.setOpt (Url( url.at( "url" ).get<std::string>() ) );
            	request.setOpt( FailOnError( true  ));
             if( m_https == true )
-            { request.setOpt( curlpp::options::SslVerifyHost( 0 ) ); }
+            {
+                //request.setOpt( curlpp::options::CaInfo ( "/home/wiljoh/tornado_certs/chromatic-universe-expansion.pem") );
+                request.setOpt( curlpp::options::CaInfo ( tornado_cert ) );
+                //request.setOpt( curlpp::options::SslVerifyHost( 0 ) );
+            }
 
 
 			string_list headers;
@@ -405,7 +414,11 @@ void  cci_curl_stream::base_post( curlpp::Easy& req ,
 		req.setOpt( curlpp::options::PostFields( post_fields ) );
 		req.setOpt( curlpp::options::PostFieldSize( post_fields.length() ) );
         if( m_https == true )
-        {req.setOpt( curlpp::options::SslVerifyHost( 0 ) );}
+        {
+            //req.setOpt( curlpp::options::SslVerifyHost( 0 ) );
+            req.setOpt( curlpp::options::CaInfo ( "/home/wiljoh/tornado_certs/tornado_cert.pem") );
+            //req.setOpt( curlpp::options::CaInfo ( "/home/wiljoh/tornado_certs/chromatic-universe-expansion.pem") );
+        }
 
 		req.perform();
 
