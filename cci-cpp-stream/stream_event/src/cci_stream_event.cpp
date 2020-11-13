@@ -1,4 +1,4 @@
-//cci_stream_event.cpp   chromatic universe 2018  william k. johnso
+//cci_stream_event.cpp   chromatic universe 2018-2020   william k. johnson
 
 
 #include <cci_stream_event.h>
@@ -21,7 +21,7 @@ cci_stream_event::cci_stream_event( kafka_producer_t kpt ,
                                     stream_event_class sec )  try : m_producer { kpt } ,
                                                                     m_curl_stream { cst } ,
                                                                     m_store( std::make_unique<event_protocol_store<cci_curl_stream>>
-                                                                         ( m_curl_stream ) ) ,
+                                                                     ( m_curl_stream ) ) ,
                                                                     m_event_class { sec } ,
                                                                     m_transport { tm }
 {

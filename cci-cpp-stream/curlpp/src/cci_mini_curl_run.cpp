@@ -87,6 +87,7 @@ bool retr_db_connection_info( json& out , const std::string& internal_url )
           adapter_strm->debug( false );
           adapter_strm->https( true  );
           adapter_strm->verify_host( false );
+          adapter_strm->endpoint_dsn( "/etc/chromatic-universe/certs/chromatic-1.pem" );
           auto ostr = std::make_unique<std::ostringstream>();
 
           const std::string retr_call { "plain_text_auth" };

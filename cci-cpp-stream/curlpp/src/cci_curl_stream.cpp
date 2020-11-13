@@ -23,10 +23,6 @@ namespace
                                                      bool verify_host = true );
 
 
-    const std::string tornado_cert { "/etc/chromatic-universe/certs/" };
-    const std::string endpoint_dsn_env { "ENDPOINT_DSN" };
-    std::string cert_path;
-
 
 	//------------------------------------------------------------------------------
 	class stream_debug
@@ -113,7 +109,8 @@ namespace
     //---------------------------------------------------------------------------------------
 	std::future<std::string> invoke_async_post_ssl ( const std::string& url ,
                                                      const std::string& params ,
-                                                     const bool verify_host )
+                                                     const bool verify_host ,
+                                                     const std::string& dsn )
 	{
 			    return std::async( std::launch::async ,
 				[&] ( const std::string& url , const std::string& params ) mutable
@@ -133,7 +130,7 @@ namespace
 				      r.setOpt( curlpp::options::Timeout( 60L ) );
 				      r.setOpt( curlpp::options::ConnectTimeout( 10L ) );
                       //r.setOpt( curlpp::options::SslVerifyHost( 0 ) );
-                      r.setOpt( curlpp::options::CaInfo ( tornado_cert ) );
+                      r.setOpt( curlpp::options::CaInfo ( dsn ) );
                       //r.setOpt( curlpp::options::SslVerifyPeer( 0 ) );
 
 				      r.setOpt( curlpp::options::WriteStream( &response ) );
@@ -152,16 +149,9 @@ namespace
 //---------------------------------------------------------------------------------------
 cci_curl_stream::cci_curl_stream() : m_debug { true } ,
                                      m_https { false  } ,
-                                     m_verify_host { false  }
+                                     m_verify_host { false  } ,
+                                     m_endpoint_dsn { "" }
 {
-        char* env = ::getenv( endpoint_dsn_env.c_str() );
-        if( env == nullptr ) { std::cerr << "...could not retrieve dsn environment...\n";  }
-        else { m_endpoint_dsn = env; }
-
-        std::ostringstream ostr;
-        ostr << tornado_cert
-             << m_endpoint_dsn;
-        cert_path = ostr.str();
 
 }
 
@@ -190,7 +180,7 @@ bool cci_curl_stream::execute_base_bool_g( const std::string& url ,
 			request.setOpt( FailOnError( true  ));
             if( m_https == true )
             //{ request.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
-            { request.setOpt( curlpp::options::CaInfo ( tornado_cert ) ); }
+            { request.setOpt( curlpp::options::CaInfo ( endpoint_dsn() ) ); }
 
 			request.perform();
 
@@ -247,7 +237,7 @@ bool cci_curl_stream::execute_base_bool_p( const std::string& url  ,
     			request.setOpt( curlpp::options::PostFieldSize( post_fields.length() ) );
             if( m_https == true )
             //{ request.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
-            { request.setOpt( curlpp::options::CaInfo ( tornado_cert ) ); }
+            { request.setOpt( curlpp::options::CaInfo ( endpoint_dsn() ) ); }
 
 
 			request.perform();
@@ -319,7 +309,7 @@ bool cci_curl_stream::instantiate_atomic_payload( json& moniker ,
     			request.setOpt( curlpp::options::PostFieldSize( jsn.dump().length() ) );
             if( m_https == true )
             //{ request.setOpt( curlpp::options::SslVerifyHost( m_verify_host ) ); }
-            { request.setOpt( curlpp::options::CaInfo ( tornado_cert ) ); }
+            { request.setOpt( curlpp::options::CaInfo ( endpoint_dsn() ) ); }
 
 
 
@@ -369,7 +359,7 @@ bool cci_curl_stream::results_by_naked_param( 	//naked param json
             if( m_https == true )
             {
                 //request.setOpt( curlpp::options::CaInfo ( "/home/wiljoh/tornado_certs/chromatic-universe-expansion.pem") );
-                request.setOpt( curlpp::options::CaInfo ( tornado_cert ) );
+                request.setOpt( curlpp::options::CaInfo ( endpoint_dsn() ) );
                 //request.setOpt( curlpp::options::SslVerifyHost( 0 ) );
             }
 
@@ -427,7 +417,7 @@ void  cci_curl_stream::base_post( curlpp::Easy& req ,
         if( m_https == true )
         {
             //req.setOpt( curlpp::options::SslVerifyHost( 0 ) );
-            req.setOpt( curlpp::options::CaInfo ( "/home/wiljoh/tornado_certs/tornado_cert.pem") );
+            req.setOpt( curlpp::options::CaInfo ( endpoint_dsn() ) );
             //req.setOpt( curlpp::options::CaInfo ( "/home/wiljoh/tornado_certs/chromatic-universe-expansion.pem") );
         }
 
@@ -450,7 +440,8 @@ bool  cci_curl_stream::results_by_naked_param_async( 	const nlohmann::json& nake
 		{
 			if( m_https == true ) { future = invoke_async_post_ssl( url.at( "url" ).get<std::string>() ,
                                                                    naked_param.dump() ,
-                                                                   m_verify_host  ); }
+                                                                   m_verify_host ,
+                                                                   m_endpoint_dsn ); }
             else { std::future<std::string> future = invoke_async_post( url.at( "url" ).get<std::string>() ,
                                                                                          naked_param.dump() ); }
 
