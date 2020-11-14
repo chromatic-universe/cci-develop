@@ -438,11 +438,11 @@ bool  cci_curl_stream::results_by_naked_param_async( 	const nlohmann::json& nake
 
 		try
 		{
-			if( m_https == true ) { future = invoke_async_post_ssl( url.at( "url" ).get<std::string>() ,
+            if( m_https == true ) { future = invoke_async_post_ssl( url.at( "url" ).get<std::string>() ,
                                                                    naked_param.dump() ,
                                                                    m_verify_host ,
                                                                    m_endpoint_dsn ); }
-            else { std::future<std::string> future = invoke_async_post( url.at( "url" ).get<std::string>() ,
+            else { future = invoke_async_post( url.at( "url" ).get<std::string>() ,
                                                                                          naked_param.dump() ); }
 
 
