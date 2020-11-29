@@ -15,8 +15,9 @@ include_directories( ${stream_eventSOURCE_DIR}
 	                 ../../../include
                      $ENV{DEV}/include
                      $ENV{DEV}/chilkat-9.5.0-x86_64-linux-gcc/include
-		     $ENV{DEV}/chilkat-9.5.0-armv7a-hardfp-linux/include
-		     $ENV{DEV}/chilkat-9.5.0-aarch64-linux/include
+		             $ENV{DEV}/chilkat-9.5.0-armv7a-hardfp-linux/include
+		             $ENV{DEV}/chilkat-9.5.0-armv7l-linux/include
+          		     $ENV{DEV}/chilkat-9.5.0-aarch64-linux/include
                      $ENV{SOURCE_ROOT}/imap2019/include
                    )
 #link location
@@ -24,6 +25,7 @@ link_directories( $ENV{DEV}/lib
                   /usr/lib
                   /dev_t/chilkat-9.5.0-x86_64-linux-gcc/lib
                   /dev_t/chilkat-9.5.0-armv7a-hardfp-linux/lib
+                  /dev_t/chilkat-9.5.0-armv7l-linux/lib
 		  $ENV{DEV}/chilkat-9.5.0-aarch64-linux/lib)
                   
 

@@ -112,6 +112,7 @@ namespace
                                                      const bool verify_host ,
                                                      const std::string& dsn )
 	{
+		            std::cerr << "...ss;!...\n";
 			    return std::async( std::launch::async ,
 				[&] ( const std::string& url , const std::string& params ) mutable
 				{
