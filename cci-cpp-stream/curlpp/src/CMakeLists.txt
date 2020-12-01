@@ -16,7 +16,8 @@ include_directories( ${cci_curk_ppSOURCE_DIR}
 		     $ENV{SOURCE_ROOT}/cci-daemon/include
                    )
 #link location
-link_directories( $ENV{DEV}/lib)
+link_directories( $ENV{DEV}/lib
+	          $ENV{DEV}/lib64)
 
 #library
 add_library(cci_curlpp_stream SHARED cci_curl_stream.cpp)
