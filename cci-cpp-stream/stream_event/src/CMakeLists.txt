@@ -15,19 +15,22 @@ include_directories( ${stream_eventSOURCE_DIR}
 	                 ../../../include
                      $ENV{DEV}/include
                      $ENV{DEV}/chilkat-9.5.0-x86_64-linux-gcc/include
-		     $ENV{DEV}/chilkat-9.5.0-armv7a-hardfp-linux/include
-		     $ENV{DEV}/chilkat-9.5.0-armv7l-linux/include
-          	     $ENV{DEV}/chilkat-9.5.0-aarch64-linux/include
-                     $ENV{SOURCE_ROOT}/imap2019/include
+		             $ENV{DEV}/chilkat-9.5.0-armv7a-hardfp-linux/include
+		             $ENV{DEV}/chilkat-9.5.0-armv7l-linux/include
+          	         $ENV{DEV}/chilkat-9.5.0-aarch64-linux/include
+                     $ENV{SOURCE_ROOT}/imap2020/include
+                     $ENV{SOURCE_ROOT}/cci-stream-mta/include
+                     $ENV{SOURCE_ROOT}/cci-faux-smtpd-async/include
+                     $ENV{SOURCE_ROOT}/cci-daemon/include
                    )
 #link location
 link_directories( $ENV{DEV}/lib 
-	          $ENV{DEV}/lib64
+	              $ENV{DEV}/lib64
                   /usr/lib
-                  /dev_t/chilkat-9.5.0-x86_64-linux-gcc/lib
-                  /dev_t/chilkat-9.5.0-armv7a-hardfp-linux/lib
-                  /dev_t/chilkat-9.5.0-armv7l-linux/lib
-		  $ENV{DEV}/chilkat-9.5.0-aarch64-linux/lib)
+                  $ENV{DEV}/chilkat-9.5.0-x86_64-linux-gcc/lib
+                  $ENV{DEV}/chilkat-9.5.0-armv7a-hardfp-linux/lib
+                  $ENV{DEV}/chilkat-9.5.0-armv7l-linux/lib
+		          $ENV{DEV}/chilkat-9.5.0-aarch64-linux/lib)
                   
 
 #library
@@ -45,7 +48,13 @@ target_link_libraries(cci_mini_stream_event  -lrdkafka++
                                              -lrdkafka
                                              -lrdkafka++
                                              -lcurlpp
+                                             -lACE
+                                             -lACE_SSL
                                              -lstdc++ 
+                                             -luuid
+                                             cci_stream_event
+                                             -lcci_mta_kernel
+                                             -lcci_daemon_kernel
                                              -lpthread
                                              -lchilkat-9.5.0 
                                              -lcci_kafka_stream
