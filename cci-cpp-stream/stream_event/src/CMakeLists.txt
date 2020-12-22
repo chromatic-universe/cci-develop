@@ -40,29 +40,29 @@ set_target_properties(cci_stream_event PROPERTIES
                                        SOVERSION 1) 
 
 #binary
-add_executable(cci_mini_stream_event  cci_mini_stream_event.cpp)                               
+#add_executable(cci_mini_stream_event  cci_mini_stream_event.cpp)                               
                                    
 
 #link libs
-target_link_libraries(cci_mini_stream_event  -lrdkafka++
-                                             -lrdkafka
-                                             -lrdkafka++
-                                             -lcurlpp
-                                             -lACE
-                                             -lACE_SSL
-                                             -lstdc++ 
-                                             -luuid
-                                             cci_stream_event
-                                             -lcci_mta_kernel
-                                             -lcci_daemon_kernel
-                                             -lpthread
-                                             -lchilkat-9.5.0 
-                                             -lcci_kafka_stream
-                                             -lcci_curlpp_stream)
+#target_link_libraries(cci_mini_stream_event  -lrdkafka++
+#                                             -lrdkafka
+#                                             -lrdkafka++
+#                                             -lcurlpp
+#                                             -lACE
+#                                             -lACE_SSL
+#                                             -lstdc++ 
+#                                             -luuid
+#                                             cci_stream_event
+#                                             -lcci_mta_kernel
+#                                             -lcci_daemon_kernel
+#                                             -lpthread
+#                                             -lchilkat-9.5.0 
+#                                             -lcci_kafka_stream
+#                                             -lcci_curlpp_stream)
 
 #install
 install_targets(/lib cci_stream_event)
-install_targets(/bin cci_mini_stream_event)
+#install_targets(/bin cci_mini_stream_event)
 
 install (DIRECTORY ../../include/ 
          DESTINATION include)
