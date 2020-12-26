@@ -7,7 +7,7 @@ django-rest-api==0.1.5
 djangorestframework==3.3.3
 dominate==2.1.17
 enum34==1.1.2
-Flask==0.10.1
+Flask==1.0
 Flask-API==0.6.5
 Flask-API-Utils==1.0.2
 Flask-APIBlueprint==0.2
