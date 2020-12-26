@@ -34,7 +34,7 @@ add_executable(cci_mini_curl_run  cci_mini_curl_run.cpp)
 target_link_libraries(cci_mini_curl_run -lcurlpp
 		                        -lcurl
 					-lstdc++
-				        -lcci-daemon-core
+				        cci-daemon-core
 					 cci_curlpp_stream)
 
 #install

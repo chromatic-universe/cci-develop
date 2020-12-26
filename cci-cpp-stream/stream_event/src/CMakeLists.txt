@@ -54,11 +54,11 @@ set_target_properties(cci_stream_event PROPERTIES
 #                                             -luuid
 #                                             cci_stream_event
 #                                             -lcci_mta_kernel
-#                                             -lcci_daemon_kernel
+#                                             cci_daemon_kernel
 #                                             -lpthread
 #                                             -lchilkat-9.5.0 
-#                                             -lcci_kafka_stream
-#                                             -lcci_curlpp_stream)
+#                                             cci_kafka_stream
+#                                             cci_curlpp_stream)
 
 #install
 install_targets(/lib cci_stream_event)
