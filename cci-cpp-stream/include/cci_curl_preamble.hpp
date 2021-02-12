@@ -1,4 +1,4 @@
-//cci_curl_stream.cpp   chromatic universe 2017    william k. johnson
+//cci_curl_stream.cpp   chromatic universe 2017-3021    william k. johnson
 
 
 #include <cci_curl_stream.h>
@@ -6,19 +6,19 @@
 
 namespace cpp_real_stream
 {
-	
-	
+
+
 		//forward
-				
-	
+
+
 
 		//services
 		template <
 				typename T
 		         >
-                class cci_curl_preamble 
+                class cci_curl_preamble
 		{
-		
+
 			public :
 
 				//ctors
@@ -30,16 +30,16 @@ namespace cpp_real_stream
 				explicit cci_curl_preamble( const std::string& url_str ) try : m_url_str{ url_str } ,
 											       m_b_valid{ false }
 				{
-				}		
+				}
 				catch ( curlpp::RuntimeError & err )
 				{
-					std::cerr << err.what() 
+					std::cerr << err.what()
 						  << "\n";
 				}
 				catch( std::exception& err )
 				{
-					std::cerr << err.what() 
-						  << "\n";	
+					std::cerr << err.what()
+						  << "\n";
 				}
 
 
@@ -48,7 +48,7 @@ namespace cpp_real_stream
 				virtual ~cci_curl_preamble()
 				{}
 
-				
+
 				//no copy
 				cci_curl_preamble( const cci_curl_preamble& ) = delete;
 				//no assign
@@ -64,23 +64,23 @@ namespace cpp_real_stream
 					std::string   		m_url_str;
 					bool 			m_b_valid;
 					T 			context;
-				
+
 			public :
-			
+
 					//accessors-mutators
 					std::string url() const noexcept { return m_url_str; }
-					
+
 
 					//mutators
 					void valid( bool vl ) { m_b_valid = vl; }
 
 
 					//services
-					
-				
+
+
 		};
-			
-		
+
+
 }
 
 
