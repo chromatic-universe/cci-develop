@@ -1,4 +1,4 @@
-//cci_kafka_consumer.cpp  william k. johnson 2016
+//cci_kafka_consumer.cpp  william k. johnson 2016-2020
 
 #include "cci_kafka_stream.h"
 #include <unistd.h>

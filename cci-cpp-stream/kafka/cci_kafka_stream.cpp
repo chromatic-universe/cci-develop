@@ -1,4 +1,4 @@
-//cpp_kafka_stream.cpp     william k. johnson 2016
+//cpp_kafka_stream.cpp     william k. johnson 2016-2021
 
 #include "cci_kafka_stream.h"
 
