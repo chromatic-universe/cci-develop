@@ -1,4 +1,4 @@
-//cci_stream_mini_event.cpp  chromatic universe 2208   william k. johnson
+//cci_stream_mini_event.cpp  chromatic universe 2020   william k. johnson
 
 
 #include <cci_mta_kernel.h>
