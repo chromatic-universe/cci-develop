@@ -4,7 +4,7 @@ conda==3.17.0
 conda-env==2.4.2
 Django==1.9.4
 django-rest-api==0.1.5
-djangorestframework==3.3.3
+djangorestframework==3.11.2
 dominate==2.1.17
 enum34==1.1.2
 Flask==0.10.1
