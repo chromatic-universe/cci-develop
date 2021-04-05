@@ -18,7 +18,7 @@ namespace
 
    	std::future<std::string> invoke_async_post( const std::string& url ,
                                                 const std::string& params );
-    std::future<std::string> invoke_async_post_ssl(  const std::string& url ,
+        std::future<std::string> invoke_async_post_ssl(  const std::string& url ,
                                                      const std::string& params ,
                                                      bool verify_host = true );
 
@@ -497,4 +497,5 @@ bool  cci_curl_stream::results_by_naked_param_async( 	const nlohmann::json& nake
 
 		return b_ret;
 }
+
 
