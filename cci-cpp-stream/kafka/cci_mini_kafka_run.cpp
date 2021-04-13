@@ -1,4 +1,4 @@
-//cpp_mini_kafka_run,cpp     william k. johnson 2016
+//cpp_mini_kafka_run,cpp     william k. johnson 2016-2021
 
 #include "cci_kafka_stream.h"
 #include <signal.h>
