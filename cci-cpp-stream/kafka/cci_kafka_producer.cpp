@@ -1,4 +1,4 @@
-//cci_kafka_producer.cpp  william k. johnson 2016
+//cci_kafka_producer.cpp  chromatic universe 2016-2021   william k. johnson
 
 #include "cci_kafka_stream.h"
 #include <unistd.h>
