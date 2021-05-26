@@ -1,4 +1,4 @@
-//cci_curl_stream_t.h   chromatic universe 2017    william k. johnson
+//cci_curl_stream_t.h   chromatic universe 2017-2021    william k. johnson
 
 
 #pragma once
