@@ -1,4 +1,4 @@
-//cci_stream_event.h   chromatic universe 2018  william k. johnson
+//cci_stream_event.h   chromatic universe 2018-2021  william k. johnson
 
 
 
