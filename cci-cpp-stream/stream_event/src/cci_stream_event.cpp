@@ -1,4 +1,4 @@
-//cci_stream_event.cpp   chromatic universe 2018-2020   william k. johnson
+//cci_stream_event.cpp   chromatic universe 2018-2021   william k. johnson
 
 
 #include <cci_stream_event.h>
