@@ -1,4 +1,4 @@
-//cci_kafka_t.h            chromatic_universe  2017  willian k. johnson
+//cci_kafka_t.h            chromatic_universe  2017-2021 willian k. johnson
 
 #pragma once
 
