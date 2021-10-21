@@ -1,4 +1,4 @@
-Babel==2.2.0
+Babel==2.9.1
 BeautifulSoup==3.2.1
 Cython==0.24
 EasyProcess==0.2.2
