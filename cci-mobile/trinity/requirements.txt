@@ -117,7 +117,7 @@ pika==0.10.0
 piston-mini-client==0.7.5
 plyer==1.2.4
 port-for==0.3.1
-protobuf==2.5.0
+protobuf==3.18.3
 py==1.4.31
 pyOpenSSL==0.13
 pyasn1==0.1.9
