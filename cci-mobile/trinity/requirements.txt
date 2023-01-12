@@ -7,7 +7,7 @@ Flask-Bootstrap==3.3.6.0
 Flask-Moment==0.5.1
 Flask-WTF==0.12
 GitPython==2.0.5
-Jinja2==2.8
+Jinja2==2.11.3
 Kivy==1.9.2-dev0
 Kivy-Garden==0.1.4
 Logbook==1.0.0
